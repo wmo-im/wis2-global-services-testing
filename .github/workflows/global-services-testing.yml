@@ -1,0 +1,45 @@
+name: WIS2 Global Services testing
+
+on:
+  push:
+    branches:
+    - main
+
+env:
+  FILE_BASENAME: wis2-global-services-testing-DRAFT
+
+jobs:
+  build-wis2-global-services-testing:
+    name: Generate documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y \
+          && sudo apt-get install -y pandoc \
+          && sudo gem install asciidoctor asciidoctor-pdf
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: build documentation
+        run: |
+          mkdir -p /tmp/wis2-global-services-testing/global-services-testing/images \
+          && cd global-services-testing \
+          && asciidoctor --trace -o /tmp/wis2-global-services-testing/global-services-testing/${FILE_BASENAME}.html index.adoc \
+          && asciidoctor -a allow-uri-read --trace --backend docbook --out-file - index.adoc | pandoc --from docbook --to docx --output /tmp/wis2-global-services-testing/global-services-testing/${FILE_BASENAME}.docx \
+          && asciidoctor -a allow-uri-read --trace -r asciidoctor-pdf --trace -b pdf -o /tmp/wis2-global-services-testing/global-services-testing/${FILE_BASENAME}.pdf index.adoc \
+          && cp images/*.png /tmp/wis2-global-services-testing/global-services-testing/images \
+          && cd ..
+      - name: checkout gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+      - name: update gh-pages branch and publish
+        run: | 
+          git checkout gh-pages
+          git config --global user.email "tomkralidis@gmail.com"
+          git config --global user.name "Tom Kralidis"
+          rm -rf global-services-testing
+          mv -f /tmp/wis2-global-services-testing/* .
+          git add .
+          git commit -am "update WIS2 Guide build"
+          git push

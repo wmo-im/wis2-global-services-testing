@@ -1,0 +1,54 @@
+:title: WIS2 Global Services testing
+:titletext: {title}
+:version: 2024-03-28
+:date: {docdate}
+:copyright: Copyright © 2024 World Meteorological Organization (WMO)
+:doctype: book
+:encoding: utf-8
+:lang: en
+:toc:
+:toc-placement!:
+:toclevels: 3
+:sectnums:
+:sectnumlevels: 4
+:sectanchors:
+:sectnum-start: 2
+
+= {title}
+
+<<<
+[cols = "<",frame = "none",grid = "none"]
+|===
+|{set:cellbgcolor:#FFFFFF}
+|[big]*World Meteorological Organization*
+|Date: {date}
+|Version: {version}
+|Document location: https://community.wmo.int/wis2-global-services-testing
+|Standing Committee on Information Management and Technology (SC-IMT)footnote:[https://community.wmo.int/governance/commission-membership/commission-observation-infrastructures-and-information-systems-infcom/commission-infrastructure-officers/infcom-management-group/standing-committee-information-management-and-technology-sc-imt]
+|Commission for Observation, Infrastructure and Information Systems (INFCOM)footnote:[https://community.wmo.int/governance/commission-membership/infcom]
+|{copyright}
+|===
+
+<<<
+toc::[]
+<<<
+
+include::sections/00-preface.adoc[]
+
+include::sections/01-scope.adoc[]
+
+include::sections/02-terms_and_definitions.adoc[]
+
+include::sections/03-references.adoc[]
+
+include::sections/04-testing.adoc[]
+
+include::sections/05-results.adoc[]
+
+include::sections/06-discussion.adoc[]
+
+include::sections/07-conclusions.adoc[]
+
+include::sections/annex-revision-history.adoc[]
+
+include::sections/annex-bibliography.adoc[]

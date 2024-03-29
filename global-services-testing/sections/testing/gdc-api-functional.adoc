@@ -1,0 +1,16 @@
+[[gdc-api-functional]]
+
+=== GDC API testing
+
+==== Type of test
+
+Functional
+
+==== Purpose
+
+Validate that a GDC API satisfies common user queries
+
+==== Steps
+
+. step 1
+. step 2
