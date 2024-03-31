@@ -1,0 +1,74 @@
+[[testing]]
+== High Level Architecture
+
+The focus of testing is to evaluate functionality to ensure all WIS2 components perform as defined by the architecture.  Testing is designed to enable core workflows:
+
+- WIS2 Nodes providing data and metadata
+- WIS2 Global Brokers subscribing to WIS2 Nodes
+- WIS2 Global Caches providing data and metadata for core data and all metadata
+- WIS2 Global Discovery Catalogues providing a search API for published discovery metadata
+- WIS2 Global Monitors scraping metrics from WIS2 Global Services, and providing metrics/insights on WIS2 performance
+
+[[img_architecture]]
+.High Level Overview of the WIS2 Architecture
+image::https://raw.githubusercontent.com/wmo-im/wis2-guide/main/guide/images/architecture/c4.container.png[align="center",width=800]
+
+The rest of this section describes the components deployed and standards implemented as part of WIS2.
+
+=== WIS2 Specifications
+
+==== WIS2 Topic Hierarchy (WTH)
+
+WTH defines the structure of the WIS Topic Hierarchy.  Topics are utilized by WIS Nodes, Global
+Broker services, and data/metadata subscribers.
+
+==== WIS2 Notification Message (WNM)
+
+WNM defines the content, structure, and encoding for the WIS2 Notification Message
+Encoding.  WNMs are provided as MQP payloads by WIS2 nodes, Global Broker services, as well
+as Replay API services (optional OGC API - Features services for data notifications).
+
+==== WMO Core Metadata Profile (WCMP2)
+
+WCMP2 defines the content, structure, and encoding for WMO resources.  WMO resources include, but are not
+limited to, data (NWP models, observations, forecasts and warnings, etc.), services/APIs, and processes.
+
+=== WIS2 Components
+
+==== Global Broker
+
+WIS2 incorporates several Global Brokers, ensuring highly resilient distribution of notification messages across the globe.
+
+==== Global Cache
+
+A Global Cache provides a highly available data server from which a Data Consumer can download Core data, as specified in the WMO Unified Data Policy, Resolution 1 (Cg-Ext(2021)).
+
+==== Global Discovery Catalogue
+
+A Global Discovery Catalogue enables a data consumer to search and browse descriptions of data published by each WIS2 Node. The data description (i.e., discovery metadata) provides sufficient information to determine the usefulness of data and how one may access it.
+
+==== Global Monitor
+
+A Global Monitor tracks what data is published by WIS2 Nodes, whether data can be effectively accessed by Data Consumers, and the performance of components in the WIS2 system.
+
+=== Testing framework
+
+==== Data
+
+TODO
+
+==== Environment
+
+TODO
+
+==== Performance testing
+
+Ensure WIS2 Global Services are able to operate under various loads.
+
+==== Functional testing
+
+Ensure WIS2 Global Services operate with one another as expected and meet requirements.
+
+=== Tests
+
+include::testing/gdc-api-functional.adoc[]

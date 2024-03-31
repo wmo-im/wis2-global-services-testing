@@ -1,0 +1,9 @@
+[.preface]
+== Abstract
+
+The subject of this Report is the results of testing and experimentation of WIS2 Global Services during the pre-operational phase of WIS2.  Global Services testing is coordinated by the WIS2 Architecture and Transition team and provides results and recommendations on testing performance, availability and functionality.
+
+[.preface]
+== Executive Summary
+
+TODO

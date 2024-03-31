@@ -1,0 +1,6 @@
+[appendix,obligation=informative]
+[[annex-bibliography]]
+[bibliography]
+== Bibliography
+
+* [[ab]] ab - Apache HTTP server benchmarking tool (2024) footnote:[https://httpd.apache.org/docs/2.4/programs/ab.html]

@@ -1,0 +1,7 @@
+== References
+
+* [[wcmp2]] WMO: WMO Core Metadata Profile (2024) footnote:[https://wmo-im.github.io/wcmp2]
+* [[wis2-notification-message]] WMO: WIS2 Notification Message (2024) footnote:[https://wmo-im.github.io/wis2-notification-message]
+* [[wis2-topic-hierarchy]] WMO: WIS2 Topic Hierarchy (2024) footnote:[https://wmo-im.github.io/wis2-topic-hierarchy]
+* [[wis2-guide]] Draft guidance on technical specifications of WIS2 (2024) footnote:[https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html]
+* [[wis2-transition-guide]] Draft guidance on transition from GTS to WIS2 (2024) footnote:[https://wmo-im.github.io/wis2-transition-guide/transition-guide/wis2-transition-guide-DRAFT.html]

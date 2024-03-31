@@ -1,0 +1,16 @@
+[[test-name-slug]]
+
+=== Name of test
+
+==== Type of test
+
+Functional or Performance
+
+==== Purpose
+
+Validate that a GDC API satisfies common user queries
+
+==== Steps
+
+. step 1
+. step 2

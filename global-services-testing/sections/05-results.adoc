@@ -1,0 +1,7 @@
+[[results]]
+== Results
+
+// each result .adoc file to be placed in global-services-testing/sections/results/
+// and included as follows:
+
+// include::testing/foo.adoc[]

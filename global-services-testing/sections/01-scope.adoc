@@ -1,0 +1,3 @@
+== Scope
+
+This report presents the testing framework put forth as part of the pre-operational phase of Global Services testing.  This report also discussses the results and presents a set of conclusions and recommendations.
