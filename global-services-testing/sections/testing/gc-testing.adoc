@@ -34,13 +34,6 @@ cache/a/wis2/+/data/core/#
 
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.1. Procedure for registration of a new Global Service: “Each Global Cache connected to at least two (2) Global Broker and should be able to download the data from all WIS2 Nodes providing Core data” https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
 
-===== global-cache-gb-subscription-failure
-====== Type of test
-Functional
-
-====== Purpose
-Where a Global Cache is unable to establish an MQTT connection with a designated Global Broker, or the connection fails and cannot be re-established, the metric xxx should be incremented?
-
 ===== global-cache-notification-processing
 ====== Type of test
 Functional
@@ -82,7 +75,7 @@ Where a Global Cache fails to process a notification message …
 
 The metric wmo_wis2_gc_download_errors_total should be incremented by 1.
 
-===== global-cache-source-dataserver-down
+===== global-cache-source-download-failure
 ====== Type of test
 Functional
 
@@ -97,7 +90,12 @@ Functional
 Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (href within a link object with ”rel”: “canonical”) refers to the source dataserver, and the metric wmo_wis2_gc_cache_override_total is incremented by 1 (one).
 
 More details needed about the notification message; format, content, topic.
-global-cache-data-integrity-check-fail
+
+===== global-cache-data-integrity-check-fail
+====== Type of test
+Functional
+
+====== Purpose
 Where a notification message provides an integrity value for a data item (properties.integrity), a Global Cache should validate the integrity of the resources it caches and only accept data which matches. A Global Cache should calculate the hash of the data object instance [once downloaded into the cache?] using the method specified in properties.integrity.method. Where the calculated hash does not match the value specified in properties.integrity.value:
 The data item should be removed from the cache if already downloaded
 No notification message should be published
@@ -138,7 +136,7 @@ Test this by sending two notification messages each with a unique identifier (id
 Functional
 
 ====== Purpose
-Where a Global Cache fails to process a notification message relating to a given unique data identifier (properties.data_id), a Global Cache must attempt to process subsequently received notification messages with the same unique data identifier.
+Where a Global Cache fails to process a notification message relating to a given unique data object (properties.data_id + properties.pubtie), a Global Cache must attempt to process subsequently received notification messages with the same unique data identifier.
 
 Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (properties.data-id). The first message should include an unresolvable data download link (href within a link object where ”rel”: “canonical”) (or simply missing a ‘canonical’ link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.
 
@@ -249,5 +247,17 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.
 
 Core data items published by the WIS2 Node are successfully cached by Global Cache #2, by way of downloading from Global Cache #1.
 
+
+=== Discussion Points
+==== Addition of wmo_wis2_gc_nocache_total metric
+This metric will be used to capture cache=false cases. It will be incremented by 1 (one) for each notification message where the cache directive is set to false or where the Global Cache determines that it is unable to cache a data item.
+
+==== Message Uniqueness = data_id + pubtime
+The unique identifier of a data item is a combination of the data identifier (properties.data_id) and the publication time (properties.pubtime). This is to ensure that the Global Cache does not store multiple copies of the same data item AND to support the ability to update/correct data items.
+
+==== Best Practices/Best Effort
+===== Retry/Redrive strategy
+* Failed download attempts - retry same url. (immediate, and/or after a backoff as these solve different problems).
+* Redrive based on messages with redundant data_id's in the event of a download failure. This would require caching all messages for a certain amount of time. This way the Global Cache can reprocess the message with the same data_id if the download fails and 'redundant' messages exist.
 
 
