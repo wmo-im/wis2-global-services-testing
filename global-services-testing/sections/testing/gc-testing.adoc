@@ -262,7 +262,7 @@ wmo_wis2_gc_integrity_failed_total
 Performance
 
 ====== Purpose
-A Global Cache shall be able to successfully process 1000 notification messages, including caching the associated data item and publishing the new notification message, within xxx seconds.
+A Global Cache shall be able to successfully process 1000 notification messages, averaging xxx bytes, including caching the associated data item and publishing the new notification message, within xxx seconds.
 
 ===== global-cache-notification-processing-time
 ====== Type of test
@@ -334,6 +334,24 @@ The testing process will be automated through scripts. These scripts will perfor
 2. **GC Subscription:** The GC will be subscribed to the MQTT broker to receive the published messages. This simulates the GC's real-world operation where it subscribes to Global Brokers to receive notifications. (Remy has something already in the works here)
 
 3. **Result Validation:** After the GC processes the received messages, the scripts will validate the results. This includes checking if the GC correctly stored the data, published notifications, and updated metrics as expected.
+
+==== General Performance Testing Strategy
+
+The performance testing strategy for the GC will primarily focus on the time taken from when a notification message is published to when the associated cache message is received by the test process. This approach ensures a comprehensive evaluation of the GC's performance under various scenarios.
+
+1. **Notification Publication:** The test process will publish a notification message to the MQTT broker. This message will represent a specific scenario based on the mocked or curated real data.
+
+2. **Start Timer:** The test process will start a timer immediately after the notification message is published. Multiple timers can be used for multiple notification messages.
+
+3. **GC Subscription and Processing:** The GC, which is subscribed to the dev MQTT broker, will receive the published notification message. It will then process the message, which may include storing the data, publishing a cache notification, and updating metrics as expected.
+
+4. **Cache Message Receipt:** The test process, which is also subscribed to the MQTT broker, will receive the cache message published by the GC.
+
+5. **Stop Timer:** The test process will stop the timer immediately after the cache message is received.
+
+6. **Result Validation:** The test process will validate the results. This includes checking if the GC correctly processed the notification message and published the cache message, and if the time taken (as measured by the timer) is within the acceptable performance limits.
+
+7. **Data Size Consideration:** The size of the cached data objects will also be considered. The performance of the GC can be evaluated based on the bytes per second processed. This will help in understanding the GC's efficiency in handling different sizes of data objects.
 
 
 ==== Addition of wmo_wis2_gc_no_cache_total metric
