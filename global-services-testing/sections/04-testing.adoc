@@ -69,6 +69,10 @@ Ensure WIS2 Global Services are able to operate under various loads.
 
 Ensure WIS2 Global Services operate with one another as expected and meet requirements.
 
-=== Tests
+== Tests
 
-include::testing/gdc-api-functional.adoc[]
+include::testing/global-broker.adoc[]
+
+include::testing/global-cache.adoc[]
+
+include::testing/global-discovery-catalogue.adoc[]

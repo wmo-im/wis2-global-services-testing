@@ -1,0 +1,29 @@
+[[global-discovery-catalogue-testing]]
+
+=== Global Discovery Catalogue Service testing
+
+==== Functional tests
+
+===== API functionality
+
+====== Purpose
+
+Validate that a GDC API satisfies common user queries
+
+====== Steps
+
+. step 1
+. step 2
+
+==== Performance tests
+
+===== API performance
+
+====== Purpose
+
+Validate that a GDC API peforms
+
+====== Steps
+
+. step 1
+. step 2

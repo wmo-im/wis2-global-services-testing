@@ -1,0 +1,29 @@
+[[global-broker-testing]]
+
+=== Global Broker Service testing
+
+==== Functional tests
+
+===== Functional test title
+
+====== Purpose
+
+TODO
+
+====== Steps
+
+. step 1
+. step 2
+
+==== Performance tests
+
+===== Performance test title
+
+====== Purpose
+
+TODO
+
+====== Steps
+
+. step 1
+. step 2
