@@ -26,7 +26,7 @@ A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis
 
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
 . Connect the MQTT client to the local broker of the Global Cache.
-. Once the connection is successful, attempt to subscribe to the "cache/a/wis2/#" topic.
+. Once the connection is successful, attempt to subscribe to the `cache/a/wis2/#` topic.
 . Check if the subscription is successful. If the subscription is successful, the test passes. If the subscription is not successful, the test fails.
 . Close the connection to the broker after the test.
 
@@ -34,22 +34,21 @@ A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis
 
 ====== Purpose
 A Global Cache must connect to at least 2 Global Brokers using the MQTT protocol with TLS and username/password authentication (everyone/everyone) and subscribe to the following topics:
-----
-origin/a/wis2/+/metadata/#
-origin/a/wis2/+/data/core/#
-cache/a/wis2/+/metadata/#
-cache/a/wis2/+/data/core/#
-----
+
+* ``++origin/a/wis2/+/metadata/#++``
+* ``++origin/a/wis2/+/data/core/#++``
+* ``++cache/a/wis2/+/metadata/#++``
+* ``++cache/a/wis2/+/data/core/#++``
 
 ====== Steps
 
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
 . Connect the MQTT client to the first Global Broker.
 . Once the connection is successful, attempt to subscribe to the following topics:
-   - "origin/a/wis2/+/metadata/#"
-   - "origin/a/wis2/+/data/core/#"
-   - "cache/a/wis2/+/metadata/#"
-   - "cache/a/wis2/+/data/core/#"
+   - ``++origin/a/wis2/+/metadata/#++``
+   - ``++origin/a/wis2/+/data/core/#++``
+   - ``++cache/a/wis2/+/metadata/#++``
+   - ``++cache/a/wis2/+/data/core/#++``
 . Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
 . Repeat steps 2 to 4 for the additional Global Brokers.
 . If the MQTT client is able to successfully subscribe to the topics on both Global Brokers, the test passes. If not, the test fails.
@@ -66,19 +65,19 @@ The intention here is to test that the GC functions as expected under normal con
 
 The cache notification message published by the Global Cache should be identical to the notification message received, except for the following:
 
-* the canonical link (see href within the link object where ”rel”: “canonical")
+* the canonical link (a link object's `href` property where `rel=canonical`)
 * the unique identifier of the message (id)
-* the topic (cache/a/wis2/…) (note the incoming message may be on this same topic if it is from another GC)
+* the topic (`cache/a/wis2/...`) (note the incoming message may be on this same topic if it is from another GC)
 
 The notification messages will follow the standard structure (see Manual on WIS (WMO-No. 1060), Volume II, Appendix E: WIS2 Notification Message).
 
-The notification messages will be published on the standard topic structure in their local message brokers (see Manual on WIS (WMO-No. 1060), Volume II, Appendix D: WIS2 Topic Hierarchy) on topic cache/a/wis2/….
+The notification messages will be published on the standard topic structure in their local message brokers (see Manual on WIS (WMO-No. 1060), Volume II, Appendix D: WIS2 Topic Hierarchy) on topic `cache/a/wis2/...`.
 
 On successful completion, the following metrics should be modified:
 
-* wmo_wis2_gc_download_total should be incremented by 1 (one).
-* wmo_wis2_gc_dataserver_status_flag for the source dataserver (i.e., the centre ID from where the data item was downloaded from) should be set to 1 (one).
-* wmo-wis2_gc_dataserver_last_download_timestamp_seconds for the source dataserver should be set to the current time.
+* `wmo_wis2_gc_download_total` should be incremented by 1 (one).
+* `wmo_wis2_gc_dataserver_status_flag` for the source data server (i.e., the centre ID from where the data item was downloaded from) should be set to 1 (one).
+* `wmo-wis2_gc_dataserver_last_download_timestamp_seconds` for the source data server should be set to the current time.
 
 ====== Steps
 
@@ -90,10 +89,9 @@ Upon processing the batch of notification messages, the following will be evalua
 * The validity of the notification messages published by the GC
 * The validity of the data objects cached by the GC (i.e., the data object is accessible via the canonical link)
 * The following metrics are updated (or not) as expected per the curated test data set:
-  ** wmo_wis2_gc_download_total
-  ** wmo_wis2_gc_dataserver_status_flag
-  ** wmo_wis2_gc_dataserver_last_download_timestamp_seconds
-
+  ** `wmo_wis2_gc_download_total`
+  ** `wmo_wis2_gc_dataserver_status_flag`
+  ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds`
 
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.4: Based on the notifications it receives, a Global Cache shall download and store a copy of discovery metadata records and core data from [WIS2 Nodes] and other Global [Services]; clause 3.7.5.7: A Global Cache shall publish notifications via its Message Broker about copies of the discovery metadata records and core data it makes available. A Global Cache shall use a standardized topic structure when publishing notifications; clause 4.5.2: A Global Cache shall download core data and discovery metadata from [WIS2 Nodes] and other Global [Services] to provide for reliable, low-latency access to those resources via WIS; clause 4.5.4: Based on received notifications, a Global Cache shall download core data from [WIS2 Nodes] or other Global [Services] and store them for a minimum duration of 24 hours; clause 4.5.5: Based on its received notifications, a Global Cache shall download discovery metadata records from [WIS2 Nodes] or other Global [Services] and store them for a minimum duration of 24 hours; clause 4.5.7: A Global Cache shall publish notifications to a Message Broker indicating  the availability of data and discovery metadata resources from the Global Cache and shall use the format and protocol specified [...].
 
@@ -102,12 +100,12 @@ Upon processing the batch of notification messages, the following will be evalua
 ===== Cache false directive
 
 ====== Purpose
-Where a Global Cache receives a notification message with _properties.cache_ set to false, the Global Cache should publish a notification message where the data download link (href within a link object with ”rel”: “canonical”) refers to the source dataserver.
+Where a Global Cache receives a notification message with _properties.cache_ set to false, the Global Cache should publish a notification message where the data download link (a link object's `href` property where `rel=canonical`) refers to the source data server.
 
 The cache notification message published by the Global Cache should be identical to the notification message received, except for the following:
 
 * the unique identifier of the message (id)
-* the topic (cache/a/wis2/…) (note the incoming message may be on this same topic if it is from another GC)
+* the topic (`cache/a/wis2/...`) (note the incoming message may be on this same topic if it is from another GC)
 ----
 Is the above assessment correct?
 ----
@@ -121,10 +119,11 @@ Upon processing the batch of notification messages, the following will be evalua
 * The total number of data objects cached by the GC
 * The validity of the notification messages published by the GC, taking into consideration the bullets above (difference between the original and the published message).
 * The following metrics are updated (or not) as expected per the curated test data set:
-  ** wmo_wis2_gc_download_total
-  ** wmo_wis2_gc_dataserver_status_flag
-  ** wmo_wis2_gc_dataserver_last_download_timestamp_seconds
-  ** wmo_wis2_gc_no_cache_total (incremented by 1 for each notification message where the cache directive is set to false)
+  ** `wmo_wis2_gc_download_total`
+  ** `wmo_wis2_gc_dataserver_status_flag`
+  ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds`
+  ** `wmo_wis2_gc_no_cache_total` (incremented by 1 for each notification message where the cache directive is set to false)
+
 ----
 wmo_wis2_gc_no_cache_total is a proposed new metric
 ----
@@ -132,7 +131,7 @@ wmo_wis2_gc_no_cache_total is a proposed new metric
 ===== Source download failure
 
 ====== Purpose
-Where a Global Cache is unable to download a data item from the location specified in a notification message (i.e., the source dataserver), the metric wmo_wis2_gc_dataserver_status_flag for the source dataserver should be set to 0 (zero).
+Where a Global Cache is unable to download a data item from the location specified in a notification message (i.e., the source data server), the `metric wmo_wis2_gc_dataserver_status_flag` for the source data server should be set to 0 (zero).
 
 ===== Steps
 
@@ -142,7 +141,7 @@ Where a Global Cache is unable to download a data item from the location specifi
 ===== Cache override
 
 ====== Purpose
-Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (href within a link object with ”rel”: “canonical”) refers to the source dataserver, and the metric wmo_wis2_gc_cache_override_total is incremented by 1 (one).
+Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (a link object's `href` property where `rel=canonical`) refers to the source data server, and the metric `wmo_wis2_gc_cache_override_total` is incremented by 1 (one).
 
 More details needed about the notification message; format, content, topic.
 
@@ -154,11 +153,11 @@ More details needed about the notification message; format, content, topic.
 ===== Data integrity failure check
 
 ====== Purpose
-Where a notification message provides an integrity value for a data item (properties.integrity), a Global Cache should validate the integrity of the resources it caches and only accept data which matches. A Global Cache should calculate the hash of the data object instance [once downloaded into the cache?] using the method specified in properties.integrity.method. Where the calculated hash does not match the value specified in properties.integrity.value:
+Where a notification message provides an integrity value for a data item (`properties.integrity`), a Global Cache should validate the integrity of the resources it caches and only accept data which matches. A Global Cache should calculate the hash of the data object instance [once downloaded into the cache?] using the method specified in `properties.integrity.method`. Where the calculated hash does not match the value specified in `properties.integrity.value`:
 The data item should be removed from the cache if already downloaded
 No notification message should be published
-The metric wmo_wis2_gc_download_errors_total should be incremented by 1 (one).
-The metric wmo_wis2_gc_integrity_failed_total should be incremented by 1 (one).
+The `metric wmo_wis2_gc_download_errors_total` should be incremented by 1 (one).
+The `metric wmo_wis2_gc_integrity_failed_total` should be incremented by 1 (one).
 
 ===== Steps
 
@@ -184,7 +183,7 @@ Test this by sending two identical notification messages, ideally from different
 ====== Purpose
 Where a Global Cache fails to process a notification message with a given unique identifier (id), a Global Cache must attempt to process subsequently received notification messages with the same unique identifier.
 
-Test this by sending two almost identical notification messages, the first of which should include an unresolvable data download link (href within a link object where ”rel”: “canonical”) (or simply missing a ‘canonical’ link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.
+Test this by sending two almost identical notification messages, the first of which should include an unresolvable data download link (a link object's `href` property where `rel=canonical`) (or simply missing a `canonical` link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.
 
 ===== Steps
 
@@ -194,9 +193,9 @@ Test this by sending two almost identical notification messages, the first of wh
 ===== Duplicate data discarding
 
 ====== Purpose
-A Global Cache must ensure that only one instance of a data item, designated with a given unique identifier (properties.data_id) and publication time (properties.pubtime) in the associated notification message, is successfully processed.
+A Global Cache must ensure that only one instance of a data item, designated with a given unique identifier (`properties.data_id`) and publication time (`properties.pubtime`) in the associated notification message, is successfully processed.
 
-Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (properties.data-id) and publication time (properties.pubtime). Ideally the notification messages should simulate data being made available at different locations (i.e., an origin WIS2 Node and another Global Cache) with differing data download links (href within a link object where ”rel”: “canonical”).
+Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (`properties.data_id`) and publication time (`properties.pubtime`). Ideally the notification messages should simulate data being made available at different locations (i.e., an origin WIS2 Node and another Global Cache) with differing data download links (a link object's `href` property where `rel=canonical`).
 
 ===== Steps
 
@@ -206,9 +205,9 @@ Test this by sending two notification messages each with a unique identifier (id
 ===== Duplicate data discarding (alternative 1)
 
 ====== Purpose
-Where a Global Cache fails to process a notification message relating to a given unique data object (properties.data_id + properties.pubtie), a Global Cache must attempt to process subsequently received notification messages with the same unique data identifier.
+Where a Global Cache fails to process a notification message relating to a given unique data object (`properties.data_id` + `properties.pubtime`), a Global Cache must attempt to process subsequently received notification messages with the same unique data identifier.
 
-Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (properties.data-id). The first message should include an unresolvable data download link (href within a link object where ”rel”: “canonical”) (or simply missing a ‘canonical’ link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.
+Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (`properties.data_id`). The first message should include an unresolvable data download link (a link object's `href` property where `rel=canonical`) (or simply missing a `canonical` link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.
 
 ===== Steps
 
@@ -218,7 +217,7 @@ Test this by sending two notification messages each with a unique identifier (id
 ===== Duplicate data discarding (alternative 2)
 
 ====== Purpose
-A Global Cache should treat notification messages with the same data item identifier (properties.data-id), but different publication times (properties.pubtime) as unique data items. Data items with the same properties.data-id but a later publication time should be copied into the cache (see test global-cache-notification-processing). Data items with the same properties.data-id but earlier or identical publication times should be ignored (see test global-cache-discard-duplicate-data).
+A Global Cache should treat notification messages with the same data item identifier (`properties.data_id`), but different publication times (`properties.pubtime`) as unique data items. Data items with the same `properties.data_id` but a later publication time should be copied into the cache (see test Notification processing). Data items with the same `properties.data_id` but earlier or identical publication times should be ignored (see test Duplicate link discarding).
 
 [Test this by sending several notification messages with varying pubtimes and determine which are successfully uploaded]
 
@@ -232,7 +231,7 @@ A Global Cache should treat notification messages with the same data item identi
 ===== Client data download
 
 ====== Purpose
-An HTTP client (i.e., a Web browser) must be able to connect to the HTTP server of the Global Cache on port 443 using HTTP 1.1 with TLS but without any authentication and be able to resolve the URL provided in a data download link (href within a link object where ”rel”: “canonical”) from a notification message published by the Global Cache within the previous 24-hours; i.e., download a cached data item.
+An HTTP client (i.e., a Web browser) must be able to connect to the HTTP server of the Global Cache on port 443 using HTTP 1.1 with TLS but without any authentication and be able to resolve the URL provided in a data download link (a link object's `href` property where `rel=canonical`) from a notification message published by the Global Cache within the previous 24 hours; i.e., download a cached data item.
 
 Note: testing provision of access via HTTP 1.1 - “at least one of the protocols”.
 
@@ -257,14 +256,14 @@ A Global Cache must use a valid certificate.
 
 ====== Purpose
 
-A Global Cache must publish the following metrics using the OpenMetrics protocol:
+A Global Cache must publish the following metrics using the OpenMetrics standard:
 
-* wmo_wis2_gc_download_total
-* wmo_wis2_gc_download_errors_total
-* wmo_wis2_gc_dataserver_status_flag
-* wmo_wis2_gc_dataserver_last_download_timestamp_seconds
-* wmo_wis2_gc_cache_override_total
-* wmo_wis2_gc_integrity_failed_total
+* `wmo_wis2_gc_download_total`
+* `wmo_wis2_gc_download_errors_total`
+* `wmo_wis2_gc_dataserver_status_flag`
+* `wmo_wis2_gc_dataserver_last_download_timestamp_seconds`
+* `wmo_wis2_gc_cache_override_total`
+* `wmo_wis2_gc_integrity_failed_total`
 
 *Source:* https://github.com/wmo-im/wis2-metric-hierarchy/blob/main/metrics/gc.csv
 
@@ -291,7 +290,7 @@ A Global Cache shall be able to successfully process 1000 notification messages,
 ====== Purpose
 A Global Cache shall successfully process a notification message, including caching the associated data item and publishing the new notification message, within xxx seconds.
 
-Note: A Global Cache may decide to ignore the request to cache a data item if it will take excessively long to process. See test global-cache-cache-override for details.
+Note: A Global Cache may decide to ignore the request to cache a data item if it will take excessively long to process. See test Cache override for details.
 
 ===== Steps
 
@@ -394,11 +393,11 @@ The performance testing strategy for the GC will primarily focus on the time tak
 7. **Data Size Consideration:** The size of the cached data objects will also be considered. The performance of the GC can be evaluated based on the bytes per second processed. This will help in understanding the GC's efficiency in handling different sizes of data objects.
 
 
-===== Addition of wmo_wis2_gc_no_cache_total metric
-* This metric will be used to capture cache=false cases. It will be incremented by 1 (one) for each notification message where the cache directive is set to false or where the Global Cache determines that it is unable to cache a data item.
+===== Addition of `wmo_wis2_gc_no_cache_total` metric
+* This metric will be used to capture `properties.cache=false` cases. It will be incremented by 1 (one) for each notification message where the `properties.cache` property is set to `false` or where the Global Cache determines that it is unable to cache a data item.
 
-===== Message uniqueness = data_id + pubtime
-* The unique identifier of a data item is a combination of the data identifier (properties.data_id) and the publication time (properties.pubtime). This is to ensure that the Global Cache does not store multiple copies of the same data item AND to support the ability to update/correct data items.
+===== Message uniqueness = `properties.data_id` + `properties.pubtime`
+* The unique identifier of a data item is a combination of the data identifier (`properties.data_id`) and the publication time (`properties.pubtime`). This is to ensure that the Global Cache does not store multiple copies of the same data item AND to support the ability to update/correct data items.
 
 * Are other folks in agreement with this approach and already implementing it?
 
@@ -410,8 +409,6 @@ The performance testing strategy for the GC will primarily focus on the time tak
 
 ===== Best practices/best effort
 ====== Retry/Redrive strategy
-* Simple: failed download attempts where we retry same url. (immediate, and/or after a backoff as these solve different problems).
-* Redrive based on messages with redundant data_id's in the event of a download failure. This would require caching all messages for a certain amount of time. This way the Global Cache can reprocess the message with the same data_id+pubtime if the download fails and 'redundant' messages with different download links exist.
+* Simple: failed download attempts where we retry same URL. (immediate, and/or after a backoff as these solve different problems).
+* Redrive based on messages with redundant `properties.data_id`'s in the event of a download failure. This would require caching all messages for a certain amount of time. This way the Global Cache can reprocess the message with the same `properties.data_id` + `properties.pubtime` if the download fails and 'redundant' messages with different download links exist.
     ** supporting update/correction of data items per GTS?
-
-
