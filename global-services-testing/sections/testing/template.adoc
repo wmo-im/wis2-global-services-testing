@@ -1,16 +1,29 @@
-[[test-name-slug]]
+[[global-service-name-testing]]
 
-=== Name of test
+=== Global XXX Service testing
 
-==== Type of test
+==== Functional tests
 
-Functional or Performance
+===== Test name
 
-==== Purpose
+====== Purpose
 
-Validate that a GDC API satisfies common user queries
+TODO
 
-==== Steps
+====== Steps
+
+. step 1
+. step 2
+
+==== Performance tests
+
+===== Test name
+
+====== Purpose
+
+TODO
+
+====== Steps
 
 . step 1
 . step 2
