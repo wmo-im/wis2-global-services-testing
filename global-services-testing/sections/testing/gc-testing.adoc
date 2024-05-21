@@ -52,23 +52,21 @@ cache/a/wis2/+/data/core/#
 
 ====== Steps (Outline)
 
-1. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
+1. Initialize the GC with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication for the connection to both GB as well as the subscription information to the listed topics. The specific means to achieve this depends on the implementation of the GC
 
-2. Connect the MQTT client to the first Global Broker.
+2. Connect the GC as described above to the Global Brokers.
 
-3. Once the connection is successful, attempt to subscribe to the following topics:
-   - "origin/a/wis2/+/metadata/#"
-   - "origin/a/wis2/+/data/core/#"
-   - "cache/a/wis2/+/metadata/#"
-   - "cache/a/wis2/+/data/core/#"
+3. Verify that the connection is established by either the Log Files of the GC, the Log Files of the GB or by inspecting network traffic whichever seems fit.
 
-4. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+4. Check if the subscription is successful. Do this by
 
-5. Repeat steps 2 to 4 for the additional Global Brokers.
+  4a. For each listed topic and each listed GB publish one matching WNM
 
-6. If the MQTT client is able to successfully subscribe to the topics on both Global Brokers, the test passes. If not, the test fails.
+  4b. Verify if each WNM is received by the GC. Do this by either inspectng the Log Files of the GC or by verification if the GC is trying to open a connection to the URL listed as canonical in the WNM.
 
-7. Close the connections to the brokers after the test.
+5. If all messages are received, the test passes. If not, the test fails.
+
+6. Close the connections to the brokers after the test.
 
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded; clause 4.5.3: A Global Cache shall subscribe to at least one Global Broker for notifications concerning core data and discovery metadata [...].
 
