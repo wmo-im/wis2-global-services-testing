@@ -59,7 +59,7 @@ TODO
 
 ==== Environment
 
-TODO
+The WIS2 development environment will be used as the target network for executing tests.
 
 ==== Performance testing
 
