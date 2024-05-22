@@ -52,7 +52,7 @@ On successful completion, the following metrics should be modified:
 
 * `wmo_wis2_gdc_connected_flag` for the centre-id frmo which the Global Discovery Catalogue connected to should be set to 1 (one).
 
-===== Notification and metadata processing
+===== Notification and metadata processing (success)
 
 ====== Purpose
 
@@ -60,7 +60,7 @@ The Global Discovery Catalogue should be able to:
 
 * process an incoming notification message.
 * download the metadata at the canonical link.
-* validate the metadata against the WCMP2 Executable Test Suite (ETS).
+* validate the valid metadata against the WCMP2 Executable Test Suite (ETS).
 * publish an ETS validation report notification message on the proper topic using the proper message structure.
 * evaluate the metadata against the WCMP2 Key Performance Indicators (KPI).
 * publish a KPI evaluation report notification message on the proper topic using the proper message structure.
@@ -79,12 +79,48 @@ On successful completion, the following metrics should be modified:
 * `wmo_wis2_gdc_kpi_percentage_average` for the centre-id from where the metadata was published from should be calculated as an average.
 * `wmo_wis2_gdc_kpi_percentage_over80_total` for the centre-id from where the metadata was published from should be incremented by 1 (one).
 
-
-===== WCMP2 metadata archive publication
+===== Notification and metadata processing (failure)
 
 ====== Purpose
 
-Validate that a GDC API publishes a metadata archive.
+The Global Discovery Catalogue should be able to:
+
+====== Steps
+
+* process an incoming notification message.
+* download the metadata at the canonical link.
+* validate the invalid failing metadata against the WCMP2 Executable Test Suite (ETS).
+* publish an ETS validation report notification message on the proper topic using the proper message structure.
+* update the necessary metrics.
+
+On successful completion, the following metrics should be modified:
+
+* `wmo_wis2_gdc_failed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one).
+
+===== Metadata ingest topic mismatch
+
+====== Purpose
+
+A Global Discovery Catalogue should detect a mismatch between an incoming message topic's centre-id and the centre-id as part of a WCMP2 record identifier.
+
+====== Steps
+
+* process an incoming notification message.
+* extract the centre-id from the topic (4th token split on `/`).
+* download the metadata at the canonical link.
+* extract the centre-id from WCMP2 record identifier (3rd token split on `:`).
+* compare the centre-id from the topic and the centre-id of the WCMP2 record identifier.
+* publish an error report to `monitor/a/wis2/`
+
+On successful completion, the following metrics should be modified:
+
+* `wmo_wis2_gdc_failed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one).
+
+===== WCMP2 metadata archive zipfile publication
+
+====== Purpose
+
+Validate that a GDC API publishes a metadata archive zipfile.
 
 ====== Steps
 
