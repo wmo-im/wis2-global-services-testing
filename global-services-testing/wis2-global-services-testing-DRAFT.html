@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.22">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="copyright" content="Copyright © 2024 World Meteorological Organization (WMO)">
 <title>WIS2 Global Services testing</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-05-13</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-05-22</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -512,20 +512,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_functional_testing">6.3.4. Functional testing</a></li>
 </ul>
 </li>
-<li><a href="#_tests">6.4. Tests</a></li>
-<li><a href="#gdc-api-functional">6.5. GDC API testing</a>
+</ul>
+</li>
+<li><a href="#_tests">7. Tests</a>
+<ul class="sectlevel2">
+<li><a href="#global-broker-testing">7.1. Global Broker Service testing</a>
 <ul class="sectlevel3">
-<li><a href="#_type_of_test">6.5.1. Type of test</a></li>
-<li><a href="#_purpose">6.5.2. Purpose</a></li>
-<li><a href="#_steps">6.5.3. Steps</a></li>
+<li><a href="#_functional_tests">7.1.1. Functional tests</a></li>
+<li><a href="#_performance_tests">7.1.2. Performance tests</a></li>
+</ul>
+</li>
+<li><a href="#global-cache-testing">7.2. Global Cache Service testing</a>
+<ul class="sectlevel3">
+<li><a href="#_functional_tests_2">7.2.1. Functional Tests</a></li>
+<li><a href="#_performance_tests_2">7.2.2. Performance tests</a></li>
+<li><a href="#_system_wide_tests">7.2.3. System-wide tests</a></li>
+<li><a href="#_considerations">7.2.4. Considerations</a></li>
+</ul>
+</li>
+<li><a href="#global-discovery-catalogue-testing">7.3. Global Discovery Catalogue Service testing</a>
+<ul class="sectlevel3">
+<li><a href="#_functional_tests_3">7.3.1. Functional tests</a></li>
+<li><a href="#_performance_tests_3">7.3.2. Performance tests</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#results">7. Results</a></li>
-<li><a href="#discussion">8. Discussion</a></li>
-<li><a href="#conclusions">9. Conclusions</a></li>
-<li><a href="#_future_work">10. Future work</a></li>
+<li><a href="#results">8. Results</a></li>
+<li><a href="#discussion">9. Discussion</a></li>
+<li><a href="#conclusions">10. Conclusions</a></li>
+<li><a href="#_future_work">11. Future work</a></li>
 <li><a href="#_revision_history">Appendix A: Revision History</a></li>
 <li><a href="#annex-bibliography">Bibliography</a></li>
 </ul>
@@ -757,7 +773,7 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 <div class="sect3">
 <h4 id="_environment"><a class="anchor" href="#_environment"></a>6.3.2. Environment</h4>
 <div class="paragraph">
-<p>TODO</p>
+<p>The WIS2 development environment will be used as the target network for executing tests.</p>
 </div>
 </div>
 <div class="sect3">
@@ -773,26 +789,50 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_tests"><a class="anchor" href="#_tests"></a>7. Tests</h2>
+<div class="sectionbody">
 <div class="sect2">
-<h3 id="_tests"><a class="anchor" href="#_tests"></a>6.4. Tests</h3>
-
-</div>
-<div class="sect2">
-<h3 id="gdc-api-functional"><a class="anchor" href="#gdc-api-functional"></a>6.5. GDC API testing</h3>
+<h3 id="global-broker-testing"><a class="anchor" href="#global-broker-testing"></a>7.1. Global Broker Service testing</h3>
 <div class="sect3">
-<h4 id="_type_of_test"><a class="anchor" href="#_type_of_test"></a>6.5.1. Type of test</h4>
+<h4 id="_functional_tests"><a class="anchor" href="#_functional_tests"></a>7.1.1. Functional tests</h4>
+<div class="sect4">
+<h5 id="_functional_test_title"><a class="anchor" href="#_functional_test_title"></a>7.1.1.1. Functional test title</h5>
+<div class="sect5">
+<h6 id="_purpose"><a class="anchor" href="#_purpose"></a>Purpose</h6>
 <div class="paragraph">
-<p>Functional</p>
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps"><a class="anchor" href="#_steps"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_purpose"><a class="anchor" href="#_purpose"></a>6.5.2. Purpose</h4>
+<h4 id="_performance_tests"><a class="anchor" href="#_performance_tests"></a>7.1.2. Performance tests</h4>
+<div class="sect4">
+<h5 id="_performance_test_title"><a class="anchor" href="#_performance_test_title"></a>7.1.2.1. Performance test title</h5>
+<div class="sect5">
+<h6 id="_purpose_2"><a class="anchor" href="#_purpose_2"></a>Purpose</h6>
 <div class="paragraph">
-<p>Validate that a GDC API satisfies common user queries</p>
+<p>TODO</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps"><a class="anchor" href="#_steps"></a>6.5.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_2"><a class="anchor" href="#_steps_2"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -807,14 +847,1416 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="global-cache-testing"><a class="anchor" href="#global-cache-testing"></a>7.2. Global Cache Service testing</h3>
+<div class="sect3">
+<h4 id="_functional_tests_2"><a class="anchor" href="#_functional_tests_2"></a>7.2.1. Functional Tests</h4>
+<div class="sect4">
+<h5 id="_mqtt_connectivity"><a class="anchor" href="#_mqtt_connectivity"></a>7.2.1.1. MQTT Connectivity</h5>
+<div class="sect5">
+<h6 id="_purpose_3"><a class="anchor" href="#_purpose_3"></a>Purpose</h6>
+<div class="paragraph">
+<p>An MQTT client must be able to connect to the local broker of the Global Cache on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.
+<strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.2: A Global Cache shall operate a message broker.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_3"><a class="anchor" href="#_steps_3"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Attempt to connect the MQTT client to the local broker of the Global Cache on port 8883.</p>
+</li>
+<li>
+<p>Check if the connection is successful. If the connection is successful, the test passes. If the connection is not successful, the test fails.</p>
+</li>
+<li>
+<p>Close the connection to the broker after the test.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_client_subscription"><a class="anchor" href="#_client_subscription"></a>7.2.1.2. Client subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_4"><a class="anchor" href="#_purpose_4"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis2/# topic.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_4"><a class="anchor" href="#_steps_4"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the local broker of the Global Cache.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the <code>cache/a/wis2/#</code> topic.</p>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, the test passes. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>Close the connection to the broker after the test.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_global_broker_subscription"><a class="anchor" href="#_global_broker_subscription"></a>7.2.1.3. Global Broker subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_5"><a class="anchor" href="#_purpose_5"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must connect to at least 2 Global Brokers using the MQTT protocol with TLS and username/password authentication (everyone/everyone) and subscribe to the following topics:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+<li>
+<p><code>origin/a/wis2/+/data/core/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/metadata/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/core/#</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_5"><a class="anchor" href="#_steps_5"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the first Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+<li>
+<p><code>origin/a/wis2/+/data/core/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/metadata/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/core/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>Repeat steps 2 to 4 for the additional Global Brokers.</p>
+</li>
+<li>
+<p>If the MQTT client is able to successfully subscribe to the topics on both Global Brokers, the test passes. If not, the test fails.</p>
+</li>
+<li>
+<p>Close the connections to the brokers after the test.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded; clause 4.5.3: A Global Cache shall subscribe to at least one Global Broker for notifications concerning core data and discovery metadata [&#8230;&#8203;].</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.1. Procedure for registration of a new Global Service: “Each Global Cache connected to at least two (2) Global Broker and should be able to download the data from all WIS2 Nodes providing Core data” <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service</a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_processing"><a class="anchor" href="#_notification_processing"></a>7.2.1.4. Notification processing</h5>
+<div class="sect5">
+<h6 id="_purpose_6"><a class="anchor" href="#_purpose_6"></a>Purpose</h6>
+<div class="paragraph">
+<p>The intention here is to test that the GC functions as expected under normal conditions. The Global Cache should be able to process an incoming notification message, download the data at the canonical link, validate the integrity of the message, publish a new notification message on the proper topic using the proper message structure, and update the necessary metrics. This case/test assumes the data object and included checksum is valid, a separate test is included to test the integrity check.</p>
+</div>
+<div class="paragraph">
+<p>The cache notification message published by the Global Cache should be identical to the notification message received, except for the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the canonical link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>)</p>
+</li>
+<li>
+<p>the unique identifier of the message (id)</p>
+</li>
+<li>
+<p>the topic (<code>cache/a/wis2/&#8230;&#8203;</code>) (note the incoming message may be on this same topic if it is from another GC)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The notification messages will follow the standard structure (see Manual on WIS (WMO-No. 1060), Volume II, Appendix E: WIS2 Notification Message).</p>
+</div>
+<div class="paragraph">
+<p>The notification messages will be published on the standard topic structure in their local message brokers (see Manual on WIS (WMO-No. 1060), Volume II, Appendix D: WIS2 Topic Hierarchy) on topic <code>cache/a/wis2/&#8230;&#8203;</code>.</p>
+</div>
+<div class="paragraph">
+<p>On successful completion, the following metrics should be modified:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gc_download_total</code> should be incremented by 1 (one).</p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_status_flag</code> for the source data server (i.e., the centre ID from where the data item was downloaded from) should be set to 1 (one).</p>
+</li>
+<li>
+<p><code>wmo-wis2_gc_dataserver_last_download_timestamp_seconds</code> for the source data server should be set to the current time.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_6"><a class="anchor" href="#_steps_6"></a>Steps</h6>
+<div class="paragraph">
+<p>These tests rely on mock data and/or curated batches of real data. Specifically notification messages, with accompanying data objects, whose characteristics are known and can be used to validate the GC&#8217;s behavior.
+Upon processing the batch of notification messages, the following will be evaluated and compared against the expected results:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The total number of cache notification messages published by the GC</p>
+</li>
+<li>
+<p>The total number of data objects cached by the GC</p>
+</li>
+<li>
+<p>The validity of the notification messages published by the GC</p>
+</li>
+<li>
+<p>The validity of the data objects cached by the GC (i.e., the data object is accessible via the canonical link)</p>
+</li>
+<li>
+<p>The following metrics are updated (or not) as expected per the curated test data set:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gc_download_total</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_status_flag</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_last_download_timestamp_seconds</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.4: Based on the notifications it receives, a Global Cache shall download and store a copy of discovery metadata records and core data from [WIS2 Nodes] and other Global [Services]; clause 3.7.5.7: A Global Cache shall publish notifications via its Message Broker about copies of the discovery metadata records and core data it makes available. A Global Cache shall use a standardized topic structure when publishing notifications; clause 4.5.2: A Global Cache shall download core data and discovery metadata from [WIS2 Nodes] and other Global [Services] to provide for reliable, low-latency access to those resources via WIS; clause 4.5.4: Based on received notifications, a Global Cache shall download core data from [WIS2 Nodes] or other Global [Services] and store them for a minimum duration of 24 hours; clause 4.5.5: Based on its received notifications, a Global Cache shall download discovery metadata records from [WIS2 Nodes] or other Global [Services] and store them for a minimum duration of 24 hours; clause 4.5.7: A Global Cache shall publish notifications to a Message Broker indicating  the availability of data and discovery metadata resources from the Global Cache and shall use the format and protocol specified [&#8230;&#8203;].</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.1. [Global Cache] Technical considerations <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2</a>; clause 2.7.4.2. [Global Cache] Practices and procedures <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2</a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_cache_false_directive"><a class="anchor" href="#_cache_false_directive"></a>7.2.1.5. Cache false directive</h5>
+<div class="sect5">
+<h6 id="_purpose_7"><a class="anchor" href="#_purpose_7"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Global Cache receives a notification message with <em>properties.cache</em> set to false, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server.</p>
+</div>
+<div class="paragraph">
+<p>The cache notification message published by the Global Cache should be identical to the notification message received, except for the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the unique identifier of the message (id)</p>
+</li>
+<li>
+<p>the topic (<code>cache/a/wis2/&#8230;&#8203;</code>) (note the incoming message may be on this same topic if it is from another GC)</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Is the above assessment correct?</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_7"><a class="anchor" href="#_steps_7"></a>7.2.1.6. Steps</h5>
+<div class="paragraph">
+<p>These tests rely on mock data and/or curated batches of real data. Specifically notification messages, with accompanying data objects, whose characteristics are known and can be used to validate the GC&#8217;s behavior. In this case a known number of messages will have the cache directive set to false.
+Upon processing the batch of notification messages, the following will be evaluated and compared against the expected results:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The total number of cache notification messages published by the GC</p>
+</li>
+<li>
+<p>The total number of data objects cached by the GC</p>
+</li>
+<li>
+<p>The validity of the notification messages published by the GC, taking into consideration the bullets above (difference between the original and the published message).</p>
+</li>
+<li>
+<p>The following metrics are updated (or not) as expected per the curated test data set:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gc_download_total</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_status_flag</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_last_download_timestamp_seconds</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_no_cache_total</code> (incremented by 1 for each notification message where the cache directive is set to false)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>wmo_wis2_gc_no_cache_total is a proposed new metric</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_source_download_failure"><a class="anchor" href="#_source_download_failure"></a>7.2.1.7. Source download failure</h5>
+<div class="sect5">
+<h6 id="_purpose_8"><a class="anchor" href="#_purpose_8"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Global Cache is unable to download a data item from the location specified in a notification message (i.e., the source data server), the <code>metric wmo_wis2_gc_dataserver_status_flag</code> for the source data server should be set to 0 (zero).</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_8"><a class="anchor" href="#_steps_8"></a>7.2.1.8. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_cache_override"><a class="anchor" href="#_cache_override"></a>7.2.1.9. Cache override</h5>
+<div class="sect5">
+<h6 id="_purpose_9"><a class="anchor" href="#_purpose_9"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server, and the metric <code>wmo_wis2_gc_cache_override_total</code> is incremented by 1 (one).</p>
+</div>
+<div class="paragraph">
+<p>More details needed about the notification message; format, content, topic.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_9"><a class="anchor" href="#_steps_9"></a>7.2.1.10. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_data_integrity_failure_check"><a class="anchor" href="#_data_integrity_failure_check"></a>7.2.1.11. Data integrity failure check</h5>
+<div class="sect5">
+<h6 id="_purpose_10"><a class="anchor" href="#_purpose_10"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a notification message provides an integrity value for a data item (<code>properties.integrity</code>), a Global Cache should validate the integrity of the resources it caches and only accept data which matches. A Global Cache should calculate the hash of the data object instance [once downloaded into the cache?] using the method specified in <code>properties.integrity.method</code>. Where the calculated hash does not match the value specified in <code>properties.integrity.value</code>:
+The data item should be removed from the cache if already downloaded
+No notification message should be published
+The <code>metric wmo_wis2_gc_download_errors_total</code> should be incremented by 1 (one).
+The <code>metric wmo_wis2_gc_integrity_failed_total</code> should be incremented by 1 (one).</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_10"><a class="anchor" href="#_steps_10"></a>7.2.1.12. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_duplicate_notification_discarding"><a class="anchor" href="#_duplicate_notification_discarding"></a>7.2.1.13. Duplicate notification discarding</h5>
+<div class="sect5">
+<h6 id="_purpose_11"><a class="anchor" href="#_purpose_11"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed.</p>
+</div>
+<div class="paragraph">
+<p>Test this by sending two identical notification messages, ideally from different sources, and verify that the second notification message is discarded.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_11"><a class="anchor" href="#_steps_11"></a>7.2.1.14. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_duplicate_notification_discarding_alternative"><a class="anchor" href="#_duplicate_notification_discarding_alternative"></a>7.2.1.15. Duplicate notification discarding (alternative)</h5>
+<div class="sect5">
+<h6 id="_purpose_12"><a class="anchor" href="#_purpose_12"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Global Cache fails to process a notification message with a given unique identifier (id), a Global Cache must attempt to process subsequently received notification messages with the same unique identifier.</p>
+</div>
+<div class="paragraph">
+<p>Test this by sending two almost identical notification messages, the first of which should include an unresolvable data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) (or simply missing a <code>canonical</code> link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_12"><a class="anchor" href="#_steps_12"></a>7.2.1.16. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_duplicate_data_discarding"><a class="anchor" href="#_duplicate_data_discarding"></a>7.2.1.17. Duplicate data discarding</h5>
+<div class="sect5">
+<h6 id="_purpose_13"><a class="anchor" href="#_purpose_13"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must ensure that only one instance of a data item, designated with a given unique identifier (<code>properties.data_id</code>) and publication time (<code>properties.pubtime</code>) in the associated notification message, is successfully processed.</p>
+</div>
+<div class="paragraph">
+<p>Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (<code>properties.data_id</code>) and publication time (<code>properties.pubtime</code>). Ideally the notification messages should simulate data being made available at different locations (i.e., an origin WIS2 Node and another Global Cache) with differing data download links (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_13"><a class="anchor" href="#_steps_13"></a>7.2.1.18. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_duplicate_data_discarding_alternative_1"><a class="anchor" href="#_duplicate_data_discarding_alternative_1"></a>7.2.1.19. Duplicate data discarding (alternative 1)</h5>
+<div class="sect5">
+<h6 id="_purpose_14"><a class="anchor" href="#_purpose_14"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Global Cache fails to process a notification message relating to a given unique data object (<code>properties.data_id</code> + <code>properties.pubtime</code>), a Global Cache must attempt to process subsequently received notification messages with the same unique data identifier.</p>
+</div>
+<div class="paragraph">
+<p>Test this by sending two notification messages each with a unique identifier (id) but both with the same data identifier (<code>properties.data_id</code>). The first message should include an unresolvable data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) (or simply missing a <code>canonical</code> link object?). This will force processing of the first message to fail. The second notification message should be processed successfully, with the data item being copied into the cache.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_14"><a class="anchor" href="#_steps_14"></a>7.2.1.20. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_duplicate_data_discarding_alternative_2"><a class="anchor" href="#_duplicate_data_discarding_alternative_2"></a>7.2.1.21. Duplicate data discarding (alternative 2)</h5>
+<div class="sect5">
+<h6 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache should treat notification messages with the same data item identifier (<code>properties.data_id</code>), but different publication times (<code>properties.pubtime</code>) as unique data items. Data items with the same <code>properties.data_id</code> but a later publication time should be copied into the cache (see test Notification processing). Data items with the same <code>properties.data_id</code> but earlier or identical publication times should be ignored (see test Duplicate link discarding).</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.2. [Global Cache] Practices and procedures: “Verify if the message points to new or updated data by comparing the pubtime value of the notification message with the list of data_ids”. <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2</a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_15"><a class="anchor" href="#_steps_15"></a>7.2.1.22. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_client_data_download"><a class="anchor" href="#_client_data_download"></a>7.2.1.23. Client data download</h5>
+<div class="sect5">
+<h6 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>Purpose</h6>
+<div class="paragraph">
+<p>An HTTP client (i.e., a Web browser) must be able to connect to the HTTP server of the Global Cache on port 443 using HTTP 1.1 with TLS but without any authentication and be able to resolve the URL provided in a data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) from a notification message published by the Global Cache within the previous 24 hours; i.e., download a cached data item.</p>
+</div>
+<div class="paragraph">
+<p>Note: testing provision of access via HTTP 1.1 - “at least one of the protocols”.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.5: A Global Cache shall provide highly available access to copies of discovery metadata records and core data it stores; clause 3.7.5.6: A Global Cache shall retain a copy of the discovery metadata records and core data it stores for a duration compatible with the real-time or near-real-time schedule of the data and not less than 24 hours; clause 4.5.2: A Global Cache shall download core data and discovery metadata from [WIS2 Nodes] and other Global [Services] to provide for reliable, low-latency access to those resources via WIS; clause 4.5.6: Data and discovery metadata available for download from a Global Cache shall be accessible via a URL using at least one of the protocols specified [&#8230;&#8203;].</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_16"><a class="anchor" href="#_steps_16"></a>7.2.1.24. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_certificate_validation"><a class="anchor" href="#_certificate_validation"></a>7.2.1.25. Certificate validation</h5>
+<div class="sect5">
+<h6 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must use a valid certificate.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_17"><a class="anchor" href="#_steps_17"></a>7.2.1.26. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_metric_publication"><a class="anchor" href="#_metric_publication"></a>7.2.1.27. Metric publication</h5>
+<div class="sect5">
+<h6 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must publish the following metrics using the OpenMetrics standard:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gc_download_total</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_download_errors_total</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_status_flag</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_dataserver_last_download_timestamp_seconds</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_cache_override_total</code></p>
+</li>
+<li>
+<p><code>wmo_wis2_gc_integrity_failed_total</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> <a href="https://github.com/wmo-im/wis2-metric-hierarchy/blob/main/metrics/gc.csv" class="bare">https://github.com/wmo-im/wis2-metric-hierarchy/blob/main/metrics/gc.csv</a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_18"><a class="anchor" href="#_steps_18"></a>7.2.1.28. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>7.2.2. Performance tests</h4>
+<div class="sect4">
+<h5 id="_notification_processing_rate"><a class="anchor" href="#_notification_processing_rate"></a>7.2.2.1. Notification processing rate</h5>
+<div class="sect5">
+<h6 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache shall be able to successfully process 1000 notification messages, averaging xxx bytes, including caching the associated data item and publishing the new notification message, within xxx seconds.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_19"><a class="anchor" href="#_steps_19"></a>7.2.2.2. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_processing_time"><a class="anchor" href="#_notification_processing_time"></a>7.2.2.3. Notification processing time</h5>
+<div class="sect5">
+<h6 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache shall successfully process a notification message, including caching the associated data item and publishing the new notification message, within xxx seconds.</p>
+</div>
+<div class="paragraph">
+<p>Note: A Global Cache may decide to ignore the request to cache a data item if it will take excessively long to process. See test Cache override for details.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_20"><a class="anchor" href="#_steps_20"></a>7.2.2.4. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_concurrent_client_downloads"><a class="anchor" href="#_concurrent_client_downloads"></a>7.2.2.5. Concurrent client downloads</h5>
+<div class="sect5">
+<h6 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>Purpose</h6>
+<div class="paragraph">
+<p>1000 HTTP clients concurrently download data items from the Global Cache, with HTTP response time not exceeding xxx seconds, at a rate exceeding xxx bytes/second.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.5: A Global Cache shall provide highly available access to copies of discovery metadata records and core data it stores; clause 4.5.1: A Global Cache shall operate a highly available storage and download service; clause 4.5.2: A Global Cache shall download core data and discovery metadata from [WIS2 Nodes] and other Global [Services] to provide for reliable, low-latency access to those resources via WIS.
+<strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: “A Global Cache should support a minimum of 1000 simultaneous downloads” <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service</a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_21"><a class="anchor" href="#_steps_21"></a>7.2.2.6. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_storage_volume"><a class="anchor" href="#_storage_volume"></a>7.2.2.7. Storage volume</h5>
+<div class="sect5">
+<h6 id="_type_of_test"><a class="anchor" href="#_type_of_test"></a>Type of test</h6>
+<div class="paragraph">
+<p>Performance</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache shall be able to store at least 100GB of Core data items.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: “A Global Cache should support a minimum of 100 GB of data in the cache” <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service</a></p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_22"><a class="anchor" href="#_steps_22"></a>7.2.2.8. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_system_wide_tests"><a class="anchor" href="#_system_wide_tests"></a>7.2.3. System-wide tests</h4>
+<div class="sect4">
+<h5 id="_single_global_broker_failure"><a class="anchor" href="#_single_global_broker_failure"></a>7.2.3.1. Single Global Broker failure</h5>
+<div class="sect5">
+<h6 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>Purpose</h6>
+<div class="paragraph">
+<p>Pre: At least 2 Global Brokers have subscribed to notification messages from a given WIS2 Node.
+Pre: Global Cache is subscribed to at least two Global Brokers.
+Pre: Global Cache is successfully downloading data items into its cache from the WIS2 Node.</p>
+</div>
+<div class="paragraph">
+<p>In the event that one of the Global Brokers subscribing to the WIS2 Node fails (i.e., goes offline), notification messages from the WIS2 Node are still received (and processed) by the Global Cache.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_23"><a class="anchor" href="#_steps_23"></a>7.2.3.2. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_origin_node_unresolvable"><a class="anchor" href="#_origin_node_unresolvable"></a>7.2.3.3. Origin node unresolvable</h5>
+<div class="sect5">
+<h6 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>Purpose</h6>
+<div class="paragraph">
+<p>Pre: A given WIS2 Node is publishing notification messages and Core data.
+Pre: At least 2 Global Caches are receiving notification messages from the WIS2 Node (via a Global Broker).
+Pre: Global Cache #1 is able to resolve HTTP URLs from the WIS2 Node.
+Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
+</div>
+<div class="paragraph">
+<p>Core data items published by the WIS2 Node are successfully cached by Global Cache #2, by way of downloading from Global Cache #1.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_steps_24"><a class="anchor" href="#_steps_24"></a>7.2.3.4. Steps</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_considerations"><a class="anchor" href="#_considerations"></a>7.2.4. Considerations</h4>
+<div class="sect4">
+<h5 id="_general_testing_strategy"><a class="anchor" href="#_general_testing_strategy"></a>7.2.4.1. General Testing Strategy</h5>
+<div class="paragraph">
+<p>The testing strategy for the Global Cache (GC) will leverage both mocked data and curated real data. This approach ensures a comprehensive evaluation of the GC&#8217;s functionality under various scenarios.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Mocked Data:</strong> This data is artificially created to simulate specific scenarios that might not be easily reproducible with real data. It allows us to test edge cases, error conditions, and unusual data patterns.</p>
+</li>
+<li>
+<p><strong>Curated Real Data:</strong> This data is derived from actual use cases and provides a realistic representation of what the GC will encounter in a production environment. It allows us to test the GC&#8217;s performance and reliability.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The testing process will be automated through scripts. These scripts will perform the following steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Data Publication:</strong> The scripts will publish a batch of messages to the dev MQTT broker. These messages will represent a mix of scenarios based on the mocked and curated real data.</p>
+</li>
+<li>
+<p><strong>GC Subscription:</strong> The GC will be subscribed to the MQTT broker to receive the published messages. This simulates the GC&#8217;s real-world operation where it subscribes to Global Brokers to receive notifications. (Remy has something already in the works here)</p>
+</li>
+<li>
+<p><strong>Result Validation:</strong> After the GC processes the received messages, the scripts will validate the results. This includes checking if the GC correctly stored the data, published notifications, and updated metrics as expected.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_general_performance_testing_strategy"><a class="anchor" href="#_general_performance_testing_strategy"></a>7.2.4.2. General Performance Testing Strategy</h5>
+<div class="paragraph">
+<p>The performance testing strategy for the GC will primarily focus on the time taken from when a notification message is published to when the associated cache message is received by the test process. This approach ensures a comprehensive evaluation of the GC&#8217;s performance under various scenarios.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Notification Publication:</strong> The test process will publish a notification message to the MQTT broker. This message will represent a specific scenario based on the mocked or curated real data.</p>
+</li>
+<li>
+<p><strong>Start Timer:</strong> The test process will start a timer immediately after the notification message is published. Multiple timers can be used for multiple notification messages.</p>
+</li>
+<li>
+<p><strong>GC Subscription and Processing:</strong> The GC, which is subscribed to the dev MQTT broker, will receive the published notification message. It will then process the message, which may include storing the data, publishing a cache notification, and updating metrics as expected.</p>
+</li>
+<li>
+<p><strong>Cache Message Receipt:</strong> The test process, which is also subscribed to the MQTT broker, will receive the cache message published by the GC.</p>
+</li>
+<li>
+<p><strong>Stop Timer:</strong> The test process will stop the timer immediately after the cache message is received.</p>
+</li>
+<li>
+<p><strong>Result Validation:</strong> The test process will validate the results. This includes checking if the GC correctly processed the notification message and published the cache message, and if the time taken (as measured by the timer) is within the acceptable performance limits.</p>
+</li>
+<li>
+<p><strong>Data Size Consideration:</strong> The size of the cached data objects will also be considered. The performance of the GC can be evaluated based on the bytes per second processed. This will help in understanding the GC&#8217;s efficiency in handling different sizes of data objects.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_addition_of_wmo_wis2_gc_no_cache_total_metric"><a class="anchor" href="#_addition_of_wmo_wis2_gc_no_cache_total_metric"></a>7.2.4.3. Addition of <code>wmo_wis2_gc_no_cache_total</code> metric</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>This metric will be used to capture <code>properties.cache=false</code> cases. It will be incremented by 1 (one) for each notification message where the <code>properties.cache</code> property is set to <code>false</code> or where the Global Cache determines that it is unable to cache a data item.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_message_uniqueness_properties_data_id_properties_pubtime"><a class="anchor" href="#_message_uniqueness_properties_data_id_properties_pubtime"></a>7.2.4.4. Message uniqueness = <code>properties.data_id</code> + <code>properties.pubtime</code></h5>
+<div class="ulist">
+<ul>
+<li>
+<p>The unique identifier of a data item is a combination of the data identifier (<code>properties.data_id</code>) and the publication time (<code>properties.pubtime</code>). This is to ensure that the Global Cache does not store multiple copies of the same data item AND to support the ability to update/correct data items.</p>
+</li>
+<li>
+<p>Are other folks in agreement with this approach and already implementing it?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_max_data_object_size"><a class="anchor" href="#_max_data_object_size"></a>7.2.4.5. Max data object size</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>What is the maximum size of a data object that a Global Cache should be able to process and store?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_data_integrity_checks"><a class="anchor" href="#_data_integrity_checks"></a>7.2.4.6. Data Integrity Checks</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>How are folks implementing the data integrity check? Downloading first or any other approach, perhaps a rolling hash?</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_best_practicesbest_effort"><a class="anchor" href="#_best_practicesbest_effort"></a>7.2.4.7. Best practices/best effort</h5>
+<div class="sect5">
+<h6 id="_retryredrive_strategy"><a class="anchor" href="#_retryredrive_strategy"></a>Retry/Redrive strategy</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Simple: failed download attempts where we retry same URL. (immediate, and/or after a backoff as these solve different problems).</p>
+</li>
+<li>
+<p>Redrive based on messages with redundant <code>properties.data_id&#8217;s in the event of a download failure. This would require caching all messages for a certain amount of time. This way the Global Cache can reprocess the message with the same `properties.data_id</code> + <code>properties.pubtime</code> if the download fails and 'redundant' messages with different download links exist.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>supporting update/correction of data items per GTS?</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="global-discovery-catalogue-testing"><a class="anchor" href="#global-discovery-catalogue-testing"></a>7.3. Global Discovery Catalogue Service testing</h3>
+<div class="sect3">
+<h4 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>7.3.1. Functional tests</h4>
+<div class="sect4">
+<h5 id="_mqtt_connectivity_2"><a class="anchor" href="#_mqtt_connectivity_2"></a>7.3.1.1. MQTT Connectivity</h5>
+<div class="sect5">
+<h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
+<div class="paragraph">
+<p>An MQTT client must be able to connect to the local broker of the Global Discovery Catalogue on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Attempt to connect the MQTT client to the local broker of the Global Discovery Catalogue on port 8883.</p>
+</li>
+<li>
+<p>Check if the connection is successful. If the connection is successful, the test passes. If the connection is not successful, the test fails.</p>
+</li>
+<li>
+<p>Close the connection to the broker after the test.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_client_subscription_2"><a class="anchor" href="#_client_subscription_2"></a>7.3.1.2. Client subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Discovery Catalogue must allow connected MQTT clients to subscribe to the <code>monitor/a/wis2/#</code> topic.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the local broker of the Global Discovery Catalogue.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the <code>monitor/a/wis2/#</code> topic.</p>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, the test passes. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>Close the connection to the broker after the test.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_global_broker_subscription_2"><a class="anchor" href="#_global_broker_subscription_2"></a>7.3.1.3. Global Broker subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Discovery Catalogue must connect to a Global Broker using the MQTT protocol with TLS and username/password authentication (everyone/everyone) and subscribe to the following topic:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_27"><a class="anchor" href="#_steps_27"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>Close the connections to the broker after the test.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion, the following metrics should be modified:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_connected_flag</code> for the centre-id frmo which the Global Discovery Catalogue connected to should be set to 1 (one).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>7.3.1.4. Notification and metadata processing (success)</h5>
+<div class="sect5">
+<h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Discovery Catalogue should be able to:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>process an incoming notification message.</p>
+</li>
+<li>
+<p>download the metadata at the canonical link.</p>
+</li>
+<li>
+<p>validate the valid metadata against the WCMP2 Executable Test Suite (ETS).</p>
+</li>
+<li>
+<p>publish an ETS validation report notification message on the proper topic using the proper message structure.</p>
+</li>
+<li>
+<p>evaluate the metadata against the WCMP2 Key Performance Indicators (KPI).</p>
+</li>
+<li>
+<p>publish a KPI evaluation report notification message on the proper topic using the proper message structure.</p>
+</li>
+<li>
+<p>update the necessary metrics.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The WCMP2 record published by the Global Discovery Catalogue should be identical to the content of the canonical link referenced from notification message received, except for the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>for core data, add/replace link objects on core data notifications to reference each WIS2 Global Broker using the associated cached topic.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>On successful completion, the following metrics should be modified:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_passed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+<li>
+<p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be incremented by 1 (one).</p>
+</li>
+<li>
+<p><code>wmo_wis2_gdc_recommended_total</code> for the centre-id from where the metadata (recommended data policy) was published from should be incremented by 1 (one).</p>
+</li>
+<li>
+<p><code>wmo_wis2_gdc_kpi_percentage_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+<li>
+<p><code>wmo_wis2_gdc_kpi_percentage_average</code> for the centre-id from where the metadata was published from should be calculated as an average.</p>
+</li>
+<li>
+<p><code>wmo_wis2_gdc_kpi_percentage_over80_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_and_metadata_processing_failure"><a class="anchor" href="#_notification_and_metadata_processing_failure"></a>7.3.1.5. Notification and metadata processing (failure)</h5>
+<div class="sect5">
+<h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Discovery Catalogue should be able to:</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_28"><a class="anchor" href="#_steps_28"></a>Steps</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>process an incoming notification message.</p>
+</li>
+<li>
+<p>download the metadata at the canonical link.</p>
+</li>
+<li>
+<p>validate the invalid failing metadata against the WCMP2 Executable Test Suite (ETS).</p>
+</li>
+<li>
+<p>publish an ETS validation report notification message on the proper topic using the proper message structure.</p>
+</li>
+<li>
+<p>update the necessary metrics.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>On successful completion, the following metrics should be modified:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_metadata_ingest_topic_mismatch"><a class="anchor" href="#_metadata_ingest_topic_mismatch"></a>7.3.1.6. Metadata ingest topic mismatch</h5>
+<div class="sect5">
+<h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Discovery Catalogue should detect a mismatch between an incoming message topic&#8217;s centre-id and the centre-id as part of a WCMP2 record identifier.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_29"><a class="anchor" href="#_steps_29"></a>Steps</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>process an incoming notification message.</p>
+</li>
+<li>
+<p>extract the centre-id from the topic (4th token split on <code>/</code>).</p>
+</li>
+<li>
+<p>download the metadata at the canonical link.</p>
+</li>
+<li>
+<p>extract the centre-id from WCMP2 record identifier (3rd token split on <code>:</code>).</p>
+</li>
+<li>
+<p>compare the centre-id from the topic and the centre-id of the WCMP2 record identifier.</p>
+</li>
+<li>
+<p>publish an error report to <code>monitor/a/wis2/</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>On successful completion, the following metrics should be modified:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.3.1.7. WCMP2 metadata archive zipfile publication</h5>
+<div class="sect5">
+<h6 id="_purpose_31"><a class="anchor" href="#_purpose_31"></a>Purpose</h6>
+<div class="paragraph">
+<p>Validate that a GDC API publishes a metadata archive zipfile.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_30"><a class="anchor" href="#_steps_30"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Construct a path to the GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Check that the record includes a <code>links</code> array.</p>
+</li>
+<li>
+<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=enclosure</code> and <code>type=application/zip</code>).</p>
+</li>
+<li>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+</li>
+<li>
+<p>Unzip the content of the HTTP response.</p>
+</li>
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Discovery Catalogue.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/centre-id/metadata/#</code> (where <code>centre-id</code> is the centre identifier of the Global Discovery Catalogue).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>If the MQTT client is able to successfully subscribe to the topic on the Global Discovery Catalogue, the test passes. If not, the test fails.</p>
+</li>
+<li>
+<p>On receipt of a notification message, issue a HTTP GET requerst on the canonical link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>)</p>
+</li>
+<li>
+<p>Unzip the content of the HTTP response.</p>
+</li>
+<li>
+<p>Close the connection to the broker after the test.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_openmetrics_publication"><a class="anchor" href="#_openmetrics_publication"></a>7.3.1.8. OpenMetrics publication</h5>
+<div class="sect5">
+<h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
+<div class="paragraph">
+<p>Validate that a GDC API publishes an OpenMetrics endpoint.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_31"><a class="anchor" href="#_steps_31"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Construct a path to the GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Check that the record includes a <code>links</code> array.</p>
+</li>
+<li>
+<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=related</code>, <code>type=text/plain</code> and <code>title=OpenMetrics</code>.</p>
+</li>
+<li>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+</li>
+<li>
+<p>Unzip the content of the HTTP response.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.1.9. API functionality</h5>
+<div class="sect5">
+<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
+<div class="paragraph">
+<p>Validate that a GDC API performs as expected based on the OGC API - Records standard.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_32"><a class="anchor" href="#_steps_32"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Construct a path to the GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Check that the record includes a <code>links</code> array.</p>
+</li>
+<li>
+<p>In the <code>links</code> array, check that an items link is available (where a link object&#8217;s <code>rel=items</code> and <code>type=application/geo+json</code>).</p>
+</li>
+<li>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Construct a path to the GDC endpoint with a bounding box query parameter (<code>https://HOST/collections/wis2-discovery-metadata?bbox=-142,42,-53,84</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>features</code> array exists.</p>
+</li>
+<li>
+<p>Construct a path to the GDC endpoint with a temporal query parameter (<code>https://HOST/collections/wis2-discovery-metadata?datetime=2000-11-11T12:42:23Z/..</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>features</code> array exists.</p>
+</li>
+<li>
+<p>Construct a path to the GDC endpoint with a full text query parameter (<code>https://HOST/collections/wis2-discovery-metadata?q=observations</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value greater than 0.</p>
+</li>
+<li>
+<p>Ensure that a <code>features</code> array exists.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_performance_tests_3"><a class="anchor" href="#_performance_tests_3"></a>7.3.2. Performance tests</h4>
+<div class="sect4">
+<h5 id="_api_performance"><a class="anchor" href="#_api_performance"></a>7.3.2.1. API performance</h5>
+<div class="sect5">
+<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
+<div class="paragraph">
+<p>Validate that a GDC API peforms</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>step 1</p>
+</li>
+<li>
+<p>step 2</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="sect1">
-<h2 id="results"><a class="anchor" href="#results"></a>7. Results</h2>
+<h2 id="results"><a class="anchor" href="#results"></a>8. Results</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="discussion"><a class="anchor" href="#discussion"></a>8. Discussion</h2>
+<h2 id="discussion"><a class="anchor" href="#discussion"></a>9. Discussion</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>TODO</p>
@@ -822,7 +2264,7 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 </div>
 </div>
 <div class="sect1">
-<h2 id="conclusions"><a class="anchor" href="#conclusions"></a>9. Conclusions</h2>
+<h2 id="conclusions"><a class="anchor" href="#conclusions"></a>10. Conclusions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>TODO</p>
@@ -830,7 +2272,7 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 </div>
 </div>
 <div class="sect1">
-<h2 id="_future_work"><a class="anchor" href="#_future_work"></a>10. Future work</h2>
+<h2 id="_future_work"><a class="anchor" href="#_future_work"></a>11. Future work</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>TODO</p>
@@ -911,7 +2353,7 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-13 12:52:50 UTC
+Last updated 2024-05-22 07:50:55 UTC
 </div>
 </div>
 </body>
