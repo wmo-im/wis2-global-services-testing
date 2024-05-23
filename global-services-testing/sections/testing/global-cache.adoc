@@ -42,21 +42,21 @@ A Global Cache must connect to at least 2 Global Brokers using the MQTT protocol
 
 ====== Steps
 
-1. Initialize the GC with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication for the connection to both GB as well as the subscription information to the listed topics. The specific means to achieve this depends on the implementation of the GC
+. Initialize the GC with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication for the connection to both GB as well as the subscription information to the listed topics. The specific means to achieve this depends on the implementation of the GC
 
-2. Connect the GC as described above to the Global Brokers.
+. Connect the GC as described above to the Global Brokers.
 
-3. Verify that the connection is established by either the Log Files of the GC, the Log Files of the GB or by inspecting network traffic whichever seems fit.
+. Verify that the connection is established by either the Log Files of the GC, the Log Files of the GB or by inspecting network traffic whichever seems fit.
 
-4. Check if the subscription is successful. Do this by
+. Check if the subscription is successful. Do this by
 
-  4a. For each listed topic and each listed GB publish one matching WNM
+  . For each listed topic and each listed GB publish one matching WNM
 
-  4b. Verify if each WNM is received by the GC. Do this by either inspectng the Log Files of the GC or by verification if the GC is trying to open a connection to the URL listed as canonical in the WNM.
+  . Verify if each WNM is received by the GC. Do this by either inspectng the Log Files of the GC or by verification if the GC is trying to open a connection to the URL listed as canonical in the WNM.
 
-5. If all messages are received, the test passes. If not, the test fails.
+. If all messages are received, the test passes. If not, the test fails.
 
-6. Close the connections to the brokers after the test.
+. Close the connections to the brokers after the test.
 
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded; clause 4.5.3: A Global Cache shall subscribe to at least one Global Broker for notifications concerning core data and discovery metadata [...].
 
