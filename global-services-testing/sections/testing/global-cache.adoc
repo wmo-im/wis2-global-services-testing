@@ -50,9 +50,9 @@ A Global Cache must connect to at least 2 Global Brokers using the MQTT protocol
 
 . Check if the subscription is successful. Do this by
 
-  . For each listed topic and each listed GB publish one matching WNM
+.. For each listed topic and each listed GB publish one matching WNM
 
-  . Verify if each WNM is received by the GC. Do this by either inspectng the Log Files of the GC or by verification if the GC is trying to open a connection to the URL listed as canonical in the WNM.
+.. Verify if each WNM is received by the GC. Do this by either inspectng the Log Files of the GC or by verification if the GC is trying to open a connection to the URL listed as canonical in the WNM.
 
 . If all messages are received, the test passes. If not, the test fails.
 
