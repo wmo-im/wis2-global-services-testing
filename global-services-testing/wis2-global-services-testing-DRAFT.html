@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-05-22</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-05-23</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -940,38 +940,29 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the GC with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication for the connection to both GB as well as the subscription information to the listed topics. The specific means to achieve this depends on the implementation of the GC</p>
 </li>
 <li>
-<p>Connect the MQTT client to the first Global Broker.</p>
+<p>Connect the GC as described above to the Global Brokers.</p>
 </li>
 <li>
-<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>origin/a/wis2/+/metadata/#</code></p>
+<p>Verify that the connection is established by either the Log Files of the GC, the Log Files of the GB or by inspecting network traffic whichever seems fit.</p>
 </li>
 <li>
-<p><code>origin/a/wis2/+/data/core/#</code></p>
+<p>Check if the subscription is successful. Do this by</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>For each listed topic and each listed GB publish one matching WNM</p>
 </li>
 <li>
-<p><code>cache/a/wis2/+/metadata/#</code></p>
+<p>Verify if each WNM is received by the GC. Do this by either inspectng the Log Files of the GC or by verification if the GC is trying to open a connection to the URL listed as canonical in the WNM.</p>
 </li>
-<li>
-<p><code>cache/a/wis2/+/data/core/#</code></p>
-</li>
-</ul>
+</ol>
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
-</li>
-<li>
-<p>Repeat steps 2 to 4 for the additional Global Brokers.</p>
-</li>
-<li>
-<p>If the MQTT client is able to successfully subscribe to the topics on both Global Brokers, the test passes. If not, the test fails.</p>
+<p>If all messages are received, the test passes. If not, the test fails.</p>
 </li>
 <li>
 <p>Close the connections to the brokers after the test.</p>
@@ -2353,7 +2344,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-22 07:50:55 UTC
+Last updated 2024-05-23 02:55:11 UTC
 </div>
 </div>
 </body>
