@@ -1,10 +1,10 @@
-[[global-service-name-testing]]
+[[global-broker-testing]]
 
-=== Global XXX Service testing
+=== Global Broker Service testing
 
 ==== Functional tests
 
-===== Test name
+===== Functional test title
 
 ====== Purpose
 
@@ -17,7 +17,7 @@ TODO
 
 ==== Performance tests
 
-===== Test name
+===== Performance test title
 
 ====== Purpose
 
