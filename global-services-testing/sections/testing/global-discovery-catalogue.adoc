@@ -121,6 +121,10 @@ On successful completion:
 
 ===== Notification and metadata processing (failure; invalid WCMP2 record)
 
+TODO: we need more examples of invalid WCMP2
+
+
+
 ====== Purpose
 
 The Global Discovery Catalogue should be able to process failing WCMP2 metadata published by a WIS2 Node.
@@ -146,6 +150,11 @@ On successful completion:
 * a notification message should arrive from the Global Broker under `monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id`)
 
 ===== Metadata ingest centre-id mismatch
+
+
+TODO: validate workflow for regional distribution of partner metadata
+
+
 
 ====== Purpose
 
@@ -202,6 +211,15 @@ On successful completion:
 ** `wmo_wis2_gdc_core_total` for the centre-id from where the metadata (core data policy) was published from should be decremented by 1 (one).
 * a notification message should arrive from the Global Broker under `monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id`)
 
+BEGIN
+TODO test deletion WITHOUT metadata_id
+END
+
+BEGIN
+TODO add test case for metadata zipfile usage on cold start
+END
+
+
 ===== WCMP2 metadata archive zipfile publication
 
 ====== Purpose
@@ -214,7 +232,7 @@ Validate that a GDC API publishes a metadata archive zipfile.
 . Issue a HTTP GET request on the path.
 . Parse the HTTP response.
 . Check that the record includes a `links` array.
-. In the `links` array, check that a metadata archive zipfile link is available (where a link object's `rel=enclosure` and `type=application/zip`).
+. In the `links` array, check that a metadata archive zipfile link is available (where a link object's `rel=archives` and `type=application/zip`).
 . In the matching link, issue a HTTP GET request on the associated `href` value.
 . Unzip the content of the HTTP response.
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
