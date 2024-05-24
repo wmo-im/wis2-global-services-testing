@@ -532,13 +532,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#global-discovery-catalogue-testing">7.3. Global Discovery Catalogue Service testing</a>
 <ul class="sectlevel3">
-<li><a href="#_functional_tests_3">7.3.1. Functional tests</a></li>
-<li><a href="#_performance_tests_3">7.3.2. Performance tests</a></li>
+<li><a href="#_test_setup">7.3.1. Test setup</a></li>
+<li><a href="#_functional_tests_3">7.3.2. Functional tests</a></li>
+<li><a href="#_performance_tests_3">7.3.3. Performance tests</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#results">8. Results</a></li>
+<li><a href="#results">8. Results</a>
+<ul class="sectlevel2">
+<li><a href="#global-cache-results">8.1. Global Cache Service results</a>
+<ul class="sectlevel3">
+<li><a href="#global-cache-china-results">8.1.1. China</a></li>
+<li><a href="#global-cache-germany-results">8.1.2. Germany</a></li>
+<li><a href="#global-cache-japan-results">8.1.3. Japan</a></li>
+<li><a href="#global-cache-korea-results">8.1.4. Republic of Korea</a></li>
+<li><a href="#global-cache-uk-us-results">8.1.5. United Kingdom of Great Britain and Northern Ireland / United States of America</a></li>
+</ul>
+</li>
+<li><a href="#global-broker-results">8.2. Global Broker Service results</a>
+<ul class="sectlevel3">
+<li><a href="#global-broker-brazil-results">8.2.1. Brazil</a></li>
+<li><a href="#global-broker-china-results">8.2.2. China</a></li>
+<li><a href="#global-broker-france-results">8.2.3. France</a></li>
+<li><a href="#global-broker-usa-results">8.2.4. United States of America</a></li>
+</ul>
+</li>
+<li><a href="#global-discovery-catalogue-results">8.3. Global Discovery Catalogue results</a>
+<ul class="sectlevel3">
+<li><a href="#global-discovery-catalogue-canada-results">8.3.1. Canada</a></li>
+<li><a href="#global-discovery-catalogue-china-results">8.3.2. China</a></li>
+</ul>
+</li>
+<li><a href="#global-monitor-results">8.4. Global Monitor results</a>
+<ul class="sectlevel3">
+<li><a href="#global-monitor-china-results">8.4.1. China</a></li>
+<li><a href="#global-monitor-morocco-results">8.4.2. Morocco</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#discussion">9. Discussion</a></li>
 <li><a href="#conclusions">10. Conclusions</a></li>
 <li><a href="#_future_work">11. Future work</a></li>
@@ -1740,70 +1773,49 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <div class="sect2">
 <h3 id="global-discovery-catalogue-testing"><a class="anchor" href="#global-discovery-catalogue-testing"></a>7.3. Global Discovery Catalogue Service testing</h3>
 <div class="sect3">
-<h4 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>7.3.1. Functional tests</h4>
+<h4 id="_test_setup"><a class="anchor" href="#_test_setup"></a>7.3.1. Test setup</h4>
+<div class="paragraph">
+<p>The GDC test setup consists of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A test data bundle to consist of:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>100 valid WCMP2 records</p>
+</li>
+<li>
+<p>1 broken JSON WCMP2 record</p>
+</li>
+<li>
+<p>1 invalid WCMP2 record</p>
+</li>
+<li>
+<p>102 WNM documents, each of which pointing to the related WCMP2 records</p>
+</li>
+<li>
+<p>1 WNM document specifying a WCMP2 record deletion</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>all WCMP2 records stored on an HTTP server</p>
+</li>
+<li>
+<p>all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>7.3.2. Functional tests</h4>
 <div class="sect4">
-<h5 id="_mqtt_connectivity_2"><a class="anchor" href="#_mqtt_connectivity_2"></a>7.3.1.1. MQTT Connectivity</h5>
+<h5 id="_global_broker_connection_and_subscription"><a class="anchor" href="#_global_broker_connection_and_subscription"></a>7.3.2.1. Global Broker connection and subscription</h5>
 <div class="sect5">
 <h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
-<div class="paragraph">
-<p>An MQTT client must be able to connect to the local broker of the Global Discovery Catalogue on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
-</li>
-<li>
-<p>Attempt to connect the MQTT client to the local broker of the Global Discovery Catalogue on port 8883.</p>
-</li>
-<li>
-<p>Check if the connection is successful. If the connection is successful, the test passes. If the connection is not successful, the test fails.</p>
-</li>
-<li>
-<p>Close the connection to the broker after the test.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_client_subscription_2"><a class="anchor" href="#_client_subscription_2"></a>7.3.1.2. Client subscription</h5>
-<div class="sect5">
-<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
-<div class="paragraph">
-<p>A Global Discovery Catalogue must allow connected MQTT clients to subscribe to the <code>monitor/a/wis2/#</code> topic.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
-</li>
-<li>
-<p>Connect the MQTT client to the local broker of the Global Discovery Catalogue.</p>
-</li>
-<li>
-<p>Once the connection is successful, attempt to subscribe to the <code>monitor/a/wis2/#</code> topic.</p>
-</li>
-<li>
-<p>Check if the subscription is successful. If the subscription is successful, the test passes. If the subscription is not successful, the test fails.</p>
-</li>
-<li>
-<p>Close the connection to the broker after the test.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_global_broker_subscription_2"><a class="anchor" href="#_global_broker_subscription_2"></a>7.3.1.3. Global Broker subscription</h5>
-<div class="sect5">
-<h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Discovery Catalogue must connect to a Global Broker using the MQTT protocol with TLS and username/password authentication (everyone/everyone) and subscribe to the following topic:</p>
 </div>
@@ -1816,7 +1828,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_27"><a class="anchor" href="#_steps_27"></a>Steps</h6>
+<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1849,57 +1861,87 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>wmo_wis2_gdc_connected_flag</code> for the centre-id frmo which the Global Discovery Catalogue connected to should be set to 1 (one).</p>
+<p><code>wmo_wis2_gdc_connected_flag</code> for the centre-id from which the Global Discovery Catalogue connected to should be set to 1 (one).</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>7.3.1.4. Notification and metadata processing (success)</h5>
+<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>7.3.2.2. Notification and metadata processing (success)</h5>
 <div class="sect5">
-<h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
+<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Discovery Catalogue should be able to:</p>
+<p>The Global Discovery Catalogue should be able to process valid WCMP2 metadata record of core data published by a WIS2 Node.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the canonical link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>parse the HTTP response:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>validate against the WCMP2 Executable Test Suite (ETS)</p>
+</li>
+<li>
+<p>publish the WCMP2 record to the catalogue</p>
+</li>
+<li>
+<p>publish an ETS validation report as a notification message to the GDC MQTT broker.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>).</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>process an incoming notification message.</p>
+<p>the resulting WCMP2 record should be available on the GDC API and contain an MQTT link / channel (using <code>cache/a/wis2</code>) foreach Global Broker</p>
 </li>
 <li>
-<p>download the metadata at the canonical link.</p>
-</li>
-<li>
-<p>validate the valid metadata against the WCMP2 Executable Test Suite (ETS).</p>
-</li>
-<li>
-<p>publish an ETS validation report notification message on the proper topic using the proper message structure.</p>
-</li>
-<li>
-<p>evaluate the metadata against the WCMP2 Key Performance Indicators (KPI).</p>
-</li>
-<li>
-<p>publish a KPI evaluation report notification message on the proper topic using the proper message structure.</p>
-</li>
-<li>
-<p>update the necessary metrics.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The WCMP2 record published by the Global Discovery Catalogue should be identical to the content of the canonical link referenced from notification message received, except for the following:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>for core data, add/replace link objects on core data notifications to reference each WIS2 Global Broker using the associated cached topic.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>On successful completion, the following metrics should be modified:</p>
-</div>
+<p>the following metrics should be modified:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1908,54 +1950,79 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <li>
 <p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be incremented by 1 (one).</p>
 </li>
-<li>
-<p><code>wmo_wis2_gdc_recommended_total</code> for the centre-id from where the metadata (recommended data policy) was published from should be incremented by 1 (one).</p>
+</ul>
+</div>
 </li>
 <li>
-<p><code>wmo_wis2_gdc_kpi_percentage_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
-</li>
-<li>
-<p><code>wmo_wis2_gdc_kpi_percentage_average</code> for the centre-id from where the metadata was published from should be calculated as an average.</p>
-</li>
-<li>
-<p><code>wmo_wis2_gdc_kpi_percentage_over80_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure"><a class="anchor" href="#_notification_and_metadata_processing_failure"></a>7.3.1.5. Notification and metadata processing (failure)</h5>
+<h5 id="_notification_and_metadata_processing_failure_record_not_found"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_not_found"></a>7.3.2.3. Notification and metadata processing (failure; record not found)</h5>
 <div class="sect5">
-<h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
+<h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Discovery Catalogue should be able to:</p>
+<p>The Global Discovery Catalogue should be able to process failing (record not found) WCMP2 metadata published by a WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_28"><a class="anchor" href="#_steps_28"></a>Steps</h6>
+<h6 id="_steps_27"><a class="anchor" href="#_steps_27"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>process an incoming notification message.</p>
-</li>
-<li>
-<p>download the metadata at the canonical link.</p>
-</li>
-<li>
-<p>validate the invalid failing metadata against the WCMP2 Executable Test Suite (ETS).</p>
-</li>
-<li>
-<p>publish an ETS validation report notification message on the proper topic using the proper message structure.</p>
-</li>
-<li>
-<p>update the necessary metrics.</p>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>On successful completion, the following metrics should be modified:</p>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the canonical link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>if the response is an HTTP status code of 404:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>publish an ETS error report as a notification message to the GDC MQTT broker.</p>
+</li>
+</ol>
 </div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the following metrics should be modified:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1963,10 +2030,184 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_metadata_ingest_topic_mismatch"><a class="anchor" href="#_metadata_ingest_topic_mismatch"></a>7.3.1.6. Metadata ingest topic mismatch</h5>
+<h5 id="_notification_and_metadata_processing_failure_malformed_json"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json"></a>7.3.2.4. Notification and metadata processing (failure; malformed JSON)</h5>
+<div class="sect5">
+<h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Discovery Catalogue should be able to process failing (malformed JSON) WCMP2 metadata published by a WIS2 Node.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_28"><a class="anchor" href="#_steps_28"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the canonical link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>parse the HTTP response:</p>
+</li>
+<li>
+<p>if the JSON is malformed:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>publish an ETS error report as a notification message to the GDC MQTT broker.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the following metrics should be modified:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_and_metadata_processing_failure_invalid_wcmp2_record"><a class="anchor" href="#_notification_and_metadata_processing_failure_invalid_wcmp2_record"></a>7.3.2.5. Notification and metadata processing (failure; invalid WCMP2 record)</h5>
+<div class="paragraph">
+<p>TODO: we need more examples of invalid WCMP2</p>
+</div>
+<div class="sect5">
+<h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Discovery Catalogue should be able to process failing WCMP2 metadata published by a WIS2 Node.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_29"><a class="anchor" href="#_steps_29"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the canonical link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>parse the HTTP response:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>validate against the WCMP2 Executable Test Suite (ETS)</p>
+</li>
+<li>
+<p>publish an ETS error report as a notification message to the GDC MQTT broker.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the following metrics should be modified:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>7.3.2.6. Metadata ingest centre-id mismatch</h5>
+<div class="paragraph">
+<p>TODO: validate workflow for regional distribution of partner metadata</p>
+</div>
 <div class="sect5">
 <h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
 <div class="paragraph">
@@ -1974,28 +2215,57 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_29"><a class="anchor" href="#_steps_29"></a>Steps</h6>
+<h6 id="_steps_30"><a class="anchor" href="#_steps_30"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>process an incoming notification message.</p>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>extract the centre-id from the topic (4th token split on <code>/</code>).</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
 </li>
 <li>
-<p>download the metadata at the canonical link.</p>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>capture the centre-id from the topic (4th token split on <code>/</code>).</p>
+</li>
+<li>
+<p>find the canonical link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>parse the HTTP response:</p>
 </li>
 <li>
 <p>extract the centre-id from WCMP2 record identifier (3rd token split on <code>:</code>).</p>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>compare the centre-id from the topic and the centre-id of the WCMP2 record identifier.</p>
 </li>
 <li>
-<p>publish an error report to <code>monitor/a/wis2/</code></p>
+<p>publish an ETS error report as a notification message to the GDC MQTT broker.</p>
 </li>
-</ul>
+</ol>
 </div>
 <div class="paragraph">
 <p>On successful completion, the following metrics should be modified:</p>
@@ -2005,20 +2275,126 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <li>
 <p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
 </li>
+<li>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
+</li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.3.1.7. WCMP2 metadata archive zipfile publication</h5>
+<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>7.3.2.7. Notification and metadata processing (record deletion)</h5>
 <div class="sect5">
 <h6 id="_purpose_31"><a class="anchor" href="#_purpose_31"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Discovery Catalogue should be able to process valid WCMP2 metadata record deletion of core data published by a WIS2 Node.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_31"><a class="anchor" href="#_steps_31"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the deletion link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>parse the HTTP response:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>validate against the WCMP2 Executable Test Suite (ETS)</p>
+</li>
+<li>
+<p>delete the WCMP2 record from the catalogue</p>
+</li>
+<li>
+<p>publish a notification message to the GDC MQTT broker.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>).</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the WCMP2 record should be removed from the GDC API</p>
+</li>
+<li>
+<p>the following metrics should be modified:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_gdc_passed_total</code> for the centre-id from where the metadata was published from should be decremented by 1 (one).</p>
+</li>
+<li>
+<p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be decremented by 1 (one).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>BEGIN
+TODO test deletion WITHOUT metadata_id
+END</p>
+</div>
+<div class="paragraph">
+<p>BEGIN
+TODO add test case for metadata zipfile usage on cold start
+END</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.3.2.8. WCMP2 metadata archive zipfile publication</h5>
+<div class="sect5">
+<h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API publishes a metadata archive zipfile.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_30"><a class="anchor" href="#_steps_30"></a>Steps</h6>
+<h6 id="_steps_32"><a class="anchor" href="#_steps_32"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2034,7 +2410,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <p>Check that the record includes a <code>links</code> array.</p>
 </li>
 <li>
-<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=enclosure</code> and <code>type=application/zip</code>).</p>
+<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=archives</code> and <code>type=application/zip</code>).</p>
 </li>
 <li>
 <p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
@@ -2070,23 +2446,30 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <li>
 <p>Unzip the content of the HTTP response.</p>
 </li>
-<li>
-<p>Close the connection to the broker after the test.</p>
-</li>
 </ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the resulting HTTP response should be a zip encoded data, which, when unzipped, contains a directory of JSON files of WCMP2 metadata.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_openmetrics_publication"><a class="anchor" href="#_openmetrics_publication"></a>7.3.1.8. OpenMetrics publication</h5>
+<h5 id="_openmetrics_publication"><a class="anchor" href="#_openmetrics_publication"></a>7.3.2.9. OpenMetrics publication</h5>
 <div class="sect5">
-<h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
+<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API publishes an OpenMetrics endpoint.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_31"><a class="anchor" href="#_steps_31"></a>Steps</h6>
+<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2108,22 +2491,32 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
 </li>
 <li>
-<p>Unzip the content of the HTTP response.</p>
+<p>Parse the HTTP response.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the resulting HTTP response should be a text file in OpenMetrics format.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.1.9. API functionality</h5>
+<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.2.10. API functionality</h5>
 <div class="sect5">
-<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
+<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API performs as expected based on the OGC API - Records standard.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_32"><a class="anchor" href="#_steps_32"></a>Steps</h6>
+<h6 id="_steps_34"><a class="anchor" href="#_steps_34"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2209,30 +2602,88 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>TODO: measure accuracy</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_performance_tests_3"><a class="anchor" href="#_performance_tests_3"></a>7.3.2. Performance tests</h4>
+<h4 id="_performance_tests_3"><a class="anchor" href="#_performance_tests_3"></a>7.3.3. Performance tests</h4>
 <div class="sect4">
-<h5 id="_api_performance"><a class="anchor" href="#_api_performance"></a>7.3.2.1. API performance</h5>
+<h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>7.3.3.1. Processing timeliness</h5>
 <div class="sect5">
-<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
+<h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
 <div class="paragraph">
-<p>Validate that a GDC API peforms</p>
+<p>Validate that a GDC is able to process WCMP2 metadata in a timely manner.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
+<h6 id="_steps_35"><a class="anchor" href="#_steps_35"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>step 1</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
 </li>
 <li>
-<p>step 2</p>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On all incoming messages:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the canonical link object in the <code>links</code> array.</p>
+</li>
+<li>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+</li>
+<li>
+<p>parse the HTTP response:</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>validate against the WCMP2 Executable Test Suite (ETS)</p>
+</li>
+<li>
+<p>publish the WCMP2 record to the catalogue</p>
+</li>
+<li>
+<p>publish an ETS validation report as a notification message to the GDC MQTT broker.</p>
 </li>
 </ol>
+</div>
+</li>
+<li>
+<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>).</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>all WCMP2 records should be processed and published in 5 minutes</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -2243,7 +2694,213 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <div class="sect1">
 <h2 id="results"><a class="anchor" href="#results"></a>8. Results</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="global-cache-results"><a class="anchor" href="#global-cache-results"></a>8.1. Global Cache Service results</h3>
+<div class="sect3">
+<h4 id="global-cache-china-results"><a class="anchor" href="#global-cache-china-results"></a>8.1.1. China</h4>
+<div class="sect4">
+<h5 id="_functional_test_results"><a class="anchor" href="#_functional_test_results"></a>8.1.1.1. Functional test results</h5>
 
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results"><a class="anchor" href="#_performance_test_results"></a>8.1.1.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations"><a class="anchor" href="#_testing_observations"></a>8.1.1.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-cache-germany-results"><a class="anchor" href="#global-cache-germany-results"></a>8.1.2. Germany</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_2"><a class="anchor" href="#_functional_test_results_2"></a>8.1.2.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_2"><a class="anchor" href="#_performance_test_results_2"></a>8.1.2.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_2"><a class="anchor" href="#_testing_observations_2"></a>8.1.2.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-cache-japan-results"><a class="anchor" href="#global-cache-japan-results"></a>8.1.3. Japan</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_3"><a class="anchor" href="#_functional_test_results_3"></a>8.1.3.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_3"><a class="anchor" href="#_performance_test_results_3"></a>8.1.3.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_3"><a class="anchor" href="#_testing_observations_3"></a>8.1.3.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-cache-korea-results"><a class="anchor" href="#global-cache-korea-results"></a>8.1.4. Republic of Korea</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_4"><a class="anchor" href="#_functional_test_results_4"></a>8.1.4.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_4"><a class="anchor" href="#_performance_test_results_4"></a>8.1.4.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_4"><a class="anchor" href="#_testing_observations_4"></a>8.1.4.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-cache-uk-us-results"><a class="anchor" href="#global-cache-uk-us-results"></a>8.1.5. United Kingdom of Great Britain and Northern Ireland / United States of America</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_5"><a class="anchor" href="#_functional_test_results_5"></a>8.1.5.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_5"><a class="anchor" href="#_performance_test_results_5"></a>8.1.5.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_5"><a class="anchor" href="#_testing_observations_5"></a>8.1.5.3. Testing observations</h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="global-broker-results"><a class="anchor" href="#global-broker-results"></a>8.2. Global Broker Service results</h3>
+<div class="sect3">
+<h4 id="global-broker-brazil-results"><a class="anchor" href="#global-broker-brazil-results"></a>8.2.1. Brazil</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_6"><a class="anchor" href="#_functional_test_results_6"></a>8.2.1.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_6"><a class="anchor" href="#_performance_test_results_6"></a>8.2.1.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_6"><a class="anchor" href="#_testing_observations_6"></a>8.2.1.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-broker-china-results"><a class="anchor" href="#global-broker-china-results"></a>8.2.2. China</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_7"><a class="anchor" href="#_functional_test_results_7"></a>8.2.2.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_7"><a class="anchor" href="#_performance_test_results_7"></a>8.2.2.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_7"><a class="anchor" href="#_testing_observations_7"></a>8.2.2.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-broker-france-results"><a class="anchor" href="#global-broker-france-results"></a>8.2.3. France</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_8"><a class="anchor" href="#_functional_test_results_8"></a>8.2.3.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_8"><a class="anchor" href="#_performance_test_results_8"></a>8.2.3.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_8"><a class="anchor" href="#_testing_observations_8"></a>8.2.3.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-broker-usa-results"><a class="anchor" href="#global-broker-usa-results"></a>8.2.4. United States of America</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_9"><a class="anchor" href="#_functional_test_results_9"></a>8.2.4.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_9"><a class="anchor" href="#_performance_test_results_9"></a>8.2.4.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_9"><a class="anchor" href="#_testing_observations_9"></a>8.2.4.3. Testing observations</h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="global-discovery-catalogue-results"><a class="anchor" href="#global-discovery-catalogue-results"></a>8.3. Global Discovery Catalogue results</h3>
+<div class="sect3">
+<h4 id="global-discovery-catalogue-canada-results"><a class="anchor" href="#global-discovery-catalogue-canada-results"></a>8.3.1. Canada</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_10"><a class="anchor" href="#_functional_test_results_10"></a>8.3.1.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_10"><a class="anchor" href="#_performance_test_results_10"></a>8.3.1.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_10"><a class="anchor" href="#_testing_observations_10"></a>8.3.1.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-discovery-catalogue-china-results"><a class="anchor" href="#global-discovery-catalogue-china-results"></a>8.3.2. China</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_11"><a class="anchor" href="#_functional_test_results_11"></a>8.3.2.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_11"><a class="anchor" href="#_performance_test_results_11"></a>8.3.2.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_11"><a class="anchor" href="#_testing_observations_11"></a>8.3.2.3. Testing observations</h5>
+
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="global-monitor-results"><a class="anchor" href="#global-monitor-results"></a>8.4. Global Monitor results</h3>
+<div class="sect3">
+<h4 id="global-monitor-china-results"><a class="anchor" href="#global-monitor-china-results"></a>8.4.1. China</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_12"><a class="anchor" href="#_functional_test_results_12"></a>8.4.1.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_12"><a class="anchor" href="#_performance_test_results_12"></a>8.4.1.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_12"><a class="anchor" href="#_testing_observations_12"></a>8.4.1.3. Testing observations</h5>
+
+</div>
+</div>
+<div class="sect3">
+<h4 id="global-monitor-morocco-results"><a class="anchor" href="#global-monitor-morocco-results"></a>8.4.2. Morocco</h4>
+<div class="sect4">
+<h5 id="_functional_test_results_13"><a class="anchor" href="#_functional_test_results_13"></a>8.4.2.1. Functional test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_performance_test_results_13"><a class="anchor" href="#_performance_test_results_13"></a>8.4.2.2. Performance test results</h5>
+
+</div>
+<div class="sect4">
+<h5 id="_testing_observations_13"><a class="anchor" href="#_testing_observations_13"></a>8.4.2.3. Testing observations</h5>
+
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2344,7 +3001,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-05-24 06:38:07 UTC
+Last updated 2024-05-24 07:33:49 UTC
 </div>
 </div>
 </body>
