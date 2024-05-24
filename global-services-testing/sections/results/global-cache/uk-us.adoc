@@ -1,0 +1,9 @@
+[[global-cache-uk-us-results]]
+
+==== United Kingdom of Great Britain and Northern Ireland / United States of America
+
+===== Functional test results
+
+===== Performance test results
+
+===== Testing observations

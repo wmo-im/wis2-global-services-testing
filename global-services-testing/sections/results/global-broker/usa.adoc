@@ -1,0 +1,9 @@
+[[global-broker-usa-results]]
+
+==== United States of America
+
+===== Functional test results
+
+===== Performance test results
+
+===== Testing observations
