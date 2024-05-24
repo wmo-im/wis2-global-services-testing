@@ -1,0 +1,6 @@
+[[global-monitor-results]]
+
+=== Global Monitor results
+
+include::china.adoc[]
+include::morocco.adoc[]

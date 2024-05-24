@@ -1,7 +1,7 @@
 [[results]]
 == Results
 
-// each result .adoc file to be placed in global-services-testing/sections/results/
-// and included as follows:
-
-// include::testing/foo.adoc[]
+include::results/global-cache/index.adoc[]
+include::results/global-broker/index.adoc[]
+include::results/global-discovery-catalogue/index.adoc[]
+include::results/global-monitor/index.adoc[]

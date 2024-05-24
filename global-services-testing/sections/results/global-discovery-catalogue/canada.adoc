@@ -1,0 +1,9 @@
+[[global-discovery-catalogue-canada-results]]
+
+==== Canada
+
+===== Functional test results
+
+===== Performance test results
+
+===== Testing observations
