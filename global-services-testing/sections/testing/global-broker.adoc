@@ -2,28 +2,54 @@
 
 === Global Broker Service testing
 
+All Global Services, and in particular Global Brokers and Global Caches, are collectively responsible in making the WIS a reliable and efficient mean to exchange
+data required for the operations of all WIS Centres. The agreed architecture provides a redundant solution where the failure of one component will not impact the overall level of service of WIS.  Each Global Service should aim at achieving at least 99.5% availability of the service they propose. This is not a contractual target. It should be considered by the entity providing the Global Service as a guideline when designing and operating the Global Service.
+
+A Global Broker:
+- should support a minimum of *200* WIS2 Nodes or Global Services
+- should support a minimum of *1000* subscribers.
+- should support processing of a minimum of *10000* messages per second
+
 ==== Functional tests
 
-===== Functional test title
+===== Global Broker connectivity
 
 ====== Purpose
 
-TODO
+There are several check-box activities that WMO Secretariat can perform on each GB service in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
 
 ====== Steps
 
-. step 1
-. step 2
+- The GB service must be accessible using ports 8883 (MQTTS) and 443 (WSS)
+- The GB service must use a valid certificate
+- The GB service must allow read access to origin/a/wis2/ and cache/a/wis2/ using everyone/everyone as user and password
+- The GB service must prevent write access to any topic with everyone/everyone credentials
+- The GB service, if deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster
 
-==== Performance tests
-
-===== Performance test title
+===== Antiloop Testing
 
 ====== Purpose
 
-TODO
+We must ensure that the antiloop feature installed as part of the GB service is functioning properly prior to January 1st, 2025
 
 ====== Steps
 
-. step 1
-. step 2
+. The GB service must discard all duplicated messages (identical id) received whatever the originator of the messages
+- The GB service must ensure that any WIS2 Node is not publishing a message using a centre_id from another WIS2 Node
+- The GB service must check that the topic used to publish a message by a WIS2 Node is compliant with the agreed topic hierarchy
+- The GB service must check that the topic used to publish a message by a WIS2 Node is announcing a dataset with a corresponding metadata
+- The GB service must verify the compliance of the WIS2 Notification Message with the agreed standard as specified in the Manual on WIS Vol. 2
+- The GB service must be able to discard or notify a notification message in breach of the requirement 3., 4. or 5.
+- The GB service must provided metrics as requested in the Guide on WIS2
+
+===== Performance Testing
+
+====== Purpose
+
+We must ensure that the GB service performs properly under stress.  The following outlines tests will test the GB service prior to transition of WIS2 to an operational state on January 1, 2025
+
+====== Steps
+
+- The GB service should support a minimum of *200* WIS2 Nodes or Global Services
+- The GB service should support a minimum of *1000* subscribers.
+- should support processing of a minimum of *10000* messages per second
