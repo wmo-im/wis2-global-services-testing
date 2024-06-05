@@ -2098,7 +2098,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_malformed_json"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json"></a>7.3.2.4. Notification and metadata processing (failure; malformed JSON)</h5>
+<h5 id="_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"></a>7.3.2.4. Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</h5>
 <div class="sect5">
 <h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
 <div class="paragraph">
@@ -2142,7 +2142,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <p>parse the HTTP response:</p>
 </li>
 <li>
-<p>if the JSON is malformed:</p>
+<p>if the JSON is malformed, or the WCMP2 is invalid:</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
@@ -2176,12 +2176,6 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_invalid_wcmp2_record"><a class="anchor" href="#_notification_and_metadata_processing_failure_invalid_wcmp2_record"></a>7.3.2.5. Notification and metadata processing (failure; invalid WCMP2 record)</h5>
-<div class="paragraph">
-<p>TODO: we need more examples of invalid WCMP2</p>
 </div>
 <div class="sect5">
 <h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
@@ -2263,7 +2257,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>7.3.2.6. Metadata ingest centre-id mismatch</h5>
+<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>7.3.2.5. Metadata ingest centre-id mismatch</h5>
 <div class="paragraph">
 <p>TODO: validate workflow for regional distribution of partner metadata</p>
 </div>
@@ -2342,7 +2336,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>7.3.2.7. Notification and metadata processing (record deletion)</h5>
+<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>7.3.2.6. Notification and metadata processing (record deletion)</h5>
 <div class="sect5">
 <h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
 <div class="paragraph">
@@ -2377,7 +2371,10 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>find the deletion link object in the <code>links</code> array.</p>
+<p>find the link object in the <code>links</code> array where <code>rel=deletion</code>.</p>
+</li>
+<li>
+<p>capture the <code>properties.metadata_id</code> value</p>
 </li>
 <li>
 <p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
@@ -2390,7 +2387,7 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 <p>validate against the WCMP2 Executable Test Suite (ETS)</p>
 </li>
 <li>
-<p>delete the WCMP2 record from the catalogue</p>
+<p>delete the WCMP2 record from the catalogue using the value from <code>properties.metadata_id</code> captured earlier in the test.</p>
 </li>
 <li>
 <p>publish a notification message to the GDC MQTT broker.</p>
@@ -2432,28 +2429,79 @@ Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.</p>
 </li>
 </ul>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"></a>7.3.2.7. Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</h5>
+<div class="sect5">
+<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
 <div class="paragraph">
-<p>BEGIN
-TODO test deletion WITHOUT metadata_id
-END</p>
+<p>The Global Discovery Catalogue should be able to detect a WNM error when <code>properties.metadata_id</code> is missing from a WCMP2 deletion request.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the Global Broker.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/metadata/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+</li>
+<li>
+<p>On an incoming message:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>find the link object in the <code>links</code> array where <code>rel=deletion</code>.</p>
+</li>
+<li>
+<p>capture the missing <code>properties.metadata_id</code> value</p>
+</li>
+<li>
+<p>publish a notification message of the error to the GDC MQTT broker.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p>BEGIN
-TODO add test case for metadata zipfile usage on cold start
-END</p>
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.3.2.8. WCMP2 metadata archive zipfile publication</h5>
 <div class="sect5">
-<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
+<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API publishes a metadata archive zipfile.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
+<h6 id="_steps_34"><a class="anchor" href="#_steps_34"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2520,15 +2568,115 @@ END</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_openmetrics_publication"><a class="anchor" href="#_openmetrics_publication"></a>7.3.2.9. OpenMetrics publication</h5>
+<h5 id="_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"><a class="anchor" href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"></a>7.3.2.9. WCMP2 cold start initialization from metadata archive zipfile</h5>
 <div class="sect5">
-<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
+<h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
+<div class="paragraph">
+<p>Validate that a GDC initializes from a metadata archive zipfile.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_35"><a class="anchor" href="#_steps_35"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Construct a path to an existing, functional GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Check that the record includes a <code>links</code> array.</p>
+</li>
+<li>
+<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=archives</code> and <code>type=application/zip</code>).</p>
+</li>
+<li>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+</li>
+<li>
+<p>Unzip the content of the HTTP response.</p>
+</li>
+<li>
+<p>Foreach WCMP2 (JSON) record in the zipfile, validate and ingest into the new GDC</p>
+</li>
+<li>
+<p>Construct a path to a Global Replay service endpoint (<code>https://HOST/collections/wis2-notification-messages?topic=origin/a/wis2/*/metadata&amp;datetime=START_TIME/..</code>).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><code>START_TIME</code> is a timestamp that is from 24 hours ago, in RFC3339 format.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Foreach item in the <code>features</code> array:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Check that the item includes a <code>links</code> array.</p>
+</li>
+<li>
+<p>In the <code>links</code> array, match the link where <code>rel=canonical</code>.</p>
+</li>
+<li>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Validate and ingest into the new GDC</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Construct a path to the new GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata/items?limit=99999</code>).</p>
+</li>
+<li>
+<p>Issue a HTTP GET request on the path.</p>
+</li>
+<li>
+<p>Parse the HTTP response.</p>
+</li>
+<li>
+<p>Count the numbe rof items in the <code>features</code> array.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>On successful completion:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the number of the features in the GDC should match the number of records in the metadata archive zipfile and the number of records from the Global Replay query.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_openmetrics_publication"><a class="anchor" href="#_openmetrics_publication"></a>7.3.2.10. OpenMetrics publication</h5>
+<div class="sect5">
+<h6 id="_purpose_36"><a class="anchor" href="#_purpose_36"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API publishes an OpenMetrics endpoint.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_34"><a class="anchor" href="#_steps_34"></a>Steps</h6>
+<h6 id="_steps_36"><a class="anchor" href="#_steps_36"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2567,15 +2715,15 @@ END</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.2.10. API functionality</h5>
+<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.2.11. API functionality</h5>
 <div class="sect5">
-<h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
+<h6 id="_purpose_37"><a class="anchor" href="#_purpose_37"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API performs as expected based on the OGC API - Records standard.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_35"><a class="anchor" href="#_steps_35"></a>Steps</h6>
+<h6 id="_steps_37"><a class="anchor" href="#_steps_37"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2606,7 +2754,7 @@ END</p>
 <p>Ensure that a <code>numberReturned</code> property exists with an integer value greater than 0.</p>
 </li>
 <li>
-<p>Construct a path to the GDC endpoint with a bounding box query parameter (<code>https://HOST/collections/wis2-discovery-metadata?bbox=-142,42,-53,84</code>).</p>
+<p>Construct a path to the GDC endpoint with a bounding box query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?bbox=-142,42,-53,84</code>).</p>
 </li>
 <li>
 <p>Issue a HTTP GET request on the path.</p>
@@ -2624,7 +2772,7 @@ END</p>
 <p>Ensure that a <code>features</code> array exists.</p>
 </li>
 <li>
-<p>Construct a path to the GDC endpoint with a temporal query parameter (<code>https://HOST/collections/wis2-discovery-metadata?datetime=2000-11-11T12:42:23Z/..</code>).</p>
+<p>Construct a path to the GDC endpoint with a temporal query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?datetime=2000-11-11T12:42:23Z/..</code>).</p>
 </li>
 <li>
 <p>Issue a HTTP GET request on the path.</p>
@@ -2642,7 +2790,7 @@ END</p>
 <p>Ensure that a <code>features</code> array exists.</p>
 </li>
 <li>
-<p>Construct a path to the GDC endpoint with a full text query parameter (<code>https://HOST/collections/wis2-discovery-metadata?q=observations</code>).</p>
+<p>Construct a path to the GDC endpoint with a full text query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?q=observations</code>).</p>
 </li>
 <li>
 <p>Issue a HTTP GET request on the path.</p>
@@ -2672,13 +2820,13 @@ END</p>
 <div class="sect4">
 <h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>7.3.3.1. Processing timeliness</h5>
 <div class="sect5">
-<h6 id="_purpose_36"><a class="anchor" href="#_purpose_36"></a>Purpose</h6>
+<h6 id="_purpose_38"><a class="anchor" href="#_purpose_38"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC is able to process WCMP2 metadata in a timely manner.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_36"><a class="anchor" href="#_steps_36"></a>Steps</h6>
+<h6 id="_steps_38"><a class="anchor" href="#_steps_38"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3060,7 +3208,7 @@ END</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-06-05 12:10:19 UTC
+Last updated 2024-06-05 12:37:11 UTC
 </div>
 </div>
 </body>
