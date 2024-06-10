@@ -1,8 +1,8 @@
 [[global-cache-testing]]
 
-=== Global Cache Service testing
+== Global Cache Service testing
 
-==== Functional Tests
+=== Functional Tests
 
 ===== 1. MQTT Broker Connectivity
 
@@ -63,7 +63,7 @@ This test also evaluates the client data download requirement: An HTTP client (i
     ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly).
 * Dev/test GB MQTT broker connection string
     ** User is able to publish (write) messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
-* Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics on the dev:
+* Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data
     ** cache/a/wis2/+/data
     ** origin/a/wis2/+/metadata
@@ -303,7 +303,8 @@ A Global Cache must ensure that only one instance of a notification message with
 
 ====== Evaluate
 * WNM Messages
-    ** Only one message should be published `cache/a/wis2/#` topic per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
+    ** Only one message should be published by the GC on the `cache/a/wis2/#` topic per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
+        *** Note that due to the update directive related to 8.2, prepared messages should use unique data_id's to ensure uniqueness.
 * Data Objects
     ** Only one data object should be cached per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
 * GC Metrics
@@ -312,10 +313,6 @@ A Global Cache must ensure that only one instance of a notification message with
     ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current for each unique identifier)
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
-
-
-
-
 
 
 ===== 8.1. WIS2 Notification Message Deduplication (Alternative 1)
@@ -361,7 +358,7 @@ Where a Global Cache fails to process a notification message relating to a given
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each unique identifier WNM message set)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-===== 8.1. WIS2 Notification Message Update (Alternative 2)
+===== 8.2. WIS2 Notification Message Update (Alternative 2)
 
 ====== Purpose
 A Global Cache should treat notification messages with the same data item identifier (`properties.data_id`), but different publication times (`properties.pubtime`) as unique data items. Data items with the same `properties.data_id` but a later publication time should be copied into the cache (see test Notification processing). Data items with the same `properties.data_id` but earlier or identical publication times should be ignored (see test Duplicate link discarding).
@@ -403,7 +400,7 @@ A Global Cache should treat notification messages with the same data item identi
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-===== 8.2. WIS2 Notification Message Deduplication (Alternative 3)
+===== 8.3. WIS2 Notification Message Deduplication (Alternative 3)
 ====== Purpose
 Related to the two previous tests, a GC should not process and cache a data item if it has already processed and cached a data item with the same `properties.data_id` and a `properties.pubtime` that is equal to or less than the `properties.pubtime` of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.
 
@@ -431,142 +428,111 @@ See above.
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
 
-==== Performance tests
+=== Performance tests
 
-===== Notification processing rate
-
-====== Purpose
-A Global Cache shall be able to successfully process 1000 notification messages, averaging xxx bytes, including caching the associated data item and publishing the new notification message, within xxx seconds.
-
-===== Steps
-
-. step 1
-. step 2
-
-===== Notification processing time
+===== WIS2 Notification Processing Rate
 
 ====== Purpose
-A Global Cache shall successfully process a notification message, including caching the associated data item and publishing the new notification message, within xxx seconds.
+A Global Cache shall be able to successfully process, on average, 2000 unique WNM's per minute with an average message size of 75kb. This test represents the upper end of the current WNM volume. This test is a measured performance test similar to test 3. WNM Processing except that a large batch of messages is used, and the time taken to process the messages is measured. The noted WNM's/minute rate can be used as a performance indicator for the GC being tested.
 
-Note: A Global Cache may decide to ignore the request to cache a data item if it will take excessively long to process. See test Cache override for details.
+====== Requirements
+* Dev/test GC MQTT broker connection string
+    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly).
+* Dev/test GB MQTT broker connection string
+    ** User is able to publish (write) messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+* Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** origin/a/wis2/+/data
+    ** cache/a/wis2/+/data
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
+* MQTT test client
+    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+* GC metrics scraper
+* Prepared WIS2 Notification Messages and associated data objects:
+  ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
+    *** `properties.cache` set to true
+    *** `properties.data_id` + `properties.pubtime` should be unique to each message. The ensure consistency, data_id alone should be used to determine uniqueness.
+  ** Accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements and the data object hash should match the hash provided in the WNM if integrity properties are provided.
+    *** Average message size should be 75kb.
 
-===== Steps
+====== Steps
 
-. step 1
-. step 2
+. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings. This script and client will be used to orchestrate the test.
+
+. Start the timer, and publish the batch of 2000 prepared WNM's to the dev/test GB on following topics:
+    ** origin/a/wis2/+/data
+    ** cache/a/wis2/+/data
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
+. The test MQTT client should count the messages received on the `cache/a/wis2/#` topic that are published by the GC, but should not download the data objects.
+. Stop the timer when the MQTT client has received all expected messages (2000). A timeout can be set to allow the test to run as long as needed within a reasonable window.
+
+====== Evaluate
+* WNM Messages
+    ** The total number of cache notification messages published by the GC on the cache/a/wis2/# topic should match what was published (2000).
+* GC Metrics
+    ** `wmo_wis2_gc_download_total` matches total expected messages.
+
+* The time taken to process the messages should not exceed 60 seconds (plus time taken to publish the WNM's) in order to pass the test.
+    ** The results can be used as a baseline for the GC's performance.
 
 ===== Concurrent client downloads
 
 ====== Purpose
-1000 HTTP clients concurrently download data items from the Global Cache, with HTTP response time not exceeding xxx seconds, at a rate exceeding xxx bytes/second.
+A Global Cache should support a minimum of 1000 simultaneous downloads.
 
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.5: A Global Cache shall provide highly available access to copies of discovery metadata records and core data it stores; clause 4.5.1: A Global Cache shall operate a highly available storage and download service; clause 4.5.2: A Global Cache shall download core data and discovery metadata from [WIS2 Nodes] and other Global [Services] to provide for reliable, low-latency access to those resources via WIS.
-*Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: “A Global Cache should support a minimum of 1000 simultaneous downloads” https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
+*Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
 
-===== Steps
+====== Requirements
+* Dev/test GC MQTT broker connection string
+    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly).
+* Dev/test GB MQTT broker connection string
+    ** User is able to publish (write) messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+* Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** origin/a/wis2/+/data
+    ** cache/a/wis2/+/data
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
+* MQTT test client
+    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+* Prepared WIS2 Notification Messages and associated data objects:
+  ** A known number (5) *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
+    *** `properties.cache` set to true
+    *** `properties.data_id` + `properties.pubtime` should be unique to each message. Ensuring a different data_id is best here.
+  ** Valid data objects to be cached
+    *** A larger than average data object should be generated/used in order to ensure that the clients downloading the data object concurrently do not finish before the test is complete. A 500MB data object is recommended.
+* Jmeter, Locust, or similar tool to manage the concurrent downloads.
 
-. step 1
-. step 2
+====== Steps
+. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings. This script and client will be used to orchestrate the test.
 
-===== Storage volume
+. Publish the prepared WNM's one at a time to the dev/test GB on one of the following topics:
+    ** origin/a/wis2/+/data
+    ** cache/a/wis2/+/data
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
-====== Type of test
-Performance
+For each WNM:
 
-====== Purpose
-A Global Cache shall be able to store at least 100GB of Core data items.
+. Once the _cache_ notification message is received by the test MQTT client (from the dev/test GC), the test client should start 1000 concurrent downloads of the data object/s from the canonical link provided in the _cache_ WNM.
+. The test client should record the number of successful downloads and the time taken to complete each download.
+
+====== Evaluate
+The test is considered successful if the following conditions are met:
+* The total number of successful downloads is 1000.
+* While the download time can be used to establish a baseline, it is highly dependent on the network and server conditions of the test environment and should not be used as a pass/fail criteria.
+
+
+=== Implicit tests
+These are tests that are to be verified by the individual implementations as they represent critical requirements but would be difficult to test in a generic way.
+
+===== Valid TLS/SSL certificate
+* A Global Cache must have a valid TLS/SSL certificate to ensure secure communication with other WIS2 components.
+
+===== Available Storage Space
+* A Global Cache shall be able to store at least 100GB of Core data items.
 
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: “A Global Cache should support a minimum of 100 GB of data in the cache” https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
 
-===== Steps
-
-. step 1
-. step 2
-
-==== System-wide tests
-
-===== Single Global Broker failure
-
-====== Purpose
-Pre: At least 2 Global Brokers have subscribed to notification messages from a given WIS2 Node.
-Pre: Global Cache is subscribed to at least two Global Brokers.
-Pre: Global Cache is successfully downloading data items into its cache from the WIS2 Node.
-
-In the event that one of the Global Brokers subscribing to the WIS2 Node fails (i.e., goes offline), notification messages from the WIS2 Node are still received (and processed) by the Global Cache.
-
-===== Steps
-
-. step 1
-. step 2
-
-===== Origin node unresolvable
-
-====== Purpose
-Pre: A given WIS2 Node is publishing notification messages and Core data.
-Pre: At least 2 Global Caches are receiving notification messages from the WIS2 Node (via a Global Broker).
-Pre: Global Cache #1 is able to resolve HTTP URLs from the WIS2 Node.
-Pre: Global Cache #2 is not able to resolve HTTP URLs from the WIS2 Node.
-
-Core data items published by the WIS2 Node are successfully cached by Global Cache #2, by way of downloading from Global Cache #1.
-
-===== Steps
-
-. step 1
-. step 2
-
-==== Considerations
-
-===== General Testing Strategy
-
-The testing strategy for the Global Cache (GC) will leverage both mocked data and prepared real data. This approach ensures a comprehensive evaluation of the GC's functionality under various scenarios.
-
-1. **Prepated Data:** This data is artificially created to simulate specific scenarios that might not be easily reproducible with real data. It allows us to test edge cases, error conditions, and unusual data patterns.
-
-2. **Curated Real Data:** This data is derived from actual use cases and provides a realistic representation of what the GC will encounter in a production environment. It allows us to test the GC's performance and reliability.
-
-The testing process will be automated through scripts. These scripts will perform the following steps:
-
-1. **Data Publication:** The scripts will publish a batch of messages to the dev MQTT broker. These messages will represent a mix of scenarios based on the mocked and prepared real data.
-
-2. **GC Subscription:** The GC will be subscribed to the MQTT broker to receive the published messages. This simulates the GC's real-world operation where it subscribes to Global Brokers to receive notifications. (Remy has something already in the works here)
-
-3. **Result Validation:** After the GC processes the received messages, the scripts will validate the results. This includes checking if the GC correctly stored the data, published notifications, and updated metrics as expected.
-
-===== General Performance Testing Strategy
-
-The performance testing strategy for the GC will primarily focus on the time taken from when a notification message is published to when the associated cache message is received by the test process. This approach ensures a comprehensive evaluation of the GC's performance under various scenarios.
-
-1. **Notification Publication:** The test process will publish a notification message to the MQTT broker. This message will represent a specific scenario based on the mocked or curated real data.
-
-2. **Start Timer:** The test process will start a timer immediately after the notification message is published. Multiple timers can be used for multiple notification messages.
-
-3. **GC Subscription and Processing:** The GC, which is subscribed to the dev MQTT broker, will receive the published notification message. It will then process the message, which may include storing the data, publishing a cache notification, and updating metrics as expected.
-
-4. **Cache Message Receipt:** The test process, which is also subscribed to the MQTT broker, will receive the cache message published by the GC.
-
-5. **Stop Timer:** The test process will stop the timer immediately after the cache message is received.
-
-6. **Result Validation:** The test process will validate the results. This includes checking if the GC correctly processed the notification message and published the cache message, and if the time taken (as measured by the timer) is within the acceptable performance limits.
-
-7. **Data Size Consideration:** The size of the cached data objects will also be considered. The performance of the GC can be evaluated based on the bytes per second processed. This will help in understanding the GC's efficiency in handling different sizes of data objects.
-
-
-===== Addition of `wmo_wis2_gc_no_cache_total` metric
-* This metric will be used to capture `properties.cache=false` cases. It will be incremented by 1 (one) for each notification message where the `properties.cache` property is set to `false` or where the Global Cache determines that it is unable to cache a data item.
-
-===== Message uniqueness = `properties.data_id` + `properties.pubtime`
-* The unique identifier of a data item is a combination of the data identifier (`properties.data_id`) and the publication time (`properties.pubtime`). This is to ensure that the Global Cache does not store multiple copies of the same data item AND to support the ability to update/correct data items.
-
-* Are other folks in agreement with this approach and already implementing it?
-
-===== Max data object size
-* What is the maximum size of a data object that a Global Cache should be able to process and store?
-
-===== Data Integrity Checks
-* How are folks implementing the data integrity check? Downloading first or any other approach, perhaps a rolling hash?
-
-===== Best practices/best effort
-====== Retry/Redrive strategy
-* Simple: failed download attempts where we retry same URL. (immediate, and/or after a backoff as these solve different problems).
-* Redrive based on messages with redundant `properties.data_id`'s in the event of a download failure. This would require caching all messages for a certain amount of time. This way the Global Cache can reprocess the message with the same `properties.data_id` + `properties.pubtime` if the download fails and 'redundant' messages with different download links exist.
-    ** supporting update/correction of data items per GTS?
