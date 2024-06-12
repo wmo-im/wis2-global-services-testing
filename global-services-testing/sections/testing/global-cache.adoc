@@ -358,49 +358,8 @@ Where a Global Cache fails to process a notification message relating to a given
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each unique identifier WNM message set)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-===== 8.2. WIS2 Notification Message Update (Alternative 2)
 
-====== Purpose
-A Global Cache should treat notification messages with the same data item identifier (`properties.data_id`), but different publication times (`properties.pubtime`) as unique data items. Data items with the same `properties.data_id` but a later publication time should be copied into the cache (see test Notification processing). Data items with the same `properties.data_id` but earlier or identical publication times should be ignored (see test Duplicate link discarding).
-
-*Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.2. [Global Cache] Practices and procedures: “Verify if the message points to new or updated data by comparing the pubtime value of the notification message with the list of data_ids”. https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2
-
-====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
-* Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
-* MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
-* GC metrics scraper
-* Prepared WIS2 Notification Messages and data objects
-  ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's where:
-    *** `properties.data_id` + `properties.pubtime` are unique to each message, but the properties.data_id is shared by 2 or more messages and the pubtimes are different.
-    *** This defines a unique identifier message set.
-  ** Accompanying data objects that are accessible via the canonical link provided in the WNM.
-
-====== Steps
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
-. Publish the prepared WNM's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s. One or more of the following topics can be used:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
-
-====== Evaluate
-* WNM Messages
-    ** For each message set with a shared data_id, each message should be processed by the GC and received on the `cache/a/wis2/#` topic assuming that the `properties.pubtime` as been correctly set (increasing) for each message sent in chronological order.
-* Data Objects
-    ** For each message set with a shared data_id, each data object should be cached by the GC and assuming that the `properties.pubtime` as been correctly set (increasing) for each message sent in chronological order.
-* GC Metrics
-    ** `wmo_wis2_gc_download_total` (+=1 for each message)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current)
-    ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
-    ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
-
-===== 8.3. WIS2 Notification Message Deduplication (Alternative 3)
+===== 8.2. WIS2 Notification Message Deduplication (Alternative 2)
 ====== Purpose
 Related to the two previous tests, a GC should not process and cache a data item if it has already processed and cached a data item with the same `properties.data_id` and a `properties.pubtime` that is equal to or less than the `properties.pubtime` of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.
 
@@ -427,6 +386,48 @@ See above.
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
+===== 9. Data Update
+
+====== Purpose
+A Global Cache should treat notification messages with the same data item identifier (`properties.data_id`), but different publication times (`properties.pubtime`) as unique data items. Data items with the same `properties.data_id` but a greater/later publication time AND a #update# link (links['rel']='update'), should be processed (see test Notification processing). Data items with the same `properties.data_id` but earlier or identical publication times should be ignored (see deduplication test 8).
+
+*Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.2. [Global Cache] Practices and procedures: “Verify if the message points to new or updated data by comparing the pubtime value of the notification message with the list of data_ids”. https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2
+
+====== Requirements
+* Dev/test GC MQTT broker connection string
+    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
+* Dev/test GB MQTT broker connection string
+    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
+* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+* MQTT test client
+    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+* GC metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+  ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's where:
+    *** `properties.data_id` + `properties.pubtime` are unique to each message, but the properties.data_id is shared by 2 or more messages and the pubtimes are different.
+    *** Ensure that for a given shared data_id, the message with the latest pubtime has link with `rel=update`.
+    *** This defines a unique identifier message set.
+  ** Accompanying data objects that are accessible via the canonical link provided in the WNM.
+
+====== Steps
+. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
+. Publish the prepared WNM's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s and subsequent messages have a valid update link. One or more of the following topics can be used:
+    ** origin/a/wis2/+/data
+    ** cache/a/wis2/+/data
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
+
+====== Evaluate
+* WNM Messages
+    ** For each message set with a shared data_id, each message should be processed by the GC and received on the `cache/a/wis2/#` topic assuming that the `properties.pubtime` as been correctly set (increasing) for each message sent in chronological order.
+* Data Objects
+    ** For each message set with a shared data_id, each data object should be cached by the GC and assuming that the `properties.pubtime` as been correctly set (increasing) for each message sent in chronological order.
+* GC Metrics
+    ** `wmo_wis2_gc_download_total` (+=1 for each message)
+    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1)
+    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current)
+    ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
+    ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
 === Performance tests
 
