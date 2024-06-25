@@ -12,7 +12,7 @@ services:
         - CENTRE_ID=100
         - MQTT_PUB_BROKER=mqtt://mosquitto
         - MQTT_PUB_USERNAME=mqtt
-        - MQTT_PUB_PASSWORD=mqtt_secure
+        - MQTT_PUB_PASSWORD=****
         - MQTT_PUB_BROKERVERSION=5
         - MQTT_PUB_QOS=1
       networks:
@@ -30,7 +30,7 @@ services:
         - CENTRE_ID=120
         - MQTT_PUB_BROKER=mqtt://mosquitto
         - MQTT_PUB_USERNAME=mqtt
-        - MQTT_PUB_PASSWORD=mqtt_secure
+        - MQTT_PUB_PASSWORD=****
         - MQTT_PUB_BROKERVERSION=5
         - MQTT_PUB_QOS=1
       networks:
@@ -47,7 +47,7 @@ services:
       - traefik.enable=true
       - traefik.tcp.routers.mosquitto.entrypoints=mqtt
       - traefik.tcp.routers.mosquitto.service=mqtt
-      - traefik.tcp.routers.mosquitto.rule=HostSNI(`test1.wis2dev.io`)
+      - traefik.tcp.routers.mosquitto.rule=HostSNI(`****.wis2dev.io`)
       - traefik.tcp.services.mqtt.loadbalancer.server.port=1883
     networks:
       - traefik
