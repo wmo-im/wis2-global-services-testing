@@ -1,0 +1,69 @@
+version: '3.8'
+services:
+    wis2nodebench1:
+      container_name: wis2nodebench1
+      image: golfvert/benchmarkwis2gb:1.0.1
+      environment:
+        - TZ=Europe/Paris
+        - MQTT_CONFIG_BROKER=
+        - MQTT_CONFIG_USERNAME=
+        - MQTT_CONFIG_PASSWORD=
+        - MQTT_CONFIG_TOPIC=config/#
+        - CENTRE_ID=100
+        - MQTT_PUB_BROKER=mqtt://mosquitto
+        - MQTT_PUB_USERNAME=mqtt
+        - MQTT_PUB_PASSWORD=mqtt_secure
+        - MQTT_PUB_BROKERVERSION=5
+        - MQTT_PUB_QOS=1
+      networks:
+        - traefik
+      restart: unless-stopped
+    wis2nodebench2:
+      container_name: wis2nodebench2
+      image: golfvert/benchmarkwis2gb:1.0.1
+      environment:
+        - TZ=Europe/Paris
+        - MQTT_CONFIG_BROKER=
+        - MQTT_CONFIG_USERNAME=
+        - MQTT_CONFIG_PASSWORD=
+        - MQTT_CONFIG_TOPIC=config/#
+        - CENTRE_ID=120
+        - MQTT_PUB_BROKER=mqtt://mosquitto
+        - MQTT_PUB_USERNAME=mqtt
+        - MQTT_PUB_PASSWORD=mqtt_secure
+        - MQTT_PUB_BROKERVERSION=5
+        - MQTT_PUB_QOS=1
+      networks:
+        - traefik
+      restart: unless-stopped   
+  mosquitto:
+    image: eclipse-mosquitto:2.0.15
+    container_name: mosquitto
+    volumes:
+      - $HOME/mosquitto:/mosquitto
+      - $HOME/mosquitto/data:/mosquitto/data
+      - $HOME/mosquitto/log:/mosquitto/log
+    labels:
+      - traefik.enable=true
+      - traefik.tcp.routers.mosquitto.entrypoints=mqtt
+      - traefik.tcp.routers.mosquitto.service=mqtt
+      - traefik.tcp.routers.mosquitto.rule=HostSNI(`test1.wis2dev.io`)
+      - traefik.tcp.services.mqtt.loadbalancer.server.port=1883
+    networks:
+      - traefik
+  traefik:
+    image: traefik:2.11
+    container_name: traefik
+    networks:
+      - traefik
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - $HOME/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - $HOME/traefik/dynamic:/etc/traefik/dynamic:ro
+    labels:
+      traefik.enable: true
+      traefik.http.routers.traefik.service: api@internal
+networks:
+    traefik:
+      external: true
