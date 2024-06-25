@@ -1,0 +1,34 @@
+global:
+  sendAnonymousUsage: false
+  checkNewVersion: false
+
+api:
+  dashboard: true
+
+pilot:
+  dashboard: false
+
+log:
+  level: INFO
+
+accessLog:
+  format: json
+
+serverTransports:
+  insecureSkipVerify: true
+
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    exposedByDefault: false
+    watch: true
+    swarmMode: false
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+
+entryPoints:
+  mqtt:
+    address: ":1883"
+  web:
+    address: ":80"
