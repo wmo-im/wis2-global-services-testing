@@ -10,7 +10,7 @@ The docker-compose file deploys 4 containers: two for message generation, one fo
 3. Each golfvert/benchmarkwis2gb container "emulates" 20 WIS2 Nodes (only for Notification Message generation). Each WIS2 Node as a centre-id io-wis2dev-[number]-test
 
 
-## How to use it ?
+## How to deploy it ?
 
 Download 
 - docker-compose.yaml
@@ -42,3 +42,26 @@ The `mosquitto` container deployed and the attached configuration file is then u
 
 The tested Global Broker should then subscribe to all WIS2 Nodes message generation using the CENTRE_ID io-wis2dev-100-test, -101-,... 
 In the envisaged test scenario, 200 WIS2 Nodes should be configured. So, up to io-wis2dev-299-test. Those 200 WIS2 Node will be distributed onto 5 VMs for performance reasons.
+
+## How to use it ?
+
+By publishing instructions on the MQTT_CONFIG_BROKER, some or all of the WIS2 Nodes will then generate messages compliant with WIS2 Notification Message format. 
+No associated data will be created. The purpose of the tool being _only_ to create a large number of Notification Messages that the Global Brokers should handle properly.
+
+The following JSON message is an example showing how to trigger the WIS2 Notification Message generation by the WIS2 Nodes:
+
+```
+{
+  "centreid_min": 101,
+  "centreid_max": 107,
+  "action": { "publish":
+     { "delay": 10,
+       "number": 1000
+     }} 
+}
+```
+
+Each WIS2 Node has a centre_id number. The above example will instruct WIS2 Node whose centre_id are above 101 and below 107 (both included) to send 1000 messages with a delay of 10ms between each message.
+
+By adjusting centreid_min and centreid_max, the delay between messages and the number of messages to send, it is possible to assess the performance of the Global Broker.
+Each generated message will have its own `id`.
