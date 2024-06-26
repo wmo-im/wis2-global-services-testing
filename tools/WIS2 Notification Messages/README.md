@@ -54,10 +54,12 @@ The following JSON message is an example showing how to trigger the WIS2 Notific
 {
   "centreid_min": 101,
   "centreid_max": 107,
-  "action": { "publish":
-     { "delay": 10,
-       "number": 1000
-     }} 
+  "action":
+    { "publish":
+      { "delay": 10,
+        "number": 1000
+      }
+    } 
 }
 ```
 
