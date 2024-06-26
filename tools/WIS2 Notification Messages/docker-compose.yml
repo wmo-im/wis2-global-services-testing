@@ -16,7 +16,7 @@ services:
         - MQTT_PUB_BROKERVERSION=5
         - MQTT_PUB_QOS=1
       networks:
-        - traefik
+        - wis2bridge
       restart: unless-stopped
     wis2nodebench2:
       container_name: wis2nodebench2
@@ -34,7 +34,7 @@ services:
         - MQTT_PUB_BROKERVERSION=5
         - MQTT_PUB_QOS=1
       networks:
-        - traefik
+        - wis2bridge
       restart: unless-stopped   
     mosquitto:
       image: eclipse-mosquitto:2.0.15
@@ -43,29 +43,10 @@ services:
         - $HOME/mosquitto:/mosquitto
         - $HOME/mosquitto/data:/mosquitto/data
         - $HOME/mosquitto/log:/mosquitto/log
-      labels: 
-        - traefik.enable=true
-        - traefik.tcp.routers.mosquitto.entrypoints=mqtt
-        - traefik.tcp.routers.mosquitto.service=mqtt
-        - traefik.tcp.routers.mosquitto.rule=HostSNI(`****.wis2dev.io`)
-        - traefik.tcp.services.mqtt.loadbalancer.server.port=1883
-      networks:
-        - traefik
-    traefik:
-      image: traefik:2.11
-      container_name: traefik
-      networks:
-        - traefik
-      restart: unless-stopped
-      port:
+      ports:
         - 1883:1883
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-        - $HOME/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-        - $HOME/traefik/dynamic:/etc/traefik/dynamic:ro
-      labels:
-        traefik.enable: true
-        traefik.http.routers.traefik.service: api@internal
+      networks:
+        - wis2bridge
 networks:
-    traefik:
+    wis2bridge:
       external: true
