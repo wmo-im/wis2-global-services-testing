@@ -13,7 +13,7 @@ The docker-compose file deploys 4 containers: two for message generation, one fo
 ## How to deploy it ?
 
 Download 
-- docker-compose.yaml
+- docker-compose.yml
 
 and edit, for each of the two golfvert/benchmarkwis2gb container :
 
@@ -24,11 +24,6 @@ and edit, for each of the two golfvert/benchmarkwis2gb container :
         - MQTT_CONFIG_PASSWORD=
         - MQTT_CONFIG_TOPIC=config/#
         - CENTRE_ID=100
-        - MQTT_PUB_BROKER=mqtt://mosquitto
-        - MQTT_PUB_USERNAME=mqtt
-        - MQTT_PUB_PASSWORD=****
-        - MQTT_PUB_BROKERVERSION=5
-        - MQTT_PUB_QOS=1
  ```
 
 MQTT_CONFIG_BROKER/USERNAME/PASSWORD/TOPIC must be identical on all servers participating to the benchmark. 
@@ -55,7 +50,8 @@ The following JSON message is an example showing how to trigger the WIS2 Notific
   "centreid_min": 101,
   "centreid_max": 107,
   "action":
-    { "publish":
+    {
+      "publish":
       { "delay": 10,
         "number": 1000
       }
