@@ -9,10 +9,10 @@ services:
         - MQTT_CONFIG_USERNAME=
         - MQTT_CONFIG_PASSWORD=
         - MQTT_CONFIG_TOPIC=config/#
-        - CENTRE_ID=100
+        - CENTRE_ID=100 # FOR CONTAINER01
         - MQTT_PUB_BROKER=mqtt://mosquitto
         - MQTT_PUB_USERNAME=mqtt
-        - MQTT_PUB_PASSWORD=****
+        - MQTT_PUB_PASSWORD=mqtt_secure
         - MQTT_PUB_BROKERVERSION=5
         - MQTT_PUB_QOS=1
       networks:
@@ -27,10 +27,10 @@ services:
         - MQTT_CONFIG_USERNAME=
         - MQTT_CONFIG_PASSWORD=
         - MQTT_CONFIG_TOPIC=config/#
-        - CENTRE_ID=120
+        - CENTRE_ID=120 # FOR CONTAINER02
         - MQTT_PUB_BROKER=mqtt://mosquitto
         - MQTT_PUB_USERNAME=mqtt
-        - MQTT_PUB_PASSWORD=****
+        - MQTT_PUB_PASSWORD=mqtt_secure
         - MQTT_PUB_BROKERVERSION=5
         - MQTT_PUB_QOS=1
       networks:
