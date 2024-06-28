@@ -12,7 +12,9 @@ The docker-compose file deploys 4 containers: two for message generation, one fo
 
 ## How to deploy it ?
 
-Download 
+### Manually
+
+Download :
 - docker-compose.yml
 
 and edit, for each of the two golfvert/benchmarkwis2gb container :
@@ -37,6 +39,16 @@ The `mosquitto` container deployed and the attached configuration file is then u
 
 The tested Global Broker should then subscribe to all WIS2 Nodes message generation using the CENTRE_ID io-wis2dev-100-test, -101-,... 
 In the envisaged test scenario, 200 WIS2 Nodes should be configured. So, up to io-wis2dev-299-test. Those 200 WIS2 Node will be distributed onto 5 VMs for performance reasons.
+
+### Using Ansible
+
+Download : 
+- inventory, ansible-playbook,... The playbook works with managed nodes running Rocky (or equivalent) Linux.
+- the docker-compose template
+
+1. Prepare the ansible configuration on the control node (this will need the docker tools) and the managed nodes (ssh access with password-less sudo, for example).
+2. With the IP addresses (or DNS names) of the managed nodes, update the inventory accordingly. On each managed node, two docker containers for the message generation will be deployed. The values for centre_id must be adapted accordingly. Typically, the 1st VM will have 100 to 119 on the 1st container, the 2nd VM will have 120 to 139. And so on.
+3. Modify the MQTT_CONFIG_BROKER/USERNAME/PASSWORD/TOPIC as explained above
 
 ## How to use it ?
 
