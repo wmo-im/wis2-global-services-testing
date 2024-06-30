@@ -1,0 +1,41 @@
+[[global-monitor-testing]]
+
+=== Global Monitor Service testing
+
+==== Functional tests
+
+===== Connectivity
+
+====== Purpose
+A Global Monitor must connect to the endpoints provided by the other Global Services, and if any of the endpoints is unavailable, the error should be reported and the alert notification messages should arrive.
+
+TODO
+
+====== Steps
+
+. step 1
+. step 2
+
+. 1.Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
+. 2.Connect the MQTT client to the broker of GM.
+. 3.Once the connection is successful, attempt to subscribe to the following topics:
+monitor/a/wis2/#
+. 4.Initialize the GM with test endpoint with simulated metrics.
+. 5.Check if the endpoint is available, if it is, it shows ¡®up¡¯ on the webpage. 
+. 6.If the endpoint is unavailable, it shows error just like ¡®404¡¯ on the webpage, and a notification message should arrive from the broker of GM under
+monitor/a/wis2/CENTRE_ID_global-monitor/centre-id
+e.g. monitor/a/wis2/cn-cma_global-monitor/us-noaa-nws-globalbroker
+
+
+==== Performance tests
+
+===== Test name
+
+====== Purpose
+
+TODO
+
+====== Steps
+
+. step 1
+. step 2
