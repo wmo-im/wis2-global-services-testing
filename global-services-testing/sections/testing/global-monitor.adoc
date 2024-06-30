@@ -131,7 +131,7 @@ No data is received by Global Cache over the two minutes
 
 ==== Performance tests
 
-===== multiple providers
+===== Multiple providers
 
 ====== Purpose
 A Global Monitor should support a minimum of 50 metrics providers.
@@ -144,7 +144,7 @@ TODO
 . If all the endpoints shows 'UP' on the webpage, the test passes.
 . Open the dashboard and check if it matches the metrics, if it is, the test passes.
 
-===== simultaneous access
+===== Simultaneous access
 
 ====== Purpose
 A Global Monitor should support 200 simultaneous access to the dashboard
