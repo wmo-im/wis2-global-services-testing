@@ -13,18 +13,44 @@ TODO
 
 ====== Steps
 
-. step 1
-. step 2
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
+. Connect the MQTT client to the broker of GM.
+. Once the connection is successful, attempt to subscribe to the following topics:
+  ``++monitor/a/wis2/#++``
+. Initialize the GM with test endpoint with simulated metrics.
+. Check if the endpoint is available, if it is, it shows â€˜UPâ€™ on the webpage. 
+. If the endpoint is unavailable, it shows error just like '404' on the webpage, and a notification message should arrive from the broker of GM under
 
-. 1.Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. 2.Connect the MQTT client to the broker of GM.
-. 3.Once the connection is successful, attempt to subscribe to the following topics:
-monitor/a/wis2/#
-. 4.Initialize the GM with test endpoint with simulated metrics.
-. 5.Check if the endpoint is available, if it is, it shows ¡®up¡¯ on the webpage. 
-. 6.If the endpoint is unavailable, it shows error just like ¡®404¡¯ on the webpage, and a notification message should arrive from the broker of GM under
-monitor/a/wis2/CENTRE_ID_global-monitor/centre-id
-e.g. monitor/a/wis2/cn-cma_global-monitor/us-noaa-nws-globalbroker
+  ``++monitor/a/wis2/CENTRE_ID_global-monitor/centre-id++``
+
+* e.g. monitor/a/wis2/cn-cma-global-monitor/us-noaa-nws-globalbroker
+
+===== Metrics validation ï¼ˆfailure; invalidï¼‰
+
+====== Purpose
+The Global Monitor should be able to recognize the invalid metrics, give prompt and alert.
+
+TODO
+
+====== Steps
+
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
+. Connect the MQTT client to the broker of GM.
+. Once the connection is successful, attempt to subscribe to the following topics:
+  ``++monitor/a/wis2/#++``
+. Initialize the GM with test endpoint with invalid metrics.
+. GM gives the error prompt on the webpage, and a notification message should arrive from the broker of GM under
+
+  ``++monitor/a/wis2/CENTRE_ID_global-monitor/centre-id++``
+
+* e.g. monitor/a/wis2/cn-cma_global-monitor/us-noaa-nws-globalbroker
+
+
+
+
+
+
+
 
 
 ==== Performance tests
