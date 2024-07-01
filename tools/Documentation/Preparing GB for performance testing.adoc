@@ -1,0 +1,115 @@
+= Preparing Global Broker for performance testing
+:toc: macro
+:sectnums: all
+:version: 0.1
+:author: Rémy Giraud
+:email: remy.giraud@meteo.fr
+:revnumber: 0.2
+:revdate: 28.06.2024 
+
+<<<
+
+toc::[]
+
+<<<
+
+The documentation _Preparing Global Broker for performance testing_ details how to prepare the Global Broker for the performance testing.
+Some of the configurations can be done ahead of the effective day of the performance test.
+
+== Configuration of the WIS2 Nodes subscription
+
+The 200 WIS2 Nodes will be deployed on 5 VMs. On each VMs, 40 WIS2 Nodes will be deployed. They will share the same MQTT Broker, however the _centre_id_ and the subscription topic will be different for each WIS2 Node.
+
+The DNS name of the VM will be:
+- test100.wis2dev.io (for centre_id from 100 to 139)
+- test140.wis2dev.io (for centre_id from 140 to 179)
+- test180.wis2dev.io (for centre_id from 180 to 219)
+- test220.wis2dev.io (for centre_id from 220 to 259)
+- test260.wis2dev.io (for centre_id from 260 to 299)
+
+=== MQTT Configuration 
+
+The MQTT broker(s) will be reachable using:
+
+```
+MQTT_SUB_BROKER=mqtt://test100.wis2dev.io (and also 140, 180, 220 and 260)
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+```
+
+1. Default MQTT port will be used (1883)
+2. The password is changed to _onlyone_. This allows to prevent the default authentication (everyone/everyone) to be usable, while keeping the authorization (typically using only the username) unchanged
+
+=== Notification Message tests
+
+As no metadata record will be provided, checking the existence of the metadata record by the Global Broker must be disabled.
+
+As the topic used for the test messages will be correct, checking the validity of the Topic Hierarchy must be done.
+
+As the Notification Messages will be syntactically correct, checking the compliance of the Notification Message with the defined schema (schemas.wmo.int) must be done.
+
+=== centre_id and subscription
+
+The centre_id will be of the from io-wis2dev-[number]-test with number varying from 100 to 299. 100 to 139 on test100.wis2dev.io and so on.
+
+Messages will be published on the topic `origin/a/wis2/io-wis2dev-x-test/#` (with x varying from 100 to 299).
+
+=== Summary
+
+Using the antiloop software used by Brazil and France, as an example, the configuration file _io-wis2dev-100-test.env_ will be : 
+
+```
+MQTT_SUB_BROKER=mqtt://test100.wis2dev.io
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+MQTT_SUB_TOPIC=origin/a/wis2/io-wis2dev-100-test/#
+CENTRE_ID=io-wis2dev-100-test
+MSG_CHECK_OPTION=verify
+TOPIC_CHECK_OPTION=verify
+METADATA_CHECK_OPTION=no
+GDC_URL=https://api.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
+SCHEMA_URL=https://raw.githubusercontent.com/golfvert/wis2-topic-hierarchy/main/wis2-notification-message.json
+```
+
+The configuration file _io-wis2dev-210-test.env_ will be : 
+
+```
+MQTT_SUB_BROKER=mqtt://test180.wis2dev.io
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+MQTT_SUB_TOPIC=origin/a/wis2/io-wis2dev-210-test/#
+CENTRE_ID=io-wis2dev-210-test
+MSG_CHECK_OPTION=verify
+TOPIC_CHECK_OPTION=verify
+METADATA_CHECK_OPTION=no
+GDC_URL=https://api.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
+SCHEMA_URL=https://raw.githubusercontent.com/golfvert/wis2-topic-hierarchy/main/wis2-notification-message.json
+```
+
+Ahead of the testing period, each Global Broker operator is invited to prepare the configuration for the 200 WIS2 Nodes.
+
+== Preparing the Global Broker for the tests
+
+In order to run the performance tests, the operators of the Global Broker will need to:
+
+1. Remove all the subscriptions to existing and _real_ WIS2 Nodes 
+2. Modify the password of the _everyone_ user on the broker of the Global Broker from *everyone* to *onlyone*
+3. Delete all existing subscriptions to broker of the Global Broker (Users, other Global Brokers, Global Caches have a subscription to the broker)
+4. Enable all configurations to the _test_ 200 WIS2 nodes
+
+Depending on the Global Broker and the MQTT broker used, the method of doing the four steps above will be different and is beyond the scope of this document. 
+
+When those steps are completed, the Global Broker will be ready to run the performance tests.
+
+== Putting back the Global Broker for WIS2 operations
+
+After the performance tests, the operators of the Global Broker will need to:
+
+1. Remove all the subscriptions to _test_ WIS2 Nodes 
+2. Modify the password of the _everyone_ user on the broker of the Global Broker from *onlyone* to *everyone*
+3. Delete all existing subscriptions to broker of the Global Broker 
+4. Enable all configurations to the _real_ WIS2 nodes
+
+Depending on the Global Broker and the MQTT broker used, the method of doing the four steps above will be different and is beyond the scope of this document. 
+
+When those steps are completed, the Global Broker will be back to normal operations.
