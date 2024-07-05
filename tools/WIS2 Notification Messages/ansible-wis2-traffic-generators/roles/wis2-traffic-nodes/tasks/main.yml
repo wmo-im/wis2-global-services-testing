@@ -1,0 +1,93 @@
+#- name: Create directory '/tmp/in'
+#  ansible.builtin.file:
+#    path: /tmp/in
+#    state: directory
+#    recurse: no
+#    owner: root
+#    group: root
+#    mode: 0775
+
+# INSTALL DOCKER INSTEAD OF PODMAN
+- name: remove podman rpms
+  ansible.builtin.dnf:
+    name: podman,podman-docker,podman-plugins,podman-catatonit,podman-gvproxy,containers-common,'@container-tools'
+    state: absent
+  when: ansible_os_family == 'RedHat'
+
+- name: add docker repository
+  ansible.builtin.yum_repository:
+    name: docker-ce
+    description: docker-ce
+    baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
+  when: ansible_os_family == 'RedHat'
+
+- name: install docker rpms
+  ansible.builtin.dnf:
+    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Start and enable docker
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: create directory
+  ansible.builtin.file:
+    path: ./wis2-traffic-generator
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  loop:
+  - $HOME/wis2-traffic-generator
+  - $HOME/mosquitto
+  - $HOME/mosquitto/data
+  - $HOME/mosquitto/log
+
+- name: Copy content of directory mosquitto config
+  copy:
+    src: ./files/common/wis2-global-services-testing/tools/WIS2 Notification Messages/mosquitto/config/ 
+    dest: ./mosquitto/config
+
+- name: copy Docker Compose files
+  copy:
+    src: "{{ item }}"
+    dest: ./wis2-traffic-generator/
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  loop:
+  - ./files/common/docker-compose.yml
+
+- name: modify min value container01
+  lineinfile: 
+    dest: ./wis2-traffic-generator/docker-compose.yml
+    #          - CENTRE_ID=120 # FOR CONTAINER01
+    regexp: '^        - CENTRE_ID=(.*) # FOR CONTAINER01.*$'
+    line: "        - CENTRE_ID={{ centre_id_min_01 }} # FOR CONTAINER01"
+
+- name: modify min value container02
+  lineinfile: 
+    dest: ./wis2-traffic-generator/docker-compose.yml
+    #          - CENTRE_ID=120 # FOR CONTAINER02
+    regexp: '^        - CENTRE_ID=(.*) # FOR CONTAINER02.*$'
+    line: "        - CENTRE_ID={{ centre_id_min_02 }} # FOR CONTAINER02"
+
+- name: Add the ansible user to docker group
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Make sure wis2bridge docker network exists
+  docker_network:
+    name: wis2bridge
+
+# use files parameter to use multiple docker-compose.yml files
+- name: deploy docker compose stack
+  remote_user: "{{ ansible_user }}"
+  become: False
+  community.docker.docker_compose_v2:
+    project_src: /home/rocky/wis2-traffic-generator
+    state: present

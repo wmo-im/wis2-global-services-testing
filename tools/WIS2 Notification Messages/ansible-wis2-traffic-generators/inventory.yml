@@ -1,0 +1,14 @@
+all:
+  children:
+    wis2trafficnodes:
+      hosts:
+        ovhsingapour:
+          ansible_host: 51.79.248.212
+          ansible_user: rocky
+          centre_id_min_01: 100
+          centre_id_min_02: 120
+        ovhsydney:
+          ansible_host: 139.99.172.31
+          ansible_user: rocky
+          centre_id_min_01: 140
+          centre_id_min_02: 160
