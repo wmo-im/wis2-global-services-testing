@@ -12,19 +12,112 @@ A Global Broker:
 
 ==== Functional tests
 
-===== Global Broker connectivity
-
-====== Purpose
+===== Global Broker connectivity Tests
 
 There are several check-box activities that WMO Secretariat can perform on each GB service in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
 
+====== 1. Global Broker Port Tests
+
+====== Purpose
+
+An MQTT client must be able to connect to the local broker of the Global Broker on ports 8883 or 443 (WSS) using the MQTT protocol with Transport Layer Security (TLS) (i.e., mqtts protocol) and username/password authentication. 
+
+====== Requirements
+
+* Global Broker MQTT connection string
+* MQTT Test Client
+
 ====== Steps
 
-- The GB service must be accessible using ports 8883 (MQTTS) and 443 (WSS)
-- The GB service must use a valid certificate
-- The GB service must allow read access to origin/a/wis2/ and cache/a/wis2/ using everyone/everyone as user and password
-- The GB service must prevent write access to any topic with everyone/everyone credentials
-- The GB service, if deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster
+. Initialize the test MQTT client with the necessary parameters such as the MQTT protocol, TLS security, and username/password for authentication (connection string).
+. Attempt to connect the MQTT broker of the Global Broker using the connection string.
+
+====== Evaluate
+
+. Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.
+
+====== 2. Global Broker Certificate Test
+
+====== Purpose
+
+The Global Broker service must use a valid HTTPS certificate.  Transport Layer Security (TLS) is an encryption protocol that provides secure connections between servers and applications on the internet. When you connect to a website that uses HTTPS, TLS verifies the identity of the website’s server and encrypts your connection, preventing hackers from intercepting any data transmitted between your device and the site. In this way, TLS provides privacy and security for the data transmitted between your browser and the website, and you can be sure the data hasn’t been tampered with.
+
+====== Requirements
+
+* Global Broker MQTT connection string
+* MQTT Test Client
+
+====== Steps
+
+. From a MQTT client and try to connect to a GB using HTTPS.  The GB server sends the MQTT client its TLS certificate.  The MQTT client then verifies that the certificate is valid and digitally signed by a trusted CA by comparing it with information it stores about trusted CAs. The signed certificate verifies the website server’s public key, which confirms that you’re communicating with the genuine server of the website you’re visiting.  The server also authenticates a key exchange, resulting in a one-time session key that is used to send encrypted and authenticated data between the clients and the server.
+
+====== Evaluate
+
+. Check if the TLS connection is successful 
+. Check for certification verfication
+
+If the connection is successful and the certificate are valid, the test passes. If the connection is not successful or the certificate is invalid, the test fails.
+
+====== 3. Global Broker Origin and Cache Read-Access Test
+
+====== Purpose
+
+The Global Broker service must allow read access to origin/a/wis2/# and cache/a/wis2/# using a username and password credential of everyone/everyone 
+
+====== Requirements
+
+* Global Broker MQTT connection string
+* MQTT Test Client
+
+====== Steps
+
+. From a MQTT client, set up a new connection for a global broker, with the following configuration settings:   
+  . Configure 2 subscriptions.  First, create separate subscriptions for "origin/a/wis2/#" and "cache/a/wis2/#" using a username and password credential for "everyone/everyone"
+. Save the configuration and click connect
+
+====== Evaluate
+
+. Check if the connection is successful, depending on the temporal frequency of updates, eventually, the WTH will be populated, and the test passes. If the connection is not successful, the test fails.
+
+====== 4. Global Broker deny write access to Origin and Cache for everyone/everyone credentials Test
+
+====== Purpose
+
+The Global Broker service must prevent write access to any topic with everyone/everyone credentials 
+
+====== Requirements
+
+* Global Broker MQTT connection string
+* MQTT Test Client
+
+====== Steps
+
+. Use an MQTT client to connect to Global Broker
+. Try to publish data or metadata to Global Broker
+
+====== Evaluate
+
+. Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.
+
+====== 5. Global Broker cluster redundancy Test
+
+====== Purpose
+
+The GB service, if deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster 
+
+====== Requirements
+
+* Global Broker MQTT connection string
+* MQTT Test Client
+
+====== Steps
+
+. From a MQTT client, set up a new subcription to either "origin/a/wis2/" and "cache/a/wis2/" using a username and password credential for "everyone/everyone".  
+. Fail a member of the cluster and ensure that subscriptions are still being fulfilled
+
+====== Evaluate
+
+. Check if the subscription is successful even after the members of the cluster are failed. If the subscription continues as cluster is altered, the test passes. If the subscription is not fulfilled after cluster alternation, the test fails.
 
 ===== Antiloop Testing
 
