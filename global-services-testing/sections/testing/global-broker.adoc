@@ -292,28 +292,67 @@ The Global Broker service must provided metrics as requested in the Guide on WIS
 
 . If the GB provide metrics during the first period of testing time, AND doesn't provide metrics for the second period of testing time,  the test passes.  Otherwise, the test fails.
 
-====== Purpose
+===== 3. Global Broker Performance Testing
 
-We must ensure that the antiloop feature installed as part of the GB service is functioning properly prior to January 1st, 2025
+We must ensure that the Global Broker service performs properly under stress.  The following outlined tests will test the Global Broker service prior to transition of WIS2 to an operational state on January 1, 2025
 
-====== Steps
-
-. The GB service must discard all duplicated messages (identical id) received whatever the originator of the messages
-- The GB service must ensure that any WIS2 Node is not publishing a message using a centre_id from another WIS2 Node
-- The GB service must check that the topic used to publish a message by a WIS2 Node is compliant with the agreed topic hierarchy
-- The GB service must check that the topic used to publish a message by a WIS2 Node is announcing a dataset with a corresponding metadata
-- The GB service must verify the compliance of the WIS2 Notification Message with the agreed standard as specified in the Manual on WIS Vol. 2
-- The GB service must be able to discard or notify a notification message in breach of the requirement 3., 4. or 5.
-- The GB service must provided metrics as requested in the Guide on WIS2
-
-===== Performance Testing
+====== A. Global Broker minimum number of WIS2 Nodes Test
 
 ====== Purpose
 
-We must ensure that the GB service performs properly under stress.  The following outlines tests will test the GB service prior to transition of WIS2 to an operational state on January 1, 2025
+The Global Broker service should support a minimum of *200* WIS2 Nodes
+
+====== Requirements
+
+* mqttx-cli
+* hive
+* global broker Cloud asset
 
 ====== Steps
 
-- The GB service should support a minimum of *200* WIS2 Nodes or Global Services
-- The GB service should support a minimum of *1000* subscribers.
-- should support processing of a minimum of *10000* messages per second
+. Use hive/mqttx-cli scripting provided by Remy to perform this test
+
+====== Evaluate
+
+. If the Global Broker subscribes to all 200 WIS2 Node subscriptions,  the test passes.  Otherwise, the test fails.
+
+====== B. Global Broker minimum number of subscribers Test
+
+====== Purpose
+
+The Global Broker service should support a minimum of *1000* subscribers.
+
+====== Requirements
+
+* mqttx-cli
+* hive
+* global broker Cloud asset
+
+====== Steps
+
+. Use hive/mqttx-cli scripting provided by Remy to perform this test
+
+====== Evaluate
+
+. If the Global Broker supports a minimum of *1000* subscribers,  the test passes.  Otherwise, the test fails.
+
+====== C. Global Broker minimum number of subscribers Test
+
+====== Purpose
+
+The Global Broker service should support processing of a minimum of *10000* messages per second.
+
+====== Requirements
+
+* mqttx-cli
+* hive
+* global broker Cloud asset
+
+====== Steps
+
+. Use hive/mqttx-cli scripting provided by Remy to perform this test
+
+====== Evaluate
+
+. If the Global Broker supports a minimum of *10000* messages per second,  the test passes.  Otherwise, the test fails.
+
