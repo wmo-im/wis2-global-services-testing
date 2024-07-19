@@ -7,7 +7,7 @@ from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 from time import sleep
 from connection_subscription import *
 from metrics import ask_prometheus, get_prom_metric_value
-from mqtt_client import *
+from input_work import *
 import queue
 import threading
 
