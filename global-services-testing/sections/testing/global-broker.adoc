@@ -12,11 +12,11 @@ A Global Broker:
 
 ==== Functional tests
 
-===== Global Broker connectivity Tests
+===== 1. Global Broker Connectivity Tests
 
 There are several check-box activities that WMO Secretariat can perform on each GB service in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
 
-====== 1. Global Broker Port Tests
+====== A. Global Broker Port Tests
 
 ====== Purpose
 
@@ -36,7 +36,7 @@ An MQTT client must be able to connect to the local broker of the Global Broker 
 
 . Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.
 
-====== 2. Global Broker Certificate Test
+====== B. Global Broker Certificate Test
 
 ====== Purpose
 
@@ -58,7 +58,7 @@ The Global Broker service must use a valid HTTPS certificate.  Transport Layer S
 
 If the connection is successful and the certificate are valid, the test passes. If the connection is not successful or the certificate is invalid, the test fails.
 
-====== 3. Global Broker Origin and Cache Read-Access Test
+====== C. Global Broker Origin and Cache Read-Access Test
 
 ====== Purpose
 
@@ -79,7 +79,7 @@ The Global Broker service must allow read access to origin/a/wis2/# and cache/a/
 
 . Check if the connection is successful, depending on the temporal frequency of updates, eventually, the WTH will be populated, and the test passes. If the connection is not successful, the test fails.
 
-====== 4. Global Broker deny write access to Origin and Cache for everyone/everyone credentials Test
+====== D. Global Broker deny write access to Origin and Cache for everyone/everyone credentials Test
 
 ====== Purpose
 
@@ -99,7 +99,7 @@ The Global Broker service must prevent write access to any topic with everyone/e
 
 . Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.
 
-====== 5. Global Broker cluster redundancy Test
+====== E. Global Broker cluster redundancy Test
 
 ====== Purpose
 
@@ -119,30 +119,240 @@ The GB service, if deployed in a cluster, then the MQTT Broker must use a redund
 
 . Check if the subscription is successful even after the members of the cluster are failed. If the subscription continues as cluster is altered, the test passes. If the subscription is not fulfilled after cluster alternation, the test fails.
 
-===== Antiloop Testing
+===== 2. Global Broker Antiloop Testing
+
+The antiloop feature of a Global Broker is a critical aspect for a successful pub/sub service.  These 7 tests are designed to test the antiloop feature of the GB service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025
+
+====== A. Discarding of duplicate messages Test
 
 ====== Purpose
 
-We must ensure that the antiloop feature installed as part of the GB service is functioning properly prior to January 1st, 2025
+The Global Broker service must discard all duplicated messages (identical id) received whatever the originator of the messages 
+
+====== Requirements
+
+* Global Broker MQTT connection string to 2 WIS2 Nodes (test1 and test2)
+* MQTT Test Client
 
 ====== Steps
 
-. The GB service must discard all duplicated messages (identical id) received whatever the originator of the messages
-- The GB service must ensure that any WIS2 Node is not publishing a message using a centre_id from another WIS2 Node
-- The GB service must check that the topic used to publish a message by a WIS2 Node is compliant with the agreed topic hierarchy
-- The GB service must check that the topic used to publish a message by a WIS2 Node is announcing a dataset with a corresponding metadata
-- The GB service must verify the compliance of the WIS2 Notification Message with the agreed standard as specified in the Manual on WIS Vol. 2
-- The GB service must be able to discard or notify a notification message in breach of the requirement 3., 4. or 5.
-- The GB service must provided metrics as requested in the Guide on WIS2
+. Have WIS2Node "test1" publish *X* messages with the same id on topic *origin/a/wis2/test1/
+core/data/weather/surface-based-observation/synop*
+. Have WIS2Node "test2" publish *Y* messages with the same id (same as id from X above) on topic *origin/a/wis2/test2/
+core/data/weather/surface-based-observation/synop*  
 
-===== Performance Testing
+====== Evaluate
+
+. If the Global Broker "gb-test" discards all messages except one, makes it available on one of the two topics depending the WIS2 Node message that arrived first (*test1* or *test2)
+. Increments *wmo_wis2_gb_messages_published* on centre_id from the WIS2Node that arrives first (*test1* or *test2*)
+. If both statements are true, the test passes. Otherwise, the test fails.
+
+====== B. Publishing a message using the centre_id from a different WIS2 Node Test
 
 ====== Purpose
 
-We must ensure that the GB service performs properly under stress.  The following outlines tests will test the GB service prior to transition of WIS2 to an operational state on January 1, 2025
+The Global Broker service must ensure that any WIS2 Node is not publishing a message using a centre_id from another WIS2 Node 
+
+====== Requirements
+
+* Global Broker MQTT connection string to 2 WIS2 Nodes (test1 and test2)
+* MQTT Test Client
 
 ====== Steps
 
-- The GB service should support a minimum of *200* WIS2 Nodes or Global Services
-- The GB service should support a minimum of *1000* subscribers.
-- should support processing of a minimum of *10000* messages per second
+. Have WIS2Node "test1" publish a valid message on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Have WIS2Node "test2" publish the same message and on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+
+====== Evaluate
+
+. If the Global Broker "gb-test" discards the message from *test2*, AND increments *wmo_wis2_gb_messages_invalid_total* on centre_id *test2*, the test passes. Otherwise, the test fails.
+
+====== C. Publishing a message from a WIS2 Node using a compliant topic hierarchy Test
+
+====== Purpose
+
+The Global Broker service must check that the topic used to publish a message by a WIS2 Node is compliant with the agreed topic hierarchy.  What follows below is  an overview of the primary topic levels. 
+
+[cols="1,1"]
+|===
+|Level 1
+|channel
+|Level 2
+|version
+|Level 3
+|system
+|Level 4
+|centre-id
+|Level 5
+|notification-type
+|Level 6
+|data-policy
+|Level 7
+|earth-system-discipline
+|===
+
+
+====== Requirements
+
+* Global Broker MQTT connection string to 1 WIS2 Nodes (test1)
+* MQTT Test Client
+
+====== Steps
+
+. Have WIS2Node "test1" publish a *valid* message with valid topic hierarchy coming on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Have WIS2Node "test1" then publish an *invalid message* with invalid topic hierarchy on topic *origin/wis2/test1/core/data/weather/surface-based-observation/synop*.  What's missing from this topic hierarchy is *level 2* ("a"). 
+
+====== Evaluate
+
+. If the Global Broker "gb-test" accepts the first message (with valid topic hierarchy) coming from WIS2 Node *test1*
+. If the Global Broker "gb-test" fails the second message coming from WIS2 Node *test1* with an invalid topic hierarchy
+. If the Global Broker "gb-test" increments *wmo_wis2_gb_messages_invalid_total*, the test passes. Otherwise, the test fails.
+
+====== D. Check that a GB subsribed to a WIS2 Node and publishes a message announces a dataset with metadata Test
+
+====== Purpose
+
+The Global Broker service must check that the topic used to publish a message by a WIS2 Node is announcing a dataset with corresponding metadata 
+
+====== Requirements
+
+* Global Broker MQTT connection string to 1 WIS2 Nodes (test1)
+* MQTT Test Client
+
+====== Steps
+
+. Using an MQTT client, subscribe to WIS2 Node "test1" on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Have WIS2Node "test1" publish a valid message coming on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Using the same MQTT client (like MQTT Explorer), check to see that that the WIS2 Node "test1" has updated it's available offerings.  Check the message payload response to ensure this announcement
+
+====== Evaluate
+
+. If the Global Broker "gb-test" sees the updated available offerings from the WIS2 Node "test1", 
+. If the Global Broker verifies that the message payload response contains metadata and a link to the data, then this test passes. Otherwise, the test fails AND the GB will increment *wmo_wis2_gb_messages_no_metadata_total*.
+
+====== E. Publishing and verifying the compliance of a WIS2 Notification message Test
+
+====== Purpose
+
+The Global Broker service must verify the compliance of the WIS2 Notification Message with the agreed standard as specified in the Manual on WIS Vol. 2
+
+====== Requirements
+
+* Global Broker MQTT connection string to 1 WIS2 Nodes (test1)
+* MQTT Test Client
+
+====== Steps
+
+. Have WIS2 Node "test1" publish a valid message for topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Next have the same WIS2 Node "test1" publish an invalid WIS2 Notification Message on the same topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+
+====== Evaluate
+
+. If the Global Broker "gb-test" accepts the first message published by WIS2 Node "test1" shows up as a valid WIS2 Notification Message
+. If the Global Broker "gb-test" drops the invalid WIS2 Notificaiton Message
+. If the Global Broker "gb-test" increments *wmo_wis2_gb_messages_invalid_total*, then this test passes. Otherwise, the test fails.
+
+====== F. GB discards or notify in a notification message breaching the requirements laid out in tests C, D or E Tests
+
+====== Purpose
+
+The Global Broker service must be able to discard or notify via a notification message in breach of the requirement in tests C, D or E
+
+====== Requirements
+
+* Global Broker MQTT connection string to 1 WIS2 Node (test1)
+* MQTT Test Client
+
+====== Steps
+
+. Follow the steps outlined in tests C, D or E
+
+====== Evaluate
+
+. If the steps from tests C or E are followed, and the test passes, the GB metrics should increment the *wmo_wis2_gb_messages_invalid_total* counter.  
+. If the steps from test D are followed, and the test passes, the GB metrics should increment the *wmo_wis2_gb_messages_no_metadata_total* counter.
+
+====== G. GB providing metrics Test
+
+====== Purpose
+
+The Global Broker service must provided metrics as requested in the Guide on WIS2
+
+====== Requirements
+
+* Global Broker MQTT connection string to 1 WIS2 Node (test1)
+* MQTT Test Client
+
+====== Steps
+
+. Have the GB update metrics for the first period of testing time (15 minutes) as usual
+. During the second period of time, make the metrics unavailable
+
+====== Evaluate
+
+. If the GB provide metrics during the first period of testing time, AND doesn't provide metrics for the second period of testing time,  the test passes.  Otherwise, the test fails.
+
+===== 3. Global Broker Performance Testing
+
+We must ensure that the Global Broker service performs properly under stress.  The following outlined tests will test the Global Broker service prior to transition of WIS2 to an operational state on January 1, 2025
+
+====== A. Global Broker minimum number of WIS2 Nodes Test
+
+====== Purpose
+
+The Global Broker service should support a minimum of *200* WIS2 Nodes
+
+====== Requirements
+
+* mqttx-cli
+* hive
+* global broker Cloud asset
+
+====== Steps
+
+. Use hive/mqttx-cli scripting provided by Remy to perform this test
+
+====== Evaluate
+
+. If the Global Broker subscribes to all 200 WIS2 Node subscriptions,  the test passes.  Otherwise, the test fails.
+
+====== B. Global Broker minimum number of subscribers Test
+
+====== Purpose
+
+The Global Broker service should support a minimum of *1000* subscribers.
+
+====== Requirements
+
+* mqttx-cli
+* hive
+* global broker Cloud asset
+
+====== Steps
+
+. Use hive/mqttx-cli scripting provided by Remy to perform this test
+
+====== Evaluate
+
+. If the Global Broker supports a minimum of *1000* subscribers,  the test passes.  Otherwise, the test fails.
+
+====== C. Global Broker minimum number of subscribers Test
+
+====== Purpose
+
+The Global Broker service should support processing of a minimum of *10000* messages per second.
+
+====== Requirements
+
+* mqttx-cli
+* hive
+* global broker Cloud asset
+
+====== Steps
+
+. Use hive/mqttx-cli scripting provided by Remy to perform this test
+
+====== Evaluate
+
+. If the Global Broker supports a minimum of *10000* messages per second,  the test passes.  Otherwise, the test fails.
+
