@@ -1,0 +1,16 @@
+{
+   "scenario": "wnmtest",
+   "configuration": {
+      "setup": {
+         "centreid": 10,
+         "number": 1
+      },
+      "wnm": {
+         "links": [
+           {
+             "href": false
+           }
+         ]
+      }
+   }
+}

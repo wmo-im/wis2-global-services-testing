@@ -1,0 +1,9 @@
+{
+   "scenario": "wnmtest",
+   "configuration": {
+      "setup": {
+         "centreid": 10,
+         "number": 1
+      }
+   }
+}
