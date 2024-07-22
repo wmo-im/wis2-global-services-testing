@@ -1772,21 +1772,11 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish (write) messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -1796,16 +1786,16 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -1815,7 +1805,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -1861,23 +1851,23 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
+<p>Configure the MQTT test client to connect to the dev/test GB MQTT broker using the provided connection string.</p>
 </li>
 <li>
 <p>Publish a batch of Prepared WIS2 Notification Messages to the dev/test GB on following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Send 1 or more messages to origin/a/wis2/+/data</p>
+<p>Send 1 or more messages to origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>Send 1 or more messages to cache/a/wis2/+/data</p>
+<p>Send 1 or more messages to cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>Send 1 or more messages to origin/a/wis2/+/metadata</p>
+<p>Send 1 or more messages to origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>Send 1 or more messages to cache/a/wis2/+/metadata</p>
+<p>Send 1 or more messages to cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -1978,21 +1968,11 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -2005,7 +1985,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to both the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -2044,23 +2024,23 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
+<p>Configure the MQTT test client to connect to the dev/test GB MQTT broker using the provided connection string.</p>
 </li>
 <li>
 <p>Publish the prepared WIS2 Notification Messages to the dev/test GB the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Send 1 or more messages to origin/a/wis2/+/data</p>
+<p>Send 1 or more messages to origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>Send 1 or more messages to cache/a/wis2/+/data</p>
+<p>Send 1 or more messages to cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>Send 1 or more messages to origin/a/wis2/+/metadata</p>
+<p>Send 1 or more messages to origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>Send 1 or more messages to cache/a/wis2/+/metadata</p>
+<p>Send 1 or more messages to cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -2131,21 +2111,11 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -2158,7 +2128,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -2197,23 +2167,23 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
 </li>
 <li>
 <p>Publish the prepared WNM&#8217;s to the dev/test GB on one or more of the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -2283,21 +2253,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -2310,7 +2270,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -2352,23 +2312,23 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
+<p>Configure the MQTT test client to connect to the dev/test GB broker using the provided connection string.</p>
 </li>
 <li>
 <p>Publish the perpared WNM&#8217;s to the dev/test GB on one or more of the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -2460,21 +2420,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -2487,7 +2437,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -2526,23 +2476,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
-</li>
-<li>
 <p>Publish the prepared WNM&#8217;s to the dev/test GB on one or more of the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -2616,21 +2563,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -2643,7 +2580,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -2679,23 +2616,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
-</li>
-<li>
 <p>Publish the prepared WNM&#8217;s to the dev/test GB on one or more of the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -2776,21 +2710,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -2803,7 +2727,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -2845,23 +2769,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
-</li>
-<li>
 <p>Publish the prepared WNM&#8217;s to the dev/test GB such that the invalid WNM for each unique data identifier is published first. One or more of the following topics can be used:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -2938,23 +2859,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
-</li>
-<li>
 <p>Publish the prepared WNM&#8217;s to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is <mark>greater than or equal to</mark> the subsequent message/s. One or more of the following topics can be used:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -3028,21 +2946,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -3055,7 +2963,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -3097,23 +3005,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.</p>
-</li>
-<li>
 <p>Publish the prepared WNM&#8217;s to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s and subsequent messages have a valid update link. One or more of the following topics can be used:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -3187,21 +3092,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish (write) messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -3211,16 +3106,16 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -3230,7 +3125,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -3279,23 +3174,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings. This script and client will be used to orchestrate the test.</p>
-</li>
-<li>
 <p>Start the timer, and publish the batch of 2000 prepared WNM&#8217;s to the dev/test GB on following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -3364,21 +3256,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Dev/test GC MQTT broker connection string</p>
-<div class="ulist">
-<ul>
-<li>
-<p>User is able to connect to the GC MQTT broker and subscribe to the <code>cache/a/wis2/#</code> topic (readonly).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
 <p>Dev/test GB MQTT broker connection string</p>
 <div class="ulist">
 <ul>
 <li>
-<p>User is able to publish (write) messages to the dev/test GB on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topic.</p>
+<p>MQTT user is able to read and write messages on the <code>origin/a/wis2/<mark></code> and <code>cache/a/wis2/</mark></code> topics.</p>
 </li>
 </ul>
 </div>
@@ -3388,16 +3270,16 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -3407,7 +3289,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.</p>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
 </li>
 </ul>
 </div>
@@ -3453,23 +3335,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings. This script and client will be used to orchestrate the test.</p>
-</li>
-<li>
 <p>Publish the prepared WNM&#8217;s one at a time to the dev/test GB on one of the following topics:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>origin/a/wis2/+/data</p>
+<p>origin/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/data</p>
+<p>cache/a/wis2/+/data/#</p>
 </li>
 <li>
-<p>origin/a/wis2/+/metadata</p>
+<p>origin/a/wis2/+/metadata/#</p>
 </li>
 <li>
-<p>cache/a/wis2/+/metadata</p>
+<p>cache/a/wis2/+/metadata/#</p>
 </li>
 </ul>
 </div>
@@ -3477,17 +3356,9 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 <div class="paragraph">
-<p>For each WNM:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Once the <em>cache</em> notification message is received by the test MQTT client (from the dev/test GC), the test client should start 1000 concurrent downloads of the data object/s from the canonical link provided in the <em>cache</em> WNM.</p>
-</li>
-<li>
-<p>The test client should record the number of successful downloads and the time taken to complete each download.</p>
-</li>
-</ol>
+<p>For each WNM:
+. Once the <em>cache</em> notification message is received by the test MQTT client (from the dev/test GC), the test client should start 1000 concurrent downloads of the data object/s from the canonical link provided in the <em>cache</em> WNM.
+. The test client should record the number of successful downloads and the time taken to complete each download.</p>
 </div>
 </div>
 <div class="sect5">
@@ -4908,7 +4779,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-07-22 05:35:18 UTC
+Last updated 2024-07-22 20:48:15 UTC
 </div>
 </div>
 </body>
