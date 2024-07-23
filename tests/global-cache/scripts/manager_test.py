@@ -8,6 +8,7 @@ from time import sleep
 from connection_subscription import *
 from metrics import ask_prometheus, get_prom_metric_value
 from input_work import *
+from pub_trigger import *
 import queue
 import threading
 
@@ -23,8 +24,10 @@ test_gc_centre_id = ""
 prometheus_baseurl = ""
 prometheus_username = ""
 prometheus_password = ""
+pub_mqtt_user = ""
+pub_mqtt_password = ""
 
-
+my_scenario1 = "input/scenario1"
 connected_flag = False
 subscribed_flag = False
 sub_error = ""
@@ -117,6 +120,8 @@ print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
 # 8.1.3. 3.
 print("\n8.1.3. 3. WIS2 Notification Message (WNM) Processing")
 print("RUN TEST SCENARIO 1")
+my_scenario = my_scenario1
+start_trigger_pub(test_gc_broker, test_gc_broker_port, pub_mqtt_user, pub_mqtt_password)
 run_scenario()
 print("\nA) Evaluate WNM Messages:")
 print("- STEP 1 - total number of cache notification messages published by the GC: " + str(len(msgTest_cache)))
@@ -144,3 +149,4 @@ else:
 print(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ")
 print("\n8.1.4. 4. Cache False Directive")
 print("RUN TEST SCENARIO 2")
+stop_trigger_pub()
