@@ -18,7 +18,8 @@ input_queue = queue.Queue(maxsize=max_size_input_queue)
 max_messages_test = 40
 origin_messages_received = 0
 stop_event = threading.Event()
-
+input_trigger_dir = "input/trigger"
+my_scenario = ""
 
 
 def on_connect(client, userdata, flags, rc, properties=None):
@@ -32,11 +33,19 @@ def on_disconnect(client, userdata, rc, properties=None):
 
 
 def on_subscribe(client, userdata, mid, reason_code_list, properties):
+    global my_scenario
     global subscribed_flag
     global sub_error
     if reason_code_list[0].value == 1 or reason_code_list[0].value == 0:
         subscribed_flag = True
-        print("-- Subscribed to topic, test messages should be published now")
+        if my_scenario != "":
+            # copy trigger messages for publish
+            triggerFiles = [f for f in os.listdir(my_scenario) if os.path.isfile(os.path.join(my_scenario, f)) and not f.startswith('.')]
+            for filename in triggerFiles:
+                source_file = os.path.join(my_scenario, filename)
+                destination_file = os.path.join(input_trigger_dir, filename)
+                shutil.copy(source_file, destination_file)
+            print("-- Subscribed to topic, trigger messages copied for my_scenario: " + str(my_scenario))
     else:
         sub_error = "sub_error: " + reason_code_list[0].value
 
@@ -87,6 +96,7 @@ def get_tls_connection(mqtt_broker, mqtt_tls_port, clientname, mqtt_user, mqtt_p
 def connection_test(mqtt_broker, mqtt_tls_port, mqtt_user, mqtt_password, sub_topic):
     global connected_flag
     global sub_error
+    global my_scenario
     connection_status = "NOT SET"
     subscribed_status = "NOT SET"
     error_message = ""
@@ -116,6 +126,7 @@ def start_subscription(mqtt_broker, mqtt_tls_port, mqtt_user, mqtt_password, sub
     global connected_flag
     global sub_error
     global test_client
+    global my_scenario
     clientname = "wis2_test_"
     instanz_suffix = uuid.uuid1()
     clientname_instanz = clientname + str(instanz_suffix)
