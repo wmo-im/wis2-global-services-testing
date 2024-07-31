@@ -59,17 +59,15 @@ This test also evaluates the client data download requirement: An HTTP client (i
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.1. [Global Cache] Technical considerations https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2; clause 2.7.4.2. [Global Cache] Practices and procedures https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly).
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish (write) messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and associated data objects:
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
@@ -80,12 +78,12 @@ This test also evaluates the client data download requirement: An HTTP client (i
 
 ====== Steps
 
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
+. Configure the MQTT test client to connect to the dev/test GB MQTT broker using the provided connection string.
 . Publish a batch of Prepared WIS2 Notification Messages to the dev/test GB on following topics:
-    ** Send 1 or more messages to origin/a/wis2/+/data
-    ** Send 1 or more messages to cache/a/wis2/+/data
-    ** Send 1 or more messages to origin/a/wis2/+/metadata
-    ** Send 1 or more messages to cache/a/wis2/+/metadata
+    ** Send 1 or more messages to origin/a/wis2/+/data/#
+    ** Send 1 or more messages to cache/a/wis2/+/data/#
+    ** Send 1 or more messages to origin/a/wis2/+/metadata/#
+    ** Send 1 or more messages to cache/a/wis2/+/metadata/#
 . The test MQTT client should store the messages received on the `cache/a/wis2/#` topic published by the GC and download the data objects from the canonical link provided in the messages using HTTP 1.1 with TLS.
     ** The original data object and the downloaded>>cached data objects can then be compared to ensure they are identical.
 
@@ -110,13 +108,11 @@ This test also evaluates the client data download requirement: An HTTP client (i
 Where a Global Cache receives a notification message with _properties.cache_ set to false, the Global Cache should publish a notification message where the data download link (a link object's `href` property where `rel=canonical`) refers to the source data server.
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to both the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects:
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
@@ -126,12 +122,12 @@ Where a Global Cache receives a notification message with _properties.cache_ set
 
 ====== Steps
 
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
+. Configure the MQTT test client to connect to the dev/test GB MQTT broker using the provided connection string.
 . Publish the prepared WIS2 Notification Messages to the dev/test GB the following topics:
-    ** Send 1 or more messages to origin/a/wis2/+/data
-    ** Send 1 or more messages to cache/a/wis2/+/data
-    ** Send 1 or more messages to origin/a/wis2/+/metadata
-    ** Send 1 or more messages to cache/a/wis2/+/metadata
+    ** Send 1 or more messages to origin/a/wis2/+/data/#
+    ** Send 1 or more messages to cache/a/wis2/+/data/#
+    ** Send 1 or more messages to origin/a/wis2/+/metadata/#
+    ** Send 1 or more messages to cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -150,13 +146,11 @@ Where a Global Cache receives a notification message with _properties.cache_ set
 Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the `metric wmo_wis2_gc_dataserver_status_flag` for the source data server should be set to 0 (zero).
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
@@ -166,12 +160,12 @@ Where a Global Cache receives a valid WNM, but is unable to download a data item
 
 ====== Steps
 
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
 . Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -191,13 +185,11 @@ Note that the trigger for this directive is implementation specific. The criteri
 to be valid. Additionally, a given GC may decide to NOT implement this directive and thus this test is included as optional.
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
@@ -208,12 +200,12 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 
 ====== Steps
 
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
+. Configure the MQTT test client to connect to the dev/test GB broker using the provided connection string.
 . Publish the perpared WNM's to the dev/test GB on one or more of the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * Topic
@@ -238,13 +230,11 @@ A Global Cache should validate the integrity of the resources it caches and only
 *Source:* https://github.com/wmo-im/wis2-notification-message/blob/main/standard/recommendations/core/REC_integrity.adoc
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
@@ -253,13 +243,11 @@ A Global Cache should validate the integrity of the resources it caches and only
   ** Accompanying data objects that are accessible via the canonical link provided in the WNM
 
 ====== Steps
-
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
 . Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -280,13 +268,11 @@ A Global Cache must ensure that only one instance of a notification message with
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's where:
@@ -294,12 +280,11 @@ A Global Cache must ensure that only one instance of a notification message with
   ** Accompanying data objects that are accessible via the canonical link provided in the WNM,
 
 ====== Steps
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
 . Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -323,13 +308,11 @@ Where a Global Cache fails to process a notification message relating to a given
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's where:
@@ -339,12 +322,11 @@ Where a Global Cache fails to process a notification message relating to a given
   ** Accompanying data objects that are accessible (or not) via the canonical link provided in the WNM.
 
 ====== Steps
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
 . Publish the prepared WNM's to the dev/test GB such that the invalid WNM for each unique data identifier is published first. One or more of the following topics can be used:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -367,12 +349,11 @@ Related to the two previous tests, a GC should not process and cache a data item
 See above.
 
 ====== Steps
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
 . Publish the prepared WNM's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is #greater than or equal to# the subsequent message/s. One or more of the following topics can be used:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -394,13 +375,11 @@ A Global Cache should treat notification messages with the same data item identi
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.2. [Global Cache] Practices and procedures: “Verify if the message points to new or updated data by comparing the pubtime value of the notification message with the list of data_ids”. https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly)
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and data objects
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's where:
@@ -410,12 +389,11 @@ A Global Cache should treat notification messages with the same data item identi
   ** Accompanying data objects that are accessible via the canonical link provided in the WNM.
 
 ====== Steps
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings.
 . Publish the prepared WNM's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s and subsequent messages have a valid update link. One or more of the following topics can be used:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 ====== Evaluate
 * WNM Messages
@@ -437,17 +415,15 @@ A Global Cache should treat notification messages with the same data item identi
 A Global Cache shall be able to successfully process, on average, 2000 unique WNM's per minute with an average message size of 75kb. This test represents the upper end of the current WNM volume. This test is a measured performance test similar to test 3. WNM Processing except that a large batch of messages is used, and the time taken to process the messages is measured. The noted WNM's/minute rate can be used as a performance indicator for the GC being tested.
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly).
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish (write) messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
 * Prepared WIS2 Notification Messages and associated data objects:
   ** A known number *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
@@ -458,14 +434,11 @@ A Global Cache shall be able to successfully process, on average, 2000 unique WN
     *** Average message size should be 75kb.
 
 ====== Steps
-
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings. This script and client will be used to orchestrate the test.
-
 . Start the timer, and publish the batch of 2000 prepared WNM's to the dev/test GB on following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 . The test MQTT client should count the messages received on the `cache/a/wis2/#` topic that are published by the GC, but should not download the data objects.
 . Stop the timer when the MQTT client has received all expected messages (2000). A timeout can be set to allow the test to run as long as needed within a reasonable window.
 
@@ -487,17 +460,15 @@ A Global Cache should support a minimum of 1000 simultaneous downloads.
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
 
 ====== Requirements
-* Dev/test GC MQTT broker connection string
-    ** User is able to connect to the GC MQTT broker and subscribe to the `cache/a/wis2/#` topic (readonly).
 * Dev/test GB MQTT broker connection string
-    ** User is able to publish (write) messages to the dev/test GB on the `origin/a/wis2/#` and `cache/a/wis2/#` topic.
+    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 * MQTT test client
-    ** Client should connect to both the dev/test GB and GC MQTT brokers using the provided connection strings to control the input and monitor the output.
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * Prepared WIS2 Notification Messages and associated data objects:
   ** A known number (5) *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
     *** `properties.cache` set to true
@@ -507,16 +478,13 @@ A Global Cache should support a minimum of 1000 simultaneous downloads.
 * Jmeter, Locust, or similar tool to manage the concurrent downloads.
 
 ====== Steps
-. Configure the MQTT test client to connect to the dev/test GB and GC MQTT brokers using the provided connection strings. This script and client will be used to orchestrate the test.
-
 . Publish the prepared WNM's one at a time to the dev/test GB on one of the following topics:
-    ** origin/a/wis2/+/data
-    ** cache/a/wis2/+/data
-    ** origin/a/wis2/+/metadata
-    ** cache/a/wis2/+/metadata
+    ** origin/a/wis2/+/data/#
+    ** cache/a/wis2/+/data/#
+    ** origin/a/wis2/+/metadata/#
+    ** cache/a/wis2/+/metadata/#
 
 For each WNM:
-
 . Once the _cache_ notification message is received by the test MQTT client (from the dev/test GC), the test client should start 1000 concurrent downloads of the data object/s from the canonical link provided in the _cache_ WNM.
 . The test client should record the number of successful downloads and the time taken to complete each download.
 

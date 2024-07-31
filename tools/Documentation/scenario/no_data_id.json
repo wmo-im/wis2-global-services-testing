@@ -1,0 +1,14 @@
+{
+   "scenario": "wnmtest",
+   "configuration": {
+      "setup": {
+         "centreid": 10,
+         "number": 1
+      },
+      "wnm": {
+         "properties": {
+             "data_id": false
+         }
+      }
+   }
+}

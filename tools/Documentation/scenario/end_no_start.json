@@ -1,0 +1,15 @@
+{
+   "scenario": "wnmtest",
+   "configuration": {
+      "setup": {
+         "centreid": 10,
+         "number": 1
+      },
+      "wnm": {
+         "properties": {
+             "datetime": false,
+             "end_datetime": "2024-07-20t19:12:29z" 
+         }
+      }
+   }
+}
