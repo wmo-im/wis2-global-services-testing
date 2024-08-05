@@ -96,8 +96,7 @@
 					}
 				],
 				"roles":[
-					"pointOfContact",
-					"distributor"
+					"host"
 				]
 			},
 			{
