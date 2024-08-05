@@ -6,6 +6,7 @@ All Global Services, and in particular Global Brokers and Global Caches, are col
 data required for the operations of all WIS Centres. The agreed architecture provides a redundant solution where the failure of one component will not impact the overall level of service of WIS.  Each Global Service should aim at achieving at least 99.5% availability of the service they propose. This is not a contractual target. It should be considered by the entity providing the Global Service as a guideline when designing and operating the Global Service.
 
 A Global Broker:
+
 - should support a minimum of *200* WIS2 Nodes or Global Services
 - should support a minimum of *1000* subscribers.
 - should support processing of a minimum of *10000* messages per second
@@ -14,47 +15,49 @@ A Global Broker:
 
 ===== 1. Global Broker Connectivity Tests
 
-There are several check-box activities that WMO Secretariat can perform on each GB service in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
+There are several test that can be performed on the Global Broker in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
+A. to D. below can be performed any time.
 
 ====== A. Global Broker Port Tests
 
 ====== Purpose
 
-An MQTT client must be able to connect to the local broker of the Global Broker on ports 8883 or 443 (WSS) using the MQTT protocol with Transport Layer Security (TLS) (i.e., mqtts protocol) and username/password authentication. 
+An MQTT client must be able to connect to the local broker of the Global Broker on ports 8883 (MQTTS) or 443 (WSS) using the agreed protocols with Transport Layer Security (TLS) and username/password authentication. 
 
 ====== Requirements
 
-* Global Broker MQTT connection string
+* Global Broker MQTT details.
 * MQTT Test Client
 
 ====== Steps
 
-. Initialize the test MQTT client with the necessary parameters such as the MQTT protocol, TLS security, and username/password for authentication (connection string).
+. Initialise the test MQTT client with the necessary parameters such as the MQTT protocol, TLS security, and username/password for authentication (connection string).
 . Attempt to connect the MQTT broker of the Global Broker using the connection string.
 
 ====== Evaluate
 
-. Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.
+. Check if the connection is successful.
 
 ====== B. Global Broker Certificate Test
 
 ====== Purpose
 
-The Global Broker service must use a valid HTTPS certificate.  Transport Layer Security (TLS) is an encryption protocol that provides secure connections between servers and applications on the internet. When you connect to a website that uses HTTPS, TLS verifies the identity of the website’s server and encrypts your connection, preventing hackers from intercepting any data transmitted between your device and the site. In this way, TLS provides privacy and security for the data transmitted between your browser and the website, and you can be sure the data hasn’t been tampered with.
+The Global Broker service must use a valid certificate.  Transport Layer Security (TLS) is an encryption protocol that provides secure connections between servers and applications on the internet.
 
 ====== Requirements
 
 * Global Broker MQTT connection string
-* MQTT Test Client
+* MQTT Test Client (If used, MQTT Explorer needs to import the Certificate Authority used by the Global Broker to check that the certificate is valid) or a browser like Firefox.
 
 ====== Steps
 
-. From a MQTT client and try to connect to a GB using HTTPS.  The GB server sends the MQTT client its TLS certificate.  The MQTT client then verifies that the certificate is valid and digitally signed by a trusted CA by comparing it with information it stores about trusted CAs. The signed certificate verifies the website server’s public key, which confirms that you’re communicating with the genuine server of the website you’re visiting.  The server also authenticates a key exchange, resulting in a one-time session key that is used to send encrypted and authenticated data between the clients and the server.
+From the client and try to connect to a Global Broker using WSS protocol.  The Global Broker sends the MQTT client its TLS certificate.  The MQTT client then verifies that the certificate is valid and digitally signed by a trusted CA by comparing it with information it stores about trusted CAs. The signed certificate verifies the website server’s public key, which confirms that you’re communicating with the genuine server of the website you’re visiting.  The server also authenticates a key exchange, resulting in a one-time session key that is used to send encrypted and authenticated data between the clients and the server.
+If a browser like Firefox is used, connect WSS endpoint (https://globalbroker.example.org/mqtt). In the address bar, a lock is displayed.
 
 ====== Evaluate
 
 . Check if the TLS connection is successful 
-. Check for certification verfication
+. Check for certification verification.
 
 If the connection is successful and the certificate are valid, the test passes. If the connection is not successful or the certificate is invalid, the test fails.
 
@@ -62,7 +65,7 @@ If the connection is successful and the certificate are valid, the test passes. 
 
 ====== Purpose
 
-The Global Broker service must allow read access to origin/a/wis2/# and cache/a/wis2/# using a username and password credential of everyone/everyone 
+The Global Broker service must allow [.underline]#only# read access to _origin/a/wis2/#_ and _cache/a/wis2/#_ using a username and password credential of everyone/everyone 
 
 ====== Requirements
 
@@ -71,15 +74,15 @@ The Global Broker service must allow read access to origin/a/wis2/# and cache/a/
 
 ====== Steps
 
-. From a MQTT client, set up a new connection for a global broker, with the following configuration settings:   
-  . Configure 2 subscriptions.  First, create separate subscriptions for "origin/a/wis2/#" and "cache/a/wis2/#" using a username and password credential for "everyone/everyone"
+. From a MQTT client, set up a new connection to the Global Broker, with the following configuration settings:   
+. Configure 2 subscriptions.  First, create separate subscriptions for _origin/a/wis2/#_ and _cache/a/wis2/#_ using a username and password credential for "everyone/everyone"
 . Save the configuration and click connect
 
 ====== Evaluate
 
-. Check if the connection is successful, depending on the temporal frequency of updates, eventually, the WTH will be populated, and the test passes. If the connection is not successful, the test fails.
+Check if the connection is successful, and depending on the flow of messages, messages should appear rapidly.  If messages are displayed, the test passes. If the connection is not successful, the test fails.
 
-====== D. Global Broker deny write access to Origin and Cache for everyone/everyone credentials Test
+====== D. Global Broker deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials Test
 
 ====== Purpose
 
@@ -97,13 +100,13 @@ The Global Broker service must prevent write access to any topic with everyone/e
 
 ====== Evaluate
 
-. Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.
+Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.
 
 ====== E. Global Broker cluster redundancy Test
 
 ====== Purpose
 
-The GB service, if deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster 
+The Global Broker service, should be using a MQTT server deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster 
 
 ====== Requirements
 
@@ -112,7 +115,7 @@ The GB service, if deployed in a cluster, then the MQTT Broker must use a redund
 
 ====== Steps
 
-. From a MQTT client, set up a new subcription to either "origin/a/wis2/" and "cache/a/wis2/" using a username and password credential for "everyone/everyone".  
+. From a MQTT client, set up a new subscription to either "origin/a/wis2/" and "cache/a/wis2/" using a username and password credential for "everyone/everyone".  
 . Fail a member of the cluster and ensure that subscriptions are still being fulfilled
 
 ====== Evaluate
@@ -121,7 +124,8 @@ The GB service, if deployed in a cluster, then the MQTT Broker must use a redund
 
 ===== 2. Global Broker Antiloop Testing
 
-The antiloop feature of a Global Broker is a critical aspect for a successful pub/sub service.  These 7 tests are designed to test the antiloop feature of the GB service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025
+The antiloop feature of a Global Broker is a critical aspect of WIS2 Architecture. This is what guarantees a high level of service while preventing “messages storm”.  These tests are designed to test the antiloop feature of the Global Broker service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025.
+If configurable, and when applicable, the Global Broker should discard incorrect WIS2 Notification Messages, by opposition of only verifying the correctness.
 
 ====== A. Discarding of duplicate messages Test
 
@@ -131,20 +135,21 @@ The Global Broker service must discard all duplicated messages (identical id) re
 
 ====== Requirements
 
-* Global Broker MQTT connection string to 2 WIS2 Nodes (test1 and test2)
-* MQTT Test Client
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
+* Global Broker MQTT connection string to 2 WIS2 Nodes (with the following centre_id: io-wis2dev-10-test and io-wis2dev-11-test)
+* MQTT Test Client subscribed to *origin/a/wis2/io-wis2dev-10-test/#* and *origin/a/wis2/io-wis2dev-11-test/*
 
 ====== Steps
 
-. Have WIS2Node "test1" publish *X* messages with the same id on topic *origin/a/wis2/test1/
-core/data/weather/surface-based-observation/synop*
-. Have WIS2Node "test2" publish *Y* messages with the same id (same as id from X above) on topic *origin/a/wis2/test2/
-core/data/weather/surface-based-observation/synop*  
+. WIS2Node _io-wis2dev-10-test_ publish on its local broker *ten* messages with a pre-defined id (using the UUID format) on topic *origin/a/wis2/io-wis2dev-10-test/core/data/weather/surface-based-observation/synop*
+. WIS2Node _io-wis2dev-10-test_ publish *ten* message with the same id (same id as above) on topic *origin/a/io-wis2dev-11-test/test2/core/data/weather/surface-based-observation/synop*  
 
 ====== Evaluate
 
-. If the Global Broker "gb-test" discards all messages except one, makes it available on one of the two topics depending the WIS2 Node message that arrived first (*test1* or *test2)
-. Increments *wmo_wis2_gb_messages_published* on centre_id from the WIS2Node that arrives first (*test1* or *test2*)
+. If the Global Broker discards all messages except one, makes it available on one of the two topics depending the WIS2 Node messages that arrived first.
+. The MQTT client received one message
+. Increments *wmo_wis2_gb_messages_subscribed_total* by 10 on both centre_id
+. Increments *wmo_wis2_gb_messages_published_total* by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-10-test or io-wis2dev-11-test)
 . If both statements are true, the test passes. Otherwise, the test fails.
 
 ====== B. Publishing a message using the centre_id from a different WIS2 Node Test
@@ -155,82 +160,94 @@ The Global Broker service must ensure that any WIS2 Node is not publishing a mes
 
 ====== Requirements
 
-* Global Broker MQTT connection string to 2 WIS2 Nodes (test1 and test2)
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
+* Global Broker MQTT connection string to *io-wis2dev-10-test*
 * MQTT Test Client
 
 ====== Steps
 
-. Have WIS2Node "test1" publish a valid message on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
-. Have WIS2Node "test2" publish the same message and on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Have WIS2Node  _io-wis2dev-10-test_ publish a valid message on topic Eg
 
 ====== Evaluate
 
-. If the Global Broker "gb-test" discards the message from *test2*, AND increments *wmo_wis2_gb_messages_invalid_total* on centre_id *test2*, the test passes. Otherwise, the test fails.
+. The Global Broker ignores (in fact the message will not be received at all) the message published. No metrics is incremented
+. If the message is received by MQTT Client then the test fails.
 
-====== C. Publishing a message from a WIS2 Node using a compliant topic hierarchy Test
+====== C. Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy) Test
 
 ====== Purpose
 
-The Global Broker service must check that the topic used to publish a message by a WIS2 Node is compliant with the agreed topic hierarchy.  What follows below is  an overview of the primary topic levels. 
-
-[cols="1,1"]
-|===
-|Level 1
-|channel
-|Level 2
-|version
-|Level 3
-|system
-|Level 4
-|centre-id
-|Level 5
-|notification-type
-|Level 6
-|data-policy
-|Level 7
-|earth-system-discipline
-|===
-
+The Global Broker service must forward messages when the topic is compliant with the WIS2 Topic Hierarchy 
 
 ====== Requirements
 
-* Global Broker MQTT connection string to 1 WIS2 Nodes (test1)
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
+* Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
 * MQTT Test Client
 
 ====== Steps
 
-. Have WIS2Node "test1" publish a *valid* message with valid topic hierarchy coming on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
-. Have WIS2Node "test1" then publish an *invalid message* with invalid topic hierarchy on topic *origin/wis2/test1/core/data/weather/surface-based-observation/synop*.  What's missing from this topic hierarchy is *level 2* ("a"). 
+. Have WIS2Node *io-wis2dev-10-test* publish *valid* messages on *valid* topics hierarchy (one message per tested valid topic)
 
 ====== Evaluate
 
-. If the Global Broker "gb-test" accepts the first message (with valid topic hierarchy) coming from WIS2 Node *test1*
-. If the Global Broker "gb-test" fails the second message coming from WIS2 Node *test1* with an invalid topic hierarchy
-. If the Global Broker "gb-test" increments *wmo_wis2_gb_messages_invalid_total*, the test passes. Otherwise, the test fails.
+. The Global Broker forward all messages
+. The MQTT client receives all messages
+. Increments *wmo_wis2_gb_messages_subscribed_total* by 1 for each message 
+. Increments *wmo_wis2_gb_messages_published_total* by 1 for each message
+. If all above statements are true, the test passes. Otherwise, the test fails.
 
-====== D. Check that a GB subsribed to a WIS2 Node and publishes a message announces a dataset with metadata Test
+====== D. Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy) Test
 
 ====== Purpose
 
-The Global Broker service must check that the topic used to publish a message by a WIS2 Node is announcing a dataset with corresponding metadata 
+The Global Broker service must forward messages when the topic is compliant with the WIS2 Topic Hierarchy 
 
 ====== Requirements
 
-* Global Broker MQTT connection string to 1 WIS2 Nodes (test1)
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
+*  Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
 * MQTT Test Client
 
 ====== Steps
 
-. Using an MQTT client, subscribe to WIS2 Node "test1" on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
-. Have WIS2Node "test1" publish a valid message coming on topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
-. Using the same MQTT client (like MQTT Explorer), check to see that that the WIS2 Node "test1" has updated it's available offerings.  Check the message payload response to ensure this announcement
+. Have WIS2 Node *io-wis2dev-10-test* publish 10 *valid* messages on 10 *different* and *invalid* topics
 
 ====== Evaluate
 
-. If the Global Broker "gb-test" sees the updated available offerings from the WIS2 Node "test1", 
-. If the Global Broker verifies that the message payload response contains metadata and a link to the data, then this test passes. Otherwise, the test fails AND the GB will increment *wmo_wis2_gb_messages_no_metadata_total*.
+. The Global Broker discards all messages
+. The MQTT client doesn't receive any message
+. Increments *wmo_wis2_gb_messages_subscribed_total* by 10
+. Increments *wmo_wis2_gb_messages_invalid_topic_total* by 10
+. If all above statements are true, the test passes. Otherwise, the test fails.
 
-====== E. Publishing and verifying the compliance of a WIS2 Notification message Test
+====== E. Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata Test
+
+====== Purpose
+
+The Global Broker service must check that the topic used to publish a message by a WIS2 Node is announcing the availability of data with corresponding metadata.
+
+====== Requirements
+
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
+* Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
+* MQTT Test Client
+
+====== Steps
+
+. Have WIS2 Node *io-wis2dev-10-test* publish 10 *valid* messages on 10 *different* topics, and no metadata exists for any topic used.
+. e.g Publish on *origin/a/wis2/ _io-wis2dev-10-test_/core/data/weather/surface-based-observation/synop* and WIS2 Node *io-wis2dev-10-test* has not published a metadata record for the synop.
+
+
+====== Evaluate
+
+. The Global Broker discards all messages
+. The MQTT client doesn't receive any message
+. Increments *wmo_wis2_gb_messages_subscribed_total* by 10
+. Increments *wmo_wis2_gb_messages_no_metadata_total* by 10
+. If all above statements are true, the test passes. Otherwise, the test fails.
+
+====== F. Verifying the compliance of a WIS2 Notification message Test
 
 ====== Purpose
 
@@ -238,59 +255,23 @@ The Global Broker service must verify the compliance of the WIS2 Notification Me
 
 ====== Requirements
 
-* Global Broker MQTT connection string to 1 WIS2 Nodes (test1)
-* MQTT Test Client
+. The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
+. Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
+. MQTT Test Client
 
 ====== Steps
 
-. Have WIS2 Node "test1" publish a valid message for topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
-. Next have the same WIS2 Node "test1" publish an invalid WIS2 Notification Message on the same topic *origin/a/wis2/test1/core/data/weather/surface-based-observation/synop*
+. Have WIS2 Node *io-wis2dev-10-test* publish 10 *invalid* messages on 10 *valid* topics
+. All mandatory fields of the WIS2 Notification Messages must be tested 
 
 ====== Evaluate
 
-. If the Global Broker "gb-test" accepts the first message published by WIS2 Node "test1" shows up as a valid WIS2 Notification Message
-. If the Global Broker "gb-test" drops the invalid WIS2 Notificaiton Message
-. If the Global Broker "gb-test" increments *wmo_wis2_gb_messages_invalid_total*, then this test passes. Otherwise, the test fails.
+. The Global Broker discards all messages
+. The MQTT client doesn't receive any message
+. Increments *wmo_wis2_gb_messages_subscribed_total* by 10
+. Increments *wmo_wis2_gb_messages_invalid_messages_total* by 10
+. If all above statements are true, the test passes. Otherwise, the test fails.
 
-====== F. GB discards or notify in a notification message breaching the requirements laid out in tests C, D or E Tests
-
-====== Purpose
-
-The Global Broker service must be able to discard or notify via a notification message in breach of the requirement in tests C, D or E
-
-====== Requirements
-
-* Global Broker MQTT connection string to 1 WIS2 Node (test1)
-* MQTT Test Client
-
-====== Steps
-
-. Follow the steps outlined in tests C, D or E
-
-====== Evaluate
-
-. If the steps from tests C or E are followed, and the test passes, the GB metrics should increment the *wmo_wis2_gb_messages_invalid_total* counter.  
-. If the steps from test D are followed, and the test passes, the GB metrics should increment the *wmo_wis2_gb_messages_no_metadata_total* counter.
-
-====== G. GB providing metrics Test
-
-====== Purpose
-
-The Global Broker service must provided metrics as requested in the Guide on WIS2
-
-====== Requirements
-
-* Global Broker MQTT connection string to 1 WIS2 Node (test1)
-* MQTT Test Client
-
-====== Steps
-
-. Have the GB update metrics for the first period of testing time (15 minutes) as usual
-. During the second period of time, make the metrics unavailable
-
-====== Evaluate
-
-. If the GB provide metrics during the first period of testing time, AND doesn't provide metrics for the second period of testing time,  the test passes.  Otherwise, the test fails.
 
 ===== 3. Global Broker Performance Testing
 
@@ -304,17 +285,18 @@ The Global Broker service should support a minimum of *200* WIS2 Nodes
 
 ====== Requirements
 
-* mqttx-cli
-* hive
-* global broker Cloud asset
+. The container https://hub.docker.com/r/golfvert/benchmarkwis2gb deployed on 5 tests system
+. Global Broker subscribing to *200* WIS2 Nodes (*io-wis2dev-100-test* to *io-wis2dev-299-test*) 
+. MQTT Test Client
 
 ====== Steps
 
-. Use hive/mqttx-cli scripting provided by Remy to perform this test
+. On each of the 200 WIS2 Nodes, publish 10 *valid* messages, on *valid* topic, without associated metadata, and with different *id* messages
+. On the MQTT test client, subscribe to *origin/a/wis2/#*
 
 ====== Evaluate
 
-. If the Global Broker subscribes to all 200 WIS2 Node subscriptions,  the test passes.  Otherwise, the test fails.
+. If on the MQTT test client, 10 messages for each of the 200 centre-id are received, the test passes. Otherwise, it fails.
 
 ====== B. Global Broker minimum number of subscribers Test
 
@@ -324,19 +306,27 @@ The Global Broker service should support a minimum of *1000* subscribers.
 
 ====== Requirements
 
-* mqttx-cli
-* hive
-* global broker Cloud asset
+* Global Broker
+* MQTTX CLI (https://mqttx.app/docs/cli) deployed on 5 tests systems
 
 ====== Steps
 
-. Use hive/mqttx-cli scripting provided by Remy to perform this test
+. Use MQTTX CLI _bench_ on each test system to simulate 200 clients by using `mqttx bench conn -c 200 -i 100` and the relevant connection information for the Global Broker being tested.
 
 ====== Evaluate
 
-. If the Global Broker supports a minimum of *1000* subscribers,  the test passes.  Otherwise, the test fails.
+. If the output of the command on each test system is similar to:
 
-====== C. Global Broker minimum number of subscribers Test
+```
+mqttx bench conn -c 200 -i 100
+❯  Starting connect benchmark, connections: 200, req interval: 100ms
+✔  [200/200] - Connected
+✔  Created 200 connections in 22.355s
+```
+
+with 200 connections created, on the 5 tests systems, this test is successful.
+
+====== C. Global Broker minimum number of messages per second Test
 
 ====== Purpose
 
@@ -344,15 +334,21 @@ The Global Broker service should support processing of a minimum of *10000* mess
 
 ====== Requirements
 
-* mqttx-cli
-* hive
-* global broker Cloud asset
+. The container https://hub.docker.com/r/golfvert/benchmarkwis2gb deployed on 5 tests system (different from above) 
+. Global Broker subscribing to *200* WIS2 Nodes (*io-wis2dev-100-test* to *io-wis2dev-299-test*) 
+. MQTTX CLI deployed on 5 tests systems.
 
 ====== Steps
 
-. Use hive/mqttx-cli scripting provided by Remy to perform this test
+. On each of the 200 WIS2 Nodes, publish X *valid* messages per second during Y seconds, on a *valid* topic, without associated metadata or data, and with different *id* messages
+. Use MQTTX CLI _bench_ on each test VMs to simulate Z clients by using `mqttx bench sub -c Z -t origin/a/wis2/#` and the relevant connection information for the Global Broker being tested.
+
+Typically with:
+
+. With X = 5 messages per second on each of the 200 WIS2 Nodes, this will create 1000 messages per second
+. With Z = 2 on each VM, this will create 10 subscriptions. 
+. As every subscriber will get all messages will be equivalent to *10000* messages per second.
 
 ====== Evaluate
 
-. If the Global Broker supports a minimum of *10000* messages per second,  the test passes.  Otherwise, the test fails.
-
+. Run the test for 30 seconds (Y=30), if MQTTS CLI output shows that 100000 are received, then the test is successful.
