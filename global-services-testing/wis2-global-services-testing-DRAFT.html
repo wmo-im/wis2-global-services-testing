@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-07-22</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-08-05</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -856,17 +856,28 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 data required for the operations of all WIS Centres. The agreed architecture provides a redundant solution where the failure of one component will not impact the overall level of service of WIS.  Each Global Service should aim at achieving at least 99.5% availability of the service they propose. This is not a contractual target. It should be considered by the entity providing the Global Service as a guideline when designing and operating the Global Service.</p>
 </div>
 <div class="paragraph">
-<p>A Global Broker:
-- should support a minimum of <strong>200</strong> WIS2 Nodes or Global Services
-- should support a minimum of <strong>1000</strong> subscribers.
-- should support processing of a minimum of <strong>10000</strong> messages per second</p>
+<p>A Global Broker:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>should support a minimum of <strong>200</strong> WIS2 Nodes or Global Services</p>
+</li>
+<li>
+<p>should support a minimum of <strong>1000</strong> subscribers.</p>
+</li>
+<li>
+<p>should support processing of a minimum of <strong>10000</strong> messages per second</p>
+</li>
+</ul>
 </div>
 <div class="sect3">
 <h4 id="_functional_tests"><a class="anchor" href="#_functional_tests"></a>7.1.1. Functional tests</h4>
 <div class="sect4">
 <h5 id="_1_global_broker_connectivity_tests"><a class="anchor" href="#_1_global_broker_connectivity_tests"></a>7.1.1.1. 1. Global Broker Connectivity Tests</h5>
 <div class="paragraph">
-<p>There are several check-box activities that WMO Secretariat can perform on each GB service in advance of the planned GB testing period (currently scheduled for September 30 - October 4).</p>
+<p>There are several test that can be performed on the Global Broker in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
+A. to D. below can be performed any time.</p>
 </div>
 <div class="sect5">
 <h6 id="_a_global_broker_port_tests"><a class="anchor" href="#_a_global_broker_port_tests"></a>A. Global Broker Port Tests</h6>
@@ -875,7 +886,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="sect5">
 <h6 id="_purpose"><a class="anchor" href="#_purpose"></a>Purpose</h6>
 <div class="paragraph">
-<p>An MQTT client must be able to connect to the local broker of the Global Broker on ports 8883 or 443 (WSS) using the MQTT protocol with Transport Layer Security (TLS) (i.e., mqtts protocol) and username/password authentication.</p>
+<p>An MQTT client must be able to connect to the local broker of the Global Broker on ports 8883 (MQTTS) or 443 (WSS) using the agreed protocols with Transport Layer Security (TLS) and username/password authentication.</p>
 </div>
 </div>
 <div class="sect5">
@@ -883,7 +894,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="ulist">
 <ul>
 <li>
-<p>Global Broker MQTT connection string</p>
+<p>Global Broker MQTT details.</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -896,7 +907,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the test MQTT client with the necessary parameters such as the MQTT protocol, TLS security, and username/password for authentication (connection string).</p>
+<p>Initialise the test MQTT client with the necessary parameters such as the MQTT protocol, TLS security, and username/password for authentication (connection string).</p>
 </li>
 <li>
 <p>Attempt to connect the MQTT broker of the Global Broker using the connection string.</p>
@@ -909,7 +920,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.</p>
+<p>Check if the connection is successful.</p>
 </li>
 </ol>
 </div>
@@ -921,7 +932,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="sect5">
 <h6 id="_purpose_2"><a class="anchor" href="#_purpose_2"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Broker service must use a valid HTTPS certificate.  Transport Layer Security (TLS) is an encryption protocol that provides secure connections between servers and applications on the internet. When you connect to a website that uses HTTPS, TLS verifies the identity of the website’s server and encrypts your connection, preventing hackers from intercepting any data transmitted between your device and the site. In this way, TLS provides privacy and security for the data transmitted between your browser and the website, and you can be sure the data hasn’t been tampered with.</p>
+<p>The Global Broker service must use a valid certificate.  Transport Layer Security (TLS) is an encryption protocol that provides secure connections between servers and applications on the internet.</p>
 </div>
 </div>
 <div class="sect5">
@@ -932,19 +943,16 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <p>Global Broker MQTT connection string</p>
 </li>
 <li>
-<p>MQTT Test Client</p>
+<p>MQTT Test Client (If used, MQTT Explorer needs to import the Certificate Authority used by the Global Broker to check that the certificate is valid) or a browser like Firefox.</p>
 </li>
 </ul>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_steps_2"><a class="anchor" href="#_steps_2"></a>Steps</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>From a MQTT client and try to connect to a GB using HTTPS.  The GB server sends the MQTT client its TLS certificate.  The MQTT client then verifies that the certificate is valid and digitally signed by a trusted CA by comparing it with information it stores about trusted CAs. The signed certificate verifies the website server’s public key, which confirms that you’re communicating with the genuine server of the website you’re visiting.  The server also authenticates a key exchange, resulting in a one-time session key that is used to send encrypted and authenticated data between the clients and the server.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>From the client and try to connect to a Global Broker using WSS protocol.  The Global Broker sends the MQTT client its TLS certificate.  The MQTT client then verifies that the certificate is valid and digitally signed by a trusted CA by comparing it with information it stores about trusted CAs. The signed certificate verifies the website server’s public key, which confirms that you’re communicating with the genuine server of the website you’re visiting.  The server also authenticates a key exchange, resulting in a one-time session key that is used to send encrypted and authenticated data between the clients and the server.
+If a browser like Firefox is used, connect WSS endpoint (<a href="https://globalbroker.example.org/mqtt" class="bare">https://globalbroker.example.org/mqtt</a>). In the address bar, a lock is displayed.</p>
 </div>
 </div>
 <div class="sect5">
@@ -955,7 +963,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <p>Check if the TLS connection is successful</p>
 </li>
 <li>
-<p>Check for certification verfication</p>
+<p>Check for certification verification.</p>
 </li>
 </ol>
 </div>
@@ -970,7 +978,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="sect5">
 <h6 id="_purpose_3"><a class="anchor" href="#_purpose_3"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Broker service must allow read access to origin/a/wis2/# and cache/a/wis2/# using a username and password credential of everyone/everyone</p>
+<p>The Global Broker service must allow <span class="underline">only</span> read access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> using a username and password credential of everyone/everyone</p>
 </div>
 </div>
 <div class="sect5">
@@ -991,10 +999,10 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>From a MQTT client, set up a new connection for a global broker, with the following configuration settings:</p>
+<p>From a MQTT client, set up a new connection to the Global Broker, with the following configuration settings:</p>
 </li>
 <li>
-<p>Configure 2 subscriptions.  First, create separate subscriptions for "origin/a/wis2/<mark>" and "cache/a/wis2/</mark>" using a username and password credential for "everyone/everyone"</p>
+<p>Configure 2 subscriptions.  First, create separate subscriptions for <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> using a username and password credential for "everyone/everyone"</p>
 </li>
 <li>
 <p>Save the configuration and click connect</p>
@@ -1004,16 +1012,12 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 </div>
 <div class="sect5">
 <h6 id="_evaluate_3"><a class="anchor" href="#_evaluate_3"></a>Evaluate</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Check if the connection is successful, depending on the temporal frequency of updates, eventually, the WTH will be populated, and the test passes. If the connection is not successful, the test fails.</p>
-</li>
-</ol>
+<div class="paragraph">
+<p>Check if the connection is successful, and depending on the flow of messages, messages should appear rapidly.  If messages are displayed, the test passes. If the connection is not successful, the test fails.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_d_global_broker_deny_write_access_to_origin_and_cache_for_everyoneeveryone_credentials_test"><a class="anchor" href="#_d_global_broker_deny_write_access_to_origin_and_cache_for_everyoneeveryone_credentials_test"></a>D. Global Broker deny write access to Origin and Cache for everyone/everyone credentials Test</h6>
+<h6 id="_d_global_broker_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials_test"><a class="anchor" href="#_d_global_broker_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials_test"></a>D. Global Broker deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials Test</h6>
 
 </div>
 <div class="sect5">
@@ -1050,12 +1054,8 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 </div>
 <div class="sect5">
 <h6 id="_evaluate_4"><a class="anchor" href="#_evaluate_4"></a>Evaluate</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<div class="paragraph">
 <p>Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.</p>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect5">
@@ -1065,7 +1065,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="sect5">
 <h6 id="_purpose_5"><a class="anchor" href="#_purpose_5"></a>Purpose</h6>
 <div class="paragraph">
-<p>The GB service, if deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster</p>
+<p>The Global Broker service, should be using a MQTT server deployed in a cluster, then the MQTT Broker must use a redundant load balancing service so that the service in maintained in case of failure of one entity of the cluster</p>
 </div>
 </div>
 <div class="sect5">
@@ -1086,7 +1086,7 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>From a MQTT client, set up a new subcription to either "origin/a/wis2/" and "cache/a/wis2/" using a username and password credential for "everyone/everyone".</p>
+<p>From a MQTT client, set up a new subscription to either "origin/a/wis2/" and "cache/a/wis2/" using a username and password credential for "everyone/everyone".</p>
 </li>
 <li>
 <p>Fail a member of the cluster and ensure that subscriptions are still being fulfilled</p>
@@ -1108,7 +1108,8 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="sect4">
 <h5 id="_2_global_broker_antiloop_testing"><a class="anchor" href="#_2_global_broker_antiloop_testing"></a>7.1.1.2. 2. Global Broker Antiloop Testing</h5>
 <div class="paragraph">
-<p>The antiloop feature of a Global Broker is a critical aspect for a successful pub/sub service.  These 7 tests are designed to test the antiloop feature of the GB service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025</p>
+<p>The antiloop feature of a Global Broker is a critical aspect of WIS2 Architecture. This is what guarantees a high level of service while preventing “messages storm”.  These tests are designed to test the antiloop feature of the Global Broker service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025.
+If configurable, and when applicable, the Global Broker should discard incorrect WIS2 Notification Messages, by opposition of only verifying the correctness.</p>
 </div>
 <div class="sect5">
 <h6 id="_a_discarding_of_duplicate_messages_test"><a class="anchor" href="#_a_discarding_of_duplicate_messages_test"></a>A. Discarding of duplicate messages Test</h6>
@@ -1125,10 +1126,13 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="ulist">
 <ul>
 <li>
-<p>Global Broker MQTT connection string to 2 WIS2 Nodes (test1 and test2)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
 </li>
 <li>
-<p>MQTT Test Client</p>
+<p>Global Broker MQTT connection string to 2 WIS2 Nodes (with the following centre_id: io-wis2dev-10-test and io-wis2dev-11-test)</p>
+</li>
+<li>
+<p>MQTT Test Client subscribed to <strong>origin/a/wis2/io-wis2dev-10-test/#</strong> and <strong>origin/a/wis2/io-wis2dev-11-test/</strong></p>
 </li>
 </ul>
 </div>
@@ -1138,12 +1142,10 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2Node "test1" publish <strong>X</strong> messages with the same id on topic <strong>origin/a/wis2/test1/
-core/data/weather/surface-based-observation/synop</strong></p>
+<p>WIS2Node <em>io-wis2dev-10-test</em> publish on its local broker <strong>ten</strong> messages with a pre-defined id (using the UUID format) on topic <strong>origin/a/wis2/io-wis2dev-10-test/core/data/weather/surface-based-observation/synop</strong></p>
 </li>
 <li>
-<p>Have WIS2Node "test2" publish <strong>Y</strong> messages with the same id (same as id from X above) on topic <strong>origin/a/wis2/test2/
-core/data/weather/surface-based-observation/synop</strong></p>
+<p>WIS2Node <em>io-wis2dev-10-test</em> publish <strong>ten</strong> message with the same id (same id as above) on topic <strong>origin/a/io-wis2dev-11-test/test2/core/data/weather/surface-based-observation/synop</strong></p>
 </li>
 </ol>
 </div>
@@ -1153,10 +1155,16 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker "gb-test" discards all messages except one, makes it available on one of the two topics depending the WIS2 Node message that arrived first (<strong>test1</strong> or *test2)</p>
+<p>If the Global Broker discards all messages except one, makes it available on one of the two topics depending the WIS2 Node messages that arrived first.</p>
 </li>
 <li>
-<p>Increments <strong>wmo_wis2_gb_messages_published</strong> on centre_id from the WIS2Node that arrives first (<strong>test1</strong> or <strong>test2</strong>)</p>
+<p>The MQTT client received one message</p>
+</li>
+<li>
+<p>Increments <strong>wmo_wis2_gb_messages_subscribed_total</strong> by 10 on both centre_id</p>
+</li>
+<li>
+<p>Increments <strong>wmo_wis2_gb_messages_published_total</strong> by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-10-test or io-wis2dev-11-test)</p>
 </li>
 <li>
 <p>If both statements are true, the test passes. Otherwise, the test fails.</p>
@@ -1179,7 +1187,10 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Global Broker MQTT connection string to 2 WIS2 Nodes (test1 and test2)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+</li>
+<li>
+<p>Global Broker MQTT connection string to <strong>io-wis2dev-10-test</strong></p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1192,10 +1203,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2Node "test1" publish a valid message on topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
-</li>
-<li>
-<p>Have WIS2Node "test2" publish the same message and on topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
+<p>Have WIS2Node  <em>io-wis2dev-10-test</em> publish a valid message on topic Eg</p>
 </li>
 </ol>
 </div>
@@ -1205,63 +1213,33 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker "gb-test" discards the message from <strong>test2</strong>, AND increments <strong>wmo_wis2_gb_messages_invalid_total</strong> on centre_id <strong>test2</strong>, the test passes. Otherwise, the test fails.</p>
+<p>The Global Broker ignores (in fact the message will not be received at all) the message published. No metrics is incremented</p>
+</li>
+<li>
+<p>If the message is received by MQTT Client then the test fails.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_c_publishing_a_message_from_a_wis2_node_using_a_compliant_topic_hierarchy_test"><a class="anchor" href="#_c_publishing_a_message_from_a_wis2_node_using_a_compliant_topic_hierarchy_test"></a>C. Publishing a message from a WIS2 Node using a compliant topic hierarchy Test</h6>
+<h6 id="_c_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy_test"><a class="anchor" href="#_c_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy_test"></a>C. Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy) Test</h6>
 
 </div>
 <div class="sect5">
 <h6 id="_purpose_8"><a class="anchor" href="#_purpose_8"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Broker service must check that the topic used to publish a message by a WIS2 Node is compliant with the agreed topic hierarchy.  What follows below is  an overview of the primary topic levels.</p>
+<p>The Global Broker service must forward messages when the topic is compliant with the WIS2 Topic Hierarchy</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 1</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">channel</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 2</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">version</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 3</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">system</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 4</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">centre-id</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 5</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">notification-type</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 6</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">data-policy</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Level 7</p></td>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">earth-system-discipline</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect5">
 <h6 id="_requirements_8"><a class="anchor" href="#_requirements_8"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
-<p>Global Broker MQTT connection string to 1 WIS2 Nodes (test1)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+</li>
+<li>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1274,10 +1252,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2Node "test1" publish a <strong>valid</strong> message with valid topic hierarchy coming on topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
-</li>
-<li>
-<p>Have WIS2Node "test1" then publish an <strong>invalid message</strong> with invalid topic hierarchy on topic <strong>origin/wis2/test1/core/data/weather/surface-based-observation/synop</strong>.  What&#8217;s missing from this topic hierarchy is <strong>level 2</strong> ("a").</p>
+<p>Have WIS2Node <strong>io-wis2dev-10-test</strong> publish <strong>valid</strong> messages on <strong>valid</strong> topics hierarchy (one message per tested valid topic)</p>
 </li>
 </ol>
 </div>
@@ -1287,25 +1262,31 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker "gb-test" accepts the first message (with valid topic hierarchy) coming from WIS2 Node <strong>test1</strong></p>
+<p>The Global Broker forward all messages</p>
 </li>
 <li>
-<p>If the Global Broker "gb-test" fails the second message coming from WIS2 Node <strong>test1</strong> with an invalid topic hierarchy</p>
+<p>The MQTT client receives all messages</p>
 </li>
 <li>
-<p>If the Global Broker "gb-test" increments <strong>wmo_wis2_gb_messages_invalid_total</strong>, the test passes. Otherwise, the test fails.</p>
+<p>Increments <strong>wmo_wis2_gb_messages_subscribed_total</strong> by 1 for each message</p>
+</li>
+<li>
+<p>Increments <strong>wmo_wis2_gb_messages_published_total</strong> by 1 for each message</p>
+</li>
+<li>
+<p>If all above statements are true, the test passes. Otherwise, the test fails.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_d_check_that_a_gb_subsribed_to_a_wis2_node_and_publishes_a_message_announces_a_dataset_with_metadata_test"><a class="anchor" href="#_d_check_that_a_gb_subsribed_to_a_wis2_node_and_publishes_a_message_announces_a_dataset_with_metadata_test"></a>D. Check that a GB subsribed to a WIS2 Node and publishes a message announces a dataset with metadata Test</h6>
+<h6 id="_d_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy_test"><a class="anchor" href="#_d_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy_test"></a>D. Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy) Test</h6>
 
 </div>
 <div class="sect5">
 <h6 id="_purpose_9"><a class="anchor" href="#_purpose_9"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Broker service must check that the topic used to publish a message by a WIS2 Node is announcing a dataset with corresponding metadata</p>
+<p>The Global Broker service must forward messages when the topic is compliant with the WIS2 Topic Hierarchy</p>
 </div>
 </div>
 <div class="sect5">
@@ -1313,7 +1294,10 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Global Broker MQTT connection string to 1 WIS2 Nodes (test1)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+</li>
+<li>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1326,13 +1310,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Using an MQTT client, subscribe to WIS2 Node "test1" on topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
-</li>
-<li>
-<p>Have WIS2Node "test1" publish a valid message coming on topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
-</li>
-<li>
-<p>Using the same MQTT client (like MQTT Explorer), check to see that that the WIS2 Node "test1" has updated it&#8217;s available offerings.  Check the message payload response to ensure this announcement</p>
+<p>Have WIS2 Node <strong>io-wis2dev-10-test</strong> publish 10 <strong>valid</strong> messages on 10 <strong>different</strong> and <strong>invalid</strong> topics</p>
 </li>
 </ol>
 </div>
@@ -1342,22 +1320,31 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker "gb-test" sees the updated available offerings from the WIS2 Node "test1",</p>
+<p>The Global Broker discards all messages</p>
 </li>
 <li>
-<p>If the Global Broker verifies that the message payload response contains metadata and a link to the data, then this test passes. Otherwise, the test fails AND the GB will increment <strong>wmo_wis2_gb_messages_no_metadata_total</strong>.</p>
+<p>The MQTT client doesn&#8217;t receive any message</p>
+</li>
+<li>
+<p>Increments <strong>wmo_wis2_gb_messages_subscribed_total</strong> by 10</p>
+</li>
+<li>
+<p>Increments <strong>wmo_wis2_gb_messages_invalid_topic_total</strong> by 10</p>
+</li>
+<li>
+<p>If all above statements are true, the test passes. Otherwise, the test fails.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_e_publishing_and_verifying_the_compliance_of_a_wis2_notification_message_test"><a class="anchor" href="#_e_publishing_and_verifying_the_compliance_of_a_wis2_notification_message_test"></a>E. Publishing and verifying the compliance of a WIS2 Notification message Test</h6>
+<h6 id="_e_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata_test"><a class="anchor" href="#_e_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata_test"></a>E. Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata Test</h6>
 
 </div>
 <div class="sect5">
 <h6 id="_purpose_10"><a class="anchor" href="#_purpose_10"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Broker service must verify the compliance of the WIS2 Notification Message with the agreed standard as specified in the Manual on WIS Vol. 2</p>
+<p>The Global Broker service must check that the topic used to publish a message by a WIS2 Node is announcing the availability of data with corresponding metadata.</p>
 </div>
 </div>
 <div class="sect5">
@@ -1365,7 +1352,10 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Global Broker MQTT connection string to 1 WIS2 Nodes (test1)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+</li>
+<li>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1378,10 +1368,10 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2 Node "test1" publish a valid message for topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
+<p>Have WIS2 Node <strong>io-wis2dev-10-test</strong> publish 10 <strong>valid</strong> messages on 10 <strong>different</strong> topics, and no metadata exists for any topic used.</p>
 </li>
 <li>
-<p>Next have the same WIS2 Node "test1" publish an invalid WIS2 Notification Message on the same topic <strong>origin/a/wis2/test1/core/data/weather/surface-based-observation/synop</strong></p>
+<p>e.g Publish on <strong>origin/a/wis2/ <em>io-wis2dev-10-test</em>/core/data/weather/surface-based-observation/synop</strong> and WIS2 Node <strong>io-wis2dev-10-test</strong> has not published a metadata record for the synop.</p>
 </li>
 </ol>
 </div>
@@ -1391,38 +1381,47 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker "gb-test" accepts the first message published by WIS2 Node "test1" shows up as a valid WIS2 Notification Message</p>
+<p>The Global Broker discards all messages</p>
 </li>
 <li>
-<p>If the Global Broker "gb-test" drops the invalid WIS2 Notificaiton Message</p>
+<p>The MQTT client doesn&#8217;t receive any message</p>
 </li>
 <li>
-<p>If the Global Broker "gb-test" increments <strong>wmo_wis2_gb_messages_invalid_total</strong>, then this test passes. Otherwise, the test fails.</p>
+<p>Increments <strong>wmo_wis2_gb_messages_subscribed_total</strong> by 10</p>
+</li>
+<li>
+<p>Increments <strong>wmo_wis2_gb_messages_no_metadata_total</strong> by 10</p>
+</li>
+<li>
+<p>If all above statements are true, the test passes. Otherwise, the test fails.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_f_gb_discards_or_notify_in_a_notification_message_breaching_the_requirements_laid_out_in_tests_c_d_or_e_tests"><a class="anchor" href="#_f_gb_discards_or_notify_in_a_notification_message_breaching_the_requirements_laid_out_in_tests_c_d_or_e_tests"></a>F. GB discards or notify in a notification message breaching the requirements laid out in tests C, D or E Tests</h6>
+<h6 id="_f_verifying_the_compliance_of_a_wis2_notification_message_test"><a class="anchor" href="#_f_verifying_the_compliance_of_a_wis2_notification_message_test"></a>F. Verifying the compliance of a WIS2 Notification message Test</h6>
 
 </div>
 <div class="sect5">
 <h6 id="_purpose_11"><a class="anchor" href="#_purpose_11"></a>Purpose</h6>
 <div class="paragraph">
-<p>The Global Broker service must be able to discard or notify via a notification message in breach of the requirement in tests C, D or E</p>
+<p>The Global Broker service must verify the compliance of the WIS2 Notification Message with the agreed standard as specified in the Manual on WIS Vol. 2</p>
 </div>
 </div>
 <div class="sect5">
 <h6 id="_requirements_11"><a class="anchor" href="#_requirements_11"></a>Requirements</h6>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p>Global Broker MQTT connection string to 1 WIS2 Node (test1)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+</li>
+<li>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
 </li>
-</ul>
+</ol>
 </div>
 </div>
 <div class="sect5">
@@ -1430,7 +1429,10 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Follow the steps outlined in tests C, D or E</p>
+<p>Have WIS2 Node <strong>io-wis2dev-10-test</strong> publish 10 <strong>invalid</strong> messages on 10 <strong>valid</strong> topics</p>
+</li>
+<li>
+<p>All mandatory fields of the WIS2 Notification Messages must be tested</p>
 </li>
 </ol>
 </div>
@@ -1440,56 +1442,19 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the steps from tests C or E are followed, and the test passes, the GB metrics should increment the <strong>wmo_wis2_gb_messages_invalid_total</strong> counter.</p>
+<p>The Global Broker discards all messages</p>
 </li>
 <li>
-<p>If the steps from test D are followed, and the test passes, the GB metrics should increment the <strong>wmo_wis2_gb_messages_no_metadata_total</strong> counter.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_g_gb_providing_metrics_test"><a class="anchor" href="#_g_gb_providing_metrics_test"></a>G. GB providing metrics Test</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_purpose_12"><a class="anchor" href="#_purpose_12"></a>Purpose</h6>
-<div class="paragraph">
-<p>The Global Broker service must provided metrics as requested in the Guide on WIS2</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_requirements_12"><a class="anchor" href="#_requirements_12"></a>Requirements</h6>
-<div class="ulist">
-<ul>
-<li>
-<p>Global Broker MQTT connection string to 1 WIS2 Node (test1)</p>
+<p>The MQTT client doesn&#8217;t receive any message</p>
 </li>
 <li>
-<p>MQTT Test Client</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_steps_12"><a class="anchor" href="#_steps_12"></a>Steps</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Have the GB update metrics for the first period of testing time (15 minutes) as usual</p>
+<p>Increments <strong>wmo_wis2_gb_messages_subscribed_total</strong> by 10</p>
 </li>
 <li>
-<p>During the second period of time, make the metrics unavailable</p>
+<p>Increments <strong>wmo_wis2_gb_messages_invalid_messages_total</strong> by 10</p>
 </li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_evaluate_12"><a class="anchor" href="#_evaluate_12"></a>Evaluate</h6>
-<div class="olist arabic">
-<ol class="arabic">
 <li>
-<p>If the GB provide metrics during the first period of testing time, AND doesn&#8217;t provide metrics for the second period of testing time,  the test passes.  Otherwise, the test fails.</p>
+<p>If all above statements are true, the test passes. Otherwise, the test fails.</p>
 </li>
 </ol>
 </div>
@@ -1505,43 +1470,46 @@ core/data/weather/surface-based-observation/synop</strong></p>
 
 </div>
 <div class="sect5">
-<h6 id="_purpose_13"><a class="anchor" href="#_purpose_13"></a>Purpose</h6>
+<h6 id="_purpose_12"><a class="anchor" href="#_purpose_12"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Broker service should support a minimum of <strong>200</strong> WIS2 Nodes</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_13"><a class="anchor" href="#_requirements_13"></a>Requirements</h6>
-<div class="ulist">
-<ul>
-<li>
-<p>mqttx-cli</p>
-</li>
-<li>
-<p>hive</p>
-</li>
-<li>
-<p>global broker Cloud asset</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_steps_13"><a class="anchor" href="#_steps_13"></a>Steps</h6>
+<h6 id="_requirements_12"><a class="anchor" href="#_requirements_12"></a>Requirements</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Use hive/mqttx-cli scripting provided by Remy to perform this test</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/benchmarkwis2gb" class="bare">https://hub.docker.com/r/golfvert/benchmarkwis2gb</a> deployed on 5 tests system</p>
+</li>
+<li>
+<p>Global Broker subscribing to <strong>200</strong> WIS2 Nodes (<strong>io-wis2dev-100-test</strong> to <strong>io-wis2dev-299-test</strong>)</p>
+</li>
+<li>
+<p>MQTT Test Client</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_13"><a class="anchor" href="#_evaluate_13"></a>Evaluate</h6>
+<h6 id="_steps_12"><a class="anchor" href="#_steps_12"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker subscribes to all 200 WIS2 Node subscriptions,  the test passes.  Otherwise, the test fails.</p>
+<p>On each of the 200 WIS2 Nodes, publish 10 <strong>valid</strong> messages, on <strong>valid</strong> topic, without associated metadata, and with different <strong>id</strong> messages</p>
+</li>
+<li>
+<p>On the MQTT test client, subscribe to <strong>origin/a/wis2/#</strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_12"><a class="anchor" href="#_evaluate_12"></a>Evaluate</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If on the MQTT test client, 10 messages for each of the 200 centre-id are received, the test passes. Otherwise, it fails.</p>
 </li>
 </ol>
 </div>
@@ -1551,25 +1519,79 @@ core/data/weather/surface-based-observation/synop</strong></p>
 
 </div>
 <div class="sect5">
-<h6 id="_purpose_14"><a class="anchor" href="#_purpose_14"></a>Purpose</h6>
+<h6 id="_purpose_13"><a class="anchor" href="#_purpose_13"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Broker service should support a minimum of <strong>1000</strong> subscribers.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_14"><a class="anchor" href="#_requirements_14"></a>Requirements</h6>
+<h6 id="_requirements_13"><a class="anchor" href="#_requirements_13"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
-<p>mqttx-cli</p>
+<p>Global Broker</p>
 </li>
 <li>
-<p>hive</p>
-</li>
-<li>
-<p>global broker Cloud asset</p>
+<p>MQTTX CLI (<a href="https://mqttx.app/docs/cli" class="bare">https://mqttx.app/docs/cli</a>) deployed on 5 tests systems</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_13"><a class="anchor" href="#_steps_13"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Use MQTTX CLI <em>bench</em> on each test system to simulate 200 clients by using <code>mqttx bench conn -c 200 -i 100</code> and the relevant connection information for the Global Broker being tested.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_13"><a class="anchor" href="#_evaluate_13"></a>Evaluate</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the output of the command on each test system is similar to:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>mqttx bench conn -c 200 -i 100
+❯  Starting connect benchmark, connections: 200, req interval: 100ms
+✔  [200/200] - Connected
+✔  Created 200 connections in 22.355s</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>with 200 connections created, on the 5 tests systems, this test is successful.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_c_global_broker_minimum_number_of_messages_per_second_test"><a class="anchor" href="#_c_global_broker_minimum_number_of_messages_per_second_test"></a>C. Global Broker minimum number of messages per second Test</h6>
+
+</div>
+<div class="sect5">
+<h6 id="_purpose_14"><a class="anchor" href="#_purpose_14"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Broker service should support processing of a minimum of <strong>10000</strong> messages per second.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_14"><a class="anchor" href="#_requirements_14"></a>Requirements</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The container <a href="https://hub.docker.com/r/golfvert/benchmarkwis2gb" class="bare">https://hub.docker.com/r/golfvert/benchmarkwis2gb</a> deployed on 5 tests system (different from above)</p>
+</li>
+<li>
+<p>Global Broker subscribing to <strong>200</strong> WIS2 Nodes (<strong>io-wis2dev-100-test</strong> to <strong>io-wis2dev-299-test</strong>)</p>
+</li>
+<li>
+<p>MQTTX CLI deployed on 5 tests systems.</p>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect5">
@@ -1577,7 +1599,26 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Use hive/mqttx-cli scripting provided by Remy to perform this test</p>
+<p>On each of the 200 WIS2 Nodes, publish X <strong>valid</strong> messages per second during Y seconds, on a <strong>valid</strong> topic, without associated metadata or data, and with different <strong>id</strong> messages</p>
+</li>
+<li>
+<p>Use MQTTX CLI <em>bench</em> on each test VMs to simulate Z clients by using <code>mqttx bench sub -c Z -t origin/a/wis2/#</code> and the relevant connection information for the Global Broker being tested.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Typically with:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>With X = 5 messages per second on each of the 200 WIS2 Nodes, this will create 1000 messages per second</p>
+</li>
+<li>
+<p>With Z = 2 on each VM, this will create 10 subscriptions.</p>
+</li>
+<li>
+<p>As every subscriber will get all messages will be equivalent to <strong>10000</strong> messages per second.</p>
 </li>
 </ol>
 </div>
@@ -1587,53 +1628,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>If the Global Broker supports a minimum of <strong>1000</strong> subscribers,  the test passes.  Otherwise, the test fails.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_c_global_broker_minimum_number_of_subscribers_test"><a class="anchor" href="#_c_global_broker_minimum_number_of_subscribers_test"></a>C. Global Broker minimum number of subscribers Test</h6>
-
-</div>
-<div class="sect5">
-<h6 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>Purpose</h6>
-<div class="paragraph">
-<p>The Global Broker service should support processing of a minimum of <strong>10000</strong> messages per second.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_requirements_15"><a class="anchor" href="#_requirements_15"></a>Requirements</h6>
-<div class="ulist">
-<ul>
-<li>
-<p>mqttx-cli</p>
-</li>
-<li>
-<p>hive</p>
-</li>
-<li>
-<p>global broker Cloud asset</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_steps_15"><a class="anchor" href="#_steps_15"></a>Steps</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Use hive/mqttx-cli scripting provided by Remy to perform this test</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_evaluate_15"><a class="anchor" href="#_evaluate_15"></a>Evaluate</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>If the Global Broker supports a minimum of <strong>10000</strong> messages per second,  the test passes.  Otherwise, the test fails.</p>
+<p>Run the test for 30 seconds (Y=30), if MQTTS CLI output shows that 100000 are received, then the test is successful.</p>
 </li>
 </ol>
 </div>
@@ -1651,12 +1646,57 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="sect4">
 <h5 id="_1_mqtt_broker_connectivity"><a class="anchor" href="#_1_mqtt_broker_connectivity"></a>8.1.1. 1. MQTT Broker Connectivity</h5>
 <div class="sect5">
-<h6 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>Purpose</h6>
+<h6 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>Purpose</h6>
 <div class="paragraph">
 <p>An MQTT client must be able to connect to the local broker of the Global Cache on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.</p>
 </div>
 <div class="paragraph">
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.2: A Global Cache shall operate a message broker.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_15"><a class="anchor" href="#_requirements_15"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>GC MQTT broker connection string</p>
+</li>
+<li>
+<p>MQTT Test Client</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_15"><a class="anchor" href="#_steps_15"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the test MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication (connection string).</p>
+</li>
+<li>
+<p>Attempt to connect the MQTT broker of the Global Cache using the connection string.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_15"><a class="anchor" href="#_evaluate_15"></a>Evaluate</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_2_gc_mqtt_broker_subscription"><a class="anchor" href="#_2_gc_mqtt_broker_subscription"></a>8.1.2. 2. GC MQTT Broker Subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis2/# topic using a provided connection string.</p>
 </div>
 </div>
 <div class="sect5">
@@ -1677,51 +1717,6 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the test MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication (connection string).</p>
-</li>
-<li>
-<p>Attempt to connect the MQTT broker of the Global Cache using the connection string.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_evaluate_16"><a class="anchor" href="#_evaluate_16"></a>Evaluate</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_2_gc_mqtt_broker_subscription"><a class="anchor" href="#_2_gc_mqtt_broker_subscription"></a>8.1.2. 2. GC MQTT Broker Subscription</h5>
-<div class="sect5">
-<h6 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>Purpose</h6>
-<div class="paragraph">
-<p>A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis2/# topic using a provided connection string.</p>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_requirements_17"><a class="anchor" href="#_requirements_17"></a>Requirements</h6>
-<div class="ulist">
-<ul>
-<li>
-<p>GC MQTT broker connection string</p>
-</li>
-<li>
-<p>MQTT Test Client</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect5">
-<h6 id="_steps_17"><a class="anchor" href="#_steps_17"></a>Steps</h6>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
 <p>Initialize a MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication (connection string).</p>
 </li>
 <li>
@@ -1734,7 +1729,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_17"><a class="anchor" href="#_evaluate_17"></a>Evaluate</h6>
+<h6 id="_evaluate_16"><a class="anchor" href="#_evaluate_16"></a>Evaluate</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1750,7 +1745,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="sect4">
 <h5 id="_3_wis2_notification_message_wnm_processing"><a class="anchor" href="#_3_wis2_notification_message_wnm_processing"></a>8.1.3. 3. WIS2 Notification Message (WNM) Processing</h5>
 <div class="sect5">
-<h6 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>Purpose</h6>
+<h6 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>Purpose</h6>
 <div class="paragraph">
 <p>Test that the GC functions as expected under normal conditions. The Global Cache should process a valid incoming WNM, download the data at the provided canonical link, and publish a new WNM on the proper cache/ topic using the proper message structure, and update the necessary GC metrics.</p>
 </div>
@@ -1768,7 +1763,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_18"><a class="anchor" href="#_requirements_18"></a>Requirements</h6>
+<h6 id="_requirements_17"><a class="anchor" href="#_requirements_17"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -1847,7 +1842,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_18"><a class="anchor" href="#_steps_18"></a>Steps</h6>
+<h6 id="_steps_17"><a class="anchor" href="#_steps_17"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1886,7 +1881,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_18"><a class="anchor" href="#_evaluate_18"></a>Evaluate</h6>
+<h6 id="_evaluate_17"><a class="anchor" href="#_evaluate_17"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -1958,13 +1953,13 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="sect4">
 <h5 id="_4_cache_false_directive"><a class="anchor" href="#_4_cache_false_directive"></a>8.1.4. 4. Cache False Directive</h5>
 <div class="sect5">
-<h6 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>Purpose</h6>
+<h6 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache receives a notification message with <em>properties.cache</em> set to false, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_19"><a class="anchor" href="#_requirements_19"></a>Requirements</h6>
+<h6 id="_requirements_18"><a class="anchor" href="#_requirements_18"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2020,7 +2015,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_19"><a class="anchor" href="#_steps_19"></a>Steps</h6>
+<h6 id="_steps_18"><a class="anchor" href="#_steps_18"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2049,7 +2044,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_19"><a class="anchor" href="#_evaluate_19"></a>Evaluate</h6>
+<h6 id="_evaluate_18"><a class="anchor" href="#_evaluate_18"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2101,13 +2096,13 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="sect4">
 <h5 id="_5_source_download_failure"><a class="anchor" href="#_5_source_download_failure"></a>8.1.5. 5. Source Download Failure</h5>
 <div class="sect5">
-<h6 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>Purpose</h6>
+<h6 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the <code>metric wmo_wis2_gc_dataserver_status_flag</code> for the source data server should be set to 0 (zero).</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_20"><a class="anchor" href="#_requirements_20"></a>Requirements</h6>
+<h6 id="_requirements_19"><a class="anchor" href="#_requirements_19"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2163,7 +2158,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_20"><a class="anchor" href="#_steps_20"></a>Steps</h6>
+<h6 id="_steps_19"><a class="anchor" href="#_steps_19"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2192,7 +2187,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_20"><a class="anchor" href="#_evaluate_20"></a>Evaluate</h6>
+<h6 id="_evaluate_19"><a class="anchor" href="#_evaluate_19"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2241,7 +2236,7 @@ core/data/weather/surface-based-observation/synop</strong></p>
 <div class="sect4">
 <h5 id="_6_cache_override_optional"><a class="anchor" href="#_6_cache_override_optional"></a>8.1.6. 6. Cache Override (Optional)</h5>
 <div class="sect5">
-<h6 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>Purpose</h6>
+<h6 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server, and the metric <code>wmo_wis2_gc_cache_override_total</code> is incremented by 1 (one).
 Note that the trigger for this directive is implementation specific. The criteria must be known and enabled for the test
@@ -2249,7 +2244,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_21"><a class="anchor" href="#_requirements_21"></a>Requirements</h6>
+<h6 id="_requirements_20"><a class="anchor" href="#_requirements_20"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2308,7 +2303,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_21"><a class="anchor" href="#_steps_21"></a>Steps</h6>
+<h6 id="_steps_20"><a class="anchor" href="#_steps_20"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2337,7 +2332,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_21"><a class="anchor" href="#_evaluate_21"></a>Evaluate</h6>
+<h6 id="_evaluate_20"><a class="anchor" href="#_evaluate_20"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2406,7 +2401,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_7_data_integrity_check_failure_recommended"><a class="anchor" href="#_7_data_integrity_check_failure_recommended"></a>8.1.7. 7. Data Integrity Check Failure (Recommended)</h5>
 <div class="sect5">
-<h6 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>Purpose</h6>
+<h6 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should validate the integrity of the resources it caches and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Global Cache should accept the data as valid. In this case a Global Cache <em>may</em> add an integrity value to the message it republishes.</p>
 </div>
@@ -2416,7 +2411,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_22"><a class="anchor" href="#_requirements_22"></a>Requirements</h6>
+<h6 id="_requirements_21"><a class="anchor" href="#_requirements_21"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2472,7 +2467,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_22"><a class="anchor" href="#_steps_22"></a>Steps</h6>
+<h6 id="_steps_21"><a class="anchor" href="#_steps_21"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2498,7 +2493,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_22"><a class="anchor" href="#_evaluate_22"></a>Evaluate</h6>
+<h6 id="_evaluate_21"><a class="anchor" href="#_evaluate_21"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2550,7 +2545,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_8_wis2_notification_message_deduplication"><a class="anchor" href="#_8_wis2_notification_message_deduplication"></a>8.1.8. 8. WIS2 Notification Message Deduplication</h5>
 <div class="sect5">
-<h6 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>Purpose</h6>
+<h6 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed.</p>
 </div>
@@ -2559,7 +2554,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_23"><a class="anchor" href="#_requirements_23"></a>Requirements</h6>
+<h6 id="_requirements_22"><a class="anchor" href="#_requirements_22"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2612,7 +2607,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_23"><a class="anchor" href="#_steps_23"></a>Steps</h6>
+<h6 id="_steps_22"><a class="anchor" href="#_steps_22"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2638,7 +2633,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_23"><a class="anchor" href="#_evaluate_23"></a>Evaluate</h6>
+<h6 id="_evaluate_22"><a class="anchor" href="#_evaluate_22"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2697,7 +2692,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_8_1_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_8_1_wis2_notification_message_deduplication_alternative_1"></a>8.1.9. 8.1. WIS2 Notification Message Deduplication (Alternative 1)</h5>
 <div class="sect5">
-<h6 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>Purpose</h6>
+<h6 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache fails to process a notification message relating to a given unique data object (<code>properties.data_id</code> + <code>properties.pubtime</code>), a Global Cache should successfully process a valid, subsequently received notification message with the same unique data identifier.</p>
 </div>
@@ -2706,7 +2701,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_24"><a class="anchor" href="#_requirements_24"></a>Requirements</h6>
+<h6 id="_requirements_23"><a class="anchor" href="#_requirements_23"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2765,7 +2760,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_24"><a class="anchor" href="#_steps_24"></a>Steps</h6>
+<h6 id="_steps_23"><a class="anchor" href="#_steps_23"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2791,7 +2786,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_24"><a class="anchor" href="#_evaluate_24"></a>Evaluate</h6>
+<h6 id="_evaluate_23"><a class="anchor" href="#_evaluate_23"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2843,19 +2838,19 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_8_2_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_8_2_wis2_notification_message_deduplication_alternative_2"></a>8.1.10. 8.2. WIS2 Notification Message Deduplication (Alternative 2)</h5>
 <div class="sect5">
-<h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
+<h6 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>Purpose</h6>
 <div class="paragraph">
 <p>Related to the two previous tests, a GC should not process and cache a data item if it has already processed and cached a data item with the same <code>properties.data_id</code> and a <code>properties.pubtime</code> that is equal to or less than the <code>properties.pubtime</code> of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_25"><a class="anchor" href="#_requirements_25"></a>Requirements</h6>
+<h6 id="_requirements_24"><a class="anchor" href="#_requirements_24"></a>Requirements</h6>
 <div class="paragraph">
 <p>See above.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
+<h6 id="_steps_24"><a class="anchor" href="#_steps_24"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2881,7 +2876,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_25"><a class="anchor" href="#_evaluate_25"></a>Evaluate</h6>
+<h6 id="_evaluate_24"><a class="anchor" href="#_evaluate_24"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2933,7 +2928,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_9_data_update"><a class="anchor" href="#_9_data_update"></a>8.1.11. 9. Data Update</h5>
 <div class="sect5">
-<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
+<h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should treat notification messages with the same data item identifier (<code>properties.data_id</code>), but different publication times (<code>properties.pubtime</code>) as unique data items. Data items with the same <code>properties.data_id</code> but a greater/later publication time AND a <mark>update</mark> link (links['rel']='update'), should be processed (see test Notification processing). Data items with the same <code>properties.data_id</code> but earlier or identical publication times should be ignored (see deduplication test 8).</p>
 </div>
@@ -2942,7 +2937,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_26"><a class="anchor" href="#_requirements_26"></a>Requirements</h6>
+<h6 id="_requirements_25"><a class="anchor" href="#_requirements_25"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3001,7 +2996,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
+<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3027,7 +3022,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_26"><a class="anchor" href="#_evaluate_26"></a>Evaluate</h6>
+<h6 id="_evaluate_25"><a class="anchor" href="#_evaluate_25"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3082,13 +3077,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_wis2_notification_processing_rate"><a class="anchor" href="#_wis2_notification_processing_rate"></a>8.2.1. WIS2 Notification Processing Rate</h5>
 <div class="sect5">
-<h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
+<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache shall be able to successfully process, on average, 2000 unique WNM&#8217;s per minute with an average message size of 75kb. This test represents the upper end of the current WNM volume. This test is a measured performance test similar to test 3. WNM Processing except that a large batch of messages is used, and the time taken to process the messages is measured. The noted WNM&#8217;s/minute rate can be used as a performance indicator for the GC being tested.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_27"><a class="anchor" href="#_requirements_27"></a>Requirements</h6>
+<h6 id="_requirements_26"><a class="anchor" href="#_requirements_26"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3170,7 +3165,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_27"><a class="anchor" href="#_steps_27"></a>Steps</h6>
+<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3202,7 +3197,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_27"><a class="anchor" href="#_evaluate_27"></a>Evaluate</h6>
+<h6 id="_evaluate_26"><a class="anchor" href="#_evaluate_26"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3242,7 +3237,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_concurrent_client_downloads"><a class="anchor" href="#_concurrent_client_downloads"></a>8.2.2. Concurrent client downloads</h5>
 <div class="sect5">
-<h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
+<h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should support a minimum of 1000 simultaneous downloads.</p>
 </div>
@@ -3252,7 +3247,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_requirements_28"><a class="anchor" href="#_requirements_28"></a>Requirements</h6>
+<h6 id="_requirements_27"><a class="anchor" href="#_requirements_27"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3331,7 +3326,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_28"><a class="anchor" href="#_steps_28"></a>Steps</h6>
+<h6 id="_steps_27"><a class="anchor" href="#_steps_27"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3362,7 +3357,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_evaluate_28"><a class="anchor" href="#_evaluate_28"></a>Evaluate</h6>
+<h6 id="_evaluate_27"><a class="anchor" href="#_evaluate_27"></a>Evaluate</h6>
 <div class="paragraph">
 <p>The test is considered successful if the following conditions are met:
 * The total number of successful downloads is 1000.
@@ -3445,7 +3440,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_global_broker_connection_and_subscription"><a class="anchor" href="#_global_broker_connection_and_subscription"></a>8.4.2.1. Global Broker connection and subscription</h5>
 <div class="sect5">
-<h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
+<h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Discovery Catalogue must connect to a Global Broker using the MQTT protocol with TLS and username/password authentication (everyone/everyone) and subscribe to the following topic:</p>
 </div>
@@ -3458,7 +3453,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_29"><a class="anchor" href="#_steps_29"></a>Steps</h6>
+<h6 id="_steps_28"><a class="anchor" href="#_steps_28"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3500,13 +3495,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>8.4.2.2. Notification and metadata processing (success)</h5>
 <div class="sect5">
-<h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
+<h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Discovery Catalogue should be able to process valid WCMP2 metadata record of core data published by a WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_30"><a class="anchor" href="#_steps_30"></a>Steps</h6>
+<h6 id="_steps_29"><a class="anchor" href="#_steps_29"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3593,13 +3588,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_notification_and_metadata_processing_failure_record_not_found"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_not_found"></a>8.4.2.3. Notification and metadata processing (failure; record not found)</h5>
 <div class="sect5">
-<h6 id="_purpose_31"><a class="anchor" href="#_purpose_31"></a>Purpose</h6>
+<h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Discovery Catalogue should be able to process failing (record not found) WCMP2 metadata published by a WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_31"><a class="anchor" href="#_steps_31"></a>Steps</h6>
+<h6 id="_steps_30"><a class="anchor" href="#_steps_30"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3671,13 +3666,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"></a>8.4.2.4. Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</h5>
 <div class="sect5">
-<h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
+<h6 id="_purpose_31"><a class="anchor" href="#_purpose_31"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Discovery Catalogue should be able to process failing (malformed JSON) WCMP2 metadata published by a WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_32"><a class="anchor" href="#_steps_32"></a>Steps</h6>
+<h6 id="_steps_31"><a class="anchor" href="#_steps_31"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3749,13 +3744,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect5">
-<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
+<h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Discovery Catalogue should be able to process failing WCMP2 metadata published by a WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
+<h6 id="_steps_32"><a class="anchor" href="#_steps_32"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3833,13 +3828,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <p>TODO: validate workflow for regional distribution of partner metadata</p>
 </div>
 <div class="sect5">
-<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
+<h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Discovery Catalogue should detect a mismatch between an incoming message topic&#8217;s centre-id and the centre-id as part of a WCMP2 record identifier.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_34"><a class="anchor" href="#_steps_34"></a>Steps</h6>
+<h6 id="_steps_33"><a class="anchor" href="#_steps_33"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3909,13 +3904,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>8.4.2.6. Notification and metadata processing (record deletion)</h5>
 <div class="sect5">
-<h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
+<h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Discovery Catalogue should be able to process valid WCMP2 metadata record deletion of core data published by a WIS2 Node.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_35"><a class="anchor" href="#_steps_35"></a>Steps</h6>
+<h6 id="_steps_34"><a class="anchor" href="#_steps_34"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4005,13 +4000,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"></a>8.4.2.7. Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</h5>
 <div class="sect5">
-<h6 id="_purpose_36"><a class="anchor" href="#_purpose_36"></a>Purpose</h6>
+<h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
 <div class="paragraph">
 <p>The Global Discovery Catalogue should be able to detect a WNM error when <code>properties.metadata_id</code> is missing from a WCMP2 deletion request.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_36"><a class="anchor" href="#_steps_36"></a>Steps</h6>
+<h6 id="_steps_35"><a class="anchor" href="#_steps_35"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4066,13 +4061,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>8.4.2.8. WCMP2 metadata archive zipfile publication</h5>
 <div class="sect5">
-<h6 id="_purpose_37"><a class="anchor" href="#_purpose_37"></a>Purpose</h6>
+<h6 id="_purpose_36"><a class="anchor" href="#_purpose_36"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API publishes a metadata archive zipfile.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_37"><a class="anchor" href="#_steps_37"></a>Steps</h6>
+<h6 id="_steps_36"><a class="anchor" href="#_steps_36"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4141,13 +4136,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"><a class="anchor" href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"></a>8.4.2.9. WCMP2 cold start initialization from metadata archive zipfile</h5>
 <div class="sect5">
-<h6 id="_purpose_38"><a class="anchor" href="#_purpose_38"></a>Purpose</h6>
+<h6 id="_purpose_37"><a class="anchor" href="#_purpose_37"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC initializes from a metadata archive zipfile.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_38"><a class="anchor" href="#_steps_38"></a>Steps</h6>
+<h6 id="_steps_37"><a class="anchor" href="#_steps_37"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4241,13 +4236,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_openmetrics_publication"><a class="anchor" href="#_openmetrics_publication"></a>8.4.2.10. OpenMetrics publication</h5>
 <div class="sect5">
-<h6 id="_purpose_39"><a class="anchor" href="#_purpose_39"></a>Purpose</h6>
+<h6 id="_purpose_38"><a class="anchor" href="#_purpose_38"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API publishes an OpenMetrics endpoint.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_39"><a class="anchor" href="#_steps_39"></a>Steps</h6>
+<h6 id="_steps_38"><a class="anchor" href="#_steps_38"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4288,13 +4283,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>8.4.2.11. API functionality</h5>
 <div class="sect5">
-<h6 id="_purpose_40"><a class="anchor" href="#_purpose_40"></a>Purpose</h6>
+<h6 id="_purpose_39"><a class="anchor" href="#_purpose_39"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC API performs as expected based on the OGC API - Records standard.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_40"><a class="anchor" href="#_steps_40"></a>Steps</h6>
+<h6 id="_steps_39"><a class="anchor" href="#_steps_39"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4391,13 +4386,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="sect4">
 <h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>8.4.3.1. Processing timeliness</h5>
 <div class="sect5">
-<h6 id="_purpose_41"><a class="anchor" href="#_purpose_41"></a>Purpose</h6>
+<h6 id="_purpose_40"><a class="anchor" href="#_purpose_40"></a>Purpose</h6>
 <div class="paragraph">
 <p>Validate that a GDC is able to process WCMP2 metadata in a timely manner.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_steps_41"><a class="anchor" href="#_steps_41"></a>Steps</h6>
+<h6 id="_steps_40"><a class="anchor" href="#_steps_40"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4779,7 +4774,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-07-22 20:48:15 UTC
+Last updated 2024-08-05 14:19:10 UTC
 </div>
 </div>
 </body>
