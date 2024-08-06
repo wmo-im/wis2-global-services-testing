@@ -249,7 +249,7 @@ Validate that a GDC initializes from a metadata archive zipfile.
 . Foreach WCMP2 (JSON) record in the zipfile, validate and ingest into the new GDC
 
 . Construct a path to a Global Replay service endpoint (`\https://HOST/collections/wis2-notification-messages?q=%22cache/a/wis2/*/metadata%22&datetime=START_TIME/..`).
-.. `START_TIME` is a timestamp that is from 24 hours ago, in RFC3339 format.
+.. `START_TIME` is a timestamp that is from up to 24 hours ago, in RFC3339 format.
 . Issue a HTTP GET request on the path.
 . Parse the HTTP response.
 . Foreach item in the `features` array:
