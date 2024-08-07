@@ -15,9 +15,11 @@
 #          "Ansible minimum version not met"
 
 - hosts: wis2datanodes
-  #  become: true
+  become: false
   become_method: sudo
   gather_facts: yes
   strategy: linear
+  any_errors_fatal: true
   roles:
      - wis2-data-nodes
+     - wis2-nodes-info
