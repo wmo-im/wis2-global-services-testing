@@ -1,0 +1,23 @@
+- name: un-deploy docker compose stack
+  remote_user: "{{ ansible_user }}"
+  become: False
+  community.docker.docker_compose_v2:
+    files:
+    - traefik-docker-compose.yml
+    - caddy-docker-compose.yml
+    - redis-docker-compose.yml
+#    - mosquitto-docker-compose.yml
+    - wis2node-docker-compose.yml
+    project_src: /home/rocky/wis2-data-generator/compose/
+    state: absent
+    remove_images: local
+
+- name: Recursively remove directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - /home/rocky/wis2-data-generator
+  - /home/rocky/wis2-traffic-generator
+  - /home/rocky/mosquitto

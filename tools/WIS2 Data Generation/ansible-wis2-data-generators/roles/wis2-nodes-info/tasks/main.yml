@@ -1,0 +1,11 @@
+- name: report server stats
+  shell: |
+    echo "Info from ipinfo.io"
+    curl ipinfo.io | egrep "(ip|city|org)"
+    echo "Ping to www.free.fr"
+    ping www.free.fr -c  3| head -n 3 | tail -n 1
+  register: hello
+
+- debug: msg="{{ hello.stdout.split('\n') }}"
+
+#- debug: msg="{{ hello.stderr }}"
