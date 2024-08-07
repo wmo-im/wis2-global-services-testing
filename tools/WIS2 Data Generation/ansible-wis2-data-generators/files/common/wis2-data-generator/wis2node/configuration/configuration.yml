@@ -1,0 +1,25 @@
+generator:
+    freq_avg: 500
+    size_min: 512
+    size_max: 5000000
+    cache_large_files: false
+    cache_size_max: 1000000
+    store_duration: 900
+    skew: 10
+    centre_id: CENTREID_CHANGE_ME 
+    embed_data: true
+    embed_size_max: 4096
+    configuration_path: /storage/configuration/
+    download_host: HTTPS_HOSTNAME_CHANGE_ME
+    download_path: /storage/files/
+    data:
+    - dataset1:
+        type: weather
+        sub_type: surface-based-observations
+        data_policy: core
+        weight: 100
+    - dataset2:
+        type: ocean
+        sub_type: experimental
+        data_policy: recommended
+        weight: 20
