@@ -15,7 +15,8 @@ generator:
     data:
     - dataset1:
         type: weather
-        sub_type: surface-based-observations
+#        sub_type: surface-based-observations
+        sub_type: surface-based-observations/synop
         data_policy: core
         weight: 100
     - dataset2:
