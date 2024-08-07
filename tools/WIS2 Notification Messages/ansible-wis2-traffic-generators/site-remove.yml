@@ -14,7 +14,7 @@
 #        msg: >
 #          "Ansible minimum version not met"
 
-- hosts: wis2trafficnodes
+- hosts: wis2datanodes
   become: true
   become_method: sudo
   gather_facts: yes

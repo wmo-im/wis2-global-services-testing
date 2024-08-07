@@ -19,6 +19,5 @@
   become_method: sudo
   gather_facts: yes
   strategy: linear
-  any_errors_fatal: true
   roles:
-     - wis2-traffic-nodes
+     - wis2-sshkeys
