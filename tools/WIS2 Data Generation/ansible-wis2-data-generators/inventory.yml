@@ -2,9 +2,63 @@ all:
   children:
     wis2datanodes:
       hosts:
-        ovhsingapour:
-          ansible_host: 51.79.248.212
+        awstestnode01:
+          ansible_host: test-node-1.wis2dev.io
           ansible_user: rocky
-        ovhsydney:
-          ansible_host: 139.99.172.31
+          centre_id_min_01: 100
+          centre_id_min_02: 120
+          centre_id: 11
+        awstestnode02:
+          ansible_host: test-node-2.wis2dev.io
           ansible_user: rocky
+          centre_id_min_01: 140
+          centre_id_min_02: 160
+          centre_id: 12
+        awstestnode03:
+          ansible_host: test-node-3.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 180
+          centre_id_min_02: 200
+          centre_id: 13
+        awstestnode04:
+          ansible_host: test-node-4.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 220
+          centre_id_min_02: 240
+          centre_id: 14
+        awstestnode05:
+          ansible_host: test-node-5.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 260
+          centre_id_min_02: 280
+          centre_id: 15
+        awstestnode06:
+          ansible_host: test-node-6.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 300
+          centre_id_min_02: 320
+          centre_id: 16
+        awstestnode07:
+          ansible_host: test-node-7.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 340
+          centre_id_min_02: 360
+          centre_id: 17
+        awstestnode08:
+          ansible_host: test-node-8.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 380
+          centre_id_min_02: 400
+          centre_id: 18
+        awstestnode09:
+          ansible_host: test-node-9.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 420
+          centre_id_min_02: 440
+          centre_id: 19
+        awstestnode10:
+          ansible_host: test-node-10.wis2dev.io
+          ansible_user: rocky
+          centre_id_min_01: 460
+          centre_id_min_02: 480
+          centre_id: 20            
