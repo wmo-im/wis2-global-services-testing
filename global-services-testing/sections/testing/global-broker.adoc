@@ -351,4 +351,4 @@ Typically with:
 
 ====== Evaluate
 
-. Run the test for 30 seconds (Y=30), if MQTTS CLI output shows that 100000 are received, then the test is successful.
+. Run the test for 30 seconds (Y=30), if MQTTS CLI output shows that 300000 are received, then the test is successful.
