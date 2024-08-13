@@ -254,7 +254,7 @@ If `number` is present, it defines the number of Notification Message to create.
 Apply to:  _wnmtest, wnmbench, datatest, metadatatest_ scenario
 Optional: Default value is 1. Maximum usable value 100000.
 
-_action_:: Applicable value are start and stop. start will create a stream of the notification messages and data files, if applicable.
+_action_:: Applicable value are start and stop. start will create a stream of notification messages and data files, if applicable.
 stop will stop the stream.
 
 Apply to:  _wnmgen, datagen_ 
