@@ -4,8 +4,8 @@
 :version: 0.9
 :author: Rémy Giraud
 :email: remy@giraud.me
-:revnumber: 0.3
-:revdate: 18.07.2024 
+:revnumber: 0.9
+:revdate: 12.08.2024 
 
 <<<
 
@@ -258,6 +258,7 @@ _action_:: Applicable value are start and stop. start will create a stream of no
 stop will stop the stream.
 
 Apply to:  _wnmgen, datagen_ 
+
 Optional: No default value.
 
 _delay_:: If present, it defines the  duration in milliseconds between two consecutive Notification Messages.  When missing the _delay_ will use the default value defined in the configuration file of the deployed WIS2 Node. 
@@ -273,11 +274,13 @@ Optional: Default value for Global Service testing: _size_min_ is 512 (512 bytes
 _skew_:: defines the repartition of the file size between the min and the max file size (see https://en.wikipedia.org/wiki/Skewness). With a large positive skew (above 100) most of the file sizes will be close to the min size. With a small positive skew (between 1 and 2), the repartition will be close to a gaussian repartition with a shift toward min size file. A skew of 0, will imply a gaussian distribution of the file size. Negative values will shift toward the max size.
 
 Apply to:  _datatest, datagen_ scenario
+
 Optional: Default value for Global Service testing is 10.
 
 _cache_a_wis2_:: can be used to force publication of the Notification Message of the _cache_ channel. The purpose of this parameter is to emulate the Global Cache to Global Cache download. It can take two values: _mix_ and _only_. In _mix_ mode, half of the messages will be published on _cache/a/wis2/..._ and half on _origin/a/wis2/..._. In _only_ mode, all messages will be published on _cache/a/wis2/..._. 
 
 Apply to:  _datatest, datagen_ scenario
+
 Optional: Default will publish messages on _origin/a/wis2/..._.
 
 
@@ -294,6 +297,7 @@ If `id` is present in the trigger message (`"id": "something"`), if "something" 
 If `id` is absent in the trigger message, then the WIS2 Notification Message will include a valid `id` and a random UUID will be generated.
 
 Apply to: _wnmtest_
+
 Optional: Default will create a correct (UUID) and random value.
 
 _conformsTo_, _type_ and _geometry_::
@@ -363,6 +367,7 @@ If `start_datetime` and `end_datetime` are present in the trigger message and se
 If `datetime`, `start_datetime` and `end_datetime` are all absent in the trigger message, the WIS2 Notification Messages will include a valid `datetime` and the current time will be used.
 
 Apply to:  _wnmtest_ scenario
+
 Optional: If nothing is provided, a valid `datetime` is included.
 
 _data_id_:: 
@@ -377,6 +382,7 @@ If `data_id` is present in the trigger message and is set as _false_, the WIS2 N
 If `data_id` is present in the trigger message, is set as a string, and if the same value is repeated in subsequent messages, the Global Cache will check whether it is an update (`"rel": "update"`) with a more recent `pubtime`. In this case, the Global Cache must update the data accordingly.
 
 Apply to:  _wnmtest, datatest, metadatatest_ scenario
+
 Optional: If nothing is provided, a valid `data_id` is included.
 
 _size_:: 
@@ -386,6 +392,7 @@ When the _content_ is embedded in the Notification Message, it must include a _s
 If `"size": false`, and if the content is embedded in the Notification Message (it is possible for data size below 4096 bytes after encoding), then, the _size_ will modified so that it is not consistent with the embedded data. The Global Cache shall discard this data and try to download the data using the `links.href` instead.
 
 Apply to:  _datatest_ scenario
+
 Optional: If nothing is provided, and content is embedded in the Notification Message, the correct `size` is included.
 
 The _configuration.wnm.links_ subsection::::
@@ -449,6 +456,7 @@ For _datatest_, it is possible to either include an invalid _href_, so that the 
 For _metadatastest_, it is possible to include a _href_ pointing to a metadata file stored, for example, on github to test the behaviour of the Global Discovery Catalog with valid or invalid metadata records.
 
 Apply to:  _wnmtest, datatest, metadatatest_ scenario
+
 Optional: If nothing is provided, _rel_ will always be canonical and _href_ will be a valid URL. In the case of _datatest_, the URL will be pointing to a file containing a random stream of bytes.
 
 
@@ -465,8 +473,9 @@ _length_:: Within the _links_ array, length COULD be in the WIS2 Notification Me
 Setting _length_ as false will force the value of the file size to be incorrect. The Global Cache shall discard the download as the result is deemed incorrect.
 
 Apply to:  _datatest_ scenario
+
 Optional: If nothing is provided, _length_ will always be a correct value if it is possible to compute it.
-For external files see _href_ above, no lenght will be provided.
+For external files see _href_ above, no length will be provided.
 
 Publishing triggering messages::
 
