@@ -1,0 +1,546 @@
+= Activating the tests on the fake WIS2 Nodes
+:toc: macro
+:sectnums: all
+:version: 0.9
+:author: Rémy Giraud
+:email: remy@giraud.me
+:revnumber: 0.3
+:revdate: 18.07.2024 
+
+<<<
+
+Introduction::
+
+The documentation _Activating the tests on the fake WIS2 Nodes_ details how to control centrally the execution of the various functional and performance tests for the Global Broker and the Global Cache.
+It is using tools available on github https://github.com/wmo-im/wis2-global-services-testing/tree/main/tools/
+
+This documentation is based on the use of two docker containers and their tags:
+
+. golfvert/fakewis2node:2.0.8 (for all tests except Global Broker benchmarking)
+. golfvert/benchmarkwis2gb:2.0.2 (for Global Broker benchmarking)
+
+Those tools are using a central MQTT broker where orders can be sent to listening _fake_ WIS2 Nodes. Each WIS2 Node has its own _centre_id_. Based either on the _centre_id_ value used or the _centreid_min_ and _centreid_max_ interval, the corresponding WIS2 Node will start the required scenario.
+
+The scenario will be analyzed by the fake WIS2 Node, and if correctly formed, this will then trigger the creation one or more messages, potentially with data files. The Notification Messages can be fully compliant with WIS2 Notification Message standard or can be modified to test the behaviour of the Global Broker or the Global Cache.
+
+By convention, the message published to this central MQTT broker is called a trigger.
+The trigger is a JSON message where it is possible to define a scenario and the corresponding values.
+
+It can be used, for example to request :
+
+. _centre_id_ 100 to send a total of 1000 WIS2 Notification Messages with an interval of 20ms and no corresponding dataset
+
+. _centre_id_ 11 to 15 to each send 500 WIS2 Notification Messages with an interval of 200ms and a corresponding dataset
+
+. _centre_id_ 11 to send a message with an incorrect _data_id_
+
+. _centre_id_ 11 to send a message with a non existing file
+
+. _centre_id_ 11 to send a message providing a link to a file stored on any server 
+
+. ...
+
+The purpose is to run functional tests (what a Global Broker, a Global Cache, a Global Discovery Catalog must to to be compliant with WIS2 Specifications) and performance tests (for both Global Broker and Global Cache).
+
+All _fake_ WIS2 Nodes are listening to trigger messages on `config/a/wis2/#` topic on a centrally agreed MQTT broker.
+
+For the Global Services testing in October 2024, a free instance of a MQTT Broker hosted by EMQX is used.
+
+Example 1:::
+
+```
+{
+"scenario": "wnmgen",
+"configuration": {
+    "setup": {
+        "centreid": 10,
+        "delay": 100,
+        "action": "start"
+    }
+    }
+}
+```
+
+Sent on the central MQTT Broker, this will instruct _centre_id_ 10 to publish WIS2 Notification Message every 100ms without defined time or number limit.
+As it is a _wnmgen_ scenario (WIS2 Notification Message Generation), no data file will be generated.
+
+```
+{
+"scenario": "wnmgen",
+"configuration": {
+    "setup": {
+        "centreid": 10,
+        "action": "stop"
+    }
+    }
+}
+```
+
+This will stop the generation of WIS2 Notification Messages started above.
+
+Example 2:::
+
+```
+{
+"scenario": "datatest",
+"configuration" : {
+    "setup" : {
+        "centreid": 10,
+        "delay": 50,
+        "number": 1,
+        "size_min": 512,
+        "size_max" : 512
+    },
+    "wnm": {
+	    "properties": {
+            "data_id": "my_static_data_id"
+	    },
+        "links": {
+            "rel": "canonical"
+        }
+    }
+    }
+}
+```
+
+As it is a _datatest_ scenario (data related test), a data file will be generated. It is possible to modify certain parameters of the Notification Message to check the correct behaviour of the Global Cache. The WIS2 Notification Message created will be compliant with the WNM Specification, unless the _pubtime_ (useful to test updates) is not conform to RFC 3339.
+
+This will send one message (`"number": 1`) of size 512 bytes (as `size_min` and `size_max` are both equal to 512), with a defined `data_id` ("my_static_data_id") and a `canonical` link.
+
+If followed by:
+
+```
+{
+"scenario": "datatest",
+"configuration" : {
+    "setup" : {
+        "centreid": 10,
+        "delay": 50,
+        "number": 1,
+        "size_min": 1024,
+        "size_max" : 1024
+    },
+    "wnm": {
+	    "properties":{
+            "data_id": "my_static_data_id"
+	    },
+        "links": {
+            "rel": "update"
+        }
+        }
+    }
+}
+```
+
+This will send one message (`"number": 1`) of 1024 bytes (as `size_min` and `size_max` are both equal to 1024), with a defined `data_id` ("my_static_data_id") and an `update` link.
+When receiving the second message, a Global Cache, after having verified the updated _pubtime_, will download the new file (the `links.href` will be a valid URL providing new content) and replace the old file with the new one.
+
+The WIS2 Notification Message::
+
+As defined in the _Manual on WIS - part 2_ the format of the WIS2 Notification Message is, as a minimum, as follow:
+```
+{
+    "id": "071154d6-0180-4b3a-beda-09cc2007a9c1",
+    "conformsTo": [
+        "http://wis.wmo.int/spec/wnm/1/conf/core"
+    ],
+    "type": "Feature",
+    "geometry": null,
+    "properties": {
+        "pubtime": "2024-07-20T12:44:28.838Z",
+        "integrity": {
+            "method": "sha512",
+            "value": "this_is_a_random_hash"
+        },
+        "data_id": "this_is_a_random_data_id",
+        "datetime": "2024-07-20T12:44:28.838Z"
+    },
+    "links": [
+        {
+            "href": "https://www.example.org/random",
+            "rel": "canonical"
+        }
+    ]
+}
+```
+
+== The scenario
+
+The tool includes seven possible scenario:
+
+- wnmtest
+- wnmgen
+- wnmbench
+- datatest
+- datagen
+- metadatatest
+- metadatagen
+
+wnmtest, wnmgen and wnmbench are focusing of WIS2 Notification Messages are meant to validate technical aspects of the Global Broker. Those three scenario will be used to generate WIS2 Notification Messages without associated data.
+
+datatest and datagen are focusing data aspects. They are meant to validate technical aspects of the Global Cache. Those two scenario will be used to generate WIS2 Notification Messages *and* associated data. The data file created will always be a stream of octets without any meaningful content.
+
+metadatatest and metadatagen are focusing metadata aspects. They are meant to validate technical aspects of the Global Discovery Catalog. Those two scenario will be used to generate WIS2 Notification Messages *and* including download links to metadata files. By opposition to the data files being created, it is either possible to create valid metadata files (with _metadatagen_ scenario) or to provides, in the notification message, links to metadata files stored, for example on github (with _metadatatest_ scenario).
+
+All _.*test_ and _.*gen_ are following the same naming convention.
+_test_ are used to do functional tests of the GB (with wnmtest), GC (datatest) or GDC (with metadatatest).
+_gen_ are used to create a stream of notification messages (and files when needed) to mimic the behavior of a real WIS2 Node.
+Finally, _wnmbench_ is used to create rapidly and constantly WIS2 Notification Messages to stress the antiloop and the broker of the Global Broker.
+
+The trigger message::
+
+As explained above, starting one of those scenario on target WIS2 Nodes, requires publishing a JSON message, on the central MQTT broker using _config/a/wis2_ topic and with the following syntax:
+
+```
+{
+    "scenario": "datatest",
+    "configuration": {
+        "setup": {
+            "centreid": 10,
+            "delay": 10,
+            "size_min": 512,
+            "size_max": 8096,
+            "number": 10 
+        },
+        "wnm" : { 
+            "properties": {
+                "data_id": "my own secret data_id"
+            },
+            "links": [
+                {
+                    "rel": "update",
+                    "length": false
+                }
+            ]
+        }
+    }
+}
+```
+
+It starts with _scenario_ with seven possible values _wnmtest, wnmgen, wnmbench, datatest, datagen, metadatatest, metadatagen_.
+
+Then, _configuration_ defines the detail of the scenario.
+
+The _configuration.setup_ section:::
+
+centreid, centreid_min, centreid_max::::
+
+Each test WIS2 Node is known with a _centre_id_ *io-wis2dev-X-test*. The corresponding WIS2 Node will be triggered if, in the setup section, *X* is included.
+
+It can be an individual selection:
+
+```
+"centreid": 11
+```
+Only _centre_id_ io-wis2dev-11-test will be triggered (assuming that such a WIS2 Node with that centre_id is connected to the central MQTT broker)
+or a range:
+```
+"centreid_min": 100
+"centreid_max": 120
+```
+
+All _centre_id_ with numbers from 100 to 120, io-wis2dev-100-test,  io-wis2dev-101-test,... io-wis2dev-120-test will be triggered (assuming that those WIS2 Nodes with these centre_id are connected to the central MQTT broker).
+
+*Note* : For the WIS2 Global Services testing of fall 2024, by design, _centre_id_ 11 to 20 will be usable for _wnmtest, wnmgen, datatest, datagen, metadatatest, metadatagen_ and _centre_id_ 100 to 399 will be usable ONLY for _wnmbench_.
+
+Apply to:  _wnmtest, wnmgen, wnmbench, datatest, datagen, metadatatest, metadatagen_ scenario
+Mandatory
+
+_number_::::
+
+If `number` is present, it defines the number of Notification Message to create. 
+
+Apply to:  _wnmtest, wnmbench, datatest, metadatatest_ scenario
+Optional: Default value is 1. Maximum usable value 100000.
+
+_action_:: Applicable value are start and stop. start will create a stream of the notification messages and data files, if applicable.
+stop will stop the stream.
+
+Apply to:  _wnmgen, datagen_ 
+Optional: No default value.
+
+_delay_:: If present, it defines the  duration in milliseconds between two consecutive Notification Messages.  When missing the _delay_ will use the default value defined in the configuration file of the deployed WIS2 Node. 
+
+Apply to:  _wnmtest, wnmbench, datatest, metadatagen_ scenario
+Optional: Default value is read in the configuration file. For Global Service testing in Autumn 2024, the default value is *1000*. So, one message on average every second.
+
+_size_min_ and _size_max_:: defines the minimum and the maximum file size when data is generated in the scenario. When missing the sizes are read in the configuration file of the deployed WIS2 Node. 
+
+Apply to:  _datatest, datagen_ scenario
+Optional: Default value for Global Service testing: _size_min_ is 512 (512 bytes) and _size_max_ is 30000000 (30MB).
+
+_skew_:: defines the repartition of the file size between the min and the max file size (see https://en.wikipedia.org/wiki/Skewness). With a large positive skew (above 100) most of the file sizes will be close to the min size. With a small positive skew (between 1 and 2), the repartition will be close to a gaussian repartition with a shift toward min size file. A skew of 0, will imply a gaussian distribution of the file size. Negative values will shift toward the max size.
+
+Apply to:  _datatest, datagen_ scenario
+Optional: Default value for Global Service testing is 10.
+
+_cache_a_wis2_:: can be used to force publication of the Notification Message of the _cache_ channel. The purpose of this parameter is to emulate the Global Cache to Global Cache download. It can take two values: _mix_ and _only_. In _mix_ mode, half of the messages will be published on _cache/a/wis2/..._ and half on _origin/a/wis2/..._. In _only_ mode, all messages will be published on _cache/a/wis2/..._. 
+
+Apply to:  _datatest, datagen_ scenario
+Optional: Default will publish messages on _origin/a/wis2/..._.
+
+
+The _configuration.wnm_ section:::
+
+The wnm part can be used to modify the WIS2 Notification Message itself. Most of the keys defined in the WIS2 Notification Message standard can be set as _false_ (that will remove the key of the WNM) or set as a defined value to test the behaviour of the Global Service.
+
+_id_::
+
+If `id` is present in the trigger message and is set as _false_, the WIS2 Notification Message will _not_ include an `id`. As a consequence, the Global Broker must discard the message.
+
+If `id` is present in the trigger message (`"id": "something"`), if "something" is not a UUID, then the Global Broker must discard the message. If "something" is a UUID, then, if the same value is repeated in subsequent messages, the Global Broker antiloop feature must discard repeated _id_.
+
+If `id` is absent in the trigger message, then the WIS2 Notification Message will include a valid `id` and a random UUID will be generated.
+
+Apply to: _wnmtest_
+Optional: Default will create a correct (UUID) and random value.
+
+_conformsTo_, _type_ and _geometry_::
+
+All three parameters are using the same logic as _id_ above.
+
+Apply to: _wnmtest_
+Optional: Default will create a correct value. 
+_geometry_ will either be randomly null, Point or Polygon.
+
+The _configuration.wnm.properties_ subsection:::
+
+_pubtime_:: 
+
+If `pubtime` is present in the trigger message and is set as _false_, the WIS2 Notification Message will _not_ include an `pubtime`. As a consequence, the Global Broker must discard the message.
+
+If `pubtime` is present in the trigger message and a string, if "something" is not a RFC3339 data time, then the Global Broker must discard the message. If "something" is a compliant RFC3339, then, if the same value is repeated in subsequent messages, the Global Cache feature on managing update can be tested.
+
+If `pubtime` is absent in the trigger message, the WIS2 Notification Messages will include a valid `pubtime` and the current time will be used.
+
+Apply to:  _wnmtest, wnmgen, wnmbench, datatest, datagen, metadatatest, metadatagen_ scenario
+OPtional: Default will use current time. 
+
+_datetime, start_datetime, end_datetime_:: 
+
+According to the specifications, either properties.datetime or both properties start_datetime and properties.end_datetime must be in the WIS2 Notification Message. 
+
+properties.datetime when present can be _null_ or be compliant with RFC3339 format.
+properties.start_datetime and properties.end_datetime are working in pair. When present, they must be in RFC 3339 format.
+
+This is will create a compliant Notification Message: 
+```
+"properties": {
+    "datetime": false,
+    "start_datetime": "2024-07-20T10:10:32Z",
+    "end_datetime": "2024-07-20T10:10:32Z"
+}
+```
+
+Whereas these will not:
+
+```
+"properties": {
+    "datetime": false           //datetime is set as false and start_ and end_ are not present
+}
+```
+
+```
+"properties": {
+    "datetime": false,
+    "start_datetime": "2024-07-20T10:10:32Z"    // start_ but no end_
+}
+```
+
+```
+"properties": {
+    "datetime": "2024/07/20T10:10:32Z"     // is not RFC 3339 compliant
+}
+```
+
+If `datetime` is present in the trigger message and is set as _false_, without providing `start_datetime` and `end_datetime` the WIS2 Notification Message will _not_ include a `datetime`. As a consequence, the Global Broker must discard the message.
+
+If `datetime` is present in the trigger message and is set as a string, if "something" is not a RFC3339 data time, then the Global Broker must discard the message. 
+
+If `start_datetime` and `end_datetime` are present in the trigger message and set as strings, if "something" is not a RFC3339 data time, then the Global Broker must discard the message.
+
+If `datetime`, `start_datetime` and `end_datetime` are all absent in the trigger message, the WIS2 Notification Messages will include a valid `datetime` and the current time will be used.
+
+Apply to:  _wnmtest_ scenario
+Optional: If nothing is provided, a valid `datetime` is included.
+
+_data_id_:: 
+
+In WIS2 Notification Message, _data_id_ must be present and must be a unique string.
+Three options all available:
+
+If `data_id` is absent in the trigger message, then the WIS2 Notification Message will include a valid `data_id` and a random string will be generated.
+
+If `data_id` is present in the trigger message and is set as _false_, the WIS2 Notification Message will _not_ include a `data_id`. As a consequence, the Global Broker must discard the message.
+
+If `data_id` is present in the trigger message, is set as a string, and if the same value is repeated in subsequent messages, the Global Cache will check whether it is an update (`"rel": "update"`) with a more recent `pubtime`. In this case, the Global Cache must update the data accordingly.
+
+Apply to:  _wnmtest, datatest, metadatatest_ scenario
+Optional: If nothing is provided, a valid `data_id` is included.
+
+_size_:: 
+
+When the _content_ is embedded in the Notification Message, it must include a _size_ of the embedded data.
+
+If `"size": false`, and if the content is embedded in the Notification Message (it is possible for data size below 4096 bytes after encoding), then, the _size_ will modified so that it is not consistent with the embedded data. The Global Cache shall discard this data and try to download the data using the `links.href` instead.
+
+Apply to:  _datatest_ scenario
+Optional: If nothing is provided, and content is embedded in the Notification Message, the correct `size` is included.
+
+The _configuration.wnm.links_ subsection::::
+
+_href_ and _rel_:: Within the _links_ array, href and rel must be in the WIS2 Notification Message.
+Removing any of those values will make the Notification Message not compliant.
+
+Changeable options must be in _links[0]_.
+
+This is compliant: 
+```
+"links": [
+    {
+    "href": "https://www.example.org/random",
+    "rel": "canonical"
+    }
+]
+```
+
+Whereas these are not:
+
+```
+"links": [
+    {
+    "href": "https://www.example.org/random",
+    "rel": false
+    }
+]
+```
+
+```
+"links": [ 
+    {
+    "href": false,
+    "rel": "canonical"
+    }
+]
+```
+
+Note that :
+
+```
+"links": [
+    {
+    "href": "some_random_string",
+    "rel": "a_random_rel"
+    }
+]
+```
+
+is compliant.
+
+Nevertheless, the Global Cache receiving this WIS2 Notification Message will not process the message as `some_random_string` if is not a valid link.
+
+Depending on the test scenario used, changing or removing the _links_ and _rel_ cover different use cases:
+
+For _wnmtest_, it is possible, by using `"href": false` and/or `"rel": false` to create an invalid message. By default, _href_ (not pointing to any file though) and _rel_ will be included.
+
+For _datatest_, it is possible to either include an invalid _href_, so that the download of the file will fail. Or to include a valid _href_ pointing to a file stored on an accessible server.
+
+For _metadatastest_, it is possible to include a _href_ pointing to a metadata file stored, for example, on github to test the behaviour of the Global Discovery Catalog with valid or invalid metadata records.
+
+Apply to:  _wnmtest, datatest, metadatatest_ scenario
+Optional: If nothing is provided, _rel_ will always be canonical and _href_ will be a valid URL. In the case of _datatest_, the URL will be pointing to a file containing a random stream of bytes.
+
+
+_length_:: Within the _links_ array, length COULD be in the WIS2 Notification Message. This represent the size of the file to download.
+
+```
+"links": [
+    {
+    "length": false
+    }
+]
+```
+
+Setting _length_ as false will force the value of the file size to be incorrect. The Global Cache shall discard the download as the result is deemed incorrect.
+
+Apply to:  _datatest_ scenario
+Optional: If nothing is provided, _length_ will always be a correct value if it is possible to compute it.
+For external files see _href_ above, no lenght will be provided.
+
+Publishing triggering messages::
+
+It is suggested to use mqttx cli (available at https://mqttx.app/cli). mqttx cli allow to store the details to connect to the central MQTT broker in a configuration file and the trigger in a json file.
+
+By using `mqttx init`, see https://mqttx.app/docs/cli/get-started#initializing-configuration, it is possible to store the connection details in a file.
+After having used the `init`, the following file will be created:
+
+```
+[default]
+output = text
+
+[mqtt]
+host = xxxxxxxx.ala.eu-central-1.emqxsl.com
+port = 8883
+protocol = mqtts
+max_reconnect_times = 5
+username = configuration
+password = ********
+```
+
+When done, it will then possible to run:
+
+```
+mqttx pub --file-read no_id.json -t config/a/wis2/trigger
+```
+
+This will publish the message stored in `no_id.json` on the topic `config/a/wis2/trigger`.
+
+The `no_id.json` is:
+
+```
+{
+  "scenario": "wnmtest",
+  "configuration": {
+    "setup": {
+      "centreid": 10,
+      "number": 1
+    },
+    "wnm": {
+      "id": false
+    }
+  }
+}
+```
+
+This will instruct the WIS2 Node with centre_id 10, to publish one message without `id` (therefore the Global Broker should discard the message).
+
+Default configuration file::
+
+```
+generator:
+    delay: 100 // Messages will be published every 100ms
+    size_min: 512 // Minimal size of the generated file
+    size_max: 35000000 // Maximal size of the generated file
+    skew: 10 // How the repartition of the file size should look like
+    centre_id: 10 // the centre_id will always be io-wis2dev-X-test - X = 10 here
+    cache_large_files: false // Should large files be cached 
+    cache_size_max: 1000000 // What is a large file in bytes
+    store_duration: 900 // Management variable 
+    embed_data: true // Should small files be part of the notification message
+    embed_size_max: 4096 // Maximal size to provide content in the notification message
+    configuration_path: /storage/configuration/ // Management variable 
+    download_host: https://www.example.com 
+    download_path: /storage/files/ // Management variable 
+    data:
+    - dataset1:
+        discipline: weather
+        sub_topic: surface-based-observations/synop
+        data_policy: core
+        weight: 100
+    - dataset3:
+        discipline: ocean
+        sub_topic: space-based-observations/experimental
+        data_policy: core
+        weight: 15
+```
+
