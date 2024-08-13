@@ -164,7 +164,7 @@ As defined in the _Manual on WIS - part 2_ the format of the WIS2 Notification M
 }
 ```
 
-== The scenario
+The scenario::
 
 The tool includes seven possible scenario:
 
