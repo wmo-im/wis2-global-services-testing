@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-08-13</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-08-15</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -1102,13 +1102,13 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="ulist">
 <ul>
 <li>
-<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 10 tests system (<strong>io-wis2dev-11-test</strong> to <strong>io-wis2dev-20-test</strong>)</p>
 </li>
 <li>
-<p>Global Broker MQTT connection string to 2 WIS2 Nodes (with the following centre_id: io-wis2dev-10-test and io-wis2dev-11-test)</p>
+<p>Global Broker MQTT connection string to 2 WIS2 Nodes (with the following centre_id: io-wis2dev-11-test and io-wis2dev-12-test)</p>
 </li>
 <li>
-<p>MQTT Test Client subscribed to <strong>origin/a/wis2/io-wis2dev-10-test/#</strong> and <strong>origin/a/wis2/io-wis2dev-11-test/</strong></p>
+<p>MQTT Test Client subscribed to <strong>origin/a/wis2/io-wis2dev-11-test/#</strong> and <strong>origin/a/wis2/io-wis2dev-20-test/</strong></p>
 </li>
 </ul>
 </div>
@@ -1118,10 +1118,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>WIS2Node <em>io-wis2dev-10-test</em> publish on its local broker <strong>ten</strong> messages with a pre-defined id (using the UUID format) on topic <strong>origin/a/wis2/io-wis2dev-10-test/core/data/weather/surface-based-observation/synop</strong></p>
+<p>WIS2Node <em>io-wis2dev-11-test</em> publish on its local broker <strong>ten</strong> messages with a pre-defined id (using the UUID format) on topic <strong>origin/a/wis2/io-wis2dev-11-test/core/data/weather/surface-based-observation/synop</strong></p>
 </li>
 <li>
-<p>WIS2Node <em>io-wis2dev-10-test</em> publish <strong>ten</strong> message with the same id (same id as above) on topic <strong>origin/a/io-wis2dev-11-test/test2/core/data/weather/surface-based-observation/synop</strong></p>
+<p>WIS2Node <em>io-wis2dev-12-test</em> publish <strong>ten</strong> message with the same id (same id as above) on topic <strong>origin/a/io-wis2dev-12-test/core/data/weather/surface-based-observation/synop</strong></p>
 </li>
 </ol>
 </div>
@@ -1140,7 +1140,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <p>Increments <strong>wmo_wis2_gb_messages_subscribed_total</strong> by 10 on both centre_id</p>
 </li>
 <li>
-<p>Increments <strong>wmo_wis2_gb_messages_published_total</strong> by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-10-test or io-wis2dev-11-test)</p>
+<p>Increments <strong>wmo_wis2_gb_messages_published_total</strong> by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-11-test or io-wis2dev-12-test)</p>
 </li>
 <li>
 <p>If both statements are true, the test passes. Otherwise, the test fails.</p>
@@ -1163,10 +1163,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="ulist">
 <ul>
 <li>
-<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 10 tests system (<strong>io-wis2dev-11-test</strong> to <strong>io-wis2dev-20-test</strong>)</p>
 </li>
 <li>
-<p>Global Broker MQTT connection string to <strong>io-wis2dev-10-test</strong></p>
+<p>Global Broker MQTT connection string to <strong>io-wis2dev-11-test</strong></p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1179,7 +1179,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2Node  <em>io-wis2dev-10-test</em> publish a valid message on topic Eg</p>
+<p>Have WIS2Node  <em>io-wis2dev-11-test</em> publish a valid message on topic Eg</p>
 </li>
 </ol>
 </div>
@@ -1212,10 +1212,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="ulist">
 <ul>
 <li>
-<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-11-test</strong> to <strong>io-wis2dev-20-test</strong>)</p>
 </li>
 <li>
-<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-11-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1228,7 +1228,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2Node <strong>io-wis2dev-10-test</strong> publish <strong>valid</strong> messages on <strong>valid</strong> topics hierarchy (one message per tested valid topic)</p>
+<p>Have WIS2Node <strong>io-wis2dev-11-test</strong> publish <strong>valid</strong> messages on <strong>valid</strong> topics hierarchy (one message per tested valid topic)</p>
 </li>
 </ol>
 </div>
@@ -1270,10 +1270,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="ulist">
 <ul>
 <li>
-<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-11-test</strong> to <strong>io-wis2dev-20-test</strong>)</p>
 </li>
 <li>
-<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-11-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1286,7 +1286,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2 Node <strong>io-wis2dev-10-test</strong> publish 10 <strong>valid</strong> messages on 10 <strong>different</strong> and <strong>invalid</strong> topics</p>
+<p>Have WIS2 Node <strong>io-wis2dev-11-test</strong> publish 10 <strong>valid</strong> messages on 10 <strong>different</strong> and <strong>invalid</strong> topics</p>
 </li>
 </ol>
 </div>
@@ -1328,10 +1328,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="ulist">
 <ul>
 <li>
-<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-11-test</strong> to <strong>io-wis2dev-20-test</strong>)</p>
 </li>
 <li>
-<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-11-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1344,10 +1344,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2 Node <strong>io-wis2dev-10-test</strong> publish 10 <strong>valid</strong> messages on 10 <strong>different</strong> topics, and no metadata exists for any topic used.</p>
+<p>Have WIS2 Node <strong>io-wis2dev-11-test</strong> publish 10 <strong>valid</strong> messages on 10 <strong>different</strong> topics, and no metadata exists for any topic used.</p>
 </li>
 <li>
-<p>e.g Publish on <strong>origin/a/wis2/ <em>io-wis2dev-10-test</em>/core/data/weather/surface-based-observation/synop</strong> and WIS2 Node <strong>io-wis2dev-10-test</strong> has not published a metadata record for the synop.</p>
+<p>e.g Publish on <strong>origin/a/wis2/<em>io-wis2dev-11-test</em>/core/data/weather/surface-based-observation/synop</strong> and WIS2 Node <strong>io-wis2dev-11-test</strong> has not published a metadata record for the synop.</p>
 </li>
 </ol>
 </div>
@@ -1389,10 +1389,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-10-test</strong> to <strong>io-wis2dev-14-test</strong>)</p>
+<p>The container <a href="https://hub.docker.com/r/golfvert/fakewis2node" class="bare">https://hub.docker.com/r/golfvert/fakewis2node</a> deployed on 5 tests system (<strong>io-wis2dev-11-test</strong> to <strong>io-wis2dev-20-test</strong>)</p>
 </li>
 <li>
-<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-10-test</strong>)</p>
+<p>Global Broker MQTT connection string to a WIS2 Nodes (<strong>io-wis2dev-11-test</strong>)</p>
 </li>
 <li>
 <p>MQTT Test Client</p>
@@ -1405,7 +1405,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Have WIS2 Node <strong>io-wis2dev-10-test</strong> publish 10 <strong>invalid</strong> messages on 10 <strong>valid</strong> topics</p>
+<p>Have WIS2 Node <strong>io-wis2dev-11-test</strong> publish 10 <strong>invalid</strong> messages on 10 <strong>valid</strong> topics</p>
 </li>
 <li>
 <p>All mandatory fields of the WIS2 Notification Messages must be tested</p>
@@ -4633,7 +4633,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-08-13 12:57:19 UTC
+Last updated 2024-08-15 15:22:40 UTC
 </div>
 </div>
 </body>
