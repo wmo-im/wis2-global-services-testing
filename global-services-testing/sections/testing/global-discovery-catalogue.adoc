@@ -2,6 +2,14 @@
 
 === Global Discovery Catalogue Service testing
 
+==== Entering the test environment
+
+The GDC implementation under test (IUT) is required to enter the test environment with the following state:
+
+- empty metadata repository (0 records)
+- empty metrics endpoint
+- empty / non-existent metadata archive zipfile
+
 ==== Test setup
 
 The GDC test setup consists of the following:
@@ -331,3 +339,12 @@ Validate that a GDC is able to process WCMP2 metadata in a timely manner.
 On successful completion:
 
 * all WCMP2 records should be processed and published in 5 minutes
+
+==== Exiting the test environment
+
+The GDC implementation under test (IUT) exits the test environment with the following state:
+
+- restoration of resources at state prior to entry:
+  - metadata repository
+  - metrics endpoint
+  - metadata archive zipfile
