@@ -1,0 +1,23 @@
+---
+#- hosts: all
+#  gather_facts: no
+#  become: true
+#  become_method: sudo
+#  tasks:
+#    - name: Wait up for all target connections to become reachable/usable
+#      wait_for_connection:
+#        timeout: 10
+#  pre_tasks:
+#    - name: Verify Ansible version
+#      assert:
+#        that: "ansible_version.full is version_compare('2.11', '>=')"
+#        msg: >
+#          "Ansible minimum version not met"
+
+- hosts: wis2datanodes
+  become: false
+  become_method: sudo
+  gather_facts: yes
+  strategy: linear
+  roles:
+     - wis2-data-nodes-remove

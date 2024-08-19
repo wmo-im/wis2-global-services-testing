@@ -9,26 +9,47 @@
 
 # INSTALL DOCKER INSTEAD OF PODMAN
 - name: remove podman rpms
+  become: true
   ansible.builtin.dnf:
     name: podman,podman-docker,podman-plugins,podman-catatonit,podman-gvproxy,containers-common,'@container-tools'
     state: absent
   when: ansible_os_family == 'RedHat'
 
-- name: add docker repository
+- name: add docker repository for Rocky 8
+  become: true
   ansible.builtin.yum_repository:
     name: docker-ce
     description: docker-ce
     baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat'  and ansible_distribution_major_version|int == 8
 
-- name: install docker rpms
+- name: add docker repository for Rocky 9
+  become: true
+  shell: |
+    dnf install -y yum-utils
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: ansible_os_family == 'RedHat'  and ansible_distribution_major_version|int == 9
+
+- name: install docker rpms for Rocky 8
+  become: true
   ansible.builtin.dnf:
     name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
     disable_gpg_check: yes
     state: present
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 8
+
+- name: install docker rpms for Rocky 9
+  become: true
+  ansible.builtin.dnf:
+    #    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
+    name: docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin,python3-setuptools
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 9
+
 
 - name: Start and enable docker
+  become: true
   ansible.builtin.service:
     name: docker
     state: started
@@ -36,10 +57,10 @@
 
 - name: create directory
   ansible.builtin.file:
-    path: ./wis2-traffic-generator
+    path: "{{ item }}"
     state: directory
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+#    owner: "{{ ansible_user }}"
+#    group: "{{ ansible_user }}"
   loop:
   - $HOME/wis2-traffic-generator
   - $HOME/mosquitto
@@ -75,12 +96,18 @@
     line: "        - CENTRE_ID={{ centre_id_min_02 }} # FOR CONTAINER02"
 
 - name: Add the ansible user to docker group
+  become: true
   ansible.builtin.user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
 
+- name: Reset ssh connection to allow user changes to affect ansible user
+  ansible.builtin.meta:
+    reset_connection
+
 - name: Make sure wis2bridge docker network exists
+  become: true
   docker_network:
     name: wis2bridge
 

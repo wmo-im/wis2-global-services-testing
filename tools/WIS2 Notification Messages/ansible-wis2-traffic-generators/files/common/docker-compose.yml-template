@@ -2,7 +2,7 @@ version: '3.8'
 services:
     wis2nodebench1:
       container_name: wis2nodebench1
-      image: golfvert/benchmarkwis2gb:1.0.1
+      image: golfvert/benchmarkwis2gb:2.0.2
       environment:
         - TZ=Europe/Paris
         - MQTT_CONFIG_BROKER=
@@ -20,7 +20,7 @@ services:
       restart: unless-stopped
     wis2nodebench2:
       container_name: wis2nodebench2
-      image: golfvert/benchmarkwis2gb:1.0.1
+      image: golfvert/benchmarkwis2gb:2.0.8
       environment:
         - TZ=Europe/Paris
         - MQTT_CONFIG_BROKER=

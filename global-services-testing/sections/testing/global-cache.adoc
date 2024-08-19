@@ -1,8 +1,8 @@
 [[global-cache-testing]]
 
-== Global Cache Service testing
+=== Global Cache Service testing
 
-=== Functional Tests
+==== Functional Tests
 
 ===== 1. MQTT Broker Connectivity
 
@@ -407,7 +407,7 @@ A Global Cache should treat notification messages with the same data item identi
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-=== Performance tests
+==== Performance tests
 
 ===== WIS2 Notification Processing Rate
 
@@ -494,7 +494,7 @@ The test is considered successful if the following conditions are met:
 * While the download time can be used to establish a baseline, it is highly dependent on the network and server conditions of the test environment and should not be used as a pass/fail criteria.
 
 
-=== Implicit tests
+==== Implicit tests
 These are tests that are to be verified by the individual implementations as they represent critical requirements but would be difficult to test in a generic way.
 
 ===== Valid TLS/SSL certificate

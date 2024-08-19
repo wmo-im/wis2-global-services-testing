@@ -1,26 +1,42 @@
 # INSTALL DOCKER INSTEAD OF PODMAN
 - name: remove podman rpms
-  become: True
+  become: true
   ansible.builtin.dnf:
     name: podman,podman-docker,podman-plugins,podman-catatonit,podman-gvproxy,containers-common,'@container-tools'
     state: absent
   when: ansible_os_family == 'RedHat'
 
-- name: add docker repository
-  become: True
+- name: add docker repository for Rocky 8
+  become: true
   ansible.builtin.yum_repository:
     name: docker-ce
     description: docker-ce
     baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat'  and ansible_distribution_major_version|int == 8
 
-- name: install docker rpms
-  become: True
+- name: add docker repository for Rocky 9
+  become: true
+  shell: |
+    dnf install -y yum-utils
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: ansible_os_family == 'RedHat'  and ansible_distribution_major_version|int == 9
+
+- name: install docker rpms for Rocky 8
+  become: true
   ansible.builtin.dnf:
-    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
+    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools,vim
     disable_gpg_check: yes
     state: present
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 8
+
+- name: install needed rpms for Rocky 9
+  become: true
+  ansible.builtin.dnf:
+    #    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
+    name: docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin,python3-setuptools,vim,firewalld,python-firewall
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 9
 
 - name: Start and enable docker
   become: True
@@ -29,67 +45,82 @@
     state: started
     enabled: yes
 
-- name: copy directory content wis2node_data_gen
-  #copy:
-  ansible.posix.synchronize:
-    src: ./files/common/wis2node_data_gen
-    dest: .
-      #    owner: "{{ ansible_user }}"
-      #    group: "{{ ansible_user }}"
-      #
-- name: copy directory content for user
-  #copy:
-  ansible.posix.synchronize:
-    src: ./files/common/wis2node_data_gen
-    dest: .
-      #    owner: "{{ ansible_user }}"
-      #    group: "{{ ansible_user }}"
-      #
-
-- name: inform playbook is not complete
-  ansible.builtin.debug:
-    msg:
-      - "Playbook not yet ready for complete deployment"
-
-- meta: end_play
-
-- name: copy Docker Compose files
-  copy:
-    src: "{{ item }}"
-    dest: ./wis2-traffic-generator/
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  loop:
-  - ./files/common/docker-compose.yml
-
-- name: modify min value container01
-  lineinfile: 
-    dest: ./wis2-traffic-generator/docker-compose.yml
-    #          - CENTRE_ID=120 # FOR CONTAINER01
-    regexp: '^        - CENTRE_ID=(.*) # FOR CONTAINER01.*$'
-    line: "        - CENTRE_ID={{ centre_id_min_01 }} # FOR CONTAINER01"
-
-- name: modify min value container02
-  lineinfile: 
-    dest: ./wis2-traffic-generator/docker-compose.yml
-    #          - CENTRE_ID=120 # FOR CONTAINER02
-    regexp: '^        - CENTRE_ID=(.*) # FOR CONTAINER02.*$'
-    line: "        - CENTRE_ID={{ centre_id_min_02 }} # FOR CONTAINER02"
-
 - name: Add the ansible user to docker group
+  become: True
   ansible.builtin.user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
 
-- name: Make sure wis2bridge docker network exists
-  docker_network:
-    name: wis2bridge
+- name: copy directory content wis2-data-generator 2
+#  become: True
+  remote_user: "{{ ansible_user }}"
+  ansible.posix.synchronize:
+    times: false
+    src: ./files/common/wis2-data-generator
+    dest: .
 
-# use files parameter to use multiple docker-compose.yml files
-- name: deploy docker compose stack
+#- name: Make sure traefik docker network exists
+#  docker_network:
+#    name: traefik
+#    internal: no
+#
+#- name: inform playbook is not complete
+#  ansible.builtin.debug:
+#    msg:
+#      - "Playbook not yet ready for complete deployment"
+
+- name: modify value for centre_id
+#  become: True
+  lineinfile: 
+    dest: ./wis2-data-generator/wis2node/configuration/configuration.yml
+    regexp: '^    centre_id:'
+    line:    '    centre_id: {{ centre_id }}' 
+
+- name: modify value for download_host
+#  become: True
+  lineinfile: 
+    dest: ./wis2-data-generator/wis2node/configuration/configuration.yml
+    regexp: '^    download_host:'
+    line:    '    download_host: https://{{ ansible_host }}' 
+
+## use files parameter to use multiple docker-compose.yml files
+#- name: deploy docker compose stack
+#  remote_user: "{{ ansible_user }}"
+#  become: False
+#  community.docker.docker_compose_v2:
+#    files:
+#    - traefik-docker-compose.yml
+#    - caddy-docker-compose.yml
+#    - redis-docker-compose.yml
+##    - mosquitto-docker-compose.yml
+#    - wis2node-docker-compose.yml
+#    project_src: /home/rocky/wis2-data-generator/compose/
+#    state: present
+#    wait: true
+#
+- name: deploy docker compose stack - ordered
   remote_user: "{{ ansible_user }}"
   become: False
   community.docker.docker_compose_v2:
-    project_src: /home/rocky/wis2-traffic-generator
+    files:
+    - "{{ item }}"
+    project_src: /home/rocky/wis2-data-generator/compose/
     state: present
+    wait: true
+  with_items:
+    - traefik-docker-compose.yml
+    - caddy-docker-compose.yml
+    - redis-docker-compose.yml
+#    - mosquitto-docker-compose.yml
+    - wis2node-docker-compose.yml
+
+
+
+
+- name: permit traffic in default zone for https service
+  become: True
+  ansible.posix.firewalld:
+    service: https
+    permanent: true
+    state: enabled

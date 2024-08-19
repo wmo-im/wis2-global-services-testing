@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  redis:
+    container_name: redis
+    image: redis:latest
+    command: redis-server --save 20 1
+    networks:
+      - wis2bridge
+    ports:
+      - 6379:6379
+    volumes:
+      - /home/rocky/wis2-data-generator/redis:/data
+networks:
+    wis2bridge:
+      external: true
