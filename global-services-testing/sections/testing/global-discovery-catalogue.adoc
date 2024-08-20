@@ -347,4 +347,4 @@ The GDC implementation under test (IUT) exits the test environment with the foll
 - restoration of resources at state prior to entry:
   - metadata repository
   - metrics endpoint
-  - metadata archive zipfile
+  - metadata archive zipfile (create new archive file or restore the backed-up file)
