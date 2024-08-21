@@ -2,12 +2,16 @@
 
 === Global Discovery Catalogue Service testing
 
+==== Preparations for the test
+
+- backup metadata repository
+- metrics can be backed up, but as they are also rebuilt after a service restart, no backup is necessary here
+
 ==== Entering the test environment
 
 The GDC implementation under test (IUT) is required to enter the test environment with the following state:
 
 - empty metadata repository (0 records)
-- empty metrics endpoint
 - empty / non-existent metadata archive zipfile
 
 ==== Test setup
