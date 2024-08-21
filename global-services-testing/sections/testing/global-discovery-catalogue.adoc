@@ -2,6 +2,18 @@
 
 === Global Discovery Catalogue Service testing
 
+==== Preparations for the test
+
+- backup metadata repository
+- metrics can be backed up, but as they are also rebuilt after a service restart, no backup is necessary here
+
+==== Entering the test environment
+
+The GDC implementation under test (IUT) is required to enter the test environment with the following state:
+
+- empty metadata repository (0 records)
+- empty / non-existent metadata archive zipfile
+
 ==== Test setup
 
 The GDC test setup consists of the following:
@@ -331,3 +343,12 @@ Validate that a GDC is able to process WCMP2 metadata in a timely manner.
 On successful completion:
 
 * all WCMP2 records should be processed and published in 5 minutes
+
+==== Exiting the test environment
+
+The GDC implementation under test (IUT) exits the test environment with the following state:
+
+- restoration of resources at state prior to entry:
+  - metadata repository
+  - metrics endpoint
+  - metadata archive zipfile (create new archive file or restore from backed up file)
