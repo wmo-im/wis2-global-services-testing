@@ -2,7 +2,45 @@
 
 === Global Cache Service testing
 
-==== Functional Tests
+[[global-cache-setup-teardown]]
+
+=== Setup and Teardown
+
+==== Setup
+
+Before running the pytest tests, ensure the following setup steps are completed:
+
+1. **Subscribe to the dev/test Global Broker**:
+    - Ensure the Global Cache is subscribed to the dev/test Global Broker (`gb.wis2dev.io`).
+    - The Global Cache should be subscribed to the following topics:
+        - `origin/a/wis2/+/data/#`
+        - `cache/a/wis2/+/data/#`
+        - `origin/a/wis2/+/metadata/#`
+        - `cache/a/wis2/+/metadata/#`
+
+2. **GB Subscription to the GC's Local MQTT Broker**:
+    - Ensure the dev/test Global Broker is subscribed to the GC's local MQTT broker.
+3. Remove other subscriptions to prod GB's.
+    - Ensure that the Global Cache is not subscribed to any other Global Broker except the dev/test Global Broker.
+
+4. **Clear the Metrics**:
+    - Clear any existing metrics to ensure a clean state for the tests.
+
+==== Teardown
+
+After running the pytest tests, ensure the following teardown steps are completed:
+
+1. **Unsubscribe from the dev/test Global Broker**:
+    - Unsubscribe the Global Cache from the dev/test Global Broker on the `gb.wis2dev.io` host.
+
+2. **Unsubscribe from the GC's Local MQTT Broker**:
+    - Unsubscribe the dev/test Global Broker from the GC's local MQTT broker.
+
+3. **Reset the Metrics**:
+    - Reset the metrics to their default state to avoid any interference with future tests.
+    - This can typically be done by restarting the Global Cache service or using a specific API endpoint if available.
+
+=== Functional Tests
 
 ===== 1. MQTT Broker Connectivity
 
