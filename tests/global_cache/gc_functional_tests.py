@@ -129,9 +129,9 @@ def test_3_mqtt_broker_message_flow():
             "setup": {
                 "centreid_min": 15,
                 "centreid_max": 15,
-                "number": 5,
-                "size_min": 128,
-                "size_max": 512
+                "number": 1,
+                "size_min": 10000,
+                "size_max": 11000
             },
             "wnm": {
                 "properties": {
@@ -180,9 +180,8 @@ def test_3_mqtt_broker_message_flow():
         is_valid, errors = validate_message(cache_msg)
         assert is_valid is True
         # verification
-        # todo - verify_data is not working as expected
-        # verified = verify_data(cache_msg, verify_certs=False)
-        # assert verified is True
+        verified = verify_data(cache_msg, verify_certs=False)
+        assert verified is True
 
 def test_4_cache_false_directive():
     print("\n4. Cache False Directive")
@@ -201,7 +200,7 @@ def test_4_cache_false_directive():
                 "centreid_max": 15,
                 "number": 5,
                 "size_min": 16,
-                "size_max": 128
+                "size_max": 128000
             },
             "wnm": {
                 "properties": {
@@ -221,7 +220,7 @@ def test_4_cache_false_directive():
     # sent_messages.append(wnm[1])
     # muid = "|".join([wnm[1]['properties']['data_id'], wnm[1]['properties']['pubtime']])
     # print(f"Published message with muid: {muid}")
-    time.sleep(10)  # Wait for messages
+    time.sleep(5)  # Wait for messages
     origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
     cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
     sub_client.loop_stop()
@@ -259,3 +258,69 @@ def test_4_cache_false_directive():
             wmo_wis2_gc_dataserver_last_download_timestamp_seconds (unchanged)
             wmo_wis2_gc_no_cache_total (+=1 for each WNM)
         """
+
+
+def test_5_source_download_failure():
+    print("\n5. Source Download Failure")
+    # generate some random id's for the messages
+    sub_client = setup_mqtt_client(mqtt_broker_out)
+    for sub_topic in sub_topics:
+        sub_client.subscribe(sub_topic, qos=1)
+        print(f"Subscribed to topic: {sub_topic}")
+    test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    test_pub_topic = f"config/a/wis2/{test_centre}"
+    test_data_id = f"somedataid1234_{test_centre}"
+    test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+
+    # Prepare WNM with invalid data download link
+    wnm_dataset_config = {
+        "scenario": "wnmtest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 11,
+                "centreid_max": 11,
+                "number": 1,
+                "size_min": 128,
+                "size_max": 256
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                    # "pubtime": test_dt,
+                    "links": [
+                        {
+                            "href": "https://www.example.org/random",
+                            "rel": "canonical"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    print(wnm_dataset_config)
+    pub_client = MQTTPubSubClient(mqtt_broker_in)
+    # Publish the message
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_dataset_config))
+    time.sleep(10)  # Wait for messages
+
+    # Evaluate
+    origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
+    cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+    sub_client.loop_stop()
+    sub_client.disconnect()
+
+    # Origin Messages
+    assert len(origin_msgs) > 0
+    # No messages should be published on the cache/a/wis2/# topic
+    for origin_msg in origin_msgs:
+        # match based on data_id and pubtime
+        cache_msg = [m for m in cache_msgs if
+                     m['properties']['data_id'] == origin_msg['properties']['data_id'] and m['properties'][
+                         'pubtime'] == origin_msg['properties']['pubtime']]
+        assert len(cache_msg) == 0
+
+    # GC Metrics
+    # Assuming a function get_gc_metrics() that retrieves the GC metrics
+    # metrics = get_gc_metrics()
+    # assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 0
+    # assert metrics['wmo_wis2_gc_downloaded_errors_total'] > 0
