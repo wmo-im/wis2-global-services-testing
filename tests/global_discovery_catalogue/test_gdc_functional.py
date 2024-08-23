@@ -44,7 +44,7 @@ def _on_subscribe(client, userdata, mid, reason_codes, properties):
     client.subscribed_flag = True
 
 
-def test_gb_subscription(gb_client):
+def test_global_broker_connection_and_subscription(gb_client):
     assert gb_client.conn.is_connected
     gb_client.conn.subscribed_flag = False
     gb_client.conn.on_subscribe = _on_subscribe
@@ -55,3 +55,7 @@ def test_gb_subscription(gb_client):
     assert gb_client.conn.subscribed_flag
     gb_client.conn.loop_stop()
     gb_client.conn.disconnect()
+
+
+def test_notification_and_metadata_processing_success(gb_client):
+    pass
