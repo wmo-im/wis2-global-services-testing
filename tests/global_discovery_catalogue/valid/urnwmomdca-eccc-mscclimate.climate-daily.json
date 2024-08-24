@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:ca-eccc-msc:climate.climate-daily",
+    "id": "urn:wmo:md:io-wis2dev-11-test:climate.climate-daily",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
@@ -126,7 +126,7 @@
         {
             "rel": "items",
             "href": "mqtts://example.org",
-            "channel": "origin/a/wis2/ca-eccc-msc/data/core/climate",
+            "channel": "origin/a/wis2/io-wis2dev-11-test/data/core/climate",
             "type": "application/geo+json",
             "title": "Data notifications"
         }

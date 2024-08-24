@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:ca-eccc-msc:weather.observations.swob-realtime",
+    "id": "urn:wmo:md:io-wis2dev-11-test:weather.observations.swob-realtime",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
@@ -158,7 +158,7 @@
         {
             "rel": "items",
             "href": "mqtts://everyone:everyone@globalbroker.meteo.fr:8883",
-            "channel": "origin/a/wis2/ca-eccc-msc/data/core/weather/surface-based-observations/synop",
+            "channel": "origin/a/wis2/io-wis2dev-11-test/data/core/weather/surface-based-observations/synop",
             "type": "application/geo+json",
             "title": "Data notifications"
         }

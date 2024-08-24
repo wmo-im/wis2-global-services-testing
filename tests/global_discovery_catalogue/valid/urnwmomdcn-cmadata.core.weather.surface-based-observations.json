@@ -1,5 +1,5 @@
 {
-	"id":"urn:wmo:md:cn-cma:data.core.weather.surface-based-observations",
+	"id":"urn:wmo:md:io-wis2dev-11-test:data.core.weather.surface-based-observations",
 	"conformsTo":[
 		"http://wis.wmo.int/spec/wcmp/2/conf/core"
 	],
@@ -115,7 +115,7 @@
 		{
             "rel": "items",
             "href": "mqtts://gb.wis.cma.cn:1883",
-            "channel": "origin/a/wis2/cn-cma/data/core/weather/surface-based-observations/synop",
+            "channel": "origin/a/wis2/io-wis2dev-11-test/data/core/weather/surface-based-observations/synop",
             "type": "application/geo+json",
             "title": "Data notifications"
         },

@@ -29,6 +29,9 @@ import pytest
 from pywis_pubsub.mqtt import MQTTPubSubClient
 import requests
 
+if os.path.exists('secrets.env'):
+    load_dotenv('secrets.env')
+
 load_dotenv('default.env')
 
 TOPIC = 'cache/a/wis2/+/metadata/#'
@@ -39,11 +42,11 @@ TOPIC = 'cache/a/wis2/+/metadata/#'
 @pytest.fixture
 def gb_client():
     options = {
-        'client_id': 'wis2-gdc-test-runner',
-        'received_messages': []
+        'client_id': 'wis2-gdc-test-runner'
     }
 
-    return MQTTPubSubClient(os.environ['GB'], options)
+    client = MQTTPubSubClient(os.environ['GB'], options)
+    return client
 
 
 def subscribe_trigger_client():
@@ -58,10 +61,6 @@ def subscribe_trigger_client():
 
 def _on_subscribe(client, userdata, mid, reason_codes, properties):
     client.subscribed_flag = True
-
-
-def _on_message(client, userdata, message):
-    client._userdata['received_messages'].append(message)
 
 
 def _disconnect_gb_client(gb_client_):
@@ -79,19 +78,16 @@ def _subscribe_gb_client(gb_client_):
     return gb_client_.conn.subscribe(TOPIC)
 
 
-def _publish_message(wcmp2_file, format_='trigger'):
+def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger'):
 
     base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
-    md = None
-
-    with open(wcmp2_file) as fh:
-        md = fh.read()
 
     if format_ == 'trigger':
         message = {
             'scenario': 'metadatatest',
             'configuration': {
                 'setup': {
+                    'cache_a_wis2': 'only',
                     'centreid': 11,
                     'number': 1
                 },
@@ -134,7 +130,10 @@ def test_notification_and_metadata_processing_success(gb_client):
     assert result is mqtt.MQTT_ERR_SUCCESS
     assert gb_client.conn.subscribed_flag
 
-    _publish_message('global_discovery_catalogue/valid/urnwmomdca-eccc-mscweather.observations.swob-realtime.json')
+    _publish_wcmp2_trigger_broker_message('valid/urnwmomdca-eccc-mscweather.observations.swob-realtime.json')
+
+    print("USERDATA", gb_client.userdata)
+    print("USERDATA", gb_client.conn._userdata)
 
     _disconnect_gb_client(gb_client)
 
