@@ -3,3 +3,6 @@ global-services-testing/*.docx
 global-services-testing/*.html
 global-services-testing/*.pdf
 global-services-testing/images/**.bkp
+
+__pycache__
+*.pyc
