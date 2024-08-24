@@ -19,10 +19,10 @@ The GDC implementation under test (IUT) is required to enter the test environmen
 The GDC test setup consists of the following:
 
 * A test data bundle to consist of:
-** 100 valid WCMP2 records
-** 1 broken JSON WCMP2 record
+** 6 valid WCMP2 records
+** 4 broken JSON WCMP2 records
 ** 1 invalid WCMP2 record
-** 102 WNM documents, each of which pointing to the related WCMP2 records
+** 20 WNM documents, each of which pointing to the related WCMP2 records
 ** 1 WNM document specifying a WCMP2 record deletion
 * all WCMP2 records stored on an HTTP server
 * all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing
