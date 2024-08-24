@@ -1,5 +1,5 @@
 {
-	"id":"urn:wmo:md:chn:babj:data.core.weather.surface-based-observations",
+	"id":"urn:wmo:md:cn-cma:data.core.weather.surface-based-observations",
 	"conformsTo":[
 		"http://wis.wmo.int/spec/wcmp/2/conf/core"
 	],
