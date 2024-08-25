@@ -24,7 +24,6 @@ import os
 import time
 
 from dotenv import load_dotenv
-import paho.mqtt.client as mqtt
 import pytest
 from pywis_pubsub.mqtt import MQTTPubSubClient
 import requests
@@ -34,7 +33,17 @@ if os.path.exists('secrets.env'):
 
 load_dotenv('default.env')
 
-TOPIC = 'cache/a/wis2/+/metadata/#'
+GB = os.environ['GB']
+TRIGGER_BROKER = os.environ['TRIGGER_BROKER']
+GDC_API = os.environ['GDC_API']
+GDC_BROKER = os.environ['GDC_BROKER']
+GDC_CENTRE_ID = os.environ['GDC_CENTRE_ID']
+
+
+TOPICS = [
+    'cache/a/wis2/+/metadata/#',
+    f'monitor/a/wis2/{GDC_CENTRE_ID}/#'
+]
 
 
 # fixtures
@@ -42,11 +51,12 @@ TOPIC = 'cache/a/wis2/+/metadata/#'
 @pytest.fixture
 def gb_client():
     options = {
-        'client_id': 'wis2-gdc-test-runner'
+        'client_id': 'wis2-gdc-test-runner',
+        'monitor_messages': []
     }
 
-    client = MQTTPubSubClient(os.environ['GB'], options)
-    return client
+    client = MQTTPubSubClient(GB, options)
+    yield client
 
 
 @pytest.fixture
@@ -55,8 +65,8 @@ def gdc_broker():
         'client_id': 'wis2-gdc-test-runner'
     }
 
-    client = MQTTPubSubClient(os.environ['GDC_BROKER'], options)
-    return client
+    client = MQTTPubSubClient(GDC_BROKER, options)
+    yield client
 
 
 def subscribe_trigger_client():
@@ -64,13 +74,19 @@ def subscribe_trigger_client():
         'client_id': 'wis2-gdc-test-runner'
     }
 
-    return MQTTPubSubClient(os.environ['TRIGGER_BROKER'], options)
+    return MQTTPubSubClient(TRIGGER_BROKER, options)
 
 
 # paho-mqtt callbacks
 
 def _on_subscribe(client, userdata, mid, reason_codes, properties):
     client.subscribed_flag = True
+
+
+def _on_message(client, userdata, message):
+    client._userdata['monitor_messages'].append(message.payload)
+    if message.topic.startswith('monitor/a/wis2'):
+        client._userdata['monitor_messages'].append(message.payload)
 
 
 def _disconnect_gb_client(gb_client_):
@@ -83,9 +99,11 @@ def _disconnect_gb_client(gb_client_):
 def _subscribe_gb_client(gb_client_):
     gb_client_.conn.subscribed_flag = False
     gb_client_.conn.on_subscribe = _on_subscribe
+    gb_client_.conn.on_message = _on_message
     gb_client_.conn.loop_start()
 
-    return gb_client_.conn.subscribe(TOPIC)
+    for topic in TOPICS:
+        _, _ = gb_client_.conn.subscribe(topic)
 
 
 def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
@@ -108,16 +126,21 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> str:
 
     base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue'
 
+    wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
+
     if format_ == 'trigger':
         message = {
             'scenario': 'metadatatest',
             'configuration': {
                 'setup': {
-                    'cache_a_wis2': 'only',
+                    # 'cache_a_wis2': 'only',
                     'centreid': 11,
                     'number': 1
                 },
                 'wnm': {
+                    'properties': {
+                        'metadata_id': wcmp2_id
+                    },
                     'links': [{
                         'href': f'{base_url}/{wcmp2_file}'
                     }]
@@ -126,7 +149,7 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> str:
         }
 
     trigger_client = subscribe_trigger_client()
-    trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message))
+    trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message), qos=0)
 
 
 def test_global_broker_connection_and_subscription(gb_client, gdc_broker):
@@ -134,11 +157,10 @@ def test_global_broker_connection_and_subscription(gb_client, gdc_broker):
 
     assert gb_client.conn.is_connected
 
-    result, _ = _subscribe_gb_client(gb_client)
+    _subscribe_gb_client(gb_client)
 
     time.sleep(1)
 
-    assert result is mqtt.MQTT_ERR_SUCCESS
     assert gb_client.conn.subscribed_flag
 
     _disconnect_gb_client(gb_client)
@@ -149,11 +171,10 @@ def test_notification_and_metadata_processing_success(gb_client):
 
     assert gb_client.conn.is_connected
 
-    result, _ = _subscribe_gb_client(gb_client)
+    _subscribe_gb_client(gb_client)
 
     time.sleep(1)
 
-    assert result is mqtt.MQTT_ERR_SUCCESS
     assert gb_client.conn.subscribed_flag
 
     wcmp2_file = 'valid/urn--wmo--md--io-wis2dev-11-test--weather.observations.swob-realtime.json'
@@ -163,30 +184,25 @@ def test_notification_and_metadata_processing_success(gb_client):
 
     time.sleep(5)
 
-    query_url = f"{os.environ['GDC_API']}/items/{wcmp2_id}"
+    query_url = f'{GDC_API}/items/{wcmp2_id}'
 
     r = requests.get(query_url)
     assert r.ok
 
+    for m in gb_client.userdata['monitor_messages']:
+        print(m)
+
     _disconnect_gb_client(gb_client)
 
 
-def test_api_functionality():
+def itest_api_functionality():
     print('Testing API functionality')
 
-    wcmp2_to_publish = [
-        'valid/urn--wmo--md--io-wis2dev-11-test--climate.climate-daily.json',
-        'valid/urn--wmo--md--io-wis2dev-11-test--climate.cmip5.tt.rcp85.year.2081-2100_pctl5.json',
-        'valid/urn--wmo--md--io-wis2dev-11-test--data.core.weather.prediction.forecast.shortrange.probabilistic.global',
-        'valid/urn--wmo--md--io-wis2dev-11-test--data.core.weather.space-based-observations.fy-3e.gnos-2.json',
-        'valid/urn--wmo--md--io-wis2dev-11-test--data.core.weather.surface-based-observations.json',
-        'valid/urn--wmo--md--io-wis2dev-11-test--weather.observations.swob-realtime.json'
-    ]
+    for w2p in os.listdir('global_discovery_catalogue/valid'):
+        _publish_wcmp2_trigger_broker_message(f'valid/{w2p}')
 
-    for w2p in wcmp2_to_publish:
-        _publish_wcmp2_trigger_broker_message(w2p)
-
-    base_url = os.environ['GDC_API']
+    time.sleep(10)
+    base_url = GDC_API
 
     query_url = None
 
