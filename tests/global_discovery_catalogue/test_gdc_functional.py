@@ -45,28 +45,24 @@ TOPICS = [
     f'monitor/a/wis2/{GDC_CENTRE_ID}/#'
 ]
 
+MONITOR_MESSAGES = {}
 
 # fixtures
 
-@pytest.fixture
+
+@pytest.fixture(scope='session')
 def gb_client():
+    print("INIT")
     options = {
         'client_id': 'wis2-gdc-test-runner',
-        'monitor_messages': []
+        'monitor_messages': {}
     }
 
     client = MQTTPubSubClient(GB, options)
     yield client
 
-
-@pytest.fixture
-def gdc_broker():
-    options = {
-        'client_id': 'wis2-gdc-test-runner'
-    }
-
-    client = MQTTPubSubClient(GDC_BROKER, options)
-    yield client
+    client.conn.loop_stop()
+    client.conn.disconnect()
 
 
 def subscribe_trigger_client():
@@ -84,14 +80,10 @@ def _on_subscribe(client, userdata, mid, reason_codes, properties):
 
 
 def _on_message(client, userdata, message):
-    client._userdata['monitor_messages'].append(message.payload)
     if message.topic.startswith('monitor/a/wis2'):
-        client._userdata['monitor_messages'].append(message.payload)
-
-
-def _disconnect_gb_client(gb_client_):
-    gb_client_.conn.loop_stop()
-    gb_client_.conn.disconnect()
+        report = json.loads(message.payload)
+        report_metadata_id = report['metadata_id']
+        MONITOR_MESSAGES[report_metadata_id] = report
 
 
 # helper functions
@@ -111,7 +103,7 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
     id_ = wcmp2_file
 
     replacers = (
-        ('valid/', ''),
+        ('metadata/valid/', ''),
         ('.json', ''),
         ('--', ':')
     )
@@ -122,7 +114,7 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
     return id_
 
 
-def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> str:
+def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> None:
 
     base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue'
 
@@ -152,7 +144,7 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> str:
     trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message), qos=0)
 
 
-def test_global_broker_connection_and_subscription(gb_client, gdc_broker):
+def test_global_broker_connection_and_subscription(gb_client):
     print('Testing Global Broker connection and subscription')
 
     assert gb_client.conn.is_connected
@@ -162,8 +154,6 @@ def test_global_broker_connection_and_subscription(gb_client, gdc_broker):
     time.sleep(1)
 
     assert gb_client.conn.subscribed_flag
-
-    _disconnect_gb_client(gb_client)
 
 
 def test_notification_and_metadata_processing_success(gb_client):
@@ -177,7 +167,7 @@ def test_notification_and_metadata_processing_success(gb_client):
 
     assert gb_client.conn.subscribed_flag
 
-    wcmp2_file = 'valid/urn--wmo--md--io-wis2dev-11-test--weather.observations.swob-realtime.json'
+    wcmp2_file = 'metadata/valid/urn--wmo--md--io-wis2dev-11-test--weather.observations.swob-realtime.json'
     wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
 
     _publish_wcmp2_trigger_broker_message(wcmp2_file)
@@ -189,19 +179,21 @@ def test_notification_and_metadata_processing_success(gb_client):
     r = requests.get(query_url)
     assert r.ok
 
-    for m in gb_client.userdata['monitor_messages']:
-        print(m)
-
-    _disconnect_gb_client(gb_client)
+    assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['PASSED'] == 12
 
 
-def itest_api_functionality():
+def test_api_functionality(gb_client):
     print('Testing API functionality')
 
-    for w2p in os.listdir('global_discovery_catalogue/valid'):
-        _publish_wcmp2_trigger_broker_message(f'valid/{w2p}')
+    wcmp2_ids = []
+    for w2p in os.listdir('global_discovery_catalogue/metadata/valid'):
+        _publish_wcmp2_trigger_broker_message(f'metadata/valid/{w2p}')
+        wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
+        time.sleep(5)
 
-    time.sleep(10)
+    for wcmp2_id in wcmp2_ids:
+        assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['PASSED'] == 12
+
     base_url = GDC_API
 
     query_url = None
