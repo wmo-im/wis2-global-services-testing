@@ -24,8 +24,20 @@ The GDC test setup consists of the following:
 ** 1 invalid WCMP2 record
 ** 20 WNM documents, each of which pointing to the related WCMP2 records
 ** 1 WNM document specifying a WCMP2 record deletion
-* all WCMP2 records stored on an HTTP server
-* all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing
+* all WCMP2 records stored on an HTTP server (GitHub)
+** documents available at the following location: https://github.com/wmo-im/wis2-global-services-testing/tree/main/tests/global_discovery_catalogue/metadata
+** all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing (raw GitHub) (example: https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue/valid/urnwmomdca-eccc-mscclimate.climate-daily.json)
+** configuring environment variables in `tests/default.env` as follows:
+*** `GB`: the Global Broker to subscribe to for GDC testing
+*** `TRIGGER_BROKER`: the Trigger Broker (in RFC1738 format) to publish WNM configurations to a WIS2 Node
+*** `GDC_API`: URL to GDC API (including collection name)
+*** `GDC_CENTRE_ID`: the centre identifier of the GDC implementation under test (IUT)
+
+Note that you can store secret environments in `tests/secrets.env` and refer to them in `tests/default.env` accordingly.
+
+Given the GDC performs various checks on the centre identifier as part of the incoming topic from the Global Broker as well as the the WCMP2 identrifier check, GDC tests require a fixed WIS2 Node centre id.
+
+The fixed WIS2 Node centre used for GDC tests is `io-wis2dev-11-test`.
 
 ==== Functional tests
 
@@ -342,7 +354,20 @@ Validate that a GDC is able to process WCMP2 metadata in a timely manner.
 
 On successful completion:
 
-* all WCMP2 records should be processed and published in 5 minutes
+* all WCMP2 records should be processed and published in 5 minutes or less.
+
+
+==== Executing the test environment
+
+To execute GDC tests:
+
+[source,bash]
+----
+cd tests
+pip3 install -r requirements.txt
+pytest -s global_discovery_catalogue/test_gdc_functional.py  
+----
+
 
 ==== Exiting the test environment
 
