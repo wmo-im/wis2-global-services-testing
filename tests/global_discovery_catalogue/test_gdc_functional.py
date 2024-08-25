@@ -49,6 +49,16 @@ def gb_client():
     return client
 
 
+@pytest.fixture
+def gdc_broker():
+    options = {
+        'client_id': 'wis2-gdc-test-runner'
+    }
+
+    client = MQTTPubSubClient(os.environ['GDC_BROKER'], options)
+    return client
+
+
 def subscribe_trigger_client():
     options = {
         'client_id': 'wis2-gdc-test-runner'
@@ -78,9 +88,25 @@ def _subscribe_gb_client(gb_client_):
     return gb_client_.conn.subscribe(TOPIC)
 
 
-def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger'):
+def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
 
-    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
+    id_ = wcmp2_file
+
+    replacers = (
+        ('valid/', ''),
+        ('.json', ''),
+        ('--', ':')
+    )
+
+    for replacer in replacers:
+        id_ = id_.replace(*replacer)
+
+    return id_
+
+
+def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> str:
+
+    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue'
 
     if format_ == 'trigger':
         message = {
@@ -103,7 +129,7 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger'):
     trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message))
 
 
-def test_global_broker_connection_and_subscription(gb_client):
+def test_global_broker_connection_and_subscription(gb_client, gdc_broker):
     print('Testing Global Broker connection and subscription')
 
     assert gb_client.conn.is_connected
@@ -130,16 +156,36 @@ def test_notification_and_metadata_processing_success(gb_client):
     assert result is mqtt.MQTT_ERR_SUCCESS
     assert gb_client.conn.subscribed_flag
 
-    _publish_wcmp2_trigger_broker_message('valid/urnwmomdca-eccc-mscweather.observations.swob-realtime.json')
+    wcmp2_file = 'valid/urn--wmo--md--io-wis2dev-11-test--weather.observations.swob-realtime.json'
+    wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
 
-    print("USERDATA", gb_client.userdata)
-    print("USERDATA", gb_client.conn._userdata)
+    _publish_wcmp2_trigger_broker_message(wcmp2_file)
+
+    time.sleep(5)
+
+    query_url = f"{os.environ['GDC_API']}/items/{wcmp2_id}"
+
+    r = requests.get(query_url)
+    assert r.ok
 
     _disconnect_gb_client(gb_client)
 
 
 def test_api_functionality():
     print('Testing API functionality')
+
+    wcmp2_to_publish = [
+        'valid/urn--wmo--md--io-wis2dev-11-test--climate.climate-daily.json',
+        'valid/urn--wmo--md--io-wis2dev-11-test--climate.cmip5.tt.rcp85.year.2081-2100_pctl5.json',
+        'valid/urn--wmo--md--io-wis2dev-11-test--data.core.weather.prediction.forecast.shortrange.probabilistic.global',
+        'valid/urn--wmo--md--io-wis2dev-11-test--data.core.weather.space-based-observations.fy-3e.gnos-2.json',
+        'valid/urn--wmo--md--io-wis2dev-11-test--data.core.weather.surface-based-observations.json',
+        'valid/urn--wmo--md--io-wis2dev-11-test--weather.observations.swob-realtime.json'
+    ]
+
+    for w2p in wcmp2_to_publish:
+        _publish_wcmp2_trigger_broker_message(w2p)
+
     base_url = os.environ['GDC_API']
 
     query_url = None
