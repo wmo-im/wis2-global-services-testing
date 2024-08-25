@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:ca-eccc-msc:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
+    "id": "urn:wmo:md:io-wis2dev-11-test:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
