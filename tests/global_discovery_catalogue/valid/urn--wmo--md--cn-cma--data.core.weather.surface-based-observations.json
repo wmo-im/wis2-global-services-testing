@@ -60,6 +60,45 @@
                 "scheme": "https://codes.wmo.int/wis/topic-hierarchy/earth-system-discipline/"
             }
         ],
+        "contacts": [
+            {
+                "name": "National Meteorological Information Center (NMIC)",
+                "organization": "China Meteorological Administration (CMA)",
+                "phones": [
+                    {
+                        "value": "+8601068409329"
+                    }
+                ],
+                "emails": [
+                    {
+                        "value": "giscadmin@cma.gov.cn"
+                    }
+                ],
+                "addresses": [
+                    {
+                        "deliveryPoint": [
+                            "46 Zhongguancun Nandajie"
+                        ],
+                        "city": "Beijing",
+                        "administrativeArea": "Beijing",
+                        "postalCode": "100081",
+                        "country": "China"
+                    }
+                ],
+                "contactInstructions": "email",
+                "hoursOfService": "0000h - 0900h UTC",
+                "links": [
+                    {
+                        "rel": "canonical",
+                        "type": "text/html",
+                        "href": "https://www.cma.gov.cn/"
+                    }
+                ],
+                "roles": [
+                    "host"
+                ]
+            }
+        ],
         "type": "dataset",
         "language": "en",
         "created": "2023-04-23T00:00:00Z",
@@ -76,7 +115,7 @@
         {
             "rel": "items",
             "href": "mqtts://gb.wis.cma.cn:1883",
-            "channel": "origin/a/wis2/cn-cma/data/core/weather/surface-based-observations/synop",
+            "channel": "origin/a/wis2/io-wis2dev-11-test/data/core/weather/surface-based-observations/synop",
             "type": "application/geo+json",
             "title": "Data notifications"
         },

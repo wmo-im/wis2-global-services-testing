@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:data.core.weather.surface-based-observations",
+    "id": "urn:wmo:md:io-wis2dev-11-test:data.core.weather.space-based-observations.fy-3e.gnos-2",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
@@ -9,36 +9,42 @@
         "coordinates": [
             [
                 [
-                    73.66,
-                    4.0
+                    -180,
+                    -90
                 ],
                 [
-                    73.66,
-                    53.52
+                    -180,
+                    90
                 ],
                 [
-                    135.08,
-                    53.52
+                    180,
+                    90
                 ],
                 [
-                    135.08,
-                    4.0
+                    180,
+                    -90
                 ],
                 [
-                    73.66,
-                    4.0
+                    -180,
+                    -90
                 ]
             ]
         ]
     },
+    "time": {
+        "interval": [
+            "2022-06-01",
+            ".."
+        ]
+    },
     "properties": {
-        "title": "ISMN SYNOP reports - China ; available from BABJ(PEKING (BEIJING)) at 00,06,12,18 .",
-        "description": "Surface weather observations from China",
+        "title": "FY-3E radio occultation",
+        "description": "Radio occultation data, up to about 500 events every day from one navigation system,  globally distribution, various parameter, various level",
         "themes": [
             {
                 "concepts": [
                     {
-                        "id": "weatherObservations"
+                        "id": "satelliteObservation"
                     }
                 ],
                 "scheme": "https://github.com/wmo-im/wcmp-codelists/blob/main/codelists/WMO_CategoryCode.csv"
@@ -88,34 +94,70 @@
                     }
                 ],
                 "roles": [
-                    "pointOfContact",
-                    "distributor"
+                    "host"
+                ]
+            },
+            {
+                "name": "National Satellite Meteorological Center (NSMC)",
+                "organization": "China Meteorological Administration (CMA)",
+                "phones": [
+                    {
+                        "value": "+8601068407027"
+                    }
+                ],
+                "emails": [
+                    {
+                        "value": "liaomi@cma.gov.cn"
+                    }
+                ],
+                "addresses": [
+                    {
+                        "deliveryPoint": [
+                            "46 Zhongguancun Nandajie"
+                        ],
+                        "city": "Beijing",
+                        "administrativeArea": "Beijing",
+                        "postalCode": "100081",
+                        "country": "China"
+                    }
+                ],
+                "contactInstructions": "email",
+                "hoursOfService": "0000h - 0900h UTC",
+                "links": [
+                    {
+                        "rel": "canonical",
+                        "type": "text/html",
+                        "href": "http://data.nsmc.org.cn/portalsite/default.aspx?currentculture=en-US"
+                    }
+                ],
+                "roles": [
+                    "producer"
                 ]
             }
         ],
         "type": "dataset",
         "language": "en",
-        "created": "2023-04-23T00:00:00Z",
+        "created": "2024-03-18T00:00:00Z",
         "updated": "2024-06-10T00:00:00Z",
         "wmo:dataPolicy": "core"
     },
     "links": [
         {
             "rel": "collection",
-            "href": "http://wis2node.wis.cma.cn/oapi/collections/urn:wmo:md:cn-cma:data.core.weather.surface-based-observations",
+            "href": "http://wis2node.wis.cma.cn/oapi/collections/urn:wmo:md:cn-cma:data.core.weather.space-based-observations.fy-3e.gnos-2",
             "type": "OAFeat",
-            "title": "urn:wmo:md:cn-cma:data.core.weather.surface-based-observations"
+            "title": "urn:wmo:md:cn-cma:data.core.weather.space-based-observations.fy-3e.gnos-2"
         },
         {
             "rel": "items",
             "href": "mqtts://gb.wis.cma.cn:1883",
-            "channel": "origin/a/wis2/cn-cma/data/core/weather/surface-based-observations/synop",
+            "channel": "origin/a/wis2/io-wis2dev-11-test/data/core/weather/space-based-observations/fy-3e/gnos-2",
             "type": "application/geo+json",
             "title": "Data notifications"
         },
         {
             "rel": "items",
-            "href": "http://gdc.wis.cma.cn/collections/wis2-discovery-metadata/items/urn:wmo:md:cn-cma:data.core.weather.surface-based-observations?f=json",
+            "href": "http://gdc.wis.cma.cn/collections/wis2-discovery-metadata/items/urn:wmo:md:cn-cma:data.core.weather.space-based-observations.fy-3e.gnos-2?f=json",
             "type": "application/geo+json",
             "title": "CMA GEPS metdata record API"
         }

@@ -4,14 +4,14 @@
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
     "type": "Feature",
-	"geometry": {
-		"type": "Point",
-		"coordinates": [
-		132.9,
-		34.1
-		]
-	},    
-	"time": {
+    "geometry": {
+        "type": "Point",
+        "coordinates": [
+            132.9,
+            34.1
+        ]
+    },
+    "time": {
         "interval": [
             "1840-01-01",
             ".."
@@ -86,11 +86,11 @@
                 ]
             }
         ],
-		"type": "dataset",
+        "type": "dataset",
         "language": "en",
         "created": "2018-01-01T21:11:12Z",
         "updated": "2022-06-17T18:43:39Z",
-		"wmo:dataPolicy": "core"
+        "wmo:dataPolicy": "core"
     },
     "links": [
         {

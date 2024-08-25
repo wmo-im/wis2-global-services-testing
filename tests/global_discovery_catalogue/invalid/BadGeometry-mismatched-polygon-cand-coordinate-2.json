@@ -4,7 +4,13 @@
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
     "type": "Feature",
-    "geometry": null,
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            132.9,
+            34.1
+        ]
+    },
     "time": {
         "interval": [
             "2081-01-01",
@@ -99,9 +105,9 @@
         ],
         "type": "dataset",
         "language": "en",
-		"created": "2018-01-01T12:34:32Z",
+        "created": "2018-01-01T12:34:32Z",
         "updated": "2018-09-06T08:18:23Z",
-		"wmo:dataPolicy": "core"
+        "wmo:dataPolicy": "core"
     },
     "links": [
         {
