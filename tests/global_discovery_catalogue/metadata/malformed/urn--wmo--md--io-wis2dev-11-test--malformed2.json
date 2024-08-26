@@ -3,7 +3,7 @@
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
-    "type": "Feature",
+    type": "Feature",
     "geometry": {
         "type": "Polygon",
         "coordinates": [
