@@ -36,7 +36,6 @@ load_dotenv('default.env')
 GB = os.environ['GB']
 TRIGGER_BROKER = os.environ['TRIGGER_BROKER']
 GDC_API = os.environ['GDC_API']
-GDC_BROKER = os.environ['GDC_BROKER']
 GDC_CENTRE_ID = os.environ['GDC_CENTRE_ID']
 
 
@@ -113,34 +112,35 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
     return id_
 
 
-def _publish_wcmp2_trigger_broker_message(wcmp2_file, format_='trigger') -> None:
+def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None) -> None:
 
     base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue'
 
     wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
 
-    if format_ == 'trigger':
-        message = {
-            'scenario': 'metadatatest',
-            'configuration': {
-                'setup': {
-                    # 'cache_a_wis2': 'only',
-                    'centreid': 11,
-                    'number': 1
+    message = {
+        'scenario': 'metadatatest',
+        'configuration': {
+            'setup': {
+                'centreid': 11,
+                'number': 1
+            },
+            'wnm': {
+                'properties': {
+                    'metadata_id': wcmp2_id
                 },
-                'wnm': {
-                    'properties': {
-                        'metadata_id': wcmp2_id
-                    },
-                    'links': [{
-                        'href': f'{base_url}/{wcmp2_file}'
-                    }]
-                }
+                'links': [{
+                    'href': f'{base_url}/{wcmp2_file}'
+                }]
             }
         }
+    }
+
+    if cache_a_wis2 is not None:
+        message['configuration']['setup']['cache_a_wis2'] = cache_a_wis2
 
     trigger_client = subscribe_trigger_client()
-    trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message), qos=0)
+    trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message))
 
 
 def test_global_broker_connection_and_subscription(gb_client):
@@ -194,7 +194,7 @@ def test_notification_and_metadata_processing_failure_record_not_found(gb_client
 
     wcmp2_file = 'metadata/valid/404.json'
 
-    _publish_wcmp2_trigger_broker_message(wcmp2_file)
+    _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2='only')
 
     print('Test not executed (not cached)')
 
