@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:invalidproperties.wmo_datapolicy-multiple-lines.jsozn",
+    "id": "urn:wmo:md:io-wis2dev-11-test:invalidproperties.wmo_datapolicy-multiple-lines",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
