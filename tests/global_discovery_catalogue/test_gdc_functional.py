@@ -52,7 +52,6 @@ MONITOR_MESSAGES = {}
 
 @pytest.fixture(scope='session')
 def gb_client():
-    print("INIT")
     options = {
         'client_id': 'wis2-gdc-test-runner',
         'monitor_messages': {}
@@ -180,6 +179,53 @@ def test_notification_and_metadata_processing_success(gb_client):
     assert r.ok
 
     assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['PASSED'] == 12
+
+
+def test_notification_and_metadata_processing_failure_record_not_found(gb_client):
+    print('Testing Notification and metadata processing (failure; record not found)')
+
+    assert gb_client.conn.is_connected
+
+    _subscribe_gb_client(gb_client)
+
+    time.sleep(1)
+
+    assert gb_client.conn.subscribed_flag
+
+    wcmp2_file = 'metadata/valid/404.json'
+
+    _publish_wcmp2_trigger_broker_message(wcmp2_file)
+
+    print('Test not executed (not cached)')
+
+
+def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2(gb_client):
+    print('Testing Notification and metadata processing (failure; malformed JSON or invalid WCMP2)')
+
+    assert gb_client.conn.is_connected
+
+    _subscribe_gb_client(gb_client)
+
+    time.sleep(1)
+
+    assert gb_client.conn.subscribed_flag
+
+    wcmp2_ids = []
+
+    print('Testing malformed JSON')
+    for w2p in os.listdir('global_discovery_catalogue/metadata/malformed'):
+        _publish_wcmp2_trigger_broker_message(f'metadata/malformed/{w2p}')
+        wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
+        time.sleep(5)
+
+    print('Testing invalid JSON')
+    for w2p in os.listdir('global_discovery_catalogue/metadata/invalid'):
+        _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{w2p}')
+        wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
+        time.sleep(5)
+
+    for wcmp2_id in wcmp2_ids:
+        assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['FAILED'] > 0
 
 
 def test_api_functionality(gb_client):
