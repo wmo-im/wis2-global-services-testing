@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
+    "id": "urn:wmo:md:io-wis2dev-11-test:badidformat-missing-urn",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
@@ -123,7 +123,7 @@
                 ]
             }
         ],
-        "wmo:dataPolicy": null,
+        "wmo:dataPolicy": "core",
         "language": "en",
         "type": "dataset",
         "created": "2018-01-01T12:34:32Z",

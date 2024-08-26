@@ -1,12 +1,35 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
+    "id": "urn:wmo:md:io-wis2dev-11-test:malformed3",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
-    "type": "Feature",
+    "type": Feature,
     "geometry": {
         "type": "Polygon",
-        "coordinates": null
+        "coordinates": [
+            [
+                [
+                    -142,
+                    28
+                ],
+                [
+                    -142,
+                    82
+                ],
+                [
+                    -52,
+                    82
+                ],
+                [
+                    -52,
+                    28
+                ],
+                [
+                    -142,
+                    28
+                ]
+            ]
+        ]
     },
     "time": {
         "interval": [
@@ -100,11 +123,11 @@
                 ]
             }
         ],
-        "type": "dataset",
+        "wmo:dataPolicy": "core",
         "language": "en",
+        "type": "dataset",
         "created": "2018-01-01T12:34:32Z",
-        "updated": "2018-09-06T08:18:23Z",
-        "wmo:dataPolicy": "core"
+        "updated": "2018-09-06T08:18:23Z"
     },
     "links": [
         {

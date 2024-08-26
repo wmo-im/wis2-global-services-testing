@@ -1,35 +1,12 @@
 {
-    "id": "urn:wmo:md:ca-eccc-msc:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
+    "id": "urn:wmo:md:io-wis2dev-11-test:badgeometry-coordinate-empty",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
     "type": "Feature",
     "geometry": {
         "type": "Polygon",
-        "coordinates": [
-            [
-                [
-                    -142,
-                    28
-                ],
-                [
-                    -142,
-                    82
-                ],
-                [
-                    -52,
-                    82
-                ],
-                [
-                    -52,
-                    28
-                ],
-                [
-                    -142,
-                    28
-                ]
-            ]
-        ]
+        "coordinates": null
     },
     "time": {
         "interval": [
@@ -123,12 +100,11 @@
                 ]
             }
         ],
-        "wmo:dataPolicy": "core",
-        "wmo:dataPolicy": "recommended1",
-        "language": "en",
         "type": "dataset",
+        "language": "en",
         "created": "2018-01-01T12:34:32Z",
-        "updated": "2018-09-06T08:18:23Z"
+        "updated": "2018-09-06T08:18:23Z",
+        "wmo:dataPolicy": "core"
     },
     "links": [
         {

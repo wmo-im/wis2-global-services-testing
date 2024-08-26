@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:data.core.weather.surface-based-observations",
+    "id": "urn:wmo:md:io-wis2dev-11-test:badgeometry-incorrect-polygon",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
@@ -15,21 +15,16 @@
                 [
                     73.66,
                     53.52
-                ],
-                [
-                    135.08,
-                    53.52
-                ],
-                [
-                    135.08,
-                    4.0
-                ],
-                [
-                    73.66,
-                    4.0
                 ]
             ]
         ]
+    },
+    "time": {
+        "interval": [
+            "2021-11-29",
+            ".."
+        ],
+        "resolution": "P1H"
     },
     "properties": {
         "title": "ISMN SYNOP reports - China ; available from BABJ(PEKING (BEIJING)) at 00,06,12,18 .",

@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:data.core.weather.surface-based-observations",
+    "id": "urn:wmo:md:io-wis2dev-11-test:missingrequiredfields-properties.contacts",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
@@ -15,6 +15,18 @@
                 [
                     73.66,
                     53.52
+                ],
+                [
+                    135.08,
+                    53.52
+                ],
+                [
+                    135.08,
+                    4.0
+                ],
+                [
+                    73.66,
+                    4.0
                 ]
             ]
         ]
@@ -46,46 +58,6 @@
                     }
                 ],
                 "scheme": "https://codes.wmo.int/wis/topic-hierarchy/earth-system-discipline/"
-            }
-        ],
-        "contacts": [
-            {
-                "name": "National Meteorological Information Center (NMIC)",
-                "organization": "China Meteorological Administration (CMA)",
-                "phones": [
-                    {
-                        "value": "+8601068409329"
-                    }
-                ],
-                "emails": [
-                    {
-                        "value": "giscadmin@cma.gov.cn"
-                    }
-                ],
-                "addresses": [
-                    {
-                        "deliveryPoint": [
-                            "46 Zhongguancun Nandajie"
-                        ],
-                        "city": "Beijing",
-                        "administrativeArea": "Beijing",
-                        "postalCode": "100081",
-                        "country": "China"
-                    }
-                ],
-                "contactInstructions": "email",
-                "hoursOfService": "0000h - 0900h UTC",
-                "links": [
-                    {
-                        "rel": "canonical",
-                        "type": "text/html",
-                        "href": "https://www.cma.gov.cn/"
-                    }
-                ],
-                "roles": [
-                    "pointOfContact",
-                    "distributor"
-                ]
             }
         ],
         "type": "dataset",

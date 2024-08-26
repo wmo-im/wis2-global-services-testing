@@ -1,9 +1,6 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
-    "conformsTo": [
-        "http://wis.wmo.int/spec/wcmp/2/conf/core"
-    ],
-    "type": Feature,
+    "id": "urn:wmo:md:io-wis2dev-11-test:missingrequiredfields-conformsto",
+    "type": "Feature",
     "geometry": {
         "type": "Polygon",
         "coordinates": [

@@ -1,34 +1,14 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:climate.cmip5.tt.rcp85.year.2081-2100_pctl5",
+    "id": "urn:wmo:md:io-wis2dev-11-test:badgeometry-mismatched-polygon-cand-coordinate-2",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
     "type": "Feature",
     "geometry": {
-        "type": "Point",
+        "type": "Polygon",
         "coordinates": [
-            [
-                [
-                    -142,
-                    28
-                ],
-                [
-                    -142,
-                    82
-                ],
-                [
-                    -52,
-                    82
-                ],
-                [
-                    -52,
-                    28
-                ],
-                [
-                    -142,
-                    28
-                ]
-            ]
+            132.9,
+            34.1
         ]
     },
     "time": {
