@@ -26,7 +26,7 @@ The GDC test setup consists of the following:
 ** 1 WNM document specifying a WCMP2 record deletion
 * all WCMP2 records stored on an HTTP server (GitHub)
 ** documents available at the following location: https://github.com/wmo-im/wis2-global-services-testing/tree/main/tests/global_discovery_catalogue/metadata
-** all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing (raw GitHub) (example: https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue/valid/urnwmomdca-eccc-mscclimate.climate-daily.json)
+** all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing (raw GitHub) (example: https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue/metadata/valid/urn--wmo--md--io-wis2dev-11-test--climate.climate-daily.json)
 ** configuring environment variables in `tests/default.env` as follows:
 *** `GB`: the Global Broker to subscribe to for GDC testing
 *** `TRIGGER_BROKER`: the Trigger Broker (in RFC1738 format) to publish WNM configurations to a WIS2 Node
