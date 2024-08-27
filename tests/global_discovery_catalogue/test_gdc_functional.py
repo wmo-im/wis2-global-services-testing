@@ -114,7 +114,7 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
 
 def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None) -> None:
 
-    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue'
+    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
 
     wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
 
