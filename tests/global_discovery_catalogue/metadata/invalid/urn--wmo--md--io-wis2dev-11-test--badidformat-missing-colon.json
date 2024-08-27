@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:badidformat-missing-colon",
+    "id": "urn:md:io-wis2dev-11-test:badidformat-missing-colon",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
