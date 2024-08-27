@@ -1,5 +1,5 @@
 {
-    "id": "urn:wmo:md:io-wis2dev-11-test:centreid-mismatch",
+    "id": "urn:wmo:md:io-wis2dev-12-test:centreid-mismatch",
     "conformsTo": [
         "http://wis.wmo.int/spec/wcmp/2/conf/core"
     ],
