@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-08-25</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-08-27</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -552,7 +552,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_test_setup">7.5.3. Test setup</a></li>
 <li><a href="#_functional_tests_3">7.5.4. Functional tests</a></li>
 <li><a href="#_performance_tests_2">7.5.5. Performance tests</a></li>
-<li><a href="#_exiting_the_test_environment">7.5.6. Exiting the test environment</a></li>
+<li><a href="#_executing_the_test_environment">7.5.6. Executing the test environment</a></li>
+<li><a href="#_exiting_the_test_environment">7.5.7. Exiting the test environment</a></li>
 </ul>
 </li>
 </ul>
@@ -3544,16 +3545,16 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>100 valid WCMP2 records</p>
+<p>6 valid WCMP2 records</p>
 </li>
 <li>
-<p>1 broken JSON WCMP2 record</p>
+<p>4 broken JSON WCMP2 records</p>
 </li>
 <li>
 <p>1 invalid WCMP2 record</p>
 </li>
 <li>
-<p>102 WNM documents, each of which pointing to the related WCMP2 records</p>
+<p>20 WNM documents, each of which pointing to the related WCMP2 records</p>
 </li>
 <li>
 <p>1 WNM document specifying a WCMP2 record deletion</p>
@@ -3562,12 +3563,47 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </li>
 <li>
-<p>all WCMP2 records stored on an HTTP server</p>
+<p>all WCMP2 records stored on an HTTP server (GitHub)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>documents available at the following location: <a href="https://github.com/wmo-im/wis2-global-services-testing/tree/main/tests/global_discovery_catalogue/metadata" class="bare">https://github.com/wmo-im/wis2-global-services-testing/tree/main/tests/global_discovery_catalogue/metadata</a></p>
 </li>
 <li>
-<p>all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing</p>
+<p>all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing (raw GitHub) (example: <a href="https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue/metadata/valid/urn&#8212;&#8203;wmo&#8212;&#8203;md&#8212;&#8203;io-wis2dev-11-test&#8212;&#8203;climate.climate-daily.json" class="bare">https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue/metadata/valid/urn&#8212;&#8203;wmo&#8212;&#8203;md&#8212;&#8203;io-wis2dev-11-test&#8212;&#8203;climate.climate-daily.json</a>)</p>
+</li>
+<li>
+<p>configuring environment variables in <code>tests/default.env</code> as follows:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>GB</code>: the Global Broker to subscribe to for GDC testing</p>
+</li>
+<li>
+<p><code>TRIGGER_BROKER</code>: the Trigger Broker (in RFC1738 format) to publish WNM configurations to a WIS2 Node</p>
+</li>
+<li>
+<p><code>GDC_API</code>: URL to GDC API (including collection name)</p>
+</li>
+<li>
+<p><code>GDC_CENTRE_ID</code>: the centre identifier of the GDC implementation under test (IUT)</p>
 </li>
 </ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note that you can store secret environments in <code>tests/secrets.env</code> and refer to them in <code>tests/default.env</code> accordingly.</p>
+</div>
+<div class="paragraph">
+<p>Given the GDC performs various checks on the centre identifier as part of the incoming topic from the Global Broker as well as the the WCMP2 identrifier check, GDC tests require a fixed WIS2 Node centre id.</p>
+</div>
+<div class="paragraph">
+<p>The fixed WIS2 Node centre used for GDC tests is <code>io-wis2dev-11-test</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4474,7 +4510,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <div class="ulist">
 <ul>
 <li>
-<p>all WCMP2 records should be processed and published in 5 minutes</p>
+<p>all WCMP2 records should be processed and published in 5 minutes or less.</p>
 </li>
 </ul>
 </div>
@@ -4482,7 +4518,20 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_exiting_the_test_environment"><a class="anchor" href="#_exiting_the_test_environment"></a>7.5.6. Exiting the test environment</h4>
+<h4 id="_executing_the_test_environment"><a class="anchor" href="#_executing_the_test_environment"></a>7.5.6. Executing the test environment</h4>
+<div class="paragraph">
+<p>To execute GDC tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">cd tests
+pip3 install -r requirements.txt
+pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exiting_the_test_environment"><a class="anchor" href="#_exiting_the_test_environment"></a>7.5.7. Exiting the test environment</h4>
 <div class="paragraph">
 <p>The GDC implementation under test (IUT) exits the test environment with the following state:</p>
 </div>
@@ -4816,7 +4865,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-08-25 11:42:50 UTC
+Last updated 2024-08-27 14:47:59 UTC
 </div>
 </div>
 </body>
