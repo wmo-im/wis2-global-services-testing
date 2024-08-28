@@ -363,8 +363,8 @@ To execute GDC tests:
 
 [source,bash]
 ----
+# ensure that the Python virtual environment is activated
 cd tests
-pip3 install -r requirements.txt
 pytest -s global_discovery_catalogue/test_gdc_functional.py  
 ----
 
