@@ -234,39 +234,22 @@ def test_5_mqtt_broker_antiloop():
     print(f"Subscribed to topics: origin/a/wis2/io-wis2dev-11-test/# origin/a/wis2/io-wis2dev-12-test/#")
 
     test_uuid = uuid.uuid4()
-    wnm_scenario_config_11 = {
+    wnm_scenario_config = {
         "scenario": "wnmgen",
         "configuration": {
             "setup": {
-                "centreid": 11,
+                "centreid_min": 11,
+                "centreid_max": 12,
                 "number": 10
             },
             "wnm": {
-                "properties": {
-                    "data_id": test_uuid,
-                }
+                "id": test_uuid
             }
         }
     }
-    wnm_scenario_config_12 = {
-        "scenario": "wnmgen",
-        "configuration": {
-            "setup": {
-                "centreid": 12,
-                "number": 10
-            },
-            "wnm": {
-                "properties": {
-                    "data_id": test_uuid,
-                }
-            }
-        }
-    }
-    print(wnm_scenario_config_11)
-    print(wnm_scenario_config_12)
+    print(wnm_scenario_config)
     pub_client = setup_mqtt_client(scenario_broker_url, True)
-    pub_client.pub(topic=pub_valid_topics[1], message=json.dumps(wnm_scenario_config_11))
-    pub_client.pub(topic=pub_valid_topics[0], message=json.dumps(wnm_scenario_config_12))
+    pub_client.pub(topic="config/a/wis2", message=json.dumps(wnm_scenario_config))
     time.sleep(10)  # Wait for messages
     client_msgs = [m for m in sub_client._userdata['received_messages']]
     sub_client.loop_stop()
@@ -282,28 +265,38 @@ def test_6_node_invalid_centre_id_test():
         print(f"Subscribed to topic: {sub_topic}")
 
     wnm_scenario_config_11 = {
-       "scenario": "wnmgen",
-       "configuration": {
-          "setup": {
-             "centreid": 11,
-             "number": 1
-          }
-       }
+        "scenario": "wnmgen",
+        "configuration": {
+            "setup": {
+                "centreid": 11,
+                "number": 1
+            },
+            "wnm": {
+                "properties": {
+                "data_id": pub_valid_topics[0] 
+                }
+            }
+        }
     }
     
     wnm_scenario_config_12 = {
-       "scenario": "wnmgen",
-       "configuration": {
-          "setup": {
-             "centreid": 12,
-             "number": 1
-          }
-       }
+        "scenario": "wnmgen",
+        "configuration": {
+            "setup": {
+                "centreid": 12,
+                "number": 1
+            },
+            "wnm": {
+                "properties": {
+                "data_id": pub_valid_topics[1] 
+                }
+            }            
+        }
     }
 
     pub_client = setup_mqtt_client(scenario_broker_url, True)
-    pub_client.pub(topic=pub_valid_topics[0], message=json.dumps(wnm_scenario_config_12))
-    pub_client.pub(topic=pub_valid_topics[1], message=json.dumps(wnm_scenario_config_11))
+    pub_client.pub(topic=f"config/a/wis2/io-wis2dev-11-test", message=json.dumps(wnm_scenario_config_12))
+    pub_client.pub(topic=f"config/a/wis2/io-wis2dev-12-test", message=json.dumps(wnm_scenario_config_11))
     time.sleep(10)  # Wait for messages
     sub_client_msgs = [m for m in sub_client._userdata['received_messages']]
     sub_client.loop_stop()
@@ -328,7 +321,7 @@ def test_7_valid_msg_test(topic):
        }
     }
     pub_client = setup_mqtt_client(scenario_broker_url, True)
-    pub_client.pub(topic=topic, message=json.dumps(wnm_scenario_config))
+    pub_client.pub(topic="config/a/wis2/io-wis2dev-{cent_id_num}-test", message=json.dumps(wnm_scenario_config))
     time.sleep(5)  # Wait for messages
     sub_client_msgs = [m for m in sub_client._userdata['received_messages']]
     sub_client.loop_stop()
@@ -353,7 +346,7 @@ def test_8_node_invalid_topic_test(topic):
         }
     }
     pub_client = setup_mqtt_client(scenario_broker_url, True)
-    pub_client.pub(topic=topic, message=json.dumps(wnm_scenario_config))
+    pub_client.pub(topic="config/a/wis2/io-wis2dev-{cent_id_num}-test", message=json.dumps(wnm_scenario_config))
     time.sleep(5)  # Wait for messages
     sub_client_msgs = [m for m in sub_client._userdata['received_messages']]
     sub_client.loop_stop()
@@ -378,7 +371,7 @@ def test_9_node_invalid_message_test(mesg):
         }
     }
     pub_client = setup_mqtt_client(scenario_broker_url, True)
-    pub_client.pub(topic="?topic?", message=json.dumps(wnm_scenario_config))
+    pub_client.pub(topic="config/a/wis2/io-wis2dev-11-test", message=json.dumps(wnm_scenario_config))
     time.sleep(5)  # Wait for messages
     sub_client_msgs = [m for m in sub_client._userdata['received_messages']]
     sub_client.loop_stop()
