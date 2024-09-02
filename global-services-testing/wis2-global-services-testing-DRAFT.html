@@ -518,7 +518,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#global-broker-testing">7.1. Global Broker Service testing</a>
 <ul class="sectlevel3">
-<li><a href="#_functional_tests">7.1.1. Functional tests</a></li>
+<li><a href="#_setup_and_tear_down_global_brokers_for_the_tests">7.1.1. Setup and tear down Global Brokers for the tests</a></li>
+<li><a href="#_setup_the_global_broker_for_the_tests">7.1.2. Setup the Global Broker for the tests</a></li>
+<li><a href="#_tear_down_the_global_broker_to_reverse_wis2_operations">7.1.3. Tear down the Global Broker to reverse WIS2 operations</a></li>
+<li><a href="#_functional_tests">7.1.4. Functional tests</a></li>
 </ul>
 </li>
 <li><a href="#global-cache-testing">7.2. Global Cache Service testing</a></li>
@@ -869,9 +872,250 @@ data required for the operations of all WIS Centres. The agreed architecture pro
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_functional_tests"><a class="anchor" href="#_functional_tests"></a>7.1.1. Functional tests</h4>
+<h4 id="_setup_and_tear_down_global_brokers_for_the_tests"><a class="anchor" href="#_setup_and_tear_down_global_brokers_for_the_tests"></a>7.1.1. Setup and tear down Global Brokers for the tests</h4>
+<div class="paragraph">
+<p>It has been decided to rely on <em>-test</em> systems to emulate WIS2 Nodes.
+Two kinds of test WIS2 Nodes have been prepared.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>10 WIS2 Nodes for functional tests</p>
+</li>
+<li>
+<p>200 WIS2 Nodes for performance tests</p>
+</li>
+</ul>
+</div>
 <div class="sect4">
-<h5 id="_1_global_broker_connectivity_tests"><a class="anchor" href="#_1_global_broker_connectivity_tests"></a>7.1.1.1. 1. Global Broker Connectivity Tests</h5>
+<h5 id="_for_the_functional_tests"><a class="anchor" href="#_for_the_functional_tests"></a>7.1.1.1. For the functional tests</h5>
+<div class="paragraph">
+<p>Ten WIS2 Nodes are deployed on AWS;
+The DNS names of the two nodes will be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>test-node-1.wis2dev.io</p>
+</li>
+<li>
+<p>test-node-2.wis2dev.io</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>test-node-10.wis2dev.io</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The <em>centre_id</em> for this WIS2 Nodes will be <strong>io-wis2dev-11-test</strong> and <strong>io-wis2dev-20-test</strong></p>
+</div>
+<div class="paragraph">
+<p>They will be used during the functional tests of the Global Broker.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_for_the_performance_tests"><a class="anchor" href="#_for_the_performance_tests"></a>7.1.1.2. For the performance tests</h5>
+<div class="paragraph">
+<p>Two hundred WIS2 Nodes, only for WIS2 Notification Messages, will be deployed on 5 of the same VMs. On each VM, the equivalent of 40 WIS2 Nodes will be deployed. They will share the same MQTT Broker, however the <em>centre_id</em> and the subscription topic will be different for each WIS2 Node.</p>
+</div>
+<div class="paragraph">
+<p>The DNS name of the VM will be:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>test-node-1.wis2dev.io (for centre_id from 100 to 139)</p>
+</li>
+<li>
+<p>test-node-2.wis2dev.io (for centre_id from 140 to 179)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>test-node-5.wis2dev.io (for centre_id from 260 to 299)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_mqtt_configuration"><a class="anchor" href="#_mqtt_configuration"></a>7.1.1.3. MQTT Configuration</h5>
+<div class="paragraph">
+<p>The MQTT broker(s) will be reachable using:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>MQTT_SUB_BROKER=mqtt://test-node-1.wis2dev.io (and also -2, -3,... -10)
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Default MQTT port will be used (1883)</p>
+</li>
+<li>
+<p>The password is changed to <em>onlyone</em>. This allows to prevent the default authentication (everyone/everyone) to be usable, while keeping the authorization (typically using only the username) unchanged</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_notification_message_tests"><a class="anchor" href="#_notification_message_tests"></a>7.1.1.4. Notification Message tests</h5>
+<div class="paragraph">
+<p>As no metadata record will be provided, checking the existence of the metadata record by the Global Broker must be disabled.</p>
+</div>
+<div class="paragraph">
+<p>As the topic used for the test messages will be correct, checking the validity of the Topic Hierarchy must be done.</p>
+</div>
+<div class="paragraph">
+<p>As the Notification Messages will be syntactically correct, checking the compliance of the Notification Message with the defined schema (schemas.wmo.int) must be done.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_centre_id_and_subscription"><a class="anchor" href="#_centre_id_and_subscription"></a>7.1.1.5. centre_id and subscription</h5>
+<div class="paragraph">
+<p>The centre_id will be of the from io-wis2dev-[number]-test with number varying from 11 to 20, and 100 to 299. 100 to 139 on test-node-1.wis2dev.io and so on.</p>
+</div>
+<div class="paragraph">
+<p>Messages will be published on the topic <code>origin/a/wis2/io-wis2dev-x-test/#</code> (with x varying from 11 to 20 and 100 to 299).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_summary"><a class="anchor" href="#_summary"></a>7.1.1.6. Summary</h5>
+<div class="paragraph">
+<p>Using the antiloop software used by Brazil and France, as an example, the configuration file <em>io-wis2dev-100-test.env</em> will be :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>MQTT_SUB_BROKER=mqtt://test-node-1.wis2dev.io
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+MQTT_SUB_TOPIC=origin/a/wis2/io-wis2dev-100-test/#
+CENTRE_ID=io-wis2dev-100-test
+MSG_CHECK_OPTION=verify
+TOPIC_CHECK_OPTION=verify
+METADATA_CHECK_OPTION=no
+GDC_URL=https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&amp;f=json&amp;q=
+SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/main/schemas/wis2-notification-message-bundled.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The configuration file <em>io-wis2dev-210-test.env</em> will be :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code>MQTT_SUB_BROKER=mqtt://test-node-3.wis2dev.io
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+MQTT_SUB_TOPIC=origin/a/wis2/io-wis2dev-210-test/#
+CENTRE_ID=io-wis2dev-210-test
+MSG_CHECK_OPTION=verify
+TOPIC_CHECK_OPTION=verify
+METADATA_CHECK_OPTION=no
+GDC_URL=https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&amp;f=json&amp;q=
+SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/main/schemas/wis2-notification-message-bundled.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Summary of the correspondance between the MQTT endpoint address and centre_id:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>WIS2 Node 100 to 139 on test-node-1.wis2dev.io</p>
+</li>
+<li>
+<p>WIS2 Node 140 to 179 on test-node-2.wis2dev.io</p>
+</li>
+<li>
+<p>WIS2 Node 180 to 219 on test-node-3.wis2dev.io</p>
+</li>
+<li>
+<p>WIS2 Node 220 to 259 on test-node-4.wis2dev.io</p>
+</li>
+<li>
+<p>WIS2 Node 260 to 299 on test-node-5.wis2dev.io</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ahead of the testing period, each Global Broker operator is invited to prepare the configuration for the 210 (10 + 200) WIS2 Nodes.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_setup_the_global_broker_for_the_tests"><a class="anchor" href="#_setup_the_global_broker_for_the_tests"></a>7.1.2. Setup the Global Broker for the tests</h4>
+<div class="paragraph">
+<p>In order to run the tests, the operators of the Global Broker will need to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remove all the subscriptions to existing and <em>real</em> WIS2 Nodes</p>
+</li>
+<li>
+<p>Modify the password of the <em>everyone</em> user on the broker of the Global Broker from <strong>everyone</strong> to <strong>onlyone</strong></p>
+</li>
+<li>
+<p>Delete all existing subscriptions to broker of the Global Broker (Users, other Global Brokers, Global Caches have a subscription to the broker)</p>
+</li>
+<li>
+<p>Enable all configurations to the <em>test</em> 210 WIS2 nodes</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Depending on the Global Broker and the MQTT broker used, the method of doing the four steps above will be different and is beyond the scope of this document.</p>
+</div>
+<div class="paragraph">
+<p>When those steps are completed, the Global Broker will be ready to run the functional and performance tests.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_tear_down_the_global_broker_to_reverse_wis2_operations"><a class="anchor" href="#_tear_down_the_global_broker_to_reverse_wis2_operations"></a>7.1.3. Tear down the Global Broker to reverse WIS2 operations</h4>
+<div class="paragraph">
+<p>After the performance tests, the operators of the Global Broker will need to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remove all the subscriptions to <em>-test</em> WIS2 Nodes</p>
+</li>
+<li>
+<p>Modify the password of the <em>everyone</em> user on the broker of the Global Broker from <strong>onlyone</strong> to <strong>everyone</strong></p>
+</li>
+<li>
+<p>Delete all existing subscriptions to broker of the Global Broker</p>
+</li>
+<li>
+<p>Enable all configurations to the <em>real</em> WIS2 nodes</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Depending on the Global Broker and the MQTT broker used, the method of doing the four steps above will be different and is beyond the scope of this document.</p>
+</div>
+<div class="paragraph">
+<p>When those steps are completed, the Global Broker will be back to normal operations.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_functional_tests"><a class="anchor" href="#_functional_tests"></a>7.1.4. Functional tests</h4>
+<div class="sect4">
+<h5 id="_1_global_broker_connectivity_tests"><a class="anchor" href="#_1_global_broker_connectivity_tests"></a>7.1.4.1. 1. Global Broker Connectivity Tests</h5>
 <div class="paragraph">
 <p>There are several test that can be performed on the Global Broker in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
 A. to D. below can be performed any time.</p>
@@ -1103,7 +1347,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_2_global_broker_antiloop_testing"><a class="anchor" href="#_2_global_broker_antiloop_testing"></a>7.1.1.2. 2. Global Broker Antiloop Testing</h5>
+<h5 id="_2_global_broker_antiloop_testing"><a class="anchor" href="#_2_global_broker_antiloop_testing"></a>7.1.4.2. 2. Global Broker Antiloop Testing</h5>
 <div class="paragraph">
 <p>The antiloop feature of a Global Broker is a critical aspect of WIS2 Architecture. This is what guarantees a high level of service while preventing “messages storm”.  These tests are designed to test the antiloop feature of the Global Broker service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025.
 If configurable, and when applicable, the Global Broker should discard incorrect WIS2 Notification Messages, by opposition of only verifying the correctness.</p>
@@ -1458,7 +1702,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 <div class="sect4">
-<h5 id="_3_global_broker_performance_testing"><a class="anchor" href="#_3_global_broker_performance_testing"></a>7.1.1.3. 3. Global Broker Performance Testing</h5>
+<h5 id="_3_global_broker_performance_testing"><a class="anchor" href="#_3_global_broker_performance_testing"></a>7.1.4.3. 3. Global Broker Performance Testing</h5>
 <div class="paragraph">
 <p>We must ensure that the Global Broker service performs properly under stress.  The following outlined tests will test the Global Broker service prior to transition of WIS2 to an operational state on January 1, 2025</p>
 </div>
@@ -4865,7 +5109,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-02 12:53:04 UTC
+Last updated 2024-09-02 14:07:42 UTC
 </div>
 </div>
 </body>
