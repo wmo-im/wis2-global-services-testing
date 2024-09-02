@@ -23,7 +23,7 @@ Two kinds of test WIS2 Nodes have been prepared.
 
 ===== For the functional tests
 Ten WIS2 Nodes are deployed on AWS;
-The DNS names of the two nodes will be:
+The DNS names of the WIS2 nodes will be:
 
 - test-node-1.wis2dev.io
 
@@ -33,7 +33,7 @@ The DNS names of the two nodes will be:
 
 - test-node-10.wis2dev.io
 
-The _centre_id_ for this WIS2 Nodes will be *io-wis2dev-11-test* and *io-wis2dev-20-test*
+The _centre_id_ for these WIS2 Nodes will be *io-wis2dev-11-test* (on test-node-1 host) to *io-wis2dev-20-test* (on test-node-10 host).
 
 They will be used during the functional tests of the Global Broker.
 
