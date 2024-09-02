@@ -91,8 +91,8 @@ CENTRE_ID=io-wis2dev-100-test
 MSG_CHECK_OPTION=verify
 TOPIC_CHECK_OPTION=verify
 METADATA_CHECK_OPTION=no
-GDC_URL=https://api.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
-SCHEMA_URL=https://raw.githubusercontent.com/golfvert/wis2-topic-hierarchy/main/wis2-notification-message.json
+GDC_URL=https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
+SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/main/schemas/wis2-notification-message-bundled.json
 ```
 
 The configuration file _io-wis2dev-210-test.env_ will be : 
@@ -106,8 +106,8 @@ CENTRE_ID=io-wis2dev-210-test
 MSG_CHECK_OPTION=verify
 TOPIC_CHECK_OPTION=verify
 METADATA_CHECK_OPTION=no
-GDC_URL=https://api.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
-SCHEMA_URL=https://raw.githubusercontent.com/golfvert/wis2-topic-hierarchy/main/wis2-notification-message.json
+GDC_URL=https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
+SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/main/schemas/wis2-notification-message-bundled.json
 ```
 Summary of the correspondance between the MQTT endpoint address and centre_id:
 
