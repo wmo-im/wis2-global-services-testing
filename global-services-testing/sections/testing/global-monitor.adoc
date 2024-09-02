@@ -2,6 +2,14 @@
 
 === Global Monitor Service testing
 
+==== Setup
+A test data bundle to consist of:
+
+- ``++ 1 valid endpoint with valid metrics. ++``
+- ``++ 1 invalid endpoint. ++``
+- ``++ 1 valid endpiont with malformed metrics. ++``
+- ``++ 50 valid endpoints for the performance test. ++``
+
 ==== Functional tests
 
 ===== Connectivity
