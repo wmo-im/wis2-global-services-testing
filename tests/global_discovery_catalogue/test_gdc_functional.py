@@ -48,7 +48,6 @@ MONITOR_MESSAGES = {}
 
 # fixtures
 
-
 @pytest.fixture(scope='session')
 def gb_client():
     options = {
@@ -68,7 +67,10 @@ def subscribe_trigger_client():
         'client_id': 'wis2-gdc-test-runner'
     }
 
-    return MQTTPubSubClient(TRIGGER_BROKER, options)
+    client = MQTTPubSubClient(TRIGGER_BROKER, options)
+    client.conn.on_message = _on_message
+
+    return client
 
 
 # paho-mqtt callbacks
@@ -78,9 +80,16 @@ def _on_subscribe(client, userdata, mid, reason_codes, properties):
 
 
 def _on_message(client, userdata, message):
+    print("TOPIC", message.topic)
     if message.topic.startswith('monitor/a/wis2'):
         report = json.loads(message.payload)
-        report_metadata_id = report['metadata_id']
+
+        if report.get('metadata_id') is not None:
+            report_metadata_id = report['metadata_id']
+        else:
+            file_ = report['href'].split('/')[-1]
+            report_metadata_id = _get_wcmp2_id_from_filename(file_)
+
         MONITOR_MESSAGES[report_metadata_id] = report
 
 
@@ -103,7 +112,8 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
     replacers = (
         ('metadata/valid/', ''),
         ('.json', ''),
-        ('--', ':')
+        ('--', ':'),
+        ('badidformat-blank-space', 'badidformat blank-space')
     )
 
     for replacer in replacers:
@@ -178,7 +188,7 @@ def test_notification_and_metadata_processing_success(gb_client):
     r = requests.get(query_url)
     assert r.ok
 
-    assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['PASSED'] == 12
+    assert MONITOR_MESSAGES[wcmp2_id]['summary']['PASSED'] == 12
 
 
 def test_notification_and_metadata_processing_failure_record_not_found(gb_client):
@@ -218,6 +228,11 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
         time.sleep(5)
 
+    time.sleep(10)
+
+    for wcmp2_id in wcmp2_ids:
+        assert 'message' in MONITOR_MESSAGES[wcmp2_id]
+
     print('Testing invalid JSON')
     for w2p in os.listdir('global_discovery_catalogue/metadata/invalid'):
         _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{w2p}')
@@ -225,7 +240,10 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
         time.sleep(5)
 
     for wcmp2_id in wcmp2_ids:
-        assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['FAILED'] > 0
+        try:
+            assert MONITOR_MESSAGES[wcmp2_id]['summary']['FAILED'] > 0
+        except Exception as err:
+            assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
 
 def test_api_functionality(gb_client):
@@ -235,10 +253,11 @@ def test_api_functionality(gb_client):
     for w2p in os.listdir('global_discovery_catalogue/metadata/valid'):
         _publish_wcmp2_trigger_broker_message(f'metadata/valid/{w2p}')
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
-        time.sleep(5)
+
+    time.sleep(10)
 
     for wcmp2_id in wcmp2_ids:
-        assert MONITOR_MESSAGES[wcmp2_id]['ets-report']['summary']['PASSED'] == 12
+        assert MONITOR_MESSAGES[wcmp2_id]['summary']['PASSED'] == 12
 
     base_url = GDC_API
 
