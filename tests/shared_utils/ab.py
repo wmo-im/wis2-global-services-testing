@@ -1,6 +1,8 @@
 import re
 import json
 import traceback
+from slugify import slugify
+
 
 def parse_ab_output(ab_output):
     result = {}
@@ -21,18 +23,22 @@ def parse_ab_output(ab_output):
         ('HTML transferred', r'HTML transferred:\s+(\d+)'),
         ('Requests per second', r'Requests per second:\s+([\d.]+)'),
         ('Time per request', r'Time per request:\s+([\d.]+) \[ms\] \(mean\)'),
-        ('Time per request (across all concurrent requests)', r'Time per request:\s+([\d.]+) \[ms\] \(mean, across all concurrent requests\)'),
+        ('Time per request (across all concurrent requests)',
+         r'Time per request:\s+([\d.]+) \[ms\] \(mean, across all concurrent requests\)'),
         ('Transfer rate', r'Transfer rate:\s+([\d.]+) \[Kbytes/sec\] received')
     ]
 
     for key, pattern in patterns:
         try:
+            key2 = slugify(key, separator='_')
             result[key] = re.search(pattern, ab_output).group(1)
         except AttributeError:
             print(traceback.format_exc())
             pass
     try:
-        connection_times = re.search(r'Connection Times \(ms\)\s+min\s+mean\[\+/-sd\]\s+median\s+max\nConnect:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nProcessing:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nWaiting:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nTotal:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)', ab_output)
+        connection_times = re.search(
+            r'Connection Times \(ms\)\s+min\s+mean\[\+/-sd\]\s+median\s+max\nConnect:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nProcessing:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nWaiting:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nTotal:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)',
+            ab_output)
         result['Connection Times'] = {
             'Connect': {
                 'min': connection_times.group(1),
@@ -69,7 +75,8 @@ def parse_ab_output(ab_output):
 
     try:
         percentage_times = re.findall(r'(\d+)%\s+(\d+)', ab_output)
-        result['Percentage of requests served within a certain time'] = {f'{percent}%': time for percent, time in percentage_times}
+        result['Percentage of requests served within a certain time'] = {f'{percent}%': time for percent, time in
+                                                                         percentage_times}
     except AttributeError:
         print(traceback.format_exc())
         pass
