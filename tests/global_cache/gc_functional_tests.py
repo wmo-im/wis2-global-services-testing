@@ -17,17 +17,23 @@ from pywis_pubsub.publish import create_message
 from pywis_pubsub.schema import sync_schema as pw_sync
 from pywis_pubsub.mqtt import MQTTPubSubClient
 from dotenv import load_dotenv
-load_dotenv()
+
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from shared_utils import mqtt_helpers
+from shared_utils import mqtt_helpers, ab, prom_metrics
 
 
 # Connection strings for the development global broker and message generator
 # Access the environment variables
-mqtt_broker_out = os.getenv('MQTT_BROKER_OUT')
-mqtt_broker_in = os.getenv('MQTT_BROKER_IN')
-mqtt_broker_gc = os.getenv('MQTT_BROKER_GC')
+load_dotenv("../default.env")
+load_dotenv("../secrets.env.env")
+mqtt_broker_out = os.getenv('GB')
+mqtt_broker_in = os.getenv('TRIGGER_MQTT_BROKER')
+mqtt_broker_gc = os.getenv('GC_MQTT_BROKER')
+# prometheus config
+prometheus_baseurl = os.getenv('PROMETHEUS_HOST')
+username = os.getenv('PROMETHEUS_USER')
+password = os.getenv('PROMETHEUS_PASSWORD')
 # Topics
 sub_topics = [
     "origin/a/wis2/#",
