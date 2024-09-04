@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-09-03</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-09-04</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -524,44 +524,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_functional_tests">7.1.4. Functional tests</a></li>
 </ul>
 </li>
-<li><a href="#global-cache-testing">7.2. Global Cache Service testing</a></li>
-<li><a href="#global-cache-setup-teardown">7.3. Setup and Teardown</a>
+<li><a href="#global-cache-testing">7.2. Global Cache Service testing</a>
 <ul class="sectlevel3">
-<li><a href="#_setup">7.3.1. Setup</a></li>
-<li><a href="#_teardown">7.3.2. Teardown</a></li>
+<li><a href="#global-cache-setup-teardown">7.2.1. Setup and Teardown</a></li>
+<li><a href="#_functional_tests_2">7.2.2. Functional Tests</a></li>
+<li><a href="#_performance_tests">7.2.3. Performance tests</a></li>
 </ul>
 </li>
-<li><a href="#_functional_tests_2">7.4. Functional Tests</a>
+<li><a href="#global-discovery-catalogue-testing">7.3. Global Discovery Catalogue Service testing</a>
 <ul class="sectlevel3">
-<li><a href="#_1_mqtt_broker_connectivity">7.4.1. 1. MQTT Broker Connectivity</a></li>
-<li><a href="#_2_gc_mqtt_broker_subscription">7.4.2. 2. GC MQTT Broker Subscription</a></li>
-<li><a href="#_3_wis2_notification_message_wnm_processing">7.4.3. 3. WIS2 Notification Message (WNM) Processing</a></li>
-<li><a href="#_4_cache_false_directive">7.4.4. 4. Cache False Directive</a></li>
-<li><a href="#_5_source_download_failure">7.4.5. 5. Source Download Failure</a></li>
-<li><a href="#_6_cache_override_optional">7.4.6. 6. Cache Override (Optional)</a></li>
-<li><a href="#_7_data_integrity_check_failure_recommended">7.4.7. 7. Data Integrity Check Failure (Recommended)</a></li>
-<li><a href="#_8_wis2_notification_message_deduplication">7.4.8. 8. WIS2 Notification Message Deduplication</a></li>
-<li><a href="#_8_1_wis2_notification_message_deduplication_alternative_1">7.4.9. 8.1. WIS2 Notification Message Deduplication (Alternative 1)</a></li>
-<li><a href="#_8_2_wis2_notification_message_deduplication_alternative_2">7.4.10. 8.2. WIS2 Notification Message Deduplication (Alternative 2)</a></li>
-<li><a href="#_9_data_update">7.4.11. 9. Data Update</a></li>
-</ul>
-</li>
-<li><a href="#_performance_tests">7.5. Performance tests</a>
-<ul class="sectlevel3">
-<li><a href="#_wis2_notification_processing_rate">7.5.1. WIS2 Notification Processing Rate</a></li>
-<li><a href="#_concurrent_client_downloads">7.5.2. Concurrent client downloads</a></li>
-<li><a href="#_implicit_tests">7.5.3. Implicit tests</a></li>
-</ul>
-</li>
-<li><a href="#global-discovery-catalogue-testing">7.6. Global Discovery Catalogue Service testing</a>
-<ul class="sectlevel3">
-<li><a href="#_preparations_for_the_test">7.6.1. Preparations for the test</a></li>
-<li><a href="#_entering_the_test_environment">7.6.2. Entering the test environment</a></li>
-<li><a href="#_test_setup">7.6.3. Test setup</a></li>
-<li><a href="#_functional_tests_3">7.6.4. Functional tests</a></li>
-<li><a href="#_performance_tests_2">7.6.5. Performance tests</a></li>
-<li><a href="#_executing_the_test_environment">7.6.6. Executing the test environment</a></li>
-<li><a href="#_exiting_the_test_environment">7.6.7. Exiting the test environment</a></li>
+<li><a href="#_preparations_for_the_test">7.3.1. Preparations for the test</a></li>
+<li><a href="#_entering_the_test_environment">7.3.2. Entering the test environment</a></li>
+<li><a href="#_test_setup">7.3.3. Test setup</a></li>
+<li><a href="#_functional_tests_3">7.3.4. Functional tests</a></li>
+<li><a href="#_performance_tests_2">7.3.5. Performance tests</a></li>
+<li><a href="#_executing_the_test_environment">7.3.6. Executing the test environment</a></li>
+<li><a href="#_exiting_the_test_environment">7.3.7. Exiting the test environment</a></li>
 </ul>
 </li>
 </ul>
@@ -1912,12 +1890,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 <div class="sect2">
 <h3 id="global-cache-testing"><a class="anchor" href="#global-cache-testing"></a>7.2. Global Cache Service testing</h3>
-
-</div>
-<div class="sect2">
-<h3 id="global-cache-setup-teardown"><a class="anchor" href="#global-cache-setup-teardown"></a>7.3. Setup and Teardown</h3>
 <div class="sect3">
-<h4 id="_setup"><a class="anchor" href="#_setup"></a>7.3.1. Setup</h4>
+<h4 id="global-cache-setup-teardown"><a class="anchor" href="#global-cache-setup-teardown"></a>7.2.1. Setup and Teardown</h4>
+<div class="sect4">
+<h5 id="_setup"><a class="anchor" href="#_setup"></a>7.2.1.1. Setup</h5>
 <div class="paragraph">
 <p>Before running the pytest tests, ensure the following setup steps are completed:</p>
 </div>
@@ -1981,8 +1957,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_teardown"><a class="anchor" href="#_teardown"></a>7.3.2. Teardown</h4>
+<div class="sect4">
+<h5 id="_teardown"><a class="anchor" href="#_teardown"></a>7.2.1.2. Teardown</h5>
 <div class="paragraph">
 <p>After running the pytest tests, ensure the following teardown steps are completed:</p>
 </div>
@@ -2025,12 +2001,12 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_functional_tests_2"><a class="anchor" href="#_functional_tests_2"></a>7.4. Functional Tests</h3>
 <div class="sect3">
-<h4 id="_1_mqtt_broker_connectivity"><a class="anchor" href="#_1_mqtt_broker_connectivity"></a>7.4.1. 1. MQTT Broker Connectivity</h4>
+<h4 id="_functional_tests_2"><a class="anchor" href="#_functional_tests_2"></a>7.2.2. Functional Tests</h4>
 <div class="sect4">
-<h5 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>7.4.1.1. Purpose</h5>
+<h5 id="_1_mqtt_broker_connectivity"><a class="anchor" href="#_1_mqtt_broker_connectivity"></a>7.2.2.1. 1. MQTT Broker Connectivity</h5>
+<div class="sect5">
+<h6 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>Purpose</h6>
 <div class="paragraph">
 <p>An MQTT client must be able to connect to the local broker of the Global Cache on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.</p>
 </div>
@@ -2038,8 +2014,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.2: A Global Cache shall operate a message broker.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_15"><a class="anchor" href="#_requirements_15"></a>7.4.1.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_15"><a class="anchor" href="#_requirements_15"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2051,8 +2027,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_15"><a class="anchor" href="#_steps_15"></a>7.4.1.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_15"><a class="anchor" href="#_steps_15"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2064,8 +2040,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_15"><a class="anchor" href="#_evaluate_15"></a>7.4.1.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_15"><a class="anchor" href="#_evaluate_15"></a>Evaluate</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2075,16 +2051,16 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_2_gc_mqtt_broker_subscription"><a class="anchor" href="#_2_gc_mqtt_broker_subscription"></a>7.4.2. 2. GC MQTT Broker Subscription</h4>
 <div class="sect4">
-<h5 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>7.4.2.1. Purpose</h5>
+<h5 id="_2_gc_mqtt_broker_subscription"><a class="anchor" href="#_2_gc_mqtt_broker_subscription"></a>7.2.2.2. 2. GC MQTT Broker Subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis2/# topic using a provided connection string.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_16"><a class="anchor" href="#_requirements_16"></a>7.4.2.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_16"><a class="anchor" href="#_requirements_16"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2096,8 +2072,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_16"><a class="anchor" href="#_steps_16"></a>7.4.2.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_16"><a class="anchor" href="#_steps_16"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2112,8 +2088,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_16"><a class="anchor" href="#_evaluate_16"></a>7.4.2.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_16"><a class="anchor" href="#_evaluate_16"></a>Evaluate</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2126,10 +2102,10 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_3_wis2_notification_message_wnm_processing"><a class="anchor" href="#_3_wis2_notification_message_wnm_processing"></a>7.4.3. 3. WIS2 Notification Message (WNM) Processing</h4>
 <div class="sect4">
-<h5 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>7.4.3.1. Purpose</h5>
+<h5 id="_3_wis2_notification_message_wnm_processing"><a class="anchor" href="#_3_wis2_notification_message_wnm_processing"></a>7.2.2.3. 3. WIS2 Notification Message (WNM) Processing</h5>
+<div class="sect5">
+<h6 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>Purpose</h6>
 <div class="paragraph">
 <p>Test that the GC functions as expected under normal conditions. The Global Cache should process a valid incoming WNM, download the data at the provided canonical link, and publish a new WNM on the proper cache/ topic using the proper message structure, and update the necessary GC metrics.</p>
 </div>
@@ -2146,8 +2122,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.1. [Global Cache] Technical considerations <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2</a>; clause 2.7.4.2. [Global Cache] Practices and procedures <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2</a></p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_17"><a class="anchor" href="#_requirements_17"></a>7.4.3.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_17"><a class="anchor" href="#_requirements_17"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2225,8 +2201,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_17"><a class="anchor" href="#_steps_17"></a>7.4.3.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_17"><a class="anchor" href="#_steps_17"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2264,8 +2240,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_17"><a class="anchor" href="#_evaluate_17"></a>7.4.3.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_17"><a class="anchor" href="#_evaluate_17"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2334,16 +2310,16 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_4_cache_false_directive"><a class="anchor" href="#_4_cache_false_directive"></a>7.4.4. 4. Cache False Directive</h4>
 <div class="sect4">
-<h5 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>7.4.4.1. Purpose</h5>
+<h5 id="_4_cache_false_directive"><a class="anchor" href="#_4_cache_false_directive"></a>7.2.2.4. 4. Cache False Directive</h5>
+<div class="sect5">
+<h6 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache receives a notification message with <em>properties.cache</em> set to false, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_18"><a class="anchor" href="#_requirements_18"></a>7.4.4.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_18"><a class="anchor" href="#_requirements_18"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2398,8 +2374,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_18"><a class="anchor" href="#_steps_18"></a>7.4.4.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_18"><a class="anchor" href="#_steps_18"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2427,8 +2403,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_18"><a class="anchor" href="#_evaluate_18"></a>7.4.4.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_18"><a class="anchor" href="#_evaluate_18"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2477,16 +2453,16 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_5_source_download_failure"><a class="anchor" href="#_5_source_download_failure"></a>7.4.5. 5. Source Download Failure</h4>
 <div class="sect4">
-<h5 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>7.4.5.1. Purpose</h5>
+<h5 id="_5_source_download_failure"><a class="anchor" href="#_5_source_download_failure"></a>7.2.2.5. 5. Source Download Failure</h5>
+<div class="sect5">
+<h6 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the <code>metric wmo_wis2_gc_dataserver_status_flag</code> for the source data server should be set to 0 (zero).</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_19"><a class="anchor" href="#_requirements_19"></a>7.4.5.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_19"><a class="anchor" href="#_requirements_19"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2541,8 +2517,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_19"><a class="anchor" href="#_steps_19"></a>7.4.5.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_19"><a class="anchor" href="#_steps_19"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2570,8 +2546,8 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_19"><a class="anchor" href="#_evaluate_19"></a>7.4.5.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_19"><a class="anchor" href="#_evaluate_19"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2617,18 +2593,18 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_6_cache_override_optional"><a class="anchor" href="#_6_cache_override_optional"></a>7.4.6. 6. Cache Override (Optional)</h4>
 <div class="sect4">
-<h5 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>7.4.6.1. Purpose</h5>
+<h5 id="_6_cache_override_optional"><a class="anchor" href="#_6_cache_override_optional"></a>7.2.2.6. 6. Cache Override (Optional)</h5>
+<div class="sect5">
+<h6 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server, and the metric <code>wmo_wis2_gc_cache_override_total</code> is incremented by 1 (one).
 Note that the trigger for this directive is implementation specific. The criteria must be known and enabled for the test
 to be valid. Additionally, a given GC may decide to NOT implement this directive and thus this test is included as optional.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_20"><a class="anchor" href="#_requirements_20"></a>7.4.6.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_20"><a class="anchor" href="#_requirements_20"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2686,8 +2662,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_20"><a class="anchor" href="#_steps_20"></a>7.4.6.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_20"><a class="anchor" href="#_steps_20"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2715,8 +2691,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_20"><a class="anchor" href="#_evaluate_20"></a>7.4.6.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_20"><a class="anchor" href="#_evaluate_20"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2782,10 +2758,10 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_7_data_integrity_check_failure_recommended"><a class="anchor" href="#_7_data_integrity_check_failure_recommended"></a>7.4.7. 7. Data Integrity Check Failure (Recommended)</h4>
 <div class="sect4">
-<h5 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>7.4.7.1. Purpose</h5>
+<h5 id="_7_data_integrity_check_failure_recommended"><a class="anchor" href="#_7_data_integrity_check_failure_recommended"></a>7.2.2.7. 7. Data Integrity Check Failure (Recommended)</h5>
+<div class="sect5">
+<h6 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should validate the integrity of the resources it caches and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Global Cache should accept the data as valid. In this case a Global Cache <em>may</em> add an integrity value to the message it republishes.</p>
 </div>
@@ -2794,8 +2770,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <strong>Source:</strong> <a href="https://github.com/wmo-im/wis2-notification-message/blob/main/standard/recommendations/core/REC_integrity.adoc" class="bare">https://github.com/wmo-im/wis2-notification-message/blob/main/standard/recommendations/core/REC_integrity.adoc</a></p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_21"><a class="anchor" href="#_requirements_21"></a>7.4.7.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_21"><a class="anchor" href="#_requirements_21"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2850,8 +2826,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_21"><a class="anchor" href="#_steps_21"></a>7.4.7.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_21"><a class="anchor" href="#_steps_21"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2876,8 +2852,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_21"><a class="anchor" href="#_evaluate_21"></a>7.4.7.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_21"><a class="anchor" href="#_evaluate_21"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2926,10 +2902,10 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_8_wis2_notification_message_deduplication"><a class="anchor" href="#_8_wis2_notification_message_deduplication"></a>7.4.8. 8. WIS2 Notification Message Deduplication</h4>
 <div class="sect4">
-<h5 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>7.4.8.1. Purpose</h5>
+<h5 id="_8_wis2_notification_message_deduplication"><a class="anchor" href="#_8_wis2_notification_message_deduplication"></a>7.2.2.8. 8. WIS2 Notification Message Deduplication</h5>
+<div class="sect5">
+<h6 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed.</p>
 </div>
@@ -2937,8 +2913,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_22"><a class="anchor" href="#_requirements_22"></a>7.4.8.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_22"><a class="anchor" href="#_requirements_22"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2990,8 +2966,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_22"><a class="anchor" href="#_steps_22"></a>7.4.8.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_22"><a class="anchor" href="#_steps_22"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3016,8 +2992,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_22"><a class="anchor" href="#_evaluate_22"></a>7.4.8.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_22"><a class="anchor" href="#_evaluate_22"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3073,10 +3049,10 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_8_1_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_8_1_wis2_notification_message_deduplication_alternative_1"></a>7.4.9. 8.1. WIS2 Notification Message Deduplication (Alternative 1)</h4>
 <div class="sect4">
-<h5 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>7.4.9.1. Purpose</h5>
+<h5 id="_8_1_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_8_1_wis2_notification_message_deduplication_alternative_1"></a>7.2.2.9. 8.1. WIS2 Notification Message Deduplication (Alternative 1)</h5>
+<div class="sect5">
+<h6 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache fails to process a notification message relating to a given unique data object (<code>properties.data_id</code> + <code>properties.pubtime</code>), a Global Cache should successfully process a valid, subsequently received notification message with the same unique data identifier.</p>
 </div>
@@ -3084,8 +3060,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_23"><a class="anchor" href="#_requirements_23"></a>7.4.9.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_23"><a class="anchor" href="#_requirements_23"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3143,8 +3119,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_23"><a class="anchor" href="#_steps_23"></a>7.4.9.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_23"><a class="anchor" href="#_steps_23"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3169,8 +3145,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_23"><a class="anchor" href="#_evaluate_23"></a>7.4.9.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_23"><a class="anchor" href="#_evaluate_23"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3219,22 +3195,22 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_8_2_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_8_2_wis2_notification_message_deduplication_alternative_2"></a>7.4.10. 8.2. WIS2 Notification Message Deduplication (Alternative 2)</h4>
 <div class="sect4">
-<h5 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>7.4.10.1. Purpose</h5>
+<h5 id="_8_2_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_8_2_wis2_notification_message_deduplication_alternative_2"></a>7.2.2.10. 8.2. WIS2 Notification Message Deduplication (Alternative 2)</h5>
+<div class="sect5">
+<h6 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>Purpose</h6>
 <div class="paragraph">
 <p>Related to the two previous tests, a GC should not process and cache a data item if it has already processed and cached a data item with the same <code>properties.data_id</code> and a <code>properties.pubtime</code> that is equal to or less than the <code>properties.pubtime</code> of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_24"><a class="anchor" href="#_requirements_24"></a>7.4.10.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_24"><a class="anchor" href="#_requirements_24"></a>Requirements</h6>
 <div class="paragraph">
 <p>See above.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_24"><a class="anchor" href="#_steps_24"></a>7.4.10.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_24"><a class="anchor" href="#_steps_24"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3259,8 +3235,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_24"><a class="anchor" href="#_evaluate_24"></a>7.4.10.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_24"><a class="anchor" href="#_evaluate_24"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3309,10 +3285,10 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_9_data_update"><a class="anchor" href="#_9_data_update"></a>7.4.11. 9. Data Update</h4>
 <div class="sect4">
-<h5 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>7.4.11.1. Purpose</h5>
+<h5 id="_9_data_update"><a class="anchor" href="#_9_data_update"></a>7.2.2.11. 9. Data Update</h5>
+<div class="sect5">
+<h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should treat notification messages with the same data item identifier (<code>properties.data_id</code>), but different publication times (<code>properties.pubtime</code>) as unique data items. Data items with the same <code>properties.data_id</code> but a greater/later publication time AND a <mark>update</mark> link (links['rel']='update'), should be processed (see test Notification processing). Data items with the same <code>properties.data_id</code> but earlier or identical publication times should be ignored (see deduplication test 8).</p>
 </div>
@@ -3320,8 +3296,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.2. [Global Cache] Practices and procedures: “Verify if the message points to new or updated data by comparing the pubtime value of the notification message with the list of data_ids”. <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2</a></p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_25"><a class="anchor" href="#_requirements_25"></a>7.4.11.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_25"><a class="anchor" href="#_requirements_25"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3379,8 +3355,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_25"><a class="anchor" href="#_steps_25"></a>7.4.11.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3405,8 +3381,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_25"><a class="anchor" href="#_evaluate_25"></a>7.4.11.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_25"><a class="anchor" href="#_evaluate_25"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3456,18 +3432,18 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_performance_tests"><a class="anchor" href="#_performance_tests"></a>7.5. Performance tests</h3>
 <div class="sect3">
-<h4 id="_wis2_notification_processing_rate"><a class="anchor" href="#_wis2_notification_processing_rate"></a>7.5.1. WIS2 Notification Processing Rate</h4>
+<h4 id="_performance_tests"><a class="anchor" href="#_performance_tests"></a>7.2.3. Performance tests</h4>
 <div class="sect4">
-<h5 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>7.5.1.1. Purpose</h5>
+<h5 id="_wis2_notification_processing_rate"><a class="anchor" href="#_wis2_notification_processing_rate"></a>7.2.3.1. WIS2 Notification Processing Rate</h5>
+<div class="sect5">
+<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache shall be able to successfully process, on average, 2000 unique WNM&#8217;s per minute with an average message size of 75kb. This test represents the upper end of the current WNM volume. This test is a measured performance test similar to test 3. WNM Processing except that a large batch of messages is used, and the time taken to process the messages is measured. The noted WNM&#8217;s/minute rate can be used as a performance indicator for the GC being tested.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_26"><a class="anchor" href="#_requirements_26"></a>7.5.1.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_26"><a class="anchor" href="#_requirements_26"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3548,8 +3524,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_26"><a class="anchor" href="#_steps_26"></a>7.5.1.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3580,8 +3556,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ol>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_26"><a class="anchor" href="#_evaluate_26"></a>7.5.1.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_26"><a class="anchor" href="#_evaluate_26"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3618,10 +3594,10 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_concurrent_client_downloads"><a class="anchor" href="#_concurrent_client_downloads"></a>7.5.2. Concurrent client downloads</h4>
 <div class="sect4">
-<h5 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>7.5.2.1. Purpose</h5>
+<h5 id="_concurrent_client_downloads"><a class="anchor" href="#_concurrent_client_downloads"></a>7.2.3.2. Concurrent client downloads</h5>
+<div class="sect5">
+<h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should support a minimum of 1000 simultaneous downloads.</p>
 </div>
@@ -3630,8 +3606,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 <strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service</a></p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_requirements_27"><a class="anchor" href="#_requirements_27"></a>7.5.2.2. Requirements</h5>
+<div class="sect5">
+<h6 id="_requirements_27"><a class="anchor" href="#_requirements_27"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3709,8 +3685,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_steps_27"><a class="anchor" href="#_steps_27"></a>7.5.2.3. Steps</h5>
+<div class="sect5">
+<h6 id="_steps_27"><a class="anchor" href="#_steps_27"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3740,8 +3716,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 . The test client should record the number of successful downloads and the time taken to complete each download.</p>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_evaluate_27"><a class="anchor" href="#_evaluate_27"></a>7.5.2.4. Evaluate</h5>
+<div class="sect5">
+<h6 id="_evaluate_27"><a class="anchor" href="#_evaluate_27"></a>Evaluate</h6>
 <div class="paragraph">
 <p>The test is considered successful if the following conditions are met:
 * The total number of successful downloads is 1000.
@@ -3749,13 +3725,13 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_implicit_tests"><a class="anchor" href="#_implicit_tests"></a>7.5.3. Implicit tests</h4>
+<div class="sect4">
+<h5 id="_implicit_tests"><a class="anchor" href="#_implicit_tests"></a>7.2.3.3. Implicit tests</h5>
 <div class="paragraph">
 <p>These are tests that are to be verified by the individual implementations as they represent critical requirements but would be difficult to test in a generic way.</p>
 </div>
-<div class="sect4">
-<h5 id="_valid_tlsssl_certificate"><a class="anchor" href="#_valid_tlsssl_certificate"></a>7.5.3.1. Valid TLS/SSL certificate</h5>
+<div class="sect5">
+<h6 id="_valid_tlsssl_certificate"><a class="anchor" href="#_valid_tlsssl_certificate"></a>Valid TLS/SSL certificate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3764,8 +3740,8 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </ul>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_available_storage_space"><a class="anchor" href="#_available_storage_space"></a>7.5.3.2. Available Storage Space</h5>
+<div class="sect5">
+<h6 id="_available_storage_space"><a class="anchor" href="#_available_storage_space"></a>Available Storage Space</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3779,10 +3755,11 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="global-discovery-catalogue-testing"><a class="anchor" href="#global-discovery-catalogue-testing"></a>7.6. Global Discovery Catalogue Service testing</h3>
+<h3 id="global-discovery-catalogue-testing"><a class="anchor" href="#global-discovery-catalogue-testing"></a>7.3. Global Discovery Catalogue Service testing</h3>
 <div class="sect3">
-<h4 id="_preparations_for_the_test"><a class="anchor" href="#_preparations_for_the_test"></a>7.6.1. Preparations for the test</h4>
+<h4 id="_preparations_for_the_test"><a class="anchor" href="#_preparations_for_the_test"></a>7.3.1. Preparations for the test</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -3795,7 +3772,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_entering_the_test_environment"><a class="anchor" href="#_entering_the_test_environment"></a>7.6.2. Entering the test environment</h4>
+<h4 id="_entering_the_test_environment"><a class="anchor" href="#_entering_the_test_environment"></a>7.3.2. Entering the test environment</h4>
 <div class="paragraph">
 <p>The GDC implementation under test (IUT) is required to enter the test environment with the following state:</p>
 </div>
@@ -3811,7 +3788,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_test_setup"><a class="anchor" href="#_test_setup"></a>7.6.3. Test setup</h4>
+<h4 id="_test_setup"><a class="anchor" href="#_test_setup"></a>7.3.3. Test setup</h4>
 <div class="paragraph">
 <p>The GDC test setup consists of the following:</p>
 </div>
@@ -3884,9 +3861,9 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>7.6.4. Functional tests</h4>
+<h4 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>7.3.4. Functional tests</h4>
 <div class="sect4">
-<h5 id="_global_broker_connection_and_subscription"><a class="anchor" href="#_global_broker_connection_and_subscription"></a>7.6.4.1. Global Broker connection and subscription</h5>
+<h5 id="_global_broker_connection_and_subscription"><a class="anchor" href="#_global_broker_connection_and_subscription"></a>7.3.4.1. Global Broker connection and subscription</h5>
 <div class="sect5">
 <h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
 <div class="paragraph">
@@ -3941,7 +3918,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>7.6.4.2. Notification and metadata processing (success)</h5>
+<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>7.3.4.2. Notification and metadata processing (success)</h5>
 <div class="sect5">
 <h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
 <div class="paragraph">
@@ -4034,7 +4011,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_record_not_found"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_not_found"></a>7.6.4.3. Notification and metadata processing (failure; record not found)</h5>
+<h5 id="_notification_and_metadata_processing_failure_record_not_found"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_not_found"></a>7.3.4.3. Notification and metadata processing (failure; record not found)</h5>
 <div class="sect5">
 <h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
 <div class="paragraph">
@@ -4112,7 +4089,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"></a>7.6.4.4. Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</h5>
+<h5 id="_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"></a>7.3.4.4. Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</h5>
 <div class="sect5">
 <h6 id="_purpose_31"><a class="anchor" href="#_purpose_31"></a>Purpose</h6>
 <div class="paragraph">
@@ -4193,7 +4170,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>7.6.4.5. Metadata ingest centre-id mismatch</h5>
+<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>7.3.4.5. Metadata ingest centre-id mismatch</h5>
 <div class="sect5">
 <h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
 <div class="paragraph">
@@ -4285,7 +4262,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>7.6.4.6. Notification and metadata processing (record deletion)</h5>
+<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>7.3.4.6. Notification and metadata processing (record deletion)</h5>
 <div class="sect5">
 <h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
 <div class="paragraph">
@@ -4381,7 +4358,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"></a>7.6.4.7. Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</h5>
+<h5 id="_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"></a>7.3.4.7. Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</h5>
 <div class="sect5">
 <h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
 <div class="paragraph">
@@ -4442,7 +4419,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.6.4.8. WCMP2 metadata archive zipfile publication</h5>
+<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.3.4.8. WCMP2 metadata archive zipfile publication</h5>
 <div class="sect5">
 <h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
 <div class="paragraph">
@@ -4517,7 +4494,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"><a class="anchor" href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"></a>7.6.4.9. WCMP2 cold start initialization from metadata archive zipfile</h5>
+<h5 id="_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"><a class="anchor" href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"></a>7.3.4.9. WCMP2 cold start initialization from metadata archive zipfile</h5>
 <div class="sect5">
 <h6 id="_purpose_36"><a class="anchor" href="#_purpose_36"></a>Purpose</h6>
 <div class="paragraph">
@@ -4617,7 +4594,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.6.4.10. API functionality</h5>
+<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.4.10. API functionality</h5>
 <div class="sect5">
 <h6 id="_purpose_37"><a class="anchor" href="#_purpose_37"></a>Purpose</h6>
 <div class="paragraph">
@@ -4715,9 +4692,9 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>7.6.5. Performance tests</h4>
+<h4 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>7.3.5. Performance tests</h4>
 <div class="sect4">
-<h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>7.6.5.1. Processing timeliness</h5>
+<h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>7.3.5.1. Processing timeliness</h5>
 <div class="sect5">
 <h6 id="_purpose_38"><a class="anchor" href="#_purpose_38"></a>Purpose</h6>
 <div class="paragraph">
@@ -4795,7 +4772,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_executing_the_test_environment"><a class="anchor" href="#_executing_the_test_environment"></a>7.6.6. Executing the test environment</h4>
+<h4 id="_executing_the_test_environment"><a class="anchor" href="#_executing_the_test_environment"></a>7.3.6. Executing the test environment</h4>
 <div class="paragraph">
 <p>To execute GDC tests:</p>
 </div>
@@ -4808,7 +4785,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_exiting_the_test_environment"><a class="anchor" href="#_exiting_the_test_environment"></a>7.6.7. Exiting the test environment</h4>
+<h4 id="_exiting_the_test_environment"><a class="anchor" href="#_exiting_the_test_environment"></a>7.3.7. Exiting the test environment</h4>
 <div class="paragraph">
 <p>The GDC implementation under test (IUT) exits the test environment with the following state:</p>
 </div>
@@ -5142,7 +5119,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-03 18:38:57 UTC
+Last updated 2024-09-04 10:57:12 UTC
 </div>
 </div>
 </body>
