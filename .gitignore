@@ -6,3 +6,6 @@ global-services-testing/images/**.bkp
 
 __pycache__
 *.pyc
+
+__idea__
+.idea/
