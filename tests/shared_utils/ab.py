@@ -76,6 +76,7 @@ def parse_ab_output(ab_output):
 
     return result
 
+
 # main boilerplate
 if __name__ == '__main__':
     with open("ab_1.txt", "r") as file:
