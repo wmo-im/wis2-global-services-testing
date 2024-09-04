@@ -127,15 +127,15 @@ def test_3_mqtt_broker_message_flow():
         "scenario": "datatest",
         "configuration": {
             "setup": {
-                "centreid_min": 15,
-                "centreid_max": 15,
+                "centreid_min": 13,
+                "centreid_max": 13,
                 "number": 1,
-                "size_min": 10000,
-                "size_max": 11000
+                "size_min": 128,
+                "size_max": 512
             },
             "wnm": {
                 "properties": {
-                    # "data_id": test_3_data_id,
+                    "data_id": test_3_data_id,
                     # "pubtime": "2024-08-23T22:41:59Z"
                 }
             }
@@ -191,13 +191,14 @@ def test_4_cache_false_directive():
         sub_client.subscribe(sub_topic, qos=1)
         print(f"Subscribed to topic: {sub_topic}")
     test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    # always use the same topic for the msg generator config/a/wis2/#
     test_pub_topic = f"config/a/wis2/{test_centre}"
     wnm_dataset_config = {
         "scenario": "datatest",
         "configuration": {
             "setup": {
-                "centreid_min": 15,
-                "centreid_max": 15,
+                "centreid_min": 14,
+                "centreid_max": 14,
                 "number": 5,
                 "size_min": 16,
                 "size_max": 128000
@@ -268,6 +269,7 @@ def test_5_source_download_failure():
         sub_client.subscribe(sub_topic, qos=1)
         print(f"Subscribed to topic: {sub_topic}")
     test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    # always use the same topic for the msg generator config/a/wis2/#
     test_pub_topic = f"config/a/wis2/{test_centre}"
     test_data_id = f"somedataid1234_{test_centre}"
     test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
@@ -324,3 +326,347 @@ def test_5_source_download_failure():
     # metrics = get_gc_metrics()
     # assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 0
     # assert metrics['wmo_wis2_gc_downloaded_errors_total'] > 0
+
+def test_6_cache_override():
+    print("\n6. Cache Override (Optional)")
+    pass
+    # generate some random id's for the messages
+    sub_client = setup_mqtt_client(mqtt_broker_out)
+    for sub_topic in sub_topics:
+        sub_client.subscribe(sub_topic, qos=1)
+        print(f"Subscribed to topic: {sub_topic}")
+    test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    # always use the same topic for the msg generator config/a/wis2/#
+    test_pub_topic = f"config/a/wis2/{test_centre}"
+    test_data_id = f"somedataid1234_{test_centre}"
+    # test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+
+    # Prepare WNM with properties that trigger the cache override directive
+    wnm_dataset_config = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 16,
+                "centreid_max": 16,
+                "number": 1,
+                "size_min": 128,
+                "size_max": 512
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                }
+            }
+        }
+    }
+    print(wnm_dataset_config)
+    pub_client = MQTTPubSubClient(mqtt_broker_in)
+    # Publish the message
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_dataset_config))
+    time.sleep(10)  # Wait for messages
+
+    # Evaluate
+    origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
+    cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+    sub_client.loop_stop()
+    sub_client.disconnect()
+
+    # Origin Messages
+    assert len(origin_msgs) > 0
+    # No messages should be published on the cache/a/wis2/# topic
+    for origin_msg in origin_msgs:
+        # match based on data_id and pubtime
+        cache_msg = [m for m in cache_msgs if
+                     m['properties']['data_id'] == origin_msg['properties']['data_id'] and m['properties'][
+                         'pubtime'] == origin_msg['properties']['pubtime']]
+        assert len(cache_msg) == 0
+
+    # GC Metrics
+    # Assuming a function get_gc_metrics() that retrieves the GC metrics
+    # metrics = get_gc_metrics()
+    # assert metrics['wmo_wis2_gc_cache_override_total'] > 0
+    # assert metrics['wmo_wis2_gc_download_total'] == 0
+    # assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 0
+    # assert metrics['wmo_wis2_gc_dataserver_last_download_timestamp_seconds'] == 0
+    # assert metrics['wmo_wis2_gc_downloaded_errors_total'] == 0
+
+
+def test_7_data_integrity_check_failure():
+    print("\n7. Data Integrity Check Failure (Recommended)")
+    num_origin_msgs = 1
+    sub_client = setup_mqtt_client(mqtt_broker_out)
+    for sub_topic in sub_topics:
+        sub_client.subscribe(sub_topic, qos=1)
+        print(f"Subscribed to topic: {sub_topic}")
+    test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    # always use the same topic for the msg generator config/a/wis2/#
+    test_pub_topic = f"config/a/wis2/{test_centre}"
+    test_data_id = f"somedataid1234_{test_centre}"
+    test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+
+    # Prepare WNM with invalid data integrity value
+    wnm_dataset_config = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 12,
+                "centreid_max": 12,
+                "number": num_origin_msgs,
+                "size_min": 128,
+                "size_max": 512
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                    # "pubtime": "2024-08-23T22:41:59Z",
+                    "integrity": {
+                        "value": "invalid_integrity_value",
+                        "method": "sha512"
+                    }
+                }
+            }
+        }
+    }
+    pub_client = MQTTPubSubClient(mqtt_broker_in)
+    # Publish the message
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_dataset_config))
+    time.sleep(5)  # Wait for messages
+
+    # Evaluate
+    origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
+    cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+    sub_client.loop_stop()
+    sub_client.disconnect()
+
+    # Origin Messages
+    assert len(origin_msgs) == num_origin_msgs
+    # No messages should be published on the cache/a/wis2/# topic
+    assert len(cache_msgs) == 0
+
+    # GC Metrics
+    # metrics = get_gc_metrics()
+    # assert metrics['wmo_wis2_gc_download_total'] == 0
+    # assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 0
+    # assert metrics['wmo_wis2_gc_dataserver_last_download_timestamp_seconds'] == 0
+    # assert metrics['wmo_wis2_gc_downloaded_errors_total'] > 0
+    # assert metrics['wmo_wis2_gc_integrity_failed_total'] > 0
+
+@pytest.mark.parametrize("centre_id", [11, 12, 13])
+def test_8_wnm_deduplication(centre_id):
+    print("\n8. WIS2 Notification Message Deduplication")
+    num_origin_msgs = 5
+    sub_client = setup_mqtt_client(mqtt_broker_out)
+    for sub_topic in sub_topics:
+        sub_client.subscribe(sub_topic, qos=1)
+        print(f"Subscribed to topic: {sub_topic}")
+    test_centre = f"centre_{centre_id}_{uuid.uuid4().hex[:6]}"
+    # always use the same topic for the msg generator config/a/wis2/#
+    test_pub_topic = f"config/a/wis2/{test_centre}"
+    test_data_id = f"somedataid1234_{test_centre}"
+    # test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+
+    # Prepare WNM with duplicate properties
+    wnm_dataset_config = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": centre_id,
+                "centreid_max": centre_id,
+                "number": num_origin_msgs,
+                "size_min": 1024*20,
+                "size_max": 1024*30
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                }
+            }
+        }
+    }
+    pub_client = MQTTPubSubClient(mqtt_broker_in)
+    # Publish the message twice
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_dataset_config))
+    # disconnect the client
+    pub_client.close()
+    # pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_dataset_config))
+    time.sleep(7)  # Wait for messages
+
+    # Evaluate
+    cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+    origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
+    sub_client.loop_stop()
+    sub_client.disconnect()
+
+    # Only one message should be published on the cache/a/wis2/# topic
+    assert len(origin_msgs) == num_origin_msgs
+    assert len(cache_msgs) == 1
+
+    # GC Metrics
+    # metrics = get_gc_metrics()
+    # assert metrics['wmo_wis2_gc_download_total'] == 1
+    # assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 1
+    # assert metrics['wmo_wis2_gc_downloaded_errors_total'] == 0
+    # assert metrics['wmo_wis2_gc_integrity_failed_total'] == 0
+
+def test_8_1_wnm_deduplication_alternative_1():
+    print("\n8.1. WIS2 Notification Message Deduplication (Alternative 1)")
+    sub_client = setup_mqtt_client(mqtt_broker_out)
+    for sub_topic in sub_topics:
+        sub_client.subscribe(sub_topic, qos=1)
+        print(f"Subscribed to topic: {sub_topic}")
+    test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    test_pub_topic = f"config/a/wis2/{test_centre}"
+    test_data_id = f"somedataid1234_{test_centre}"
+    test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+
+    # Prepare WNM with invalid and valid properties
+    wnm_invalid_config = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 16,
+                "centreid_max": 16,
+                "number": 1,
+                "size_min": 10000,
+                "size_max": 11000
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                    "pubtime": test_dt,
+                    "links": [
+                        {
+                            "rel": "canonical",
+                            "href": "http://invalid.example.com/data"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    wnm_valid_config = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 16,
+                "centreid_max": 16,
+                "number": 1,
+                "size_min": 10000,
+                "size_max": 11000
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                    "pubtime": test_dt,
+                    "links": [
+                        {
+                            "rel": "canonical",
+                            "href": "http://example.com/data"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    pub_client = MQTTPubSubClient(mqtt_broker_in)
+    # Publish the invalid message first, then the valid message
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_invalid_config))
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_valid_config))
+    time.sleep(10)  # Wait for messages
+
+    # Evaluate
+    cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+    sub_client.loop_stop()
+    sub_client.disconnect()
+
+    # Only one message should be published on the cache/a/wis2/# topic
+    assert len(cache_msgs) == 1
+
+    # GC Metrics
+    metrics = get_gc_metrics()
+    assert metrics['wmo_wis2_gc_download_total'] == 1
+    assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 1
+    assert metrics['wmo_wis2_gc_downloaded_errors_total'] == 1
+    assert metrics['wmo_wis2_gc_integrity_failed_total'] == 0
+
+def test_8_2_wnm_deduplication_alternative_2():
+    print("\n8.2. WIS2 Notification Message Deduplication (Alternative 2)")
+    sub_client = setup_mqtt_client(mqtt_broker_out)
+    for sub_topic in sub_topics:
+        sub_client.subscribe(sub_topic, qos=1)
+        print(f"Subscribed to topic: {sub_topic}")
+    test_centre = f"centre_{uuid.uuid4().hex[:6]}"
+    test_pub_topic = f"config/a/wis2/{test_centre}"
+    test_data_id = f"somedataid1234_{test_centre}"
+    test_dt_1 = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+    test_dt_2 = (datetime.now(timezone.utc) - timedelta(seconds=10)).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
+
+    # Prepare WNM with decreasing pubtime
+    wnm_config_1 = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 16,
+                "centreid_max": 16,
+                "number": 1,
+                "size_min": 10000,
+                "size_max": 11000
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                    "pubtime": test_dt_1,
+                    "links": [
+                        {
+                            "rel": "canonical",
+                            "href": "http://example.com/data"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    wnm_config_2 = {
+        "scenario": "datatest",
+        "configuration": {
+            "setup": {
+                "centreid_min": 16,
+                "centreid_max": 16,
+                "number": 1,
+                "size_min": 10000,
+                "size_max": 11000
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": test_data_id,
+                    "pubtime": test_dt_2,
+                    "links": [
+                        {
+                            "rel": "canonical",
+                            "href": "http://example.com/data"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+    pub_client = MQTTPubSubClient(mqtt_broker_in)
+    # Publish the message with later pubtime first, then the earlier pubtime
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_1))
+    pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_2))
+    time.sleep(10)  # Wait for messages
+
+    # Evaluate
+    cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+    sub_client.loop_stop()
+    sub_client.disconnect()
+
+    # Both messages should be published on the cache/a/wis2/# topic
+    assert len(cache_msgs) == 2
+
+    # GC Metrics
+    metrics = get_gc_metrics()
+    assert metrics['wmo_wis2_gc_download_total'] == 2
+    assert metrics['wmo_wis2_gc_dataserver_status_flag'] == 1
+    assert metrics['wmo_wis2_gc_downloaded_errors_total'] == 0
+    assert metrics['wmo_wis2_gc_integrity_failed_total'] == 0
