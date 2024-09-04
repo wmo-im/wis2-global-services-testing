@@ -3,7 +3,6 @@ import json
 import traceback
 from slugify import slugify
 
-
 def parse_ab_output(ab_output):
     result = {}
     patterns = [
@@ -23,15 +22,14 @@ def parse_ab_output(ab_output):
         ('HTML transferred', r'HTML transferred:\s+(\d+)'),
         ('Requests per second', r'Requests per second:\s+([\d.]+)'),
         ('Time per request', r'Time per request:\s+([\d.]+) \[ms\] \(mean\)'),
-        ('Time per request (across all concurrent requests)',
-         r'Time per request:\s+([\d.]+) \[ms\] \(mean, across all concurrent requests\)'),
+        ('Time per request (across all concurrent requests)', r'Time per request:\s+([\d.]+) \[ms\] \(mean, across all concurrent requests\)'),
         ('Transfer rate', r'Transfer rate:\s+([\d.]+) \[Kbytes/sec\] received')
     ]
 
     for key, pattern in patterns:
         try:
             key2 = slugify(key, separator='_')
-            result[key] = re.search(pattern, ab_output).group(1)
+            result[key2] = re.search(pattern, ab_output).group(1)
         except AttributeError:
             print(traceback.format_exc())
             pass
@@ -39,29 +37,29 @@ def parse_ab_output(ab_output):
         connection_times = re.search(
             r'Connection Times \(ms\)\s+min\s+mean\[\+/-sd\]\s+median\s+max\nConnect:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nProcessing:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nWaiting:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)\nTotal:\s+(\d+)\s+(\d+)\s+([\d.]+)\s+(\d+)\s+(\d+)',
             ab_output)
-        result['Connection Times'] = {
-            'Connect': {
+        result['connection_times'] = {
+            'connect': {
                 'min': connection_times.group(1),
                 'mean': connection_times.group(2),
                 'sd': connection_times.group(3),
                 'median': connection_times.group(4),
                 'max': connection_times.group(5)
             },
-            'Processing': {
+            'processing': {
                 'min': connection_times.group(6),
                 'mean': connection_times.group(7),
                 'sd': connection_times.group(8),
                 'median': connection_times.group(9),
                 'max': connection_times.group(10)
             },
-            'Waiting': {
+            'waiting': {
                 'min': connection_times.group(11),
                 'mean': connection_times.group(12),
                 'sd': connection_times.group(13),
                 'median': connection_times.group(14),
                 'max': connection_times.group(15)
             },
-            'Total': {
+            'total': {
                 'min': connection_times.group(16),
                 'mean': connection_times.group(17),
                 'sd': connection_times.group(18),
@@ -75,15 +73,13 @@ def parse_ab_output(ab_output):
 
     try:
         percentage_times = re.findall(r'(\d+)%\s+(\d+)', ab_output)
-        result['Percentage of requests served within a certain time'] = {f'{percent}%': time for percent, time in
+        result['percentage_of_requests_served_within_a_certain_time'] = {f'{percent}%': time for percent, time in
                                                                          percentage_times}
     except AttributeError:
         print(traceback.format_exc())
         pass
 
     return result
-
-
 # main boilerplate
 if __name__ == '__main__':
     with open("ab_1.txt", "r") as file:
