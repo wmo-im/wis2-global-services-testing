@@ -1,7 +1,9 @@
-import re
 import json
-import traceback
+import re
 from slugify import slugify
+import sys
+import traceback
+
 
 def parse_ab_output(ab_output):
     result = {}
@@ -80,9 +82,11 @@ def parse_ab_output(ab_output):
         pass
 
     return result
+
+
 # main boilerplate
 if __name__ == '__main__':
-    with open("ab_1.txt", "r") as file:
+    with open(sys.argv[1]) as file:
         ab_output = file.read()
         ab_json = parse_ab_output(ab_output)
         print(ab_json)
