@@ -2,9 +2,7 @@ version: '3.8'
 services:
     wis2node:
       container_name: wis2node
-#      image: golfvert/fakewis2node:1.0.9
-#      image: golfvert/fakewis2node:2.0.3
-      image: golfvert/fakewis2node:2.0.4
+      image: golfvert/fakewis2node:2.1.10
       labels:
         - traefik.enable=true
         - traefik.http.routers.wis2node.entrypoints=websecure
