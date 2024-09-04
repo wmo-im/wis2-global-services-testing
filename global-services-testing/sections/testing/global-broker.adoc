@@ -11,6 +11,140 @@ A Global Broker:
 - should support a minimum of *1000* subscribers.
 - should support processing of a minimum of *10000* messages per second
 
+
+
+==== Setup and tear down Global Brokers for the tests
+
+It has been decided to rely on _-test_ systems to emulate WIS2 Nodes. 
+Two kinds of test WIS2 Nodes have been prepared.
+
+- 10 WIS2 Nodes for functional tests
+- 200 WIS2 Nodes for performance tests
+
+===== For the functional tests
+Ten WIS2 Nodes are deployed on AWS;
+The DNS names of the WIS2 nodes will be:
+
+- test-node-1.wis2dev.io
+
+- test-node-2.wis2dev.io
+
+...
+
+- test-node-10.wis2dev.io
+
+The _centre_id_ for these WIS2 Nodes will be *io-wis2dev-11-test* (on test-node-1 host) to *io-wis2dev-20-test* (on test-node-10 host).
+
+They will be used during the functional tests of the Global Broker.
+
+===== For the performance tests
+
+Two hundred WIS2 Nodes, only for WIS2 Notification Messages, will be deployed on 5 of the same VMs. On each VM, the equivalent of 40 WIS2 Nodes will be deployed. They will share the same MQTT Broker, however the _centre_id_ and the subscription topic will be different for each WIS2 Node.
+
+The DNS name of the VM will be:
+
+- test-node-1.wis2dev.io (for centre_id from 100 to 139)
+
+- test-node-2.wis2dev.io (for centre_id from 140 to 179)
+
+...
+
+- test-node-5.wis2dev.io (for centre_id from 260 to 299)
+
+===== MQTT Configuration 
+
+The MQTT broker(s) will be reachable using:
+
+```
+MQTT_SUB_BROKER=mqtt://test-node-1.wis2dev.io (and also -2, -3,... -10)
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+```
+
+1. Default MQTT port will be used (1883)
+2. The password is changed to _onlyone_. This allows to prevent the default authentication (everyone/everyone) to be usable, while keeping the authorization (typically using only the username) unchanged
+
+===== Notification Message tests
+
+As no metadata record will be provided, checking the existence of the metadata record by the Global Broker must be disabled.
+
+As the topic used for the test messages will be correct, checking the validity of the Topic Hierarchy must be done.
+
+As the Notification Messages will be syntactically correct, checking the compliance of the Notification Message with the defined schema (schemas.wmo.int) must be done.
+
+===== centre_id and subscription
+
+The centre_id will be of the from io-wis2dev-[number]-test with number varying from 11 to 20, and 100 to 299. 100 to 139 on test-node-1.wis2dev.io and so on.
+
+Messages will be published on the topic `origin/a/wis2/io-wis2dev-x-test/#` (with x varying from 11 to 20 and 100 to 299).
+
+===== Summary
+
+Using the antiloop software used by Brazil and France, as an example, the configuration file _io-wis2dev-100-test.env_ will be : 
+
+```
+MQTT_SUB_BROKER=mqtt://test-node-1.wis2dev.io
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+MQTT_SUB_TOPIC=origin/a/wis2/io-wis2dev-100-test/#
+CENTRE_ID=io-wis2dev-100-test
+MSG_CHECK_OPTION=verify
+TOPIC_CHECK_OPTION=verify
+METADATA_CHECK_OPTION=no
+GDC_URL=https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
+SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/main/schemas/wis2-notification-message-bundled.json
+```
+
+The configuration file _io-wis2dev-210-test.env_ will be : 
+
+```
+MQTT_SUB_BROKER=mqtt://test-node-3.wis2dev.io
+MQTT_SUB_USERNAME=everyone
+MQTT_SUB_PASSWORD=onlyone
+MQTT_SUB_TOPIC=origin/a/wis2/io-wis2dev-210-test/#
+CENTRE_ID=io-wis2dev-210-test
+MSG_CHECK_OPTION=verify
+TOPIC_CHECK_OPTION=verify
+METADATA_CHECK_OPTION=no
+GDC_URL=https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata/items?lang=en&f=json&q=
+SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/main/schemas/wis2-notification-message-bundled.json
+```
+Summary of the correspondance between the MQTT endpoint address and centre_id:
+
+- WIS2 Node 100 to 139 on test-node-1.wis2dev.io
+- WIS2 Node 140 to 179 on test-node-2.wis2dev.io
+- WIS2 Node 180 to 219 on test-node-3.wis2dev.io
+- WIS2 Node 220 to 259 on test-node-4.wis2dev.io
+- WIS2 Node 260 to 299 on test-node-5.wis2dev.io
+
+Ahead of the testing period, each Global Broker operator is invited to prepare the configuration for the 210 (10 + 200) WIS2 Nodes.
+
+==== Setup the Global Broker for the tests
+
+In order to run the tests, the operators of the Global Broker will need to:
+
+1. Remove all the subscriptions to existing and _real_ WIS2 Nodes 
+2. Modify the password of the _everyone_ user on the broker of the Global Broker from *everyone* to *onlyone*
+3. Delete all existing subscriptions to broker of the Global Broker (Users, other Global Brokers, Global Caches have a subscription to the broker)
+4. Enable all configurations to the _test_ 210 WIS2 nodes
+
+Depending on the Global Broker and the MQTT broker used, the method of doing the four steps above will be different and is beyond the scope of this document. 
+
+When those steps are completed, the Global Broker will be ready to run the functional and performance tests.
+
+==== Tear down the Global Broker to reverse WIS2 operations
+
+After the performance tests, the operators of the Global Broker will need to:
+
+1. Remove all the subscriptions to _-test_ WIS2 Nodes 
+2. Modify the password of the _everyone_ user on the broker of the Global Broker from *onlyone* to *everyone*
+3. Delete all existing subscriptions to broker of the Global Broker 
+4. Enable all configurations to the _real_ WIS2 nodes
+
+Depending on the Global Broker and the MQTT broker used, the method of doing the four steps above will be different and is beyond the scope of this document. 
+
+When those steps are completed, the Global Broker will be back to normal operations.
+
 ==== Functional tests
 
 ===== 1. Global Broker Connectivity Tests
@@ -135,21 +269,21 @@ The Global Broker service must discard all duplicated messages (identical id) re
 
 ====== Requirements
 
-* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
-* Global Broker MQTT connection string to 2 WIS2 Nodes (with the following centre_id: io-wis2dev-10-test and io-wis2dev-11-test)
-* MQTT Test Client subscribed to *origin/a/wis2/io-wis2dev-10-test/#* and *origin/a/wis2/io-wis2dev-11-test/*
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 10 tests system (*io-wis2dev-11-test* to *io-wis2dev-20-test*)
+* Global Broker MQTT connection string to 2 WIS2 Nodes (with the following centre_id: io-wis2dev-11-test and io-wis2dev-12-test)
+* MQTT Test Client subscribed to *origin/a/wis2/io-wis2dev-11-test/#* and *origin/a/wis2/io-wis2dev-20-test/*
 
 ====== Steps
 
-. WIS2Node _io-wis2dev-10-test_ publish on its local broker *ten* messages with a pre-defined id (using the UUID format) on topic *origin/a/wis2/io-wis2dev-10-test/core/data/weather/surface-based-observation/synop*
-. WIS2Node _io-wis2dev-10-test_ publish *ten* message with the same id (same id as above) on topic *origin/a/io-wis2dev-11-test/test2/core/data/weather/surface-based-observation/synop*  
+. WIS2Node _io-wis2dev-11-test_ publish on its local broker *ten* messages with a pre-defined id (using the UUID format) on topic *origin/a/wis2/io-wis2dev-11-test/core/data/weather/surface-based-observation/synop*
+. WIS2Node _io-wis2dev-12-test_ publish *ten* message with the same id (same id as above) on topic *origin/a/io-wis2dev-12-test/core/data/weather/surface-based-observation/synop*  
 
 ====== Evaluate
 
 . If the Global Broker discards all messages except one, makes it available on one of the two topics depending the WIS2 Node messages that arrived first.
 . The MQTT client received one message
 . Increments *wmo_wis2_gb_messages_subscribed_total* by 10 on both centre_id
-. Increments *wmo_wis2_gb_messages_published_total* by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-10-test or io-wis2dev-11-test)
+. Increments *wmo_wis2_gb_messages_published_total* by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-11-test or io-wis2dev-12-test)
 . If both statements are true, the test passes. Otherwise, the test fails.
 
 ====== B. Publishing a message using the centre_id from a different WIS2 Node Test
@@ -160,13 +294,13 @@ The Global Broker service must ensure that any WIS2 Node is not publishing a mes
 
 ====== Requirements
 
-* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
-* Global Broker MQTT connection string to *io-wis2dev-10-test*
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 10 tests system (*io-wis2dev-11-test* to *io-wis2dev-20-test*)
+* Global Broker MQTT connection string to *io-wis2dev-11-test*
 * MQTT Test Client
 
 ====== Steps
 
-. Have WIS2Node  _io-wis2dev-10-test_ publish a valid message on topic Eg
+. Have WIS2Node  _io-wis2dev-11-test_ publish a valid message on topic Eg
 
 ====== Evaluate
 
@@ -181,13 +315,13 @@ The Global Broker service must forward messages when the topic is compliant with
 
 ====== Requirements
 
-* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
-* Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-11-test* to *io-wis2dev-20-test*)
+* Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-11-test*)
 * MQTT Test Client
 
 ====== Steps
 
-. Have WIS2Node *io-wis2dev-10-test* publish *valid* messages on *valid* topics hierarchy (one message per tested valid topic)
+. Have WIS2Node *io-wis2dev-11-test* publish *valid* messages on *valid* topics hierarchy (one message per tested valid topic)
 
 ====== Evaluate
 
@@ -205,13 +339,13 @@ The Global Broker service must forward messages when the topic is compliant with
 
 ====== Requirements
 
-* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
-*  Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-11-test* to *io-wis2dev-20-test*)
+*  Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-11-test*)
 * MQTT Test Client
 
 ====== Steps
 
-. Have WIS2 Node *io-wis2dev-10-test* publish 10 *valid* messages on 10 *different* and *invalid* topics
+. Have WIS2 Node *io-wis2dev-11-test* publish 10 *valid* messages on 10 *different* and *invalid* topics
 
 ====== Evaluate
 
@@ -229,14 +363,14 @@ The Global Broker service must check that the topic used to publish a message by
 
 ====== Requirements
 
-* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
-* Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
+* The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-11-test* to *io-wis2dev-20-test*)
+* Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-11-test*)
 * MQTT Test Client
 
 ====== Steps
 
-. Have WIS2 Node *io-wis2dev-10-test* publish 10 *valid* messages on 10 *different* topics, and no metadata exists for any topic used.
-. e.g Publish on *origin/a/wis2/ _io-wis2dev-10-test_/core/data/weather/surface-based-observation/synop* and WIS2 Node *io-wis2dev-10-test* has not published a metadata record for the synop.
+. Have WIS2 Node *io-wis2dev-11-test* publish 10 *valid* messages on 10 *different* topics, and no metadata exists for any topic used.
+. e.g Publish on *origin/a/wis2/_io-wis2dev-11-test_/core/data/weather/surface-based-observation/synop* and WIS2 Node *io-wis2dev-11-test* has not published a metadata record for the synop.
 
 
 ====== Evaluate
@@ -255,13 +389,13 @@ The Global Broker service must verify the compliance of the WIS2 Notification Me
 
 ====== Requirements
 
-. The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-10-test* to *io-wis2dev-14-test*)
-. Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-10-test*)
+. The container https://hub.docker.com/r/golfvert/fakewis2node deployed on 5 tests system (*io-wis2dev-11-test* to *io-wis2dev-20-test*)
+. Global Broker MQTT connection string to a WIS2 Nodes (*io-wis2dev-11-test*)
 . MQTT Test Client
 
 ====== Steps
 
-. Have WIS2 Node *io-wis2dev-10-test* publish 10 *invalid* messages on 10 *valid* topics
+. Have WIS2 Node *io-wis2dev-11-test* publish 10 *invalid* messages on 10 *valid* topics
 . All mandatory fields of the WIS2 Notification Messages must be tested 
 
 ====== Evaluate
@@ -351,4 +485,4 @@ Typically with:
 
 ====== Evaluate
 
-. Run the test for 30 seconds (Y=30), if MQTTS CLI output shows that 100000 are received, then the test is successful.
+. Run the test for 30 seconds (Y=30), if MQTTS CLI output shows that 300000 are received, then the test is successful.

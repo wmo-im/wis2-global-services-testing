@@ -55,19 +55,40 @@ A Global Monitor tracks what data is published by WIS2 Nodes, whether data can b
 
 ==== Data
 
-TODO
+Test data and notification messages are generated dynanamically within the testing environment.  More information can be found in https://github.com/wmo-im/wis2-global-services-testing/blob/main/tools/Documentation/Activating%20the%20tests%20on%20the%20fake%20WIS2%20Nodes.adoc
+
+Test WCMP2 records are found in https://github.com/wmo-im/wis2-global-services-testing/tree/main/tests/global_discovery_catalogue/metadata.
 
 ==== Environment
 
+.WIS2 Development Environment
+image::images/c4.container.png[wis2dev.io development environment]
+
 The WIS2 development environment will be used as the target network for executing tests.
 
-==== Performance testing
+The test orchestrators/runners will execute on ``master.wis2dev.io``
 
-Ensure WIS2 Global Services are able to operate under various loads.
+The environment to perform tests is made available on ``master.wis2dev.io``.  Access is coordinated with the testing team.
+
+The following steps are required before executing tests in the test environment 
+
+[source,bash]
+----
+cd /data/wis2-testing/
+python3 -m venv env
+. bin/activate
+git clone https://github.com/wmo-im/wis2-global-services-testing.git
+cd wis2-global-services-testing/tests
+pip3 install -r requirements.txt
+----
 
 ==== Functional testing
 
-Ensure WIS2 Global Services operate with one another as expected and meet requirements.
+Functional testing ensures WIS2 Global Services operate with one another as expected and meet requirements.
+
+==== Performance testing
+
+Performace testing ensures that WIS2 Global Services are able to operate under various loads.
 
 == Tests
 

@@ -1,8 +1,46 @@
 [[global-cache-testing]]
 
-== Global Cache Service testing
+=== Global Cache Service testing
 
-=== Functional Tests
+[[global-cache-setup-teardown]]
+
+==== Setup and Teardown
+
+===== Setup
+
+Before running the pytest tests, ensure the following setup steps are completed:
+
+1. **Subscribe to the dev/test Global Broker**:
+    - Ensure the Global Cache is subscribed to the dev/test Global Broker (`gb.wis2dev.io`).
+    - The Global Cache should be subscribed to the following topics:
+        - `origin/a/wis2/+/data/#`
+        - `cache/a/wis2/+/data/#`
+        - `origin/a/wis2/+/metadata/#`
+        - `cache/a/wis2/+/metadata/#`
+
+2. **GB Subscription to the GC's Local MQTT Broker**:
+    - Ensure the dev/test Global Broker is subscribed to the GC's local MQTT broker.
+3. Remove other subscriptions to prod GB's.
+    - Ensure that the Global Cache is not subscribed to any other Global Broker except the dev/test Global Broker.
+
+4. **Clear the Metrics**:
+    - Clear any existing metrics to ensure a clean state for the tests.
+
+===== Teardown
+
+After running the pytest tests, ensure the following teardown steps are completed:
+
+1. **Unsubscribe from the dev/test Global Broker**:
+    - Unsubscribe the Global Cache from the dev/test Global Broker on the `gb.wis2dev.io` host.
+
+2. **Unsubscribe from the GC's Local MQTT Broker**:
+    - Unsubscribe the dev/test Global Broker from the GC's local MQTT broker.
+
+3. **Reset the Metrics**:
+    - Reset the metrics to their default state to avoid any interference with future tests.
+    - This can typically be done by restarting the Global Cache service or using a specific API endpoint if available.
+
+==== Functional Tests
 
 ===== 1. MQTT Broker Connectivity
 
@@ -104,10 +142,13 @@ This test also evaluates the client data download requirement: An HTTP client (i
     ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
 
 ===== 4. Cache False Directive
+
 ====== Purpose
+
 Where a Global Cache receives a notification message with _properties.cache_ set to false, the Global Cache should publish a notification message where the data download link (a link object's `href` property where `rel=canonical`) refers to the source data server.
 
 ====== Requirements
+
 * Dev/test GB MQTT broker connection string
     ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
 * Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
@@ -142,6 +183,7 @@ Where a Global Cache receives a notification message with _properties.cache_ set
   ** `wmo_wis2_gc_no_cache_total` (+=1 for each WNM)
 
 ===== 5. Source Download Failure
+
 ====== Purpose
 Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the `metric wmo_wis2_gc_dataserver_status_flag` for the source data server should be set to 0 (zero).
 
@@ -223,6 +265,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
         *** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
 
 ===== 7. Data Integrity Check Failure (Recommended)
+
 ====== Purpose
 A Global Cache should validate the integrity of the resources it caches and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Global Cache should accept the data as valid. In this case a Global Cache _may_ add an integrity value to the message it republishes.
 
@@ -262,7 +305,9 @@ A Global Cache should validate the integrity of the resources it caches and only
     ** `wmo_wis2_gc_integrity_failed_total` (+=1 for each WNM)
 
 ===== 8. WIS2 Notification Message Deduplication
+
 ====== Purpose
+
 A Global Cache must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed.
 
 *Source:* Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.
@@ -340,9 +385,10 @@ Where a Global Cache fails to process a notification message relating to a given
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each unique identifier WNM message set)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-
 ===== 8.2. WIS2 Notification Message Deduplication (Alternative 2)
+
 ====== Purpose
+
 Related to the two previous tests, a GC should not process and cache a data item if it has already processed and cached a data item with the same `properties.data_id` and a `properties.pubtime` that is equal to or less than the `properties.pubtime` of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.
 
 ====== Requirements
@@ -407,7 +453,7 @@ A Global Cache should treat notification messages with the same data item identi
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-=== Performance tests
+==== Performance tests
 
 ===== WIS2 Notification Processing Rate
 
@@ -494,13 +540,13 @@ The test is considered successful if the following conditions are met:
 * While the download time can be used to establish a baseline, it is highly dependent on the network and server conditions of the test environment and should not be used as a pass/fail criteria.
 
 
-=== Implicit tests
+===== Implicit tests
 These are tests that are to be verified by the individual implementations as they represent critical requirements but would be difficult to test in a generic way.
 
-===== Valid TLS/SSL certificate
+====== Valid TLS/SSL certificate
 * A Global Cache must have a valid TLS/SSL certificate to ensure secure communication with other WIS2 components.
 
-===== Available Storage Space
+====== Available Storage Space
 * A Global Cache shall be able to store at least 100GB of Core data items.
 
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: “A Global Cache should support a minimum of 100 GB of data in the cache” https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
