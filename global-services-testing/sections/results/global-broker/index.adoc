@@ -1,0 +1,5 @@
+[[global-broker-results]]
+
+=== Global Broker results
+
+// include::CENTRE-ID.adoc[]

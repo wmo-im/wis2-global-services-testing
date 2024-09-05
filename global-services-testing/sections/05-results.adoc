@@ -10,8 +10,6 @@ Pre-testing was performed in September 2024.  Final tests were performed in Octo
 
 The following tables provide the results of all tests (in alphabetical order, grouped by Global Service type).
 
-include::results/global-broker.adoc[]
-
-include::results/global-cache.adoc[]
-
-include::results/global-discovery-catalogue.adoc[]
+include::results/global-cache/index.adoc[]
+include::results/global-broker/index.adoc[]
+include::results/global-discovery-catalogue/index.adoc[]

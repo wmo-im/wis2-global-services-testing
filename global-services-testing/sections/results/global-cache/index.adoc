@@ -1,0 +1,5 @@
+[[global-cache-results]]
+
+=== Global Cache results
+
+// include::CENTRE-ID.adoc[]

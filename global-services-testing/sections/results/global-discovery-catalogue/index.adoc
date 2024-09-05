@@ -1,0 +1,5 @@
+[[global-discovery-catalogue-results]]
+
+=== Global Discovery Catalogue results
+
+include::ca-eccc-msc-global-discovery-catalogue.adoc[]
