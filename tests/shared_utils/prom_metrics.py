@@ -38,9 +38,9 @@ def fetch_and_verify_timestamp_metric(metric_name, expected_range, prometheus_ba
 
 if __name__ == '__main__':
     # Example usage
-    import dotenv
+    from dotenv import load_dotenv
     import os
-    dotenv.load_dotenv("../secrets.env")
+    load_dotenv("../secrets.env")
     # prometheus config
     prometheus_baseurl = os.getenv('PROMETHEUS_HOST')
     username = os.getenv('PROMETHEUS_USER')
