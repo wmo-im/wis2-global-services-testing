@@ -76,7 +76,7 @@ The following steps are required before executing tests in the test environment
 ----
 cd /data/wis2-testing/
 python3 -m venv env
-. bin/activate
+. env/bin/activate
 git clone https://github.com/wmo-im/wis2-global-services-testing.git
 cd wis2-global-services-testing/tests
 pip3 install -r requirements.txt

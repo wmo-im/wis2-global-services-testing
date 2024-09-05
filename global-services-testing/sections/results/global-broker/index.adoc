@@ -1,8 +1,0 @@
-[[global-broker-results]]
-
-=== Global Broker Service results
-
-include::brazil.adoc[]
-include::china.adoc[]
-include::france.adoc[]
-include::usa.adoc[]

@@ -1,0 +1,29 @@
+[[global-cache-results]]
+
+=== Global Cache test results
+
+.Table. Global Cache test results
+|===
+|Centre identifier|Pass|Comments
+
+|cn-cma-global-cache
+|
+|
+
+|data-metoffice-noaa-global-cache
+|
+|
+
+|de-dwd-global-cache
+|
+|
+
+|jp-jma-global-cache
+|
+|
+
+|kr-kma-global-cache
+|
+|
+
+|===

@@ -1,0 +1,25 @@
+[[global-broker-results]]
+
+=== Global Broker test results
+
+.Table. Global Broker test results
+|===
+|Centre identifier|Pass|Comments
+
+|br-inmet-global-broker
+|
+|
+
+|cn-cma-global-broker
+|
+|
+
+|fr-meteofrance-global-broker
+|
+|
+
+|us-noaa-global-broker
+|
+|
+
+|===

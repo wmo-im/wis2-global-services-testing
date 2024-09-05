@@ -1,9 +1,0 @@
-[[global-monitor-china-results]]
-
-==== China
-
-===== Functional test results
-
-===== Performance test results
-
-===== Testing observations

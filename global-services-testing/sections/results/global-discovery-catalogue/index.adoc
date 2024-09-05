@@ -1,6 +1,0 @@
-[[global-discovery-catalogue-results]]
-
-=== Global Discovery Catalogue results
-
-include::canada.adoc[]
-include::china.adoc[]

@@ -1,9 +1,0 @@
-[[global-monitor-morocco-results]]
-
-==== Morocco
-
-===== Functional test results
-
-===== Performance test results
-
-===== Testing observations
