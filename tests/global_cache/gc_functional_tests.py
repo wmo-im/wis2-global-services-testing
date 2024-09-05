@@ -3,7 +3,6 @@ import uuid
 import random
 import sys
 import os
-
 import pytest
 import paho.mqtt.client as mqtt
 import time
@@ -13,8 +12,6 @@ from paho.mqtt.packettypes import PacketTypes
 from paho.mqtt.properties import Properties
 from pywis_pubsub.validation import validate_message
 from pywis_pubsub.verification import verify_data
-from pywis_pubsub.publish import create_message
-from pywis_pubsub.schema import sync_schema as pw_sync
 from pywis_pubsub.mqtt import MQTTPubSubClient
 from dotenv import load_dotenv
 
@@ -26,7 +23,7 @@ from shared_utils import mqtt_helpers, ab, prom_metrics
 # Connection strings for the development global broker and message generator
 # Access the environment variables
 load_dotenv("../default.env")
-load_dotenv("../secrets.env.env")
+load_dotenv("../secrets.env")
 mqtt_broker_out = os.getenv('GB')
 mqtt_broker_in = os.getenv('TRIGGER_MQTT_BROKER')
 mqtt_broker_gc = os.getenv('GC_MQTT_BROKER')
