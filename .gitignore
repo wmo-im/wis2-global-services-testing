@@ -6,3 +6,9 @@ global-services-testing/images/**.bkp
 
 __pycache__
 *.pyc
+
+__idea__
+.idea/
+
+__secrets.env__
+/tests/secrets.env
