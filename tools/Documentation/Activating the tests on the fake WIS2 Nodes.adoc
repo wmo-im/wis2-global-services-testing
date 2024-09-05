@@ -100,10 +100,12 @@ Example 2:::
 	    "properties": {
             "data_id": "my_static_data_id"
 	    },
-        "links": {
+        "links": [ 
+           {
             "rel": "canonical"
+           }
+        ]
         }
-    }
     }
 }
 ```
@@ -129,9 +131,11 @@ If followed by:
 	    "properties":{
             "data_id": "my_static_data_id"
 	    },
-        "links": {
+        "links": [
+          {
             "rel": "update"
-        }
+          }
+        ]
         }
     }
 }
