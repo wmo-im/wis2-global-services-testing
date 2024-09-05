@@ -1,0 +1,77 @@
+[[data-metoffice-noaa-global-cache-results]]
+
+==== Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service test results
+
+Date: YYYY-MM-DD
+
+===== Functional tests
+
+.Table. Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service functional test results
+|===
+|Test|Pass|Comments
+
+|<<MQTT Broker Connectivity>>
+|
+|
+
+|<<GC MQTT Broker Subscription>>
+|
+|
+
+|<<WIS2 Notification Message (WNM) Processing>>
+|
+|
+
+|<<Cache False Directive>>
+|
+|
+
+|<<Source Download Failure>>
+|
+|
+
+|<<Cache Override (Optional)>>
+|
+|
+
+|<<Data Integrity Check Failure (Recommended)>>
+|
+|
+
+|<<WIS2 Notification Message Deduplication>>
+|
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 1)>>
+|
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 2)>>
+|
+|
+
+|<<Data Update>>
+|
+|
+
+|===
+
+===== Performance tests
+
+.Table. Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service performance test results
+|===
+|Test|Pass|Comments
+
+|<<WIS2 Notification Processing Rate>>
+|
+|
+
+|<<Concurrent client downloads>>
+|
+|
+
+|<<Implicit tests>>
+|
+|
+
+|===
