@@ -1,9 +1,0 @@
-[[global-broker-france-results]]
-
-==== France
-
-===== Functional test results
-
-===== Performance test results
-
-===== Testing observations

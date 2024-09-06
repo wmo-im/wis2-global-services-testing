@@ -1,9 +1,5 @@
 [[global-cache-results]]
 
-=== Global Cache Service results
+=== Global Cache results
 
-include::china.adoc[]
-include::germany.adoc[]
-include::japan.adoc[]
-include::korea.adoc[]
-include::uk-us.adoc[]
+include::data-metoffice-noaa-global-cache.adoc[]

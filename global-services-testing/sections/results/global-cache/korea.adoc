@@ -1,9 +1,0 @@
-[[global-cache-korea-results]]
-
-==== Republic of Korea
-
-===== Functional test results
-
-===== Performance test results
-
-===== Testing observations
