@@ -1,12 +1,12 @@
-[[ca-eccc-msc-global-discovery-catalogue-results]]
+[[CENTRE_ID-results]]
 
-==== ca-eccc-msc-global-discovery-catalogue test results
+==== CENTRE_ID results
 
 Date: YYYY-MM-DD
 
 ===== Functional tests
 
-.ca-eccc-msc-global-discovery-catalogue functional test results
+.CENTRE_ID functional test results
 |===
 |Test|Pass|Comments
 
@@ -54,7 +54,7 @@ Date: YYYY-MM-DD
 
 ===== Performance tests
 
-.ca-eccc-msc-global-discovery-catalogue performance test results
+.CENTRE_ID performance test results
 |===
 |Test|Pass|Comments
 

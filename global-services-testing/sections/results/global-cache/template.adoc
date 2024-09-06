@@ -1,12 +1,12 @@
-[[data-metoffice-noaa-global-cache-results]]
+[[CENTRE_ID-results]]
 
-==== data-metoffice-noaa-global-cache-results test results
+==== CENTRE_ID test results
 
 Date: YYYY-MM-DD
 
 ===== Functional tests
 
-.data-metoffice-noaa-global-cache-results functional test results
+.CENTRE_ID functional test results
 |===
 |Test|Pass|Comments
 
@@ -58,7 +58,7 @@ Date: YYYY-MM-DD
 
 ===== Performance tests
 
-.data-metoffice-noaa-global-cache-results performance test results
+.CENTRE_ID performance test results
 |===
 |Test|Pass|Comments
 

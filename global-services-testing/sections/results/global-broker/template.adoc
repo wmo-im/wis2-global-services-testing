@@ -1,12 +1,12 @@
-[[fr-meteofrance-global-broker-results]]
+[[CENTRE_ID-results]]
 
-==== fr-meteofrance-global-broker test results
+==== CENTRE_ID test results
 
 Date: YYYY-MM-DD
 
 ===== Functional tests
 
-.fr-meteofrance-global-broker functional test results
+.CENTRE_ID functional test results
 |===
 |Test|Pass|Comments
 
@@ -59,7 +59,7 @@ Date: YYYY-MM-DD
 
 ===== Performance tests
 
-.fr-meteofrance-global-broker performance test results
+.CENTRE_ID test results
 |===
 |Test|Pass|Comments
 
