@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-09-05</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-09-06</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -522,13 +522,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_setup_the_global_broker_for_the_tests">7.1.2. Setup the Global Broker for the tests</a></li>
 <li><a href="#_tear_down_the_global_broker_to_reverse_wis2_operations">7.1.3. Tear down the Global Broker to reverse WIS2 operations</a></li>
 <li><a href="#_functional_tests">7.1.4. Functional tests</a></li>
+<li><a href="#_performance_tests">7.1.5. Performance tests</a></li>
 </ul>
 </li>
 <li><a href="#global-cache-testing">7.2. Global Cache Service testing</a>
 <ul class="sectlevel3">
 <li><a href="#global-cache-setup-teardown">7.2.1. Setup and Teardown</a></li>
 <li><a href="#_functional_tests_2">7.2.2. Functional Tests</a></li>
-<li><a href="#_performance_tests">7.2.3. Performance tests</a></li>
+<li><a href="#_performance_tests_2">7.2.3. Performance tests</a></li>
 </ul>
 </li>
 <li><a href="#global-discovery-catalogue-testing">7.3. Global Discovery Catalogue Service testing</a>
@@ -537,7 +538,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_entering_the_test_environment">7.3.2. Entering the test environment</a></li>
 <li><a href="#_test_setup">7.3.3. Test setup</a></li>
 <li><a href="#_functional_tests_3">7.3.4. Functional tests</a></li>
-<li><a href="#_performance_tests_2">7.3.5. Performance tests</a></li>
+<li><a href="#_performance_tests_3">7.3.5. Performance tests</a></li>
 <li><a href="#_executing_the_test_environment">7.3.6. Executing the test environment</a></li>
 <li><a href="#_exiting_the_test_environment">7.3.7. Exiting the test environment</a></li>
 </ul>
@@ -546,33 +547,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#results">8. Results</a>
 <ul class="sectlevel2">
-<li><a href="#global-cache-results">8.1. Global Cache Service results</a>
+<li><a href="#global-broker-results">8.1. Global Broker results</a>
 <ul class="sectlevel3">
-<li><a href="#global-cache-china-results">8.1.1. China</a></li>
-<li><a href="#global-cache-germany-results">8.1.2. Germany</a></li>
-<li><a href="#global-cache-japan-results">8.1.3. Japan</a></li>
-<li><a href="#global-cache-korea-results">8.1.4. Republic of Korea</a></li>
-<li><a href="#global-cache-uk-us-results">8.1.5. United Kingdom of Great Britain and Northern Ireland / United States of America</a></li>
+<li><a href="#fr-meteofrance-global-broker-results">8.1.1. fr-meteofrance-global-broker test results</a></li>
 </ul>
 </li>
-<li><a href="#global-broker-results">8.2. Global Broker Service results</a>
+<li><a href="#global-cache-results">8.2. Global Cache results</a>
 <ul class="sectlevel3">
-<li><a href="#global-broker-brazil-results">8.2.1. Brazil</a></li>
-<li><a href="#global-broker-china-results">8.2.2. China</a></li>
-<li><a href="#global-broker-france-results">8.2.3. France</a></li>
-<li><a href="#global-broker-usa-results">8.2.4. United States of America</a></li>
+<li><a href="#data-metoffice-noaa-global-cache-results">8.2.1. data-metoffice-noaa-global-cache-results test results</a></li>
 </ul>
 </li>
 <li><a href="#global-discovery-catalogue-results">8.3. Global Discovery Catalogue results</a>
 <ul class="sectlevel3">
-<li><a href="#global-discovery-catalogue-canada-results">8.3.1. Canada</a></li>
-<li><a href="#global-discovery-catalogue-china-results">8.3.2. China</a></li>
-</ul>
-</li>
-<li><a href="#global-monitor-results">8.4. Global Monitor results</a>
-<ul class="sectlevel3">
-<li><a href="#global-monitor-china-results">8.4.1. China</a></li>
-<li><a href="#global-monitor-morocco-results">8.4.2. Morocco</a></li>
+<li><a href="#ca-eccc-msc-global-discovery-catalogue-results">8.3.1. ca-eccc-msc-global-discovery-catalogue test results</a></li>
 </ul>
 </li>
 </ul>
@@ -835,7 +822,7 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash">cd /data/wis2-testing/
 python3 -m venv env
-. bin/activate
+. env/bin/activate
 git clone https://github.com/wmo-im/wis2-global-services-testing.git
 cd wis2-global-services-testing/tests
 pip3 install -r requirements.txt</code></pre>
@@ -1126,15 +1113,7 @@ SCHEMA_URL=https://raw.githubusercontent.com/wmo-im/wis2-notification-message/ma
 <div class="sect3">
 <h4 id="_functional_tests"><a class="anchor" href="#_functional_tests"></a>7.1.4. Functional tests</h4>
 <div class="sect4">
-<h5 id="_1_global_broker_connectivity_tests"><a class="anchor" href="#_1_global_broker_connectivity_tests"></a>7.1.4.1. 1. Global Broker Connectivity Tests</h5>
-<div class="paragraph">
-<p>There are several test that can be performed on the Global Broker in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
-A. to D. below can be performed any time.</p>
-</div>
-<div class="sect5">
-<h6 id="_a_global_broker_port_tests"><a class="anchor" href="#_a_global_broker_port_tests"></a>A. Global Broker Port Tests</h6>
-
-</div>
+<h5 id="_port"><a class="anchor" href="#_port"></a>7.1.4.1. Port</h5>
 <div class="sect5">
 <h6 id="_purpose"><a class="anchor" href="#_purpose"></a>Purpose</h6>
 <div class="paragraph">
@@ -1177,10 +1156,9 @@ A. to D. below can be performed any time.</p>
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_b_global_broker_certificate_test"><a class="anchor" href="#_b_global_broker_certificate_test"></a>B. Global Broker Certificate Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_certificate"><a class="anchor" href="#_certificate"></a>7.1.4.2. Certificate</h5>
 <div class="sect5">
 <h6 id="_purpose_2"><a class="anchor" href="#_purpose_2"></a>Purpose</h6>
 <div class="paragraph">
@@ -1223,10 +1201,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>If the connection is successful and the certificate are valid, the test passes. If the connection is not successful or the certificate is invalid, the test fails.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_c_global_broker_origin_and_cache_read_access_test"><a class="anchor" href="#_c_global_broker_origin_and_cache_read_access_test"></a>C. Global Broker Origin and Cache Read-Access Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_origin_and_cache_read_access"><a class="anchor" href="#_origin_and_cache_read_access"></a>7.1.4.3. Origin and Cache Read-Access</h5>
 <div class="sect5">
 <h6 id="_purpose_3"><a class="anchor" href="#_purpose_3"></a>Purpose</h6>
 <div class="paragraph">
@@ -1268,10 +1245,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>Check if the connection is successful, and depending on the flow of messages, messages should appear rapidly.  If messages are displayed, the test passes. If the connection is not successful, the test fails.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_d_global_broker_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials_test"><a class="anchor" href="#_d_global_broker_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials_test"></a>D. Global Broker deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials"><a class="anchor" href="#_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials"></a>7.1.4.4. Deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials</h5>
 <div class="sect5">
 <h6 id="_purpose_4"><a class="anchor" href="#_purpose_4"></a>Purpose</h6>
 <div class="paragraph">
@@ -1310,10 +1286,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_e_global_broker_cluster_redundancy_test"><a class="anchor" href="#_e_global_broker_cluster_redundancy_test"></a>E. Global Broker cluster redundancy Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_cluster_redundancy"><a class="anchor" href="#_cluster_redundancy"></a>7.1.4.5. cluster redundancy</h5>
 <div class="sect5">
 <h6 id="_purpose_5"><a class="anchor" href="#_purpose_5"></a>Purpose</h6>
 <div class="paragraph">
@@ -1358,15 +1333,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_2_global_broker_antiloop_testing"><a class="anchor" href="#_2_global_broker_antiloop_testing"></a>7.1.4.2. 2. Global Broker Antiloop Testing</h5>
-<div class="paragraph">
-<p>The antiloop feature of a Global Broker is a critical aspect of WIS2 Architecture. This is what guarantees a high level of service while preventing “messages storm”.  These tests are designed to test the antiloop feature of the Global Broker service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025.
-If configurable, and when applicable, the Global Broker should discard incorrect WIS2 Notification Messages, by opposition of only verifying the correctness.</p>
-</div>
-<div class="sect5">
-<h6 id="_a_discarding_of_duplicate_messages_test"><a class="anchor" href="#_a_discarding_of_duplicate_messages_test"></a>A. Discarding of duplicate messages Test</h6>
-
-</div>
+<h5 id="_discarding_of_duplicate_messages"><a class="anchor" href="#_discarding_of_duplicate_messages"></a>7.1.4.6. Discarding of duplicate messages</h5>
 <div class="sect5">
 <h6 id="_purpose_6"><a class="anchor" href="#_purpose_6"></a>Purpose</h6>
 <div class="paragraph">
@@ -1424,10 +1391,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_b_publishing_a_message_using_the_centre_id_from_a_different_wis2_node_test"><a class="anchor" href="#_b_publishing_a_message_using_the_centre_id_from_a_different_wis2_node_test"></a>B. Publishing a message using the centre_id from a different WIS2 Node Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_publishing_a_message_using_the_centre_id_from_a_different_wis2_node"><a class="anchor" href="#_publishing_a_message_using_the_centre_id_from_a_different_wis2_node"></a>7.1.4.7. Publishing a message using the centre_id from a different WIS2 Node</h5>
 <div class="sect5">
 <h6 id="_purpose_7"><a class="anchor" href="#_purpose_7"></a>Purpose</h6>
 <div class="paragraph">
@@ -1473,10 +1439,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_c_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy_test"><a class="anchor" href="#_c_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy_test"></a>C. Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy) Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy"><a class="anchor" href="#_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy"></a>7.1.4.8. Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)</h5>
 <div class="sect5">
 <h6 id="_purpose_8"><a class="anchor" href="#_purpose_8"></a>Purpose</h6>
 <div class="paragraph">
@@ -1531,10 +1496,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_d_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy_test"><a class="anchor" href="#_d_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy_test"></a>D. Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy) Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy"><a class="anchor" href="#_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy"></a>7.1.4.9. Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)</h5>
 <div class="sect5">
 <h6 id="_purpose_9"><a class="anchor" href="#_purpose_9"></a>Purpose</h6>
 <div class="paragraph">
@@ -1589,10 +1553,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_e_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata_test"><a class="anchor" href="#_e_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata_test"></a>E. Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata"><a class="anchor" href="#_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata"></a>7.1.4.10. Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata</h5>
 <div class="sect5">
 <h6 id="_purpose_10"><a class="anchor" href="#_purpose_10"></a>Purpose</h6>
 <div class="paragraph">
@@ -1650,10 +1613,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_f_verifying_the_compliance_of_a_wis2_notification_message_test"><a class="anchor" href="#_f_verifying_the_compliance_of_a_wis2_notification_message_test"></a>F. Verifying the compliance of a WIS2 Notification message Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_verifying_the_compliance_of_a_wis2_notification_message"><a class="anchor" href="#_verifying_the_compliance_of_a_wis2_notification_message"></a>7.1.4.11. Verifying the compliance of a WIS2 Notification message</h5>
 <div class="sect5">
 <h6 id="_purpose_11"><a class="anchor" href="#_purpose_11"></a>Purpose</h6>
 <div class="paragraph">
@@ -1712,15 +1674,14 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_3_global_broker_performance_testing"><a class="anchor" href="#_3_global_broker_performance_testing"></a>7.1.4.3. 3. Global Broker Performance Testing</h5>
+</div>
+<div class="sect3">
+<h4 id="_performance_tests"><a class="anchor" href="#_performance_tests"></a>7.1.5. Performance tests</h4>
 <div class="paragraph">
 <p>We must ensure that the Global Broker service performs properly under stress.  The following outlined tests will test the Global Broker service prior to transition of WIS2 to an operational state on January 1, 2025</p>
 </div>
-<div class="sect5">
-<h6 id="_a_global_broker_minimum_number_of_wis2_nodes_test"><a class="anchor" href="#_a_global_broker_minimum_number_of_wis2_nodes_test"></a>A. Global Broker minimum number of WIS2 Nodes Test</h6>
-
-</div>
+<div class="sect4">
+<h5 id="_minimum_number_of_wis2_nodes"><a class="anchor" href="#_minimum_number_of_wis2_nodes"></a>7.1.5.1. Minimum number of WIS2 Nodes</h5>
 <div class="sect5">
 <h6 id="_purpose_12"><a class="anchor" href="#_purpose_12"></a>Purpose</h6>
 <div class="paragraph">
@@ -1766,10 +1727,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </ol>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_b_global_broker_minimum_number_of_subscribers_test"><a class="anchor" href="#_b_global_broker_minimum_number_of_subscribers_test"></a>B. Global Broker minimum number of subscribers Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_minimum_number_of_subscribers"><a class="anchor" href="#_minimum_number_of_subscribers"></a>7.1.5.2. Minimum number of subscribers</h5>
 <div class="sect5">
 <h6 id="_purpose_13"><a class="anchor" href="#_purpose_13"></a>Purpose</h6>
 <div class="paragraph">
@@ -1820,10 +1780,9 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <p>with 200 connections created, on the 5 tests systems, this test is successful.</p>
 </div>
 </div>
-<div class="sect5">
-<h6 id="_c_global_broker_minimum_number_of_messages_per_second_test"><a class="anchor" href="#_c_global_broker_minimum_number_of_messages_per_second_test"></a>C. Global Broker minimum number of messages per second Test</h6>
-
 </div>
+<div class="sect4">
+<h5 id="_minimum_number_of_messages_per_second"><a class="anchor" href="#_minimum_number_of_messages_per_second"></a>7.1.5.3. Minimum number of messages per second</h5>
 <div class="sect5">
 <h6 id="_purpose_14"><a class="anchor" href="#_purpose_14"></a>Purpose</h6>
 <div class="paragraph">
@@ -2004,7 +1963,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 <div class="sect3">
 <h4 id="_functional_tests_2"><a class="anchor" href="#_functional_tests_2"></a>7.2.2. Functional Tests</h4>
 <div class="sect4">
-<h5 id="_1_mqtt_broker_connectivity"><a class="anchor" href="#_1_mqtt_broker_connectivity"></a>7.2.2.1. 1. MQTT Broker Connectivity</h5>
+<h5 id="_mqtt_broker_connectivity"><a class="anchor" href="#_mqtt_broker_connectivity"></a>7.2.2.1. MQTT Broker Connectivity</h5>
 <div class="sect5">
 <h6 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>Purpose</h6>
 <div class="paragraph">
@@ -2052,7 +2011,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 <div class="sect4">
-<h5 id="_2_gc_mqtt_broker_subscription"><a class="anchor" href="#_2_gc_mqtt_broker_subscription"></a>7.2.2.2. 2. GC MQTT Broker Subscription</h5>
+<h5 id="_gc_mqtt_broker_subscription"><a class="anchor" href="#_gc_mqtt_broker_subscription"></a>7.2.2.2. GC MQTT Broker Subscription</h5>
 <div class="sect5">
 <h6 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>Purpose</h6>
 <div class="paragraph">
@@ -2103,7 +2062,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 <div class="sect4">
-<h5 id="_3_wis2_notification_message_wnm_processing"><a class="anchor" href="#_3_wis2_notification_message_wnm_processing"></a>7.2.2.3. 3. WIS2 Notification Message (WNM) Processing</h5>
+<h5 id="_wis2_notification_message_wnm_processing"><a class="anchor" href="#_wis2_notification_message_wnm_processing"></a>7.2.2.3. WIS2 Notification Message (WNM) Processing</h5>
 <div class="sect5">
 <h6 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>Purpose</h6>
 <div class="paragraph">
@@ -2311,7 +2270,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 <div class="sect4">
-<h5 id="_4_cache_false_directive"><a class="anchor" href="#_4_cache_false_directive"></a>7.2.2.4. 4. Cache False Directive</h5>
+<h5 id="_cache_false_directive"><a class="anchor" href="#_cache_false_directive"></a>7.2.2.4. Cache False Directive</h5>
 <div class="sect5">
 <h6 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>Purpose</h6>
 <div class="paragraph">
@@ -2454,7 +2413,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 <div class="sect4">
-<h5 id="_5_source_download_failure"><a class="anchor" href="#_5_source_download_failure"></a>7.2.2.5. 5. Source Download Failure</h5>
+<h5 id="_source_download_failure"><a class="anchor" href="#_source_download_failure"></a>7.2.2.5. Source Download Failure</h5>
 <div class="sect5">
 <h6 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>Purpose</h6>
 <div class="paragraph">
@@ -2594,7 +2553,7 @@ If configurable, and when applicable, the Global Broker should discard incorrect
 </div>
 </div>
 <div class="sect4">
-<h5 id="_6_cache_override_optional"><a class="anchor" href="#_6_cache_override_optional"></a>7.2.2.6. 6. Cache Override (Optional)</h5>
+<h5 id="_cache_override_optional"><a class="anchor" href="#_cache_override_optional"></a>7.2.2.6. Cache Override (Optional)</h5>
 <div class="sect5">
 <h6 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>Purpose</h6>
 <div class="paragraph">
@@ -2759,7 +2718,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_7_data_integrity_check_failure_recommended"><a class="anchor" href="#_7_data_integrity_check_failure_recommended"></a>7.2.2.7. 7. Data Integrity Check Failure (Recommended)</h5>
+<h5 id="_data_integrity_check_failure_recommended"><a class="anchor" href="#_data_integrity_check_failure_recommended"></a>7.2.2.7. Data Integrity Check Failure (Recommended)</h5>
 <div class="sect5">
 <h6 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>Purpose</h6>
 <div class="paragraph">
@@ -2903,7 +2862,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_8_wis2_notification_message_deduplication"><a class="anchor" href="#_8_wis2_notification_message_deduplication"></a>7.2.2.8. 8. WIS2 Notification Message Deduplication</h5>
+<h5 id="_wis2_notification_message_deduplication"><a class="anchor" href="#_wis2_notification_message_deduplication"></a>7.2.2.8. WIS2 Notification Message Deduplication</h5>
 <div class="sect5">
 <h6 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>Purpose</h6>
 <div class="paragraph">
@@ -3050,7 +3009,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_8_1_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_8_1_wis2_notification_message_deduplication_alternative_1"></a>7.2.2.9. 8.1. WIS2 Notification Message Deduplication (Alternative 1)</h5>
+<h5 id="_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_1"></a>7.2.2.9. WIS2 Notification Message Deduplication (Alternative 1)</h5>
 <div class="sect5">
 <h6 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>Purpose</h6>
 <div class="paragraph">
@@ -3196,7 +3155,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_8_2_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_8_2_wis2_notification_message_deduplication_alternative_2"></a>7.2.2.10. 8.2. WIS2 Notification Message Deduplication (Alternative 2)</h5>
+<h5 id="_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_2"></a>7.2.2.10. WIS2 Notification Message Deduplication (Alternative 2)</h5>
 <div class="sect5">
 <h6 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>Purpose</h6>
 <div class="paragraph">
@@ -3286,7 +3245,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect4">
-<h5 id="_9_data_update"><a class="anchor" href="#_9_data_update"></a>7.2.2.11. 9. Data Update</h5>
+<h5 id="_data_update"><a class="anchor" href="#_data_update"></a>7.2.2.11. Data Update</h5>
 <div class="sect5">
 <h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
 <div class="paragraph">
@@ -3433,7 +3392,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_performance_tests"><a class="anchor" href="#_performance_tests"></a>7.2.3. Performance tests</h4>
+<h4 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>7.2.3. Performance tests</h4>
 <div class="sect4">
 <h5 id="_wis2_notification_processing_rate"><a class="anchor" href="#_wis2_notification_processing_rate"></a>7.2.3.1. WIS2 Notification Processing Rate</h5>
 <div class="sect5">
@@ -4692,7 +4651,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
 </div>
 </div>
 <div class="sect3">
-<h4 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>7.3.5. Performance tests</h4>
+<h4 id="_performance_tests_3"><a class="anchor" href="#_performance_tests_3"></a>7.3.5. Performance tests</h4>
 <div class="sect4">
 <h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>7.3.5.1. Processing timeliness</h5>
 <div class="sect5">
@@ -4812,210 +4771,364 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <div class="sect1">
 <h2 id="results"><a class="anchor" href="#results"></a>8. Results</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="global-cache-results"><a class="anchor" href="#global-cache-results"></a>8.1. Global Cache Service results</h3>
-<div class="sect3">
-<h4 id="global-cache-china-results"><a class="anchor" href="#global-cache-china-results"></a>8.1.1. China</h4>
-<div class="sect4">
-<h5 id="_functional_test_results"><a class="anchor" href="#_functional_test_results"></a>8.1.1.1. Functional test results</h5>
-
+<div class="paragraph">
+<p>Pre-testing was performed in September 2024.  Final tests were performed in October 2024.  Foreach Global Service tested, participants included:</p>
 </div>
-<div class="sect4">
-<h5 id="_performance_test_results"><a class="anchor" href="#_performance_test_results"></a>8.1.1.2. Performance test results</h5>
-
+<div class="ulist">
+<ul>
+<li>
+<p>Global Service operator contact point</p>
+</li>
+<li>
+<p>WMO Secretariat</p>
+</li>
+<li>
+<p>Testing support/expertise as defined per Global Service</p>
+</li>
+</ul>
 </div>
-<div class="sect4">
-<h5 id="_testing_observations"><a class="anchor" href="#_testing_observations"></a>8.1.1.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-cache-germany-results"><a class="anchor" href="#global-cache-germany-results"></a>8.1.2. Germany</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_2"><a class="anchor" href="#_functional_test_results_2"></a>8.1.2.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_2"><a class="anchor" href="#_performance_test_results_2"></a>8.1.2.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_2"><a class="anchor" href="#_testing_observations_2"></a>8.1.2.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-cache-japan-results"><a class="anchor" href="#global-cache-japan-results"></a>8.1.3. Japan</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_3"><a class="anchor" href="#_functional_test_results_3"></a>8.1.3.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_3"><a class="anchor" href="#_performance_test_results_3"></a>8.1.3.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_3"><a class="anchor" href="#_testing_observations_3"></a>8.1.3.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-cache-korea-results"><a class="anchor" href="#global-cache-korea-results"></a>8.1.4. Republic of Korea</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_4"><a class="anchor" href="#_functional_test_results_4"></a>8.1.4.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_4"><a class="anchor" href="#_performance_test_results_4"></a>8.1.4.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_4"><a class="anchor" href="#_testing_observations_4"></a>8.1.4.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-cache-uk-us-results"><a class="anchor" href="#global-cache-uk-us-results"></a>8.1.5. United Kingdom of Great Britain and Northern Ireland / United States of America</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_5"><a class="anchor" href="#_functional_test_results_5"></a>8.1.5.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_5"><a class="anchor" href="#_performance_test_results_5"></a>8.1.5.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_5"><a class="anchor" href="#_testing_observations_5"></a>8.1.5.3. Testing observations</h5>
-
-</div>
-</div>
+<div class="paragraph">
+<p>The following tables provide the results of all tests (in alphabetical order, grouped by Global Service type).</p>
 </div>
 <div class="sect2">
-<h3 id="global-broker-results"><a class="anchor" href="#global-broker-results"></a>8.2. Global Broker Service results</h3>
+<h3 id="global-broker-results"><a class="anchor" href="#global-broker-results"></a>8.1. Global Broker results</h3>
 <div class="sect3">
-<h4 id="global-broker-brazil-results"><a class="anchor" href="#global-broker-brazil-results"></a>8.2.1. Brazil</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_6"><a class="anchor" href="#_functional_test_results_6"></a>8.2.1.1. Functional test results</h5>
-
+<h4 id="fr-meteofrance-global-broker-results"><a class="anchor" href="#fr-meteofrance-global-broker-results"></a>8.1.1. fr-meteofrance-global-broker test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_performance_test_results_6"><a class="anchor" href="#_performance_test_results_6"></a>8.2.1.2. Performance test results</h5>
-
+<h5 id="_functional_tests_4"><a class="anchor" href="#_functional_tests_4"></a>8.1.1.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. fr-meteofrance-global-broker functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_port">Port</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_certificate">Certificate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_origin_and_cache_read_access">Origin and Cache Read-Access</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials">Deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cluster_redundancy">cluster redundancy</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_discarding_of_duplicate_messages">Discarding of duplicate messages</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_a_message_using_the_centre_id_from_a_different_wis2_node">Publishing a message using the centre_id from a different WIS2 Node</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata">Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_verifying_the_compliance_of_a_wis2_notification_message">Verifying the compliance of a WIS2 Notification message</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect4">
-<h5 id="_testing_observations_6"><a class="anchor" href="#_testing_observations_6"></a>8.2.1.3. Testing observations</h5>
-
+<h5 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>8.1.1.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. fr-meteofrance-global-broker performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_wis2_nodes">Minimum number of WIS2 Nodes</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_subscribers">Minimum number of subscribers</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_messages_per_second">Minimum number of messages per second</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="global-cache-results"><a class="anchor" href="#global-cache-results"></a>8.2. Global Cache results</h3>
 <div class="sect3">
-<h4 id="global-broker-china-results"><a class="anchor" href="#global-broker-china-results"></a>8.2.2. China</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_7"><a class="anchor" href="#_functional_test_results_7"></a>8.2.2.1. Functional test results</h5>
-
+<h4 id="data-metoffice-noaa-global-cache-results"><a class="anchor" href="#data-metoffice-noaa-global-cache-results"></a>8.2.1. data-metoffice-noaa-global-cache-results test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_performance_test_results_7"><a class="anchor" href="#_performance_test_results_7"></a>8.2.2.2. Performance test results</h5>
-
+<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>8.2.1.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. data-metoffice-noaa-global-cache-results functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_mqtt_broker_connectivity">MQTT Broker Connectivity</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_gc_mqtt_broker_subscription">GC MQTT Broker Subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_wnm_processing">WIS2 Notification Message (WNM) Processing</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_false_directive">Cache False Directive</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_source_download_failure">Source Download Failure</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_override_optional">Cache Override (Optional)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_integrity_check_failure_recommended">Data Integrity Check Failure (Recommended)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication">WIS2 Notification Message Deduplication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_1">WIS2 Notification Message Deduplication (Alternative 1)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_2">WIS2 Notification Message Deduplication (Alternative 2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_update">Data Update</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect4">
-<h5 id="_testing_observations_7"><a class="anchor" href="#_testing_observations_7"></a>8.2.2.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-broker-france-results"><a class="anchor" href="#global-broker-france-results"></a>8.2.3. France</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_8"><a class="anchor" href="#_functional_test_results_8"></a>8.2.3.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_8"><a class="anchor" href="#_performance_test_results_8"></a>8.2.3.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_8"><a class="anchor" href="#_testing_observations_8"></a>8.2.3.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-broker-usa-results"><a class="anchor" href="#global-broker-usa-results"></a>8.2.4. United States of America</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_9"><a class="anchor" href="#_functional_test_results_9"></a>8.2.4.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_9"><a class="anchor" href="#_performance_test_results_9"></a>8.2.4.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_9"><a class="anchor" href="#_testing_observations_9"></a>8.2.4.3. Testing observations</h5>
-
+<h5 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>8.2.1.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. data-metoffice-noaa-global-cache-results performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_processing_rate">WIS2 Notification Processing Rate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_concurrent_client_downloads">Concurrent client downloads</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_implicit_tests">Implicit tests</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="global-discovery-catalogue-results"><a class="anchor" href="#global-discovery-catalogue-results"></a>8.3. Global Discovery Catalogue results</h3>
 <div class="sect3">
-<h4 id="global-discovery-catalogue-canada-results"><a class="anchor" href="#global-discovery-catalogue-canada-results"></a>8.3.1. Canada</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_10"><a class="anchor" href="#_functional_test_results_10"></a>8.3.1.1. Functional test results</h5>
-
+<h4 id="ca-eccc-msc-global-discovery-catalogue-results"><a class="anchor" href="#ca-eccc-msc-global-discovery-catalogue-results"></a>8.3.1. ca-eccc-msc-global-discovery-catalogue test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_performance_test_results_10"><a class="anchor" href="#_performance_test_results_10"></a>8.3.1.2. Performance test results</h5>
-
+<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.3.1.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_global_broker_connection_and_subscription">Global Broker connection and subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_success">Notification and metadata processing (success)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_record_not_found">Notification and metadata processing (failure; record not found)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2">Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_metadata_ingest_centre_id_mismatch">Metadata ingest centre-id mismatch</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_record_deletion">Notification and metadata processing (record deletion)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id">Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wcmp2_metadata_archive_zipfile_publication">WCMP2 metadata archive zipfile publication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile">WCMP2 cold start initialization from metadata archive zipfile</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_api_functionality">API functionality</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect4">
-<h5 id="_testing_observations_10"><a class="anchor" href="#_testing_observations_10"></a>8.3.1.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-discovery-catalogue-china-results"><a class="anchor" href="#global-discovery-catalogue-china-results"></a>8.3.2. China</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_11"><a class="anchor" href="#_functional_test_results_11"></a>8.3.2.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_11"><a class="anchor" href="#_performance_test_results_11"></a>8.3.2.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_11"><a class="anchor" href="#_testing_observations_11"></a>8.3.2.3. Testing observations</h5>
-
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="global-monitor-results"><a class="anchor" href="#global-monitor-results"></a>8.4. Global Monitor results</h3>
-<div class="sect3">
-<h4 id="global-monitor-china-results"><a class="anchor" href="#global-monitor-china-results"></a>8.4.1. China</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_12"><a class="anchor" href="#_functional_test_results_12"></a>8.4.1.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_12"><a class="anchor" href="#_performance_test_results_12"></a>8.4.1.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_12"><a class="anchor" href="#_testing_observations_12"></a>8.4.1.3. Testing observations</h5>
-
-</div>
-</div>
-<div class="sect3">
-<h4 id="global-monitor-morocco-results"><a class="anchor" href="#global-monitor-morocco-results"></a>8.4.2. Morocco</h4>
-<div class="sect4">
-<h5 id="_functional_test_results_13"><a class="anchor" href="#_functional_test_results_13"></a>8.4.2.1. Functional test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_performance_test_results_13"><a class="anchor" href="#_performance_test_results_13"></a>8.4.2.2. Performance test results</h5>
-
-</div>
-<div class="sect4">
-<h5 id="_testing_observations_13"><a class="anchor" href="#_testing_observations_13"></a>8.4.2.3. Testing observations</h5>
-
+<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.3.1.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_processing_timeliness">Processing timeliness</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -5119,7 +5232,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-05 18:57:03 UTC
+Last updated 2024-09-06 14:26:03 UTC
 </div>
 </div>
 </body>
