@@ -6,7 +6,7 @@ Date: YYYY-MM-DD
 
 ===== Functional tests
 
-.Table. Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service functional test results
+.Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service functional test results
 |===
 |Test|Pass|Comments
 
@@ -58,7 +58,7 @@ Date: YYYY-MM-DD
 
 ===== Performance tests
 
-.Table. Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service performance test results
+.Met Office (Exeter) (United Kingdom of Great Britain and Northern Ireland) and National Oceanic and Atmospheric Administration, National Weather Service (United States of America), Global Cache Service performance test results
 |===
 |Test|Pass|Comments
 

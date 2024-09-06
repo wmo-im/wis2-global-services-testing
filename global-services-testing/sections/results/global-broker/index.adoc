@@ -2,4 +2,4 @@
 
 === Global Broker results
 
-// include::CENTRE-ID.adoc[]
+include::fr-meteofrance-global-broker.adoc[]

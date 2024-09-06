@@ -6,7 +6,7 @@ Date: YYYY-MM-DD
 
 ===== Functional tests
 
-.Table. Meteorological Service of Canada, Global Discovery Catalogue Service functional test results
+.Meteorological Service of Canada, Global Discovery Catalogue Service functional test results
 |===
 |Test|Pass|Comments
 
@@ -54,7 +54,7 @@ Date: YYYY-MM-DD
 
 ===== Performance tests
 
-.Table. Meteorological Service of Canada, Global Discovery Catalogue Service performance test results
+.Meteorological Service of Canada, Global Discovery Catalogue Service performance test results
 |===
 |Test|Pass|Comments
 
