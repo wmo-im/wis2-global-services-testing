@@ -3,3 +3,4 @@ prometheus_api_client
 pytest
 python-dotenv
 slugify
+pywis-pubsub
