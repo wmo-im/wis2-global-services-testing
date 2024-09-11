@@ -92,7 +92,6 @@ def setup_mqtt_client(connection_info: str):
         raise Exception("Failed to connect to MQTT broker")
     return client
 
-
 def wait_for_messages(sub_client, num_origin_msgs, num_cache_msgs, data_ids=[], interval=0.5, max_wait_time=10, min_wait_time=0):
     """
     Waits for the expected number of origin and cache messages.
@@ -111,8 +110,13 @@ def wait_for_messages(sub_client, num_origin_msgs, num_cache_msgs, data_ids=[], 
     """
     elapsed_time = 0
     while elapsed_time < max_wait_time:
-        origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
-        cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic'] and m['properties']['data_id'] in data_ids]
+        if data_ids:
+            origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
+            cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic'] and m['properties']['data_id'] in data_ids]
+        else:
+            origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
+            cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
+
         if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs and elapsed_time >= min_wait_time:
             print(elapsed_time)
             break
@@ -234,7 +238,7 @@ def test_mqtt_broker_message_flow(run, _setup):
     pub_client = MQTTPubSubClient(mqtt_broker_in)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_dataset_config))
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs, data_ids=[_init['test_data_id']])
     sub_client.loop_stop()
     # assert origin and cache messages
     assert len(origin_msgs) > 0
@@ -290,7 +294,7 @@ def test_cache_false_directive(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_in)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_dataset_config))
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs, data_ids=[_init['test_data_id']])
     assert len(origin_msgs) > 0
     assert len(cache_msgs) > 0
     # compare origin and cache messages
@@ -350,7 +354,7 @@ def test_source_download_failure(_setup):
     # Publish the message
     pub_client.pub(topic=_init['test_pub_topic'] , message=json.dumps(wnm_dataset_config))
     del pub_client
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, min_wait_time=5)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, data_ids=[_init['test_data_id']], min_wait_time=5)
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
@@ -399,7 +403,7 @@ def test_data_integrity_check_failure(_setup):
     if not pub_result:
         raise Exception("Failed to publish message")
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, min_wait_time=5)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, data_ids=[_init['test_data_id']], min_wait_time=5)
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
