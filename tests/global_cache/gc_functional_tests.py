@@ -566,7 +566,6 @@ def test_data_update(_setup):
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
-    test_data_id = _init['test_data_id']
     test_dt_earlier = (datetime.now(timezone.utc) - timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
     test_dt_later = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
 
@@ -582,7 +581,7 @@ def test_data_update(_setup):
             },
             "wnm": {
                 "properties": {
-                    "data_id": test_data_id,
+                    "data_id": _init['test_data_id'],
                     "pubtime": test_dt_earlier,
                 }
             }
@@ -604,7 +603,7 @@ def test_data_update(_setup):
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_later_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs * 2)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs * 2, data_ids=[_init['test_data_id']])
 
     sub_client.loop_stop()
     sub_client.disconnect()
