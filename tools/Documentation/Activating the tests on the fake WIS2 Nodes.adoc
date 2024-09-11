@@ -16,7 +16,7 @@ It is using tools available on github https://github.com/wmo-im/wis2-global-serv
 
 This documentation is based on the use of two docker containers and their tags:
 
-. golfvert/fakewis2node:2.1.3 (for all tests except Global Broker benchmarking)
+. golfvert/fakewis2node:2.1.11 (for all tests except Global Broker benchmarking)
 . golfvert/benchmarkwis2gb:2.0.2 (for Global Broker benchmarking)
 . golfvert/wis2benchtools:1.0.5 (for performance related test - include MQTT client and HTTP downloader)
 
@@ -298,6 +298,15 @@ For _ab_, it is the number of concurrent download.
 
 _topic_::
 
+For _producer_:
+
+This is the topic to publish to. It can be used to publish on an invalid topic (to validate the filtering by Global Brokers) or on another _centre-id_ to assess that the message is *not* received by the Global Broker.
+
+Apply to:  _wnmtest_ scenario
+
+Optional: Default value is _origin/a/wis2/io-wis2dev-*centre-id*-test/data/core/weather/surface-based-observations/synop_
+
+For _consumer_:
 This is the topic to subscribe to. It applies only to _mqttx_ scenario.
 
 Apply to:  _mqttx_ 
