@@ -1,0 +1,10 @@
+{
+"scenario": "wnmtest",
+"configuration" : {
+    "setup" : {
+        "centreid": 11,
+        "number": 1,
+        "topic": "origin/a/wis2/io-wis2dev-11-test/data/core/weather/doesntexist"
+    }
+  }
+}
