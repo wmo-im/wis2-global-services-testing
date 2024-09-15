@@ -364,7 +364,7 @@ Apply to:  _datatest, datagen_ scenario
 
 Optional: Default value for Global Service testing is 10.
 
-_cache_a_wis2_:: can be used to force publication of the Notification Message of the _cache_ channel. The purpose of this parameter is to emulate the Global Cache to Global Cache download or to allow Global Discovery Catalog (that are subscribing to _cache/a/wis2/+/metadata_) to get notifications messages using _cache_. It can take two values: _mix_ and _only_. In _mix_ mode, half of the messages will be published on _cache/a/wis2/..._ and half on _origin/a/wis2/..._. In _only_ mode, all messages will be published on _cache/a/wis2/..._. 
+_cache_a_wis2_:: can be used to force publication of the Notification Message on the _cache_ channel. The purpose of this parameter is to emulate the Global Cache to Global Cache download or to allow Global Discovery Catalog (that are subscribing to _cache/a/wis2/+/metadata_) to get notifications messages using _cache_. It can take two values: _mix_ and _only_. In _mix_ mode, half of the messages will be published on _cache/a/wis2/..._ and half on _origin/a/wis2/..._. In _only_ mode, all messages will be published on _cache/a/wis2/..._. 
 
 Apply to:  _datatest, datagen_ scenario for _mix_ and _only_ and to _metadatatest_ scenario for _only_
 
