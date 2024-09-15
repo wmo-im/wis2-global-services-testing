@@ -2,5 +2,5 @@ paho-mqtt
 prometheus_api_client
 pytest
 python-dotenv
-slugify
+python-slugify
 pywis-pubsub
