@@ -3,3 +3,7 @@
 === Global Discovery Catalogue results
 
 include::ca-eccc-msc-global-discovery-catalogue.adoc[]
+
+include::cn-cma-global-discovery-catalogue.adoc[]
+
+include::de-dwd-global-discovery-catalogue.adoc[]
