@@ -2,4 +2,11 @@
 
 === Global Broker results
 
+include::cn-cma-global-broker.adoc[]
+
 include::fr-meteofrance-global-broker.adoc[]
+
+include::br-inmet-global-broker.adoc[]
+
+include::us-noaa-global-broker.adoc[]
+
