@@ -549,7 +549,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#global-broker-results">8.1. Global Broker results</a>
 <ul class="sectlevel3">
-<li><a href="#fr-meteofrance-global-broker-results">8.1.1. fr-meteofrance-global-broker test results</a></li>
+<li><a href="#cn-cma-global-broker-results">8.1.1. cn-cma-global-broker test results</a></li>
+<li><a href="#fr-meteofrance-global-broker-results">8.1.2. fr-meteofrance-global-broker test results</a></li>
+<li><a href="#br-inmet-global-broker-results">8.1.3. br-inmet-global-broker test results</a></li>
+<li><a href="#CENTRE_ID-results">8.1.4. CENTRE_ID test results</a></li>
 </ul>
 </li>
 <li><a href="#global-cache-results">8.2. Global Cache results</a>
@@ -4798,14 +4801,130 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <div class="sect2">
 <h3 id="global-broker-results"><a class="anchor" href="#global-broker-results"></a>8.1. Global Broker results</h3>
 <div class="sect3">
-<h4 id="fr-meteofrance-global-broker-results"><a class="anchor" href="#fr-meteofrance-global-broker-results"></a>8.1.1. fr-meteofrance-global-broker test results</h4>
+<h4 id="cn-cma-global-broker-results"><a class="anchor" href="#cn-cma-global-broker-results"></a>8.1.1. cn-cma-global-broker test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
 <h5 id="_functional_tests_4"><a class="anchor" href="#_functional_tests_4"></a>8.1.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. fr-meteofrance-global-broker functional test results</caption>
+<caption class="title">Table 1. cn-cma-global-broker functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_port">Port</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_certificate">Certificate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_origin_and_cache_read_access">Origin and Cache Read-Access</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials">Deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cluster_redundancy">cluster redundancy</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_discarding_of_duplicate_messages">Discarding of duplicate messages</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Publishing a message using the cn-cma-global-broker from a different WIS2 Node">[Publishing a message using the cn-cma-global-broker from a different WIS2 Node]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata">Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_verifying_the_compliance_of_a_wis2_notification_message">Verifying the compliance of a WIS2 Notification message</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>8.1.1.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. cn-cma-global-broker test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_wis2_nodes">Minimum number of WIS2 Nodes</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_subscribers">Minimum number of subscribers</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_messages_per_second">Minimum number of messages per second</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="fr-meteofrance-global-broker-results"><a class="anchor" href="#fr-meteofrance-global-broker-results"></a>8.1.2. fr-meteofrance-global-broker test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>8.1.2.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. fr-meteofrance-global-broker functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4878,9 +4997,241 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>8.1.1.2. Performance tests</h5>
+<h5 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>8.1.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. fr-meteofrance-global-broker performance test results</caption>
+<caption class="title">Table 4. fr-meteofrance-global-broker performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_wis2_nodes">Minimum number of WIS2 Nodes</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_subscribers">Minimum number of subscribers</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_messages_per_second">Minimum number of messages per second</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="br-inmet-global-broker-results"><a class="anchor" href="#br-inmet-global-broker-results"></a>8.1.3. br-inmet-global-broker test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.1.3.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. br-inmet-global-broker functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_port">Port</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_certificate">Certificate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_origin_and_cache_read_access">Origin and Cache Read-Access</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials">Deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cluster_redundancy">cluster redundancy</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_discarding_of_duplicate_messages">Discarding of duplicate messages</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Publishing a message using the br-inmet-global-broker from a different WIS2 Node">[Publishing a message using the br-inmet-global-broker from a different WIS2 Node]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata">Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_verifying_the_compliance_of_a_wis2_notification_message">Verifying the compliance of a WIS2 Notification message</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.1.3.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. br-inmet-global-broker test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_wis2_nodes">Minimum number of WIS2 Nodes</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_subscribers">Minimum number of subscribers</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_minimum_number_of_messages_per_second">Minimum number of messages per second</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="CENTRE_ID-results"><a class="anchor" href="#CENTRE_ID-results"></a>8.1.4. CENTRE_ID test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>8.1.4.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. CENTRE_ID functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_port">Port</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_certificate">Certificate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_origin_and_cache_read_access">Origin and Cache Read-Access</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_deny_write_access_to_originawis2_and_cacheawis2_for_everyoneeveryone_credentials">Deny write access to <em>origin/a/wis2/<mark></em> and <em>cache/a/wis2/</mark></em> for everyone/everyone credentials</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cluster_redundancy">cluster redundancy</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_discarding_of_duplicate_messages">Discarding of duplicate messages</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_a_message_using_the_centre_id_from_a_different_wis2_node">Publishing a message using the centre_id from a different WIS2 Node</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_valid_topics_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishing_messages_from_a_wis2_node_using_invalid_topics_not_compliant_with_wis2_topic_hierarchy">Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_publishes_messages_from_a_wis2_node_on_a_valid_topic_without_corresponding_metadata">Publishes messages from a WIS2 Node on a <em>valid</em> topic without corresponding metadata</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_verifying_the_compliance_of_a_wis2_notification_message">Verifying the compliance of a WIS2 Notification message</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>8.1.4.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. CENTRE_ID test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4922,9 +5273,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>8.2.1.1. Functional tests</h5>
+<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>8.2.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. data-metoffice-noaa-global-cache-results functional test results</caption>
+<caption class="title">Table 9. data-metoffice-noaa-global-cache-results functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4997,9 +5348,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>8.2.1.2. Performance tests</h5>
+<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>8.2.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. data-metoffice-noaa-global-cache-results performance test results</caption>
+<caption class="title">Table 10. data-metoffice-noaa-global-cache-results performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5038,9 +5389,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.2.2.1. Functional tests</h5>
+<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>8.2.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. de-dwd-global-cache functional test results</caption>
+<caption class="title">Table 11. de-dwd-global-cache functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5113,9 +5464,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.2.2.2. Performance tests</h5>
+<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>8.2.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. de-dwd-global-cache performance test results</caption>
+<caption class="title">Table 12. de-dwd-global-cache performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5154,9 +5505,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>8.2.3.1. Functional tests</h5>
+<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>8.2.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. cn-cma-global-cache functional test results</caption>
+<caption class="title">Table 13. cn-cma-global-cache functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5229,9 +5580,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>8.2.3.2. Performance tests</h5>
+<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>8.2.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. cn-cma-global-cache performance test results</caption>
+<caption class="title">Table 14. cn-cma-global-cache performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5270,9 +5621,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>8.2.4.1. Functional tests</h5>
+<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>8.2.4.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. sa-ncm-global-cache functional test results</caption>
+<caption class="title">Table 15. sa-ncm-global-cache functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5345,9 +5696,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>8.2.4.2. Performance tests</h5>
+<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>8.2.4.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. sa-ncm-global-cache performance test results</caption>
+<caption class="title">Table 16. sa-ncm-global-cache performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5386,9 +5737,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>8.2.5.1. Functional tests</h5>
+<h5 id="_functional_tests_12"><a class="anchor" href="#_functional_tests_12"></a>8.2.5.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. jp-jma-global-cache functional test results</caption>
+<caption class="title">Table 17. jp-jma-global-cache functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5461,9 +5812,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>8.2.5.2. Performance tests</h5>
+<h5 id="_performance_tests_12"><a class="anchor" href="#_performance_tests_12"></a>8.2.5.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. jp-jma-global-cache performance test results</caption>
+<caption class="title">Table 18. jp-jma-global-cache performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5502,9 +5853,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>8.2.6.1. Functional tests</h5>
+<h5 id="_functional_tests_13"><a class="anchor" href="#_functional_tests_13"></a>8.2.6.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. kr-kma-global-cache functional test results</caption>
+<caption class="title">Table 19. kr-kma-global-cache functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5577,9 +5928,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>8.2.6.2. Performance tests</h5>
+<h5 id="_performance_tests_13"><a class="anchor" href="#_performance_tests_13"></a>8.2.6.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. kr-kma-global-cache performance test results</caption>
+<caption class="title">Table 20. kr-kma-global-cache performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5621,9 +5972,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>8.3.1.1. Functional tests</h5>
+<h5 id="_functional_tests_14"><a class="anchor" href="#_functional_tests_14"></a>8.3.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
+<caption class="title">Table 21. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5691,9 +6042,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>8.3.1.2. Performance tests</h5>
+<h5 id="_performance_tests_14"><a class="anchor" href="#_performance_tests_14"></a>8.3.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
+<caption class="title">Table 22. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5817,7 +6168,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-16 15:50:09 UTC
+Last updated 2024-09-16 15:51:51 UTC
 </div>
 </div>
 </body>
