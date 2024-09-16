@@ -488,23 +488,25 @@ A Global Cache should support a minimum of 1000 simultaneous downloads.
     ** cache/a/wis2/+/metadata/#
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
-* Prepared WIS2 Notification Messages and associated data objects:
-  ** A known number (5) *https://github.com/wmo-im/wis2-notification-message[valid]* WNM's with:
+* WIS2 Notification Messages and associated data objects:
+  ** A known number (1) *https://github.com/wmo-im/wis2-notification-message[valid]* WNM with:
     *** `properties.cache` set to true
     *** `properties.data_id` + `properties.pubtime` should be unique to each message. Ensuring a different data_id is best here.
   ** Valid data objects to be cached
-    *** A larger than average data object should be generated/used in order to ensure that the clients downloading the data object concurrently do not finish before the test is complete. A 500MB data object is recommended.
-* Jmeter, Locust, or similar tool to manage the concurrent downloads.
+    *** A larger than average data object should be generated/used in order to ensure that the clients downloading the data object concurrently do not finish before the test is complete. A 200MB data object will be used.
+* ApacheBench (ab) to manage the concurrent downloads.
 
 ==== Steps
-. Publish the prepared WNM's one at a time to the dev/test GB on one of the following topics:
+. Publish the prepared WNM to the dev/test GB on one of the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
     ** origin/a/wis2/+/metadata/#
     ** cache/a/wis2/+/metadata/#
 
-For each WNM:
-. Once the _cache_ notification message is received by the test MQTT client (from the dev/test GC), the test client should start 1000 concurrent downloads of the data object/s from the canonical link provided in the _cache_ WNM.
+For the WNM:
+. Once the _cache_ notification message is received by the test MQTT client (from the dev/test GC), extract the canonical link from the cached messages.
+. Prepare and publish an 'ab' scenario configuration using the extracted canonical link.
+. The test client should start 1000 concurrent downloads of the data object from the canonical link provided in the _cache_ WNM. This will be accomplished by distributing the concurrent downloads across the available test nodes (10) and achieving a total of 1000 concurrent downloads.
 . The test client should record the number of successful downloads and the time taken to complete each download.
 
 ==== Evaluate
