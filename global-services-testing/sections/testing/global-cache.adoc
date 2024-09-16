@@ -37,6 +37,12 @@ Before running the pytest tests, ensure the following setup steps are completed:
         - `origin/a/wis2/+/metadata/#`
         - `cache/a/wis2/+/metadata/#`
 
+==== Pytest Setup
+    Prior to executing the tests, update the global-cache.env file with the necessary environment variables. This env file is nested in the tests/global_cache directory and the values of the following variable must be updated:
+
+- ``GC_METRICS_REPORT_BY`` - this is the centre_id of the global service and matches the report_by property in the metrics.
+- ``TEST_GC_MQTT_BROKER`` - this is the MQTT broker host for the Global Cache being tested. This should be the same connection string that was provided to the test administrators to configure the dev/test Global Broker to subscribe to the GC's local MQTT broker.
+
 === Teardown
 
 To teardown the configuration after the testing session, simply reverse the setup steps:
