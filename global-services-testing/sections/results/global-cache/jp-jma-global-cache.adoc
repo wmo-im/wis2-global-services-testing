@@ -1,0 +1,77 @@
+[[jp-jma-global-cache-results]]
+
+==== jp-jma-global-cache test results
+
+Date: YYYY-MM-DD
+
+===== Functional tests
+
+.jp-jma-global-cache functional test results
+|===
+|Test|Pass|Comments
+
+|<<MQTT Broker Connectivity>>
+|
+|
+
+|<<GC MQTT Broker Subscription>>
+|
+|
+
+|<<WIS2 Notification Message (WNM) Processing>>
+|
+|
+
+|<<Cache False Directive>>
+|
+|
+
+|<<Source Download Failure>>
+|
+|
+
+|<<Cache Override (Optional)>>
+|
+|
+
+|<<Data Integrity Check Failure (Recommended)>>
+|
+|
+
+|<<WIS2 Notification Message Deduplication>>
+|
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 1)>>
+|
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 2)>>
+|
+|
+
+|<<Data Update>>
+|
+|
+
+|===
+
+===== Performance tests
+
+.jp-jma-global-cache performance test results
+|===
+|Test|Pass|Comments
+
+|<<WIS2 Notification Processing Rate>>
+|
+|
+
+|<<Concurrent client downloads>>
+|
+|
+
+|<<Implicit tests>>
+|
+|
+
+|===
