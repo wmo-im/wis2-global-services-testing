@@ -11,8 +11,6 @@ A Global Broker:
 - should support a minimum of *1000* subscribers.
 - should support processing of a minimum of *10000* messages per second
 
-
-
 ==== Setup and tear down Global Brokers for the tests
 
 It has been decided to rely on _-test_ systems to emulate WIS2 Nodes. 
@@ -147,12 +145,7 @@ When those steps are completed, the Global Broker will be back to normal operati
 
 ==== Functional tests
 
-===== 1. Global Broker Connectivity Tests
-
-There are several test that can be performed on the Global Broker in advance of the planned GB testing period (currently scheduled for September 30 - October 4).
-A. to D. below can be performed any time.
-
-====== A. Global Broker Port Tests
+===== Port
 
 ====== Purpose
 
@@ -172,7 +165,7 @@ An MQTT client must be able to connect to the local broker of the Global Broker 
 
 . Check if the connection is successful.
 
-====== B. Global Broker Certificate Test
+===== Certificate
 
 ====== Purpose
 
@@ -195,7 +188,7 @@ If a browser like Firefox is used, connect WSS endpoint (https://globalbroker.ex
 
 If the connection is successful and the certificate are valid, the test passes. If the connection is not successful or the certificate is invalid, the test fails.
 
-====== C. Global Broker Origin and Cache Read-Access Test
+===== Origin and Cache Read-Access
 
 ====== Purpose
 
@@ -216,7 +209,7 @@ The Global Broker service must allow [.underline]#only# read access to _origin/a
 
 Check if the connection is successful, and depending on the flow of messages, messages should appear rapidly.  If messages are displayed, the test passes. If the connection is not successful, the test fails.
 
-====== D. Global Broker deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials Test
+===== Deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials
 
 ====== Purpose
 
@@ -236,7 +229,7 @@ The Global Broker service must prevent write access to any topic with everyone/e
 
 Check if the connection is successful, and the publication fails or the connection drops, the test is successful. If the connection is successful, and the publication is allowed, the test fails.
 
-====== E. Global Broker cluster redundancy Test
+===== cluster redundancy
 
 ====== Purpose
 
@@ -256,12 +249,7 @@ The Global Broker service, should be using a MQTT server deployed in a cluster, 
 
 . Check if the subscription is successful even after the members of the cluster are failed. If the subscription continues as cluster is altered, the test passes. If the subscription is not fulfilled after cluster alternation, the test fails.
 
-===== 2. Global Broker Antiloop Testing
-
-The antiloop feature of a Global Broker is a critical aspect of WIS2 Architecture. This is what guarantees a high level of service while preventing “messages storm”.  These tests are designed to test the antiloop feature of the Global Broker service.  This must be fully functional for each WIS2 Global Broker properly prior WIS2 going to an operational state on January 1st, 2025.
-If configurable, and when applicable, the Global Broker should discard incorrect WIS2 Notification Messages, by opposition of only verifying the correctness.
-
-====== A. Discarding of duplicate messages Test
+===== Discarding of duplicate messages
 
 ====== Purpose
 
@@ -286,7 +274,7 @@ The Global Broker service must discard all duplicated messages (identical id) re
 . Increments *wmo_wis2_gb_messages_published_total* by 1 on centre_id from the WIS2Node that arrives first (io-wis2dev-11-test or io-wis2dev-12-test)
 . If both statements are true, the test passes. Otherwise, the test fails.
 
-====== B. Publishing a message using the centre_id from a different WIS2 Node Test
+===== Publishing a message using the centre_id from a different WIS2 Node
 
 ====== Purpose
 
@@ -307,7 +295,7 @@ The Global Broker service must ensure that any WIS2 Node is not publishing a mes
 . The Global Broker ignores (in fact the message will not be received at all) the message published. No metrics is incremented
 . If the message is received by MQTT Client then the test fails.
 
-====== C. Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy) Test
+===== Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)
 
 ====== Purpose
 
@@ -331,7 +319,7 @@ The Global Broker service must forward messages when the topic is compliant with
 . Increments *wmo_wis2_gb_messages_published_total* by 1 for each message
 . If all above statements are true, the test passes. Otherwise, the test fails.
 
-====== D. Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy) Test
+===== Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)
 
 ====== Purpose
 
@@ -355,7 +343,7 @@ The Global Broker service must forward messages when the topic is compliant with
 . Increments *wmo_wis2_gb_messages_invalid_topic_total* by 10
 . If all above statements are true, the test passes. Otherwise, the test fails.
 
-====== E. Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata Test
+===== Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata
 
 ====== Purpose
 
@@ -381,7 +369,7 @@ The Global Broker service must check that the topic used to publish a message by
 . Increments *wmo_wis2_gb_messages_no_metadata_total* by 10
 . If all above statements are true, the test passes. Otherwise, the test fails.
 
-====== F. Verifying the compliance of a WIS2 Notification message Test
+===== Verifying the compliance of a WIS2 Notification message
 
 ====== Purpose
 
@@ -407,11 +395,11 @@ The Global Broker service must verify the compliance of the WIS2 Notification Me
 . If all above statements are true, the test passes. Otherwise, the test fails.
 
 
-===== 3. Global Broker Performance Testing
+==== Performance tests
 
 We must ensure that the Global Broker service performs properly under stress.  The following outlined tests will test the Global Broker service prior to transition of WIS2 to an operational state on January 1, 2025
 
-====== A. Global Broker minimum number of WIS2 Nodes Test
+===== Minimum number of WIS2 Nodes
 
 ====== Purpose
 
@@ -432,7 +420,7 @@ The Global Broker service should support a minimum of *200* WIS2 Nodes
 
 . If on the MQTT test client, 10 messages for each of the 200 centre-id are received, the test passes. Otherwise, it fails.
 
-====== B. Global Broker minimum number of subscribers Test
+===== Minimum number of subscribers
 
 ====== Purpose
 
@@ -460,7 +448,7 @@ mqttx bench conn -c 200 -i 100
 
 with 200 connections created, on the 5 tests systems, this test is successful.
 
-====== C. Global Broker minimum number of messages per second Test
+===== Minimum number of messages per second
 
 ====== Purpose
 

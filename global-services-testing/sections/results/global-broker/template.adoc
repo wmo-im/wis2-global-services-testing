@@ -1,0 +1,78 @@
+[[CENTRE_ID-results]]
+
+==== CENTRE_ID test results
+
+Date: YYYY-MM-DD
+
+===== Functional tests
+
+.CENTRE_ID functional test results
+|===
+|Test|Pass|Comments
+
+|<<Port>>
+|
+|
+
+|<<Certificate>>
+|
+|
+
+|<<Origin and Cache Read-Access>>
+|
+|
+
+|<<Deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials>>
+|
+|
+
+
+|<<cluster redundancy>>
+|
+|
+
+|<<Discarding of duplicate messages>>
+|
+|
+
+|<<Publishing a message using the centre_id from a different WIS2 Node>>
+|
+|
+
+|<<Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)>>
+|
+|
+
+|<<Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)>>
+|
+|
+
+|<<Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata>>
+|
+|
+
+|<<Verifying the compliance of a WIS2 Notification message>>
+|
+|
+
+|===
+
+===== Performance tests
+
+.CENTRE_ID test results
+|===
+|Test|Pass|Comments
+
+|<<Minimum number of WIS2 Nodes>>
+|
+|
+
+|<<Minimum number of subscribers>>
+|
+|
+
+|<<Minimum number of messages per second>>
+|
+|
+
+|===

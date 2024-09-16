@@ -42,7 +42,7 @@ After running the pytest tests, ensure the following teardown steps are complete
 
 ==== Functional Tests
 
-===== 1. MQTT Broker Connectivity
+===== MQTT Broker Connectivity
 
 ====== Purpose
 An MQTT client must be able to connect to the local broker of the Global Cache on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.
@@ -62,7 +62,7 @@ An MQTT client must be able to connect to the local broker of the Global Cache o
 
 . Check if the connection is successful (rc code). If the connection is successful, the test passes. If the connection is not successful, the test fails.
 
-===== 2. GC MQTT Broker Subscription
+===== GC MQTT Broker Subscription
 
 ====== Purpose
 A Global Cache must allow connected MQTT clients to subscribe to the ++cache/a/wis2/#++ topic using a provided connection string.
@@ -83,7 +83,7 @@ A Global Cache must allow connected MQTT clients to subscribe to the ++cache/a/w
 . Close the connection to the broker after the test.
 
 
-===== 3. WIS2 Notification Message (WNM) Processing
+===== WIS2 Notification Message (WNM) Processing
 
 ====== Purpose
 Test that the GC functions as expected under normal conditions. The Global Cache should process a valid incoming WNM, download the data at the provided canonical link, and publish a new WNM on the proper ++cache/++ topic using the proper message structure, and update the necessary GC metrics.
@@ -141,7 +141,7 @@ This test also evaluates the client data download requirement: An HTTP client (i
     ** `wmo_wis2_gc_dataserver_status_flag` (set to 1 for each)
     ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
 
-===== 4. Cache False Directive
+===== Cache False Directive
 
 ====== Purpose
 
@@ -182,7 +182,7 @@ Where a Global Cache receives a notification message with _properties.cache_ set
   ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (unchanged)
   ** `wmo_wis2_gc_no_cache_total` (+=1 for each WNM)
 
-===== 5. Source Download Failure
+===== Source Download Failure
 
 ====== Purpose
 Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the `metric wmo_wis2_gc_dataserver_status_flag` for the source data server should be set to 0 (zero).
@@ -220,7 +220,7 @@ Where a Global Cache receives a valid WNM, but is unable to download a data item
     ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (unchanged)
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each WNM)
 
-===== 6. Cache Override (Optional)
+===== Cache Override (Optional)
 ====== Purpose
 Where a Global Cache determines that it is unable to cache a data item, the Global Cache should publish a notification message where the data download link (a link object's `href` property where `rel=canonical`) refers to the source data server, and the metric `wmo_wis2_gc_cache_override_total` is incremented by 1 (one).
 Note that the trigger for this directive is implementation specific. The criteria must be known and enabled for the test
@@ -264,7 +264,7 @@ to be valid. Additionally, a given GC may decide to NOT implement this directive
         *** `wmo_wis2_gc_cache_override_total` (+=1 for each WNM)
         *** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
 
-===== 7. Data Integrity Check Failure (Recommended)
+===== Data Integrity Check Failure (Recommended)
 
 ====== Purpose
 A Global Cache should validate the integrity of the resources it caches and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Global Cache should accept the data as valid. In this case a Global Cache _may_ add an integrity value to the message it republishes.
@@ -304,7 +304,7 @@ A Global Cache should validate the integrity of the resources it caches and only
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each WNM)
     ** `wmo_wis2_gc_integrity_failed_total` (+=1 for each WNM)
 
-===== 8. WIS2 Notification Message Deduplication
+===== WIS2 Notification Message Deduplication
 
 ====== Purpose
 
@@ -345,7 +345,7 @@ A Global Cache must ensure that only one instance of a notification message with
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
 
-===== 8.1. WIS2 Notification Message Deduplication (Alternative 1)
+===== WIS2 Notification Message Deduplication (Alternative 1)
 
 ====== Purpose
 Where a Global Cache fails to process a notification message relating to a given unique data object (`properties.data_id` + `properties.pubtime`), a Global Cache should successfully process a valid, subsequently received notification message with the same unique data identifier.
@@ -385,7 +385,7 @@ Where a Global Cache fails to process a notification message relating to a given
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each unique identifier WNM message set)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-===== 8.2. WIS2 Notification Message Deduplication (Alternative 2)
+===== WIS2 Notification Message Deduplication (Alternative 2)
 
 ====== Purpose
 
@@ -413,7 +413,7 @@ See above.
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
-===== 9. Data Update
+===== Data Update
 
 ====== Purpose
 A Global Cache should treat notification messages with the same data item identifier (`properties.data_id`), but different publication times (`properties.pubtime`) as unique data items. Data items with the same `properties.data_id` but a greater/later publication time AND a #update# link (links['rel']='update'), should be processed (see test Notification processing). Data items with the same `properties.data_id` but earlier or identical publication times should be ignored (see deduplication test 8).

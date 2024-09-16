@@ -2,5 +2,4 @@
 
 === Global Discovery Catalogue results
 
-include::canada.adoc[]
-include::china.adoc[]
+include::ca-eccc-msc-global-discovery-catalogue.adoc[]

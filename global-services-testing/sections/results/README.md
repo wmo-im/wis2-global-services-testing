@@ -1,6 +1,6 @@
 # Results
 
-To add a result to the document:
+To add a testing result to the document:
 
-- Create `global-services-testing/sections/results/name-of-result.adoc` following the template in [`template.adoc`](template.adoc)
-- Include the file in `global-services-testing/sections/05-results.adoc` (i.e. `include::testing/name-of-result.adoc[]`)
+- Create `global-services-testing/sections/results/<global-service-type>/<centre-id>` following the relevant template in `<global-service-type>/`template.adoc`
+- Include the file in `global-services-testing/sections/<global-service-type>/index.adoc` (i.e. `include::testing/<global-service-type>/<centre-id>.adoc[]`)
