@@ -1,0 +1,65 @@
+[[de-dwd-global-discovery-catalogue-results]]
+
+==== de-dwd-global-discovery-catalogue results
+
+Date: YYYY-MM-DD
+
+===== Functional tests
+
+.de-dwd-global-discovery-catalogue functional test results
+|===
+|Test|Pass|Comments
+
+|<<Global Broker connection and subscription>>
+|
+|
+
+|<<Notification and metadata processing (success)>>
+|
+|
+
+|<<Notification and metadata processing (failure; record not found)>>
+|
+|
+
+|<<Notification and metadata processing (failure; malformed JSON or invalid WCMP2)>>
+|
+|
+
+|<<Metadata ingest centre-id mismatch>>
+|
+|
+
+|<<Notification and metadata processing (record deletion)>>
+|
+|
+
+|<<Notification and metadata processing (failure; record deletion message does not contain `properties.metadata_id`)>>
+|
+|
+
+|<<WCMP2 metadata archive zipfile publication>>
+|
+|
+
+|<<WCMP2 cold start initialization from metadata archive zipfile>>
+|
+|
+
+|<<API functionality>>
+|
+|
+
+|===
+
+===== Performance tests
+
+.de-dwd-global-discovery-catalogue performance test results
+|===
+|Test|Pass|Comments
+
+|<<Processing timeliness>>
+|
+|
+
+|===
