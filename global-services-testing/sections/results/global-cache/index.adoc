@@ -3,3 +3,14 @@
 === Global Cache results
 
 include::data-metoffice-noaa-global-cache.adoc[]
+
+include::de-dwd-global-cache.adoc[]
+
+include::cn-cma-global-cache.adoc[]
+
+include::sa-ncm-global-cache.adoc[]
+
+include::jp-jma-global-cache.adoc[]
+
+include::kr-kma-global-cache.adoc[]
+
