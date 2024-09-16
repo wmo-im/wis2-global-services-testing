@@ -568,6 +568,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#global-discovery-catalogue-results">8.3. Global Discovery Catalogue results</a>
 <ul class="sectlevel3">
 <li><a href="#ca-eccc-msc-global-discovery-catalogue-results">8.3.1. ca-eccc-msc-global-discovery-catalogue test results</a></li>
+<li><a href="#cn-cma-global-discovery-catalogue-results">8.3.2. cn-cma-global-discovery-catalogue results</a></li>
+<li><a href="#de-dwd-global-discovery-catalogue-results">8.3.3. de-dwd-global-discovery-catalogue results</a></li>
 </ul>
 </li>
 </ul>
@@ -6067,6 +6069,208 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="cn-cma-global-discovery-catalogue-results"><a class="anchor" href="#cn-cma-global-discovery-catalogue-results"></a>8.3.2. cn-cma-global-discovery-catalogue results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_15"><a class="anchor" href="#_functional_tests_15"></a>8.3.2.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 23. cn-cma-global-discovery-catalogue functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_global_broker_connection_and_subscription">Global Broker connection and subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_success">Notification and metadata processing (success)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_record_not_found">Notification and metadata processing (failure; record not found)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2">Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_metadata_ingest_centre_id_mismatch">Metadata ingest centre-id mismatch</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_record_deletion">Notification and metadata processing (record deletion)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id">Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wcmp2_metadata_archive_zipfile_publication">WCMP2 metadata archive zipfile publication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile">WCMP2 cold start initialization from metadata archive zipfile</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_api_functionality">API functionality</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_15"><a class="anchor" href="#_performance_tests_15"></a>8.3.2.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 24. cn-cma-global-discovery-catalogue performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_processing_timeliness">Processing timeliness</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="de-dwd-global-discovery-catalogue-results"><a class="anchor" href="#de-dwd-global-discovery-catalogue-results"></a>8.3.3. de-dwd-global-discovery-catalogue results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_16"><a class="anchor" href="#_functional_tests_16"></a>8.3.3.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 25. de-dwd-global-discovery-catalogue functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_global_broker_connection_and_subscription">Global Broker connection and subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_success">Notification and metadata processing (success)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_record_not_found">Notification and metadata processing (failure; record not found)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2">Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_metadata_ingest_centre_id_mismatch">Metadata ingest centre-id mismatch</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_record_deletion">Notification and metadata processing (record deletion)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id">Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wcmp2_metadata_archive_zipfile_publication">WCMP2 metadata archive zipfile publication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile">WCMP2 cold start initialization from metadata archive zipfile</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_api_functionality">API functionality</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_16"><a class="anchor" href="#_performance_tests_16"></a>8.3.3.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 26. de-dwd-global-discovery-catalogue performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_processing_timeliness">Processing timeliness</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -6168,7 +6372,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-16 15:51:51 UTC
+Last updated 2024-09-16 15:52:49 UTC
 </div>
 </div>
 </body>
