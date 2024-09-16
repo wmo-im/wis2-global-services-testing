@@ -555,6 +555,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#global-cache-results">8.2. Global Cache results</a>
 <ul class="sectlevel3">
 <li><a href="#data-metoffice-noaa-global-cache-results">8.2.1. data-metoffice-noaa-global-cache-results test results</a></li>
+<li><a href="#de-dwd-global-cache-results">8.2.2. de-dwd-global-cache test results</a></li>
+<li><a href="#cn-cma-global-cache-results">8.2.3. cn-cma-global-cache test results</a></li>
+<li><a href="#sa-ncm-global-cache-results">8.2.4. sa-ncm-global-cache test results</a></li>
+<li><a href="#jp-jma-global-cache-results">8.2.5. jp-jma-global-cache test results</a></li>
+<li><a href="#kr-kma-global-cache-results">8.2.6. kr-kma-global-cache test results</a></li>
 </ul>
 </li>
 <li><a href="#global-discovery-catalogue-results">8.3. Global Discovery Catalogue results</a>
@@ -5027,6 +5032,586 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="de-dwd-global-cache-results"><a class="anchor" href="#de-dwd-global-cache-results"></a>8.2.2. de-dwd-global-cache test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.2.2.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. de-dwd-global-cache functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_mqtt_broker_connectivity">MQTT Broker Connectivity</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_gc_mqtt_broker_subscription">GC MQTT Broker Subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_wnm_processing">WIS2 Notification Message (WNM) Processing</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_false_directive">Cache False Directive</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_source_download_failure">Source Download Failure</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_override_optional">Cache Override (Optional)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_integrity_check_failure_recommended">Data Integrity Check Failure (Recommended)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication">WIS2 Notification Message Deduplication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_1">WIS2 Notification Message Deduplication (Alternative 1)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_2">WIS2 Notification Message Deduplication (Alternative 2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_update">Data Update</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.2.2.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. de-dwd-global-cache performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_processing_rate">WIS2 Notification Processing Rate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_concurrent_client_downloads">Concurrent client downloads</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_implicit_tests">Implicit tests</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cn-cma-global-cache-results"><a class="anchor" href="#cn-cma-global-cache-results"></a>8.2.3. cn-cma-global-cache test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>8.2.3.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. cn-cma-global-cache functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_mqtt_broker_connectivity">MQTT Broker Connectivity</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_gc_mqtt_broker_subscription">GC MQTT Broker Subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_wnm_processing">WIS2 Notification Message (WNM) Processing</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_false_directive">Cache False Directive</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_source_download_failure">Source Download Failure</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_override_optional">Cache Override (Optional)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_integrity_check_failure_recommended">Data Integrity Check Failure (Recommended)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication">WIS2 Notification Message Deduplication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_1">WIS2 Notification Message Deduplication (Alternative 1)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_2">WIS2 Notification Message Deduplication (Alternative 2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_update">Data Update</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>8.2.3.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. cn-cma-global-cache performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_processing_rate">WIS2 Notification Processing Rate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_concurrent_client_downloads">Concurrent client downloads</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_implicit_tests">Implicit tests</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sa-ncm-global-cache-results"><a class="anchor" href="#sa-ncm-global-cache-results"></a>8.2.4. sa-ncm-global-cache test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>8.2.4.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. sa-ncm-global-cache functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_mqtt_broker_connectivity">MQTT Broker Connectivity</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_gc_mqtt_broker_subscription">GC MQTT Broker Subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_wnm_processing">WIS2 Notification Message (WNM) Processing</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_false_directive">Cache False Directive</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_source_download_failure">Source Download Failure</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_override_optional">Cache Override (Optional)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_integrity_check_failure_recommended">Data Integrity Check Failure (Recommended)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication">WIS2 Notification Message Deduplication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_1">WIS2 Notification Message Deduplication (Alternative 1)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_2">WIS2 Notification Message Deduplication (Alternative 2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_update">Data Update</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>8.2.4.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. sa-ncm-global-cache performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_processing_rate">WIS2 Notification Processing Rate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_concurrent_client_downloads">Concurrent client downloads</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_implicit_tests">Implicit tests</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="jp-jma-global-cache-results"><a class="anchor" href="#jp-jma-global-cache-results"></a>8.2.5. jp-jma-global-cache test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>8.2.5.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. jp-jma-global-cache functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_mqtt_broker_connectivity">MQTT Broker Connectivity</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_gc_mqtt_broker_subscription">GC MQTT Broker Subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_wnm_processing">WIS2 Notification Message (WNM) Processing</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_false_directive">Cache False Directive</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_source_download_failure">Source Download Failure</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_override_optional">Cache Override (Optional)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_integrity_check_failure_recommended">Data Integrity Check Failure (Recommended)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication">WIS2 Notification Message Deduplication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_1">WIS2 Notification Message Deduplication (Alternative 1)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_2">WIS2 Notification Message Deduplication (Alternative 2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_update">Data Update</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>8.2.5.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. jp-jma-global-cache performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_processing_rate">WIS2 Notification Processing Rate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_concurrent_client_downloads">Concurrent client downloads</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_implicit_tests">Implicit tests</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="kr-kma-global-cache-results"><a class="anchor" href="#kr-kma-global-cache-results"></a>8.2.6. kr-kma-global-cache test results</h4>
+<div class="paragraph">
+<p>Date: YYYY-MM-DD</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>8.2.6.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. kr-kma-global-cache functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_mqtt_broker_connectivity">MQTT Broker Connectivity</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_gc_mqtt_broker_subscription">GC MQTT Broker Subscription</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_wnm_processing">WIS2 Notification Message (WNM) Processing</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_false_directive">Cache False Directive</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_source_download_failure">Source Download Failure</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_cache_override_optional">Cache Override (Optional)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_integrity_check_failure_recommended">Data Integrity Check Failure (Recommended)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication">WIS2 Notification Message Deduplication</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_1">WIS2 Notification Message Deduplication (Alternative 1)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_message_deduplication_alternative_2">WIS2 Notification Message Deduplication (Alternative 2)</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_data_update">Data Update</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>8.2.6.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 14. kr-kma-global-cache performance test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_wis2_notification_processing_rate">WIS2 Notification Processing Rate</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_concurrent_client_downloads">Concurrent client downloads</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_implicit_tests">Implicit tests</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="global-discovery-catalogue-results"><a class="anchor" href="#global-discovery-catalogue-results"></a>8.3. Global Discovery Catalogue results</h3>
@@ -5036,9 +5621,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.3.1.1. Functional tests</h5>
+<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>8.3.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
+<caption class="title">Table 15. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5106,9 +5691,9 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.3.1.2. Performance tests</h5>
+<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>8.3.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
+<caption class="title">Table 16. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -5232,7 +5817,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-16 15:47:07 UTC
+Last updated 2024-09-16 15:50:09 UTC
 </div>
 </div>
 </body>
