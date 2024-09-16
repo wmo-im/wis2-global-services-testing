@@ -29,10 +29,11 @@ ab_centres = [1001, 1010]
 
 # Connection strings for the development global broker and message generator
 # Access the environment variables
-load_dotenv("../default.env")
+load_dotenv("../global-cache.env")
 load_dotenv("../secrets.env")
+load_dotenv("../default.env")
 mqtt_broker_recv = os.getenv('GB')
-mqtt_broker_trigger = os.getenv('TRIGGER_MQTT_BROKER')
+mqtt_broker_trigger = os.getenv('TRIGGER_BROKER')
 mqtt_broker_gc = os.getenv('TEST_GC_MQTT_BROKER')
 # prometheus config
 prom_host = os.getenv('PROMETHEUS_HOST')
