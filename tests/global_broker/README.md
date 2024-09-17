@@ -19,7 +19,7 @@ This PyTest script implements the functional tests for the Global Broker.  **Cur
 6. TEST_BROKER_TEST: Functional Tests Connections
 
 The functional tests endpoint is separate providing the opportunity to select
-a functional in the event that SSL/TLS is not available.
+a functional URL in the event that SSL/TLS is not available.
 
 ### Script Configurables
 
