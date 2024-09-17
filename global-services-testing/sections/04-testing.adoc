@@ -70,7 +70,9 @@ The test orchestrators/runners will execute on ``master.wis2dev.io``
 
 The environment to perform tests is made available on ``master.wis2dev.io``.  Access is coordinated with the testing team.
 
-The following steps are required before executing tests in the test environment 
+===== Setup
+
+The following steps are required to setup the initial test environment:
 
 [source,bash]
 ----
@@ -81,6 +83,23 @@ git clone https://github.com/wmo-im/wis2-global-services-testing.git
 cd wis2-global-services-testing/tests
 pip3 install -r requirements.txt
 ----
+
+===== Execution
+
+The following steps are required prior to executing a given tests:
+
+[source,bash]
+----
+cd /data/wis2-testing/wis2-global-services-testing/tests
+. /data/wis2-testing/env/bin/activate
+git pull origin main
+----
+
+From here, test execution is specific to the Global Service.
+
+===== Results
+
+Test results shall be stored in `/data/wis2-testing/results`, organized by the centre id of the Global Service Implementation Under Test (IUT).
 
 ==== Functional testing
 
