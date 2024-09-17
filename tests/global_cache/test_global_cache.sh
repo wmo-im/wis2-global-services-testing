@@ -5,7 +5,7 @@ source ./global-cache.env
 
 # Create the output directory if it doesn't exist
 #OUTPUT_DIR=~/user/test-results/gc
-OUTPUT_DIR="$HOME/results/${GC_METRICS_REPORT_BY}"
+OUTPUT_DIR="/data/wis2-testing/results/${GC_METRICS_REPORT_BY}"
 mkdir -p $OUTPUT_DIR
 
 # Get the current datetime stamp
