@@ -525,179 +525,60 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_performance_tests">7.1.5. Performance tests</a></li>
 </ul>
 </li>
+<li><a href="#global-cache-testing">7.2. Global Cache Service Testing</a>
+<ul class="sectlevel3">
+<li><a href="#global-cache-setup-teardown">7.2.1. Preparation</a></li>
+<li><a href="#global-cache-tests">7.2.2. Functional Tests</a></li>
+<li><a href="#_performance_tests_2">7.2.3. Performance tests</a></li>
 </ul>
 </li>
-<li><a href="#global-cache-testing">Global Cache Service Testing</a>
-<ul class="sectlevel1">
-<li><a href="#global-cache-setup-teardown">8. Preparation</a>
+<li><a href="#global-discovery-catalogue-testing">7.3. Global Discovery Catalogue Service testing</a>
+<ul class="sectlevel3">
+<li><a href="#_preparations_for_the_test">7.3.1. Preparations for the test</a></li>
+<li><a href="#_entering_the_test_environment">7.3.2. Entering the test environment</a></li>
+<li><a href="#_test_setup">7.3.3. Test setup</a></li>
+<li><a href="#_functional_tests_2">7.3.4. Functional tests</a></li>
+<li><a href="#_performance_tests_3">7.3.5. Performance tests</a></li>
+<li><a href="#_executing_the_test_environment">7.3.6. Executing the test environment</a></li>
+<li><a href="#_exiting_the_test_environment">7.3.7. Exiting the test environment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#results">8. Results</a>
 <ul class="sectlevel2">
-<li><a href="#_setup_2">8.1. Setup</a>
+<li><a href="#global-broker-results">8.1. Global Broker results</a>
 <ul class="sectlevel3">
-<li><a href="#_disconnect_the_global_cache_from_the_production_environment">8.1.1. Disconnect the Global Cache from the production environment.</a></li>
-<li><a href="#_connect_the_global_cache_to_the_devtest_environment">8.1.2. Connect the Global Cache to the dev/test environment.</a></li>
-<li><a href="#_pytest_setup">8.1.3. Pytest Setup</a></li>
+<li><a href="#cn-cma-global-broker-results">8.1.1. cn-cma-global-broker test results</a></li>
+<li><a href="#fr-meteofrance-global-broker-results">8.1.2. fr-meteofrance-global-broker test results</a></li>
+<li><a href="#br-inmet-global-broker-results">8.1.3. br-inmet-global-broker test results</a></li>
+<li><a href="#CENTRE_ID-results">8.1.4. CENTRE_ID test results</a></li>
 </ul>
 </li>
-<li><a href="#_teardown">8.2. Teardown</a></li>
-</ul>
-</li>
-<li><a href="#global-cache-tests">9. Functional Tests</a>
-<ul class="sectlevel2">
-<li><a href="#_mqtt_broker_connectivity">9.1. MQTT Broker Connectivity</a>
+<li><a href="#global-cache-results">8.2. Global Cache results</a>
 <ul class="sectlevel3">
-<li><a href="#_purpose_15">9.1.1. Purpose</a></li>
-<li><a href="#_requirements_15">9.1.2. Requirements</a></li>
-<li><a href="#_steps_15">9.1.3. Steps</a></li>
-<li><a href="#_evaluate_15">9.1.4. Evaluate</a></li>
+<li><a href="#data-metoffice-noaa-global-cache-results">8.2.1. data-metoffice-noaa-global-cache-results test results</a></li>
+<li><a href="#de-dwd-global-cache-results">8.2.2. de-dwd-global-cache test results</a></li>
+<li><a href="#cn-cma-global-cache-results">8.2.3. cn-cma-global-cache test results</a></li>
+<li><a href="#sa-ncm-global-cache-results">8.2.4. sa-ncm-global-cache test results</a></li>
+<li><a href="#jp-jma-global-cache-results">8.2.5. jp-jma-global-cache test results</a></li>
+<li><a href="#kr-kma-global-cache-results">8.2.6. kr-kma-global-cache test results</a></li>
 </ul>
 </li>
-<li><a href="#_gc_mqtt_broker_subscription">9.2. GC MQTT Broker Subscription</a>
+<li><a href="#global-discovery-catalogue-results">8.3. Global Discovery Catalogue results</a>
 <ul class="sectlevel3">
-<li><a href="#_purpose_16">9.2.1. Purpose</a></li>
-<li><a href="#_requirements_16">9.2.2. Requirements</a></li>
-<li><a href="#_steps_16">9.2.3. Steps</a></li>
-<li><a href="#_evaluate_16">9.2.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_wis2_notification_message_wnm_processing">9.3. WIS2 Notification Message (WNM) Processing</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_17">9.3.1. Purpose</a></li>
-<li><a href="#_requirements_17">9.3.2. Requirements</a></li>
-<li><a href="#_steps_17">9.3.3. Steps</a></li>
-<li><a href="#_evaluate_17">9.3.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_cache_false_directive">9.4. Cache False Directive</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_18">9.4.1. Purpose</a></li>
-<li><a href="#_requirements_18">9.4.2. Requirements</a></li>
-<li><a href="#_steps_18">9.4.3. Steps</a></li>
-<li><a href="#_evaluate_18">9.4.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_source_download_failure">9.5. Source Download Failure</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_19">9.5.1. Purpose</a></li>
-<li><a href="#_requirements_19">9.5.2. Requirements</a></li>
-<li><a href="#_steps_19">9.5.3. Steps</a></li>
-<li><a href="#_evaluate_19">9.5.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_data_integrity_check_failure">9.6. Data Integrity Check Failure</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_20">9.6.1. Purpose</a></li>
-<li><a href="#_requirements_20">9.6.2. Requirements</a></li>
-<li><a href="#_steps_20">9.6.3. Steps</a></li>
-<li><a href="#_evaluate_20">9.6.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_wis2_notification_message_deduplication">9.7. WIS2 Notification Message Deduplication</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_21">9.7.1. Purpose</a></li>
-<li><a href="#_requirements_21">9.7.2. Requirements</a></li>
-<li><a href="#_steps_21">9.7.3. Steps</a></li>
-<li><a href="#_evaluate_21">9.7.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_wis2_notification_message_deduplication_alternative_1">9.8. WIS2 Notification Message Deduplication (Alternative 1)</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_22">9.8.1. Purpose</a></li>
-<li><a href="#_requirements_22">9.8.2. Requirements</a></li>
-<li><a href="#_steps_22">9.8.3. Steps</a></li>
-<li><a href="#_evaluate_22">9.8.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_wis2_notification_message_deduplication_alternative_2">9.9. WIS2 Notification Message Deduplication (Alternative 2)</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_23">9.9.1. Purpose</a></li>
-<li><a href="#_requirements_23">9.9.2. Requirements</a></li>
-<li><a href="#_steps_23">9.9.3. Steps</a></li>
-<li><a href="#_evaluate_23">9.9.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_data_update">9.10. Data Update</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_24">9.10.1. Purpose</a></li>
-<li><a href="#_requirements_24">9.10.2. Requirements</a></li>
-<li><a href="#_steps_24">9.10.3. Steps</a></li>
-<li><a href="#_evaluate_24">9.10.4. Evaluate</a></li>
+<li><a href="#ca-eccc-msc-global-discovery-catalogue-results">8.3.1. ca-eccc-msc-global-discovery-catalogue test results</a></li>
+<li><a href="#cn-cma-global-discovery-catalogue-results">8.3.2. cn-cma-global-discovery-catalogue results</a></li>
+<li><a href="#de-dwd-global-discovery-catalogue-results">8.3.3. de-dwd-global-discovery-catalogue results</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_performance_tests_2">10. Performance tests</a>
-<ul class="sectlevel2">
-<li><a href="#_wis2_notification_processing_rate">10.1. WIS2 Notification Processing Rate</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_25">10.1.1. Purpose</a></li>
-<li><a href="#_requirements_25">10.1.2. Requirements</a></li>
-<li><a href="#_steps_25">10.1.3. Steps</a></li>
-<li><a href="#_evaluate_25">10.1.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_concurrent_client_downloads">10.2. Concurrent client downloads</a>
-<ul class="sectlevel3">
-<li><a href="#_purpose_26">10.2.1. Purpose</a></li>
-<li><a href="#_requirements_26">10.2.2. Requirements</a></li>
-<li><a href="#_steps_26">10.2.3. Steps</a></li>
-<li><a href="#_evaluate_26">10.2.4. Evaluate</a></li>
-</ul>
-</li>
-<li><a href="#_implicit_tests">10.3. Implicit tests</a>
-<ul class="sectlevel3">
-<li><a href="#_valid_tlsssl_certificate">10.3.1. Valid TLS/SSL certificate</a></li>
-<li><a href="#_available_storage_space">10.3.2. Available Storage Space</a></li>
-</ul>
-</li>
-<li><a href="#global-discovery-catalogue-testing">10.4. Global Discovery Catalogue Service testing</a>
-<ul class="sectlevel3">
-<li><a href="#_preparations_for_the_test">10.4.1. Preparations for the test</a></li>
-<li><a href="#_entering_the_test_environment">10.4.2. Entering the test environment</a></li>
-<li><a href="#_test_setup">10.4.3. Test setup</a></li>
-<li><a href="#_functional_tests_2">10.4.4. Functional tests</a></li>
-<li><a href="#_performance_tests_3">10.4.5. Performance tests</a></li>
-<li><a href="#_executing_the_test_environment">10.4.6. Executing the test environment</a></li>
-<li><a href="#_exiting_the_test_environment">10.4.7. Exiting the test environment</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#results">11. Results</a>
-<ul class="sectlevel2">
-<li><a href="#global-broker-results">11.1. Global Broker results</a>
-<ul class="sectlevel3">
-<li><a href="#cn-cma-global-broker-results">11.1.1. cn-cma-global-broker test results</a></li>
-<li><a href="#fr-meteofrance-global-broker-results">11.1.2. fr-meteofrance-global-broker test results</a></li>
-<li><a href="#br-inmet-global-broker-results">11.1.3. br-inmet-global-broker test results</a></li>
-<li><a href="#CENTRE_ID-results">11.1.4. CENTRE_ID test results</a></li>
-</ul>
-</li>
-<li><a href="#global-cache-results">11.2. Global Cache results</a>
-<ul class="sectlevel3">
-<li><a href="#data-metoffice-noaa-global-cache-results">11.2.1. data-metoffice-noaa-global-cache-results test results</a></li>
-<li><a href="#de-dwd-global-cache-results">11.2.2. de-dwd-global-cache test results</a></li>
-<li><a href="#cn-cma-global-cache-results">11.2.3. cn-cma-global-cache test results</a></li>
-<li><a href="#sa-ncm-global-cache-results">11.2.4. sa-ncm-global-cache test results</a></li>
-<li><a href="#jp-jma-global-cache-results">11.2.5. jp-jma-global-cache test results</a></li>
-<li><a href="#kr-kma-global-cache-results">11.2.6. kr-kma-global-cache test results</a></li>
-</ul>
-</li>
-<li><a href="#global-discovery-catalogue-results">11.3. Global Discovery Catalogue results</a>
-<ul class="sectlevel3">
-<li><a href="#ca-eccc-msc-global-discovery-catalogue-results">11.3.1. ca-eccc-msc-global-discovery-catalogue test results</a></li>
-<li><a href="#cn-cma-global-discovery-catalogue-results">11.3.2. cn-cma-global-discovery-catalogue results</a></li>
-<li><a href="#de-dwd-global-discovery-catalogue-results">11.3.3. de-dwd-global-discovery-catalogue results</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#discussion">12. Discussion</a></li>
-<li><a href="#conclusions">13. Conclusions</a></li>
-<li><a href="#_future_work">14. Future work</a></li>
+<li><a href="#discussion">9. Discussion</a></li>
+<li><a href="#conclusions">10. Conclusions</a></li>
+<li><a href="#_future_work">11. Future work</a></li>
 <li><a href="#_revision_history">Appendix A: Revision History</a></li>
 <li><a href="#annex-bibliography">Bibliography</a></li>
-</ul>
-</li>
 </ul>
 </div>
 <div style="page-break-after: always;"></div>
@@ -2001,19 +1882,17 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-</div>
-</div>
-<h1 id="global-cache-testing" class="sect0"><a class="anchor" href="#global-cache-testing"></a>Global Cache Service Testing</h1>
-<div class="sect1">
-<h2 id="global-cache-setup-teardown"><a class="anchor" href="#global-cache-setup-teardown"></a>8. Preparation</h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_setup_2"><a class="anchor" href="#_setup_2"></a>8.1. Setup</h3>
+<h3 id="global-cache-testing"><a class="anchor" href="#global-cache-testing"></a>7.2. Global Cache Service Testing</h3>
+<div class="sect3">
+<h4 id="global-cache-setup-teardown"><a class="anchor" href="#global-cache-setup-teardown"></a>7.2.1. Preparation</h4>
+<div class="sect4">
+<h5 id="_setup_2"><a class="anchor" href="#_setup_2"></a>7.2.1.1. Setup</h5>
 <div class="paragraph">
 <p>Before running the pytest tests, ensure the following setup steps are completed:</p>
 </div>
-<div class="sect3">
-<h4 id="_disconnect_the_global_cache_from_the_production_environment"><a class="anchor" href="#_disconnect_the_global_cache_from_the_production_environment"></a>8.1.1. Disconnect the Global Cache from the production environment.</h4>
+<div class="sect5">
+<h6 id="_disconnect_the_global_cache_from_the_production_environment"><a class="anchor" href="#_disconnect_the_global_cache_from_the_production_environment"></a>Disconnect the Global Cache from the production environment.</h6>
 <div class="literalblock">
 <div class="content">
 <pre>Ensure that the Global Cache is not connected to the production environment during the testing session. This is to prevent any test messages from being propagated to the production environment.</pre>
@@ -2047,8 +1926,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_connect_the_global_cache_to_the_devtest_environment"><a class="anchor" href="#_connect_the_global_cache_to_the_devtest_environment"></a>8.1.2. Connect the Global Cache to the dev/test environment.</h4>
+<div class="sect5">
+<h6 id="_connect_the_global_cache_to_the_devtest_environment"><a class="anchor" href="#_connect_the_global_cache_to_the_devtest_environment"></a>Connect the Global Cache to the dev/test environment.</h6>
 <div class="literalblock">
 <div class="content">
 <pre>Ensure that the Global Cache is connected to the dev/test environment during the testing session. This is to allow the test messages to be propagated to the Global Cache for testing.</pre>
@@ -2118,8 +1997,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_pytest_setup"><a class="anchor" href="#_pytest_setup"></a>8.1.3. Pytest Setup</h4>
+<div class="sect5">
+<h6 id="_pytest_setup"><a class="anchor" href="#_pytest_setup"></a>Pytest Setup</h6>
 <div class="literalblock">
 <div class="content">
 <pre>Prior to executing the tests, update the global-cache.env file with the necessary environment variables. This env file is nested in the tests/global_cache directory and the values of the following variable must be updated:</pre>
@@ -2137,8 +2016,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_teardown"><a class="anchor" href="#_teardown"></a>8.2. Teardown</h3>
+<div class="sect4">
+<h5 id="_teardown"><a class="anchor" href="#_teardown"></a>7.2.1.2. Teardown</h5>
 <div class="paragraph">
 <p>To teardown the configuration after the testing session, simply reverse the setup steps:</p>
 </div>
@@ -2163,14 +2042,12 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="global-cache-tests"><a class="anchor" href="#global-cache-tests"></a>9. Functional Tests</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_mqtt_broker_connectivity"><a class="anchor" href="#_mqtt_broker_connectivity"></a>9.1. MQTT Broker Connectivity</h3>
 <div class="sect3">
-<h4 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>9.1.1. Purpose</h4>
+<h4 id="global-cache-tests"><a class="anchor" href="#global-cache-tests"></a>7.2.2. Functional Tests</h4>
+<div class="sect4">
+<h5 id="_mqtt_broker_connectivity"><a class="anchor" href="#_mqtt_broker_connectivity"></a>7.2.2.1. MQTT Broker Connectivity</h5>
+<div class="sect5">
+<h6 id="_purpose_15"><a class="anchor" href="#_purpose_15"></a>Purpose</h6>
 <div class="paragraph">
 <p>An MQTT client must be able to connect to the local broker of the Global Cache on port 8883 using the MQTT protocol version 5 with TLS (i.e., mqtts protocol) and username/password authentication.</p>
 </div>
@@ -2178,8 +2055,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.2: A Global Cache shall operate a message broker.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_15"><a class="anchor" href="#_requirements_15"></a>9.1.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_15"><a class="anchor" href="#_requirements_15"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2191,8 +2068,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_15"><a class="anchor" href="#_steps_15"></a>9.1.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_15"><a class="anchor" href="#_steps_15"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2204,8 +2081,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_15"><a class="anchor" href="#_evaluate_15"></a>9.1.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_15"><a class="anchor" href="#_evaluate_15"></a>Evaluate</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2215,16 +2092,16 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_gc_mqtt_broker_subscription"><a class="anchor" href="#_gc_mqtt_broker_subscription"></a>9.2. GC MQTT Broker Subscription</h3>
-<div class="sect3">
-<h4 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>9.2.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_gc_mqtt_broker_subscription"><a class="anchor" href="#_gc_mqtt_broker_subscription"></a>7.2.2.2. GC MQTT Broker Subscription</h5>
+<div class="sect5">
+<h6 id="_purpose_16"><a class="anchor" href="#_purpose_16"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache must allow connected MQTT clients to subscribe to the cache/a/wis2/# topic using a provided connection string.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_16"><a class="anchor" href="#_requirements_16"></a>9.2.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_16"><a class="anchor" href="#_requirements_16"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2236,8 +2113,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_16"><a class="anchor" href="#_steps_16"></a>9.2.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_16"><a class="anchor" href="#_steps_16"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2252,8 +2129,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_16"><a class="anchor" href="#_evaluate_16"></a>9.2.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_16"><a class="anchor" href="#_evaluate_16"></a>Evaluate</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2266,10 +2143,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_wis2_notification_message_wnm_processing"><a class="anchor" href="#_wis2_notification_message_wnm_processing"></a>9.3. WIS2 Notification Message (WNM) Processing</h3>
-<div class="sect3">
-<h4 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>9.3.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_message_wnm_processing"><a class="anchor" href="#_wis2_notification_message_wnm_processing"></a>7.2.2.3. WIS2 Notification Message (WNM) Processing</h5>
+<div class="sect5">
+<h6 id="_purpose_17"><a class="anchor" href="#_purpose_17"></a>Purpose</h6>
 <div class="paragraph">
 <p>Test that the GC functions as expected under normal conditions. The Global Cache should process a valid incoming WNM, download the data at the provided canonical link, and publish a new WNM on the proper cache/ topic using the proper message structure, and update the necessary GC metrics.</p>
 </div>
@@ -2286,8 +2163,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.1. [Global Cache] Technical considerations <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_technical_considerations_2</a>; clause 2.7.4.2. [Global Cache] Practices and procedures <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2</a></p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_17"><a class="anchor" href="#_requirements_17"></a>9.3.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_17"><a class="anchor" href="#_requirements_17"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2365,8 +2242,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_17"><a class="anchor" href="#_steps_17"></a>9.3.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_17"><a class="anchor" href="#_steps_17"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2404,8 +2281,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_17"><a class="anchor" href="#_evaluate_17"></a>9.3.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_17"><a class="anchor" href="#_evaluate_17"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2474,16 +2351,16 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_cache_false_directive"><a class="anchor" href="#_cache_false_directive"></a>9.4. Cache False Directive</h3>
-<div class="sect3">
-<h4 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>9.4.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_cache_false_directive"><a class="anchor" href="#_cache_false_directive"></a>7.2.2.4. Cache False Directive</h5>
+<div class="sect5">
+<h6 id="_purpose_18"><a class="anchor" href="#_purpose_18"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache receives a notification message with <em>properties.cache</em> set to false, the Global Cache should publish a notification message where the data download link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>) refers to the source data server.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_18"><a class="anchor" href="#_requirements_18"></a>9.4.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_18"><a class="anchor" href="#_requirements_18"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2538,8 +2415,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_18"><a class="anchor" href="#_steps_18"></a>9.4.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_18"><a class="anchor" href="#_steps_18"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2567,8 +2444,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_18"><a class="anchor" href="#_evaluate_18"></a>9.4.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_18"><a class="anchor" href="#_evaluate_18"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2617,16 +2494,16 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_source_download_failure"><a class="anchor" href="#_source_download_failure"></a>9.5. Source Download Failure</h3>
-<div class="sect3">
-<h4 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>9.5.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_source_download_failure"><a class="anchor" href="#_source_download_failure"></a>7.2.2.5. Source Download Failure</h5>
+<div class="sect5">
+<h6 id="_purpose_19"><a class="anchor" href="#_purpose_19"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the <code>metric wmo_wis2_gc_dataserver_status_flag</code> for the source data server should be set to 0 (zero).</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_19"><a class="anchor" href="#_requirements_19"></a>9.5.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_19"><a class="anchor" href="#_requirements_19"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2681,8 +2558,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_19"><a class="anchor" href="#_steps_19"></a>9.5.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_19"><a class="anchor" href="#_steps_19"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2710,8 +2587,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_19"><a class="anchor" href="#_evaluate_19"></a>9.5.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_19"><a class="anchor" href="#_evaluate_19"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2757,10 +2634,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_data_integrity_check_failure"><a class="anchor" href="#_data_integrity_check_failure"></a>9.6. Data Integrity Check Failure</h3>
-<div class="sect3">
-<h4 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>9.6.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_data_integrity_check_failure"><a class="anchor" href="#_data_integrity_check_failure"></a>7.2.2.6. Data Integrity Check Failure</h5>
+<div class="sect5">
+<h6 id="_purpose_20"><a class="anchor" href="#_purpose_20"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should validate the integrity of the resources it caches and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Global Cache should accept the data as valid. In this case a Global Cache <em>may</em> add an integrity value to the message it republishes.</p>
 </div>
@@ -2769,8 +2646,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <strong>Source:</strong> <a href="https://github.com/wmo-im/wis2-notification-message/blob/main/standard/recommendations/core/REC_integrity.adoc" class="bare">https://github.com/wmo-im/wis2-notification-message/blob/main/standard/recommendations/core/REC_integrity.adoc</a></p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_20"><a class="anchor" href="#_requirements_20"></a>9.6.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_20"><a class="anchor" href="#_requirements_20"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2825,8 +2702,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_20"><a class="anchor" href="#_steps_20"></a>9.6.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_20"><a class="anchor" href="#_steps_20"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2851,8 +2728,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_20"><a class="anchor" href="#_evaluate_20"></a>9.6.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_20"><a class="anchor" href="#_evaluate_20"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2901,10 +2778,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_wis2_notification_message_deduplication"><a class="anchor" href="#_wis2_notification_message_deduplication"></a>9.7. WIS2 Notification Message Deduplication</h3>
-<div class="sect3">
-<h4 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>9.7.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_message_deduplication"><a class="anchor" href="#_wis2_notification_message_deduplication"></a>7.2.2.7. WIS2 Notification Message Deduplication</h5>
+<div class="sect5">
+<h6 id="_purpose_21"><a class="anchor" href="#_purpose_21"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed.</p>
 </div>
@@ -2912,8 +2789,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_21"><a class="anchor" href="#_requirements_21"></a>9.7.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_21"><a class="anchor" href="#_requirements_21"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -2965,8 +2842,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_21"><a class="anchor" href="#_steps_21"></a>9.7.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_21"><a class="anchor" href="#_steps_21"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2991,8 +2868,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_21"><a class="anchor" href="#_evaluate_21"></a>9.7.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_21"><a class="anchor" href="#_evaluate_21"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3048,10 +2925,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_1"></a>9.8. WIS2 Notification Message Deduplication (Alternative 1)</h3>
-<div class="sect3">
-<h4 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>9.8.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_message_deduplication_alternative_1"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_1"></a>7.2.2.8. WIS2 Notification Message Deduplication (Alternative 1)</h5>
+<div class="sect5">
+<h6 id="_purpose_22"><a class="anchor" href="#_purpose_22"></a>Purpose</h6>
 <div class="paragraph">
 <p>Where a Global Cache fails to process a notification message relating to a given unique data object (<code>properties.data_id</code> + <code>properties.pubtime</code>), a Global Cache should successfully process a valid, subsequently received notification message with the same unique data identifier.</p>
 </div>
@@ -3059,8 +2936,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p><strong>Source:</strong> Manual on WIS (WMO No. 1060), Vol II, clause 3.7.5.3: A Global Cache shall subscribe to notifications about the availability of discovery metadata records and core data for real-time or near-real-time exchange. Duplicate notifications are discarded.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_22"><a class="anchor" href="#_requirements_22"></a>9.8.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_22"><a class="anchor" href="#_requirements_22"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3118,8 +2995,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_22"><a class="anchor" href="#_steps_22"></a>9.8.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_22"><a class="anchor" href="#_steps_22"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3144,8 +3021,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_22"><a class="anchor" href="#_evaluate_22"></a>9.8.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_22"><a class="anchor" href="#_evaluate_22"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3194,22 +3071,22 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_2"></a>9.9. WIS2 Notification Message Deduplication (Alternative 2)</h3>
-<div class="sect3">
-<h4 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>9.9.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_message_deduplication_alternative_2"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_2"></a>7.2.2.9. WIS2 Notification Message Deduplication (Alternative 2)</h5>
+<div class="sect5">
+<h6 id="_purpose_23"><a class="anchor" href="#_purpose_23"></a>Purpose</h6>
 <div class="paragraph">
 <p>Related to the two previous tests, a GC should not process and cache a data item if it has already processed and cached a data item with the same <code>properties.data_id</code> and a <code>properties.pubtime</code> that is equal to or less than the <code>properties.pubtime</code> of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_23"><a class="anchor" href="#_requirements_23"></a>9.9.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_23"><a class="anchor" href="#_requirements_23"></a>Requirements</h6>
 <div class="paragraph">
 <p>See above.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_23"><a class="anchor" href="#_steps_23"></a>9.9.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_23"><a class="anchor" href="#_steps_23"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3234,8 +3111,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_23"><a class="anchor" href="#_evaluate_23"></a>9.9.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_23"><a class="anchor" href="#_evaluate_23"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3284,10 +3161,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_data_update"><a class="anchor" href="#_data_update"></a>9.10. Data Update</h3>
-<div class="sect3">
-<h4 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>9.10.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_data_update"><a class="anchor" href="#_data_update"></a>7.2.2.10. Data Update</h5>
+<div class="sect5">
+<h6 id="_purpose_24"><a class="anchor" href="#_purpose_24"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should treat notification messages with the same data item identifier (<code>properties.data_id</code>), but different publication times (<code>properties.pubtime</code>) as unique data items. Data items with the same <code>properties.data_id</code> but a greater/later publication time AND a <mark>update</mark> link (links['rel']='update'), should be processed (see test Notification processing). Data items with the same <code>properties.data_id</code> but earlier or identical publication times should be ignored (see deduplication test 8).</p>
 </div>
@@ -3295,8 +3172,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p><strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.4.2. [Global Cache] Practices and procedures: “Verify if the message points to new or updated data by comparing the pubtime value of the notification message with the list of data_ids”. <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_practices_and_procedures_2</a></p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_24"><a class="anchor" href="#_requirements_24"></a>9.10.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_24"><a class="anchor" href="#_requirements_24"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3354,8 +3231,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_24"><a class="anchor" href="#_steps_24"></a>9.10.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_24"><a class="anchor" href="#_steps_24"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3380,8 +3257,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_24"><a class="anchor" href="#_evaluate_24"></a>9.10.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_24"><a class="anchor" href="#_evaluate_24"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3431,20 +3308,18 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>10. Performance tests</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_wis2_notification_processing_rate"><a class="anchor" href="#_wis2_notification_processing_rate"></a>10.1. WIS2 Notification Processing Rate</h3>
 <div class="sect3">
-<h4 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>10.1.1. Purpose</h4>
+<h4 id="_performance_tests_2"><a class="anchor" href="#_performance_tests_2"></a>7.2.3. Performance tests</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_processing_rate"><a class="anchor" href="#_wis2_notification_processing_rate"></a>7.2.3.1. WIS2 Notification Processing Rate</h5>
+<div class="sect5">
+<h6 id="_purpose_25"><a class="anchor" href="#_purpose_25"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache shall be able to successfully process, on average, 2000 unique WNM&#8217;s per minute with an average message size of 85kb. This test represents the average message size of the current WNM&#8217;s. The noted WNM&#8217;s/minute rate can be used as a performance indicator for the GC being tested.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_25"><a class="anchor" href="#_requirements_25"></a>10.1.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_25"><a class="anchor" href="#_requirements_25"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3525,8 +3400,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_25"><a class="anchor" href="#_steps_25"></a>10.1.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_25"><a class="anchor" href="#_steps_25"></a>Steps</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3560,8 +3435,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_25"><a class="anchor" href="#_evaluate_25"></a>10.1.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_25"><a class="anchor" href="#_evaluate_25"></a>Evaluate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3598,10 +3473,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_concurrent_client_downloads"><a class="anchor" href="#_concurrent_client_downloads"></a>10.2. Concurrent client downloads</h3>
-<div class="sect3">
-<h4 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>10.2.1. Purpose</h4>
+<div class="sect4">
+<h5 id="_concurrent_client_downloads"><a class="anchor" href="#_concurrent_client_downloads"></a>7.2.3.2. Concurrent client downloads</h5>
+<div class="sect5">
+<h6 id="_purpose_26"><a class="anchor" href="#_purpose_26"></a>Purpose</h6>
 <div class="paragraph">
 <p>A Global Cache should support a minimum of 1000 simultaneous downloads.</p>
 </div>
@@ -3610,8 +3485,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <strong>Source:</strong> Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: <a href="https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service" class="bare">https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service</a></p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_requirements_26"><a class="anchor" href="#_requirements_26"></a>10.2.2. Requirements</h4>
+<div class="sect5">
+<h6 id="_requirements_26"><a class="anchor" href="#_requirements_26"></a>Requirements</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3689,8 +3564,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_steps_26"><a class="anchor" href="#_steps_26"></a>10.2.3. Steps</h4>
+<div class="sect5">
+<h6 id="_steps_26"><a class="anchor" href="#_steps_26"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -3737,8 +3612,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_evaluate_26"><a class="anchor" href="#_evaluate_26"></a>10.2.4. Evaluate</h4>
+<div class="sect5">
+<h6 id="_evaluate_26"><a class="anchor" href="#_evaluate_26"></a>Evaluate</h6>
 <div class="paragraph">
 <p>The test is considered successful if the following conditions are met:</p>
 </div>
@@ -3754,15 +3629,15 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_implicit_tests"><a class="anchor" href="#_implicit_tests"></a>10.3. Implicit tests</h3>
+<div class="sect4">
+<h5 id="_implicit_tests"><a class="anchor" href="#_implicit_tests"></a>7.2.3.3. Implicit tests</h5>
 <div class="literalblock">
 <div class="content">
 <pre>These are tests that are to be verified by the individual implementations as they represent critical requirements but would be difficult to test in a generic way.</pre>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_valid_tlsssl_certificate"><a class="anchor" href="#_valid_tlsssl_certificate"></a>10.3.1. Valid TLS/SSL certificate</h4>
+<div class="sect5">
+<h6 id="_valid_tlsssl_certificate"><a class="anchor" href="#_valid_tlsssl_certificate"></a>Valid TLS/SSL certificate</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3771,8 +3646,8 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_available_storage_space"><a class="anchor" href="#_available_storage_space"></a>10.3.2. Available Storage Space</h4>
+<div class="sect5">
+<h6 id="_available_storage_space"><a class="anchor" href="#_available_storage_space"></a>Available Storage Space</h6>
 <div class="ulist">
 <ul>
 <li>
@@ -3785,10 +3660,12 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 </div>
+</div>
+</div>
 <div class="sect2">
-<h3 id="global-discovery-catalogue-testing"><a class="anchor" href="#global-discovery-catalogue-testing"></a>10.4. Global Discovery Catalogue Service testing</h3>
+<h3 id="global-discovery-catalogue-testing"><a class="anchor" href="#global-discovery-catalogue-testing"></a>7.3. Global Discovery Catalogue Service testing</h3>
 <div class="sect3">
-<h4 id="_preparations_for_the_test"><a class="anchor" href="#_preparations_for_the_test"></a>10.4.1. Preparations for the test</h4>
+<h4 id="_preparations_for_the_test"><a class="anchor" href="#_preparations_for_the_test"></a>7.3.1. Preparations for the test</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -3801,7 +3678,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect3">
-<h4 id="_entering_the_test_environment"><a class="anchor" href="#_entering_the_test_environment"></a>10.4.2. Entering the test environment</h4>
+<h4 id="_entering_the_test_environment"><a class="anchor" href="#_entering_the_test_environment"></a>7.3.2. Entering the test environment</h4>
 <div class="paragraph">
 <p>The GDC implementation under test (IUT) is required to enter the test environment with the following state:</p>
 </div>
@@ -3817,7 +3694,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect3">
-<h4 id="_test_setup"><a class="anchor" href="#_test_setup"></a>10.4.3. Test setup</h4>
+<h4 id="_test_setup"><a class="anchor" href="#_test_setup"></a>7.3.3. Test setup</h4>
 <div class="paragraph">
 <p>The GDC test setup consists of the following:</p>
 </div>
@@ -3890,9 +3767,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect3">
-<h4 id="_functional_tests_2"><a class="anchor" href="#_functional_tests_2"></a>10.4.4. Functional tests</h4>
+<h4 id="_functional_tests_2"><a class="anchor" href="#_functional_tests_2"></a>7.3.4. Functional tests</h4>
 <div class="sect4">
-<h5 id="_global_broker_connection_and_subscription"><a class="anchor" href="#_global_broker_connection_and_subscription"></a>10.4.4.1. Global Broker connection and subscription</h5>
+<h5 id="_global_broker_connection_and_subscription"><a class="anchor" href="#_global_broker_connection_and_subscription"></a>7.3.4.1. Global Broker connection and subscription</h5>
 <div class="sect5">
 <h6 id="_purpose_27"><a class="anchor" href="#_purpose_27"></a>Purpose</h6>
 <div class="paragraph">
@@ -3947,7 +3824,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>10.4.4.2. Notification and metadata processing (success)</h5>
+<h5 id="_notification_and_metadata_processing_success"><a class="anchor" href="#_notification_and_metadata_processing_success"></a>7.3.4.2. Notification and metadata processing (success)</h5>
 <div class="sect5">
 <h6 id="_purpose_28"><a class="anchor" href="#_purpose_28"></a>Purpose</h6>
 <div class="paragraph">
@@ -4040,7 +3917,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_record_not_found"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_not_found"></a>10.4.4.3. Notification and metadata processing (failure; record not found)</h5>
+<h5 id="_notification_and_metadata_processing_failure_record_not_found"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_not_found"></a>7.3.4.3. Notification and metadata processing (failure; record not found)</h5>
 <div class="sect5">
 <h6 id="_purpose_29"><a class="anchor" href="#_purpose_29"></a>Purpose</h6>
 <div class="paragraph">
@@ -4118,7 +3995,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"></a>10.4.4.4. Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</h5>
+<h5 id="_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"><a class="anchor" href="#_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2"></a>7.3.4.4. Notification and metadata processing (failure; malformed JSON or invalid WCMP2)</h5>
 <div class="sect5">
 <h6 id="_purpose_30"><a class="anchor" href="#_purpose_30"></a>Purpose</h6>
 <div class="paragraph">
@@ -4199,7 +4076,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>10.4.4.5. Metadata ingest centre-id mismatch</h5>
+<h5 id="_metadata_ingest_centre_id_mismatch"><a class="anchor" href="#_metadata_ingest_centre_id_mismatch"></a>7.3.4.5. Metadata ingest centre-id mismatch</h5>
 <div class="sect5">
 <h6 id="_purpose_31"><a class="anchor" href="#_purpose_31"></a>Purpose</h6>
 <div class="paragraph">
@@ -4291,7 +4168,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>10.4.4.6. Notification and metadata processing (record deletion)</h5>
+<h5 id="_notification_and_metadata_processing_record_deletion"><a class="anchor" href="#_notification_and_metadata_processing_record_deletion"></a>7.3.4.6. Notification and metadata processing (record deletion)</h5>
 <div class="sect5">
 <h6 id="_purpose_32"><a class="anchor" href="#_purpose_32"></a>Purpose</h6>
 <div class="paragraph">
@@ -4387,7 +4264,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"></a>10.4.4.7. Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</h5>
+<h5 id="_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"><a class="anchor" href="#_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id"></a>7.3.4.7. Notification and metadata processing (failure; record deletion message does not contain <code>properties.metadata_id</code>)</h5>
 <div class="sect5">
 <h6 id="_purpose_33"><a class="anchor" href="#_purpose_33"></a>Purpose</h6>
 <div class="paragraph">
@@ -4448,7 +4325,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>10.4.4.8. WCMP2 metadata archive zipfile publication</h5>
+<h5 id="_wcmp2_metadata_archive_zipfile_publication"><a class="anchor" href="#_wcmp2_metadata_archive_zipfile_publication"></a>7.3.4.8. WCMP2 metadata archive zipfile publication</h5>
 <div class="sect5">
 <h6 id="_purpose_34"><a class="anchor" href="#_purpose_34"></a>Purpose</h6>
 <div class="paragraph">
@@ -4523,7 +4400,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"><a class="anchor" href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"></a>10.4.4.9. WCMP2 cold start initialization from metadata archive zipfile</h5>
+<h5 id="_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"><a class="anchor" href="#_wcmp2_cold_start_initialization_from_metadata_archive_zipfile"></a>7.3.4.9. WCMP2 cold start initialization from metadata archive zipfile</h5>
 <div class="sect5">
 <h6 id="_purpose_35"><a class="anchor" href="#_purpose_35"></a>Purpose</h6>
 <div class="paragraph">
@@ -4623,7 +4500,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect4">
-<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>10.4.4.10. API functionality</h5>
+<h5 id="_api_functionality"><a class="anchor" href="#_api_functionality"></a>7.3.4.10. API functionality</h5>
 <div class="sect5">
 <h6 id="_purpose_36"><a class="anchor" href="#_purpose_36"></a>Purpose</h6>
 <div class="paragraph">
@@ -4721,9 +4598,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect3">
-<h4 id="_performance_tests_3"><a class="anchor" href="#_performance_tests_3"></a>10.4.5. Performance tests</h4>
+<h4 id="_performance_tests_3"><a class="anchor" href="#_performance_tests_3"></a>7.3.5. Performance tests</h4>
 <div class="sect4">
-<h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>10.4.5.1. Processing timeliness</h5>
+<h5 id="_processing_timeliness"><a class="anchor" href="#_processing_timeliness"></a>7.3.5.1. Processing timeliness</h5>
 <div class="sect5">
 <h6 id="_purpose_37"><a class="anchor" href="#_purpose_37"></a>Purpose</h6>
 <div class="paragraph">
@@ -4801,7 +4678,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </div>
 <div class="sect3">
-<h4 id="_executing_the_test_environment"><a class="anchor" href="#_executing_the_test_environment"></a>10.4.6. Executing the test environment</h4>
+<h4 id="_executing_the_test_environment"><a class="anchor" href="#_executing_the_test_environment"></a>7.3.6. Executing the test environment</h4>
 <div class="paragraph">
 <p>To execute GDC tests:</p>
 </div>
@@ -4814,7 +4691,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_exiting_the_test_environment"><a class="anchor" href="#_exiting_the_test_environment"></a>10.4.7. Exiting the test environment</h4>
+<h4 id="_exiting_the_test_environment"><a class="anchor" href="#_exiting_the_test_environment"></a>7.3.7. Exiting the test environment</h4>
 <div class="paragraph">
 <p>The GDC implementation under test (IUT) exits the test environment with the following state:</p>
 </div>
@@ -4839,7 +4716,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="results"><a class="anchor" href="#results"></a>11. Results</h2>
+<h2 id="results"><a class="anchor" href="#results"></a>8. Results</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Pre-testing was performed in September 2024.  Final tests were performed in October 2024.  Foreach Global Service tested, participants included:</p>
@@ -4861,14 +4738,14 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 <p>The following tables provide the results of all tests (in alphabetical order, grouped by Global Service type).</p>
 </div>
 <div class="sect2">
-<h3 id="global-broker-results"><a class="anchor" href="#global-broker-results"></a>11.1. Global Broker results</h3>
+<h3 id="global-broker-results"><a class="anchor" href="#global-broker-results"></a>8.1. Global Broker results</h3>
 <div class="sect3">
-<h4 id="cn-cma-global-broker-results"><a class="anchor" href="#cn-cma-global-broker-results"></a>11.1.1. cn-cma-global-broker test results</h4>
+<h4 id="cn-cma-global-broker-results"><a class="anchor" href="#cn-cma-global-broker-results"></a>8.1.1. cn-cma-global-broker test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>11.1.1.1. Functional tests</h5>
+<h5 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>8.1.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. cn-cma-global-broker functional test results</caption>
 <colgroup>
@@ -4943,7 +4820,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>11.1.1.2. Performance tests</h5>
+<h5 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>8.1.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. cn-cma-global-broker test results</caption>
 <colgroup>
@@ -4979,12 +4856,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="fr-meteofrance-global-broker-results"><a class="anchor" href="#fr-meteofrance-global-broker-results"></a>11.1.2. fr-meteofrance-global-broker test results</h4>
+<h4 id="fr-meteofrance-global-broker-results"><a class="anchor" href="#fr-meteofrance-global-broker-results"></a>8.1.2. fr-meteofrance-global-broker test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_4"><a class="anchor" href="#_functional_tests_4"></a>11.1.2.1. Functional tests</h5>
+<h5 id="_functional_tests_4"><a class="anchor" href="#_functional_tests_4"></a>8.1.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 3. fr-meteofrance-global-broker functional test results</caption>
 <colgroup>
@@ -5059,7 +4936,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>11.1.2.2. Performance tests</h5>
+<h5 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>8.1.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 4. fr-meteofrance-global-broker performance test results</caption>
 <colgroup>
@@ -5095,12 +4972,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="br-inmet-global-broker-results"><a class="anchor" href="#br-inmet-global-broker-results"></a>11.1.3. br-inmet-global-broker test results</h4>
+<h4 id="br-inmet-global-broker-results"><a class="anchor" href="#br-inmet-global-broker-results"></a>8.1.3. br-inmet-global-broker test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>11.1.3.1. Functional tests</h5>
+<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>8.1.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. br-inmet-global-broker functional test results</caption>
 <colgroup>
@@ -5175,7 +5052,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>11.1.3.2. Performance tests</h5>
+<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.1.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. br-inmet-global-broker test results</caption>
 <colgroup>
@@ -5211,12 +5088,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="CENTRE_ID-results"><a class="anchor" href="#CENTRE_ID-results"></a>11.1.4. CENTRE_ID test results</h4>
+<h4 id="CENTRE_ID-results"><a class="anchor" href="#CENTRE_ID-results"></a>8.1.4. CENTRE_ID test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>11.1.4.1. Functional tests</h5>
+<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.1.4.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 7. CENTRE_ID functional test results</caption>
 <colgroup>
@@ -5291,7 +5168,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>11.1.4.2. Performance tests</h5>
+<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>8.1.4.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 8. CENTRE_ID test results</caption>
 <colgroup>
@@ -5328,14 +5205,14 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="global-cache-results"><a class="anchor" href="#global-cache-results"></a>11.2. Global Cache results</h3>
+<h3 id="global-cache-results"><a class="anchor" href="#global-cache-results"></a>8.2. Global Cache results</h3>
 <div class="sect3">
-<h4 id="data-metoffice-noaa-global-cache-results"><a class="anchor" href="#data-metoffice-noaa-global-cache-results"></a>11.2.1. data-metoffice-noaa-global-cache-results test results</h4>
+<h4 id="data-metoffice-noaa-global-cache-results"><a class="anchor" href="#data-metoffice-noaa-global-cache-results"></a>8.2.1. data-metoffice-noaa-global-cache-results test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>11.2.1.1. Functional tests</h5>
+<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>8.2.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 9. data-metoffice-noaa-global-cache-results functional test results</caption>
 <colgroup>
@@ -5410,7 +5287,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>11.2.1.2. Performance tests</h5>
+<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>8.2.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 10. data-metoffice-noaa-global-cache-results performance test results</caption>
 <colgroup>
@@ -5446,12 +5323,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="de-dwd-global-cache-results"><a class="anchor" href="#de-dwd-global-cache-results"></a>11.2.2. de-dwd-global-cache test results</h4>
+<h4 id="de-dwd-global-cache-results"><a class="anchor" href="#de-dwd-global-cache-results"></a>8.2.2. de-dwd-global-cache test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>11.2.2.1. Functional tests</h5>
+<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>8.2.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 11. de-dwd-global-cache functional test results</caption>
 <colgroup>
@@ -5526,7 +5403,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>11.2.2.2. Performance tests</h5>
+<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>8.2.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 12. de-dwd-global-cache performance test results</caption>
 <colgroup>
@@ -5562,12 +5439,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cn-cma-global-cache-results"><a class="anchor" href="#cn-cma-global-cache-results"></a>11.2.3. cn-cma-global-cache test results</h4>
+<h4 id="cn-cma-global-cache-results"><a class="anchor" href="#cn-cma-global-cache-results"></a>8.2.3. cn-cma-global-cache test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>11.2.3.1. Functional tests</h5>
+<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>8.2.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 13. cn-cma-global-cache functional test results</caption>
 <colgroup>
@@ -5642,7 +5519,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>11.2.3.2. Performance tests</h5>
+<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>8.2.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 14. cn-cma-global-cache performance test results</caption>
 <colgroup>
@@ -5678,12 +5555,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="sa-ncm-global-cache-results"><a class="anchor" href="#sa-ncm-global-cache-results"></a>11.2.4. sa-ncm-global-cache test results</h4>
+<h4 id="sa-ncm-global-cache-results"><a class="anchor" href="#sa-ncm-global-cache-results"></a>8.2.4. sa-ncm-global-cache test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>11.2.4.1. Functional tests</h5>
+<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>8.2.4.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 15. sa-ncm-global-cache functional test results</caption>
 <colgroup>
@@ -5758,7 +5635,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>11.2.4.2. Performance tests</h5>
+<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>8.2.4.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 16. sa-ncm-global-cache performance test results</caption>
 <colgroup>
@@ -5794,12 +5671,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="jp-jma-global-cache-results"><a class="anchor" href="#jp-jma-global-cache-results"></a>11.2.5. jp-jma-global-cache test results</h4>
+<h4 id="jp-jma-global-cache-results"><a class="anchor" href="#jp-jma-global-cache-results"></a>8.2.5. jp-jma-global-cache test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>11.2.5.1. Functional tests</h5>
+<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>8.2.5.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 17. jp-jma-global-cache functional test results</caption>
 <colgroup>
@@ -5874,7 +5751,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_12"><a class="anchor" href="#_performance_tests_12"></a>11.2.5.2. Performance tests</h5>
+<h5 id="_performance_tests_12"><a class="anchor" href="#_performance_tests_12"></a>8.2.5.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 18. jp-jma-global-cache performance test results</caption>
 <colgroup>
@@ -5910,12 +5787,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="kr-kma-global-cache-results"><a class="anchor" href="#kr-kma-global-cache-results"></a>11.2.6. kr-kma-global-cache test results</h4>
+<h4 id="kr-kma-global-cache-results"><a class="anchor" href="#kr-kma-global-cache-results"></a>8.2.6. kr-kma-global-cache test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_12"><a class="anchor" href="#_functional_tests_12"></a>11.2.6.1. Functional tests</h5>
+<h5 id="_functional_tests_12"><a class="anchor" href="#_functional_tests_12"></a>8.2.6.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 19. kr-kma-global-cache functional test results</caption>
 <colgroup>
@@ -5990,7 +5867,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_13"><a class="anchor" href="#_performance_tests_13"></a>11.2.6.2. Performance tests</h5>
+<h5 id="_performance_tests_13"><a class="anchor" href="#_performance_tests_13"></a>8.2.6.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 20. kr-kma-global-cache performance test results</caption>
 <colgroup>
@@ -6027,14 +5904,14 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="global-discovery-catalogue-results"><a class="anchor" href="#global-discovery-catalogue-results"></a>11.3. Global Discovery Catalogue results</h3>
+<h3 id="global-discovery-catalogue-results"><a class="anchor" href="#global-discovery-catalogue-results"></a>8.3. Global Discovery Catalogue results</h3>
 <div class="sect3">
-<h4 id="ca-eccc-msc-global-discovery-catalogue-results"><a class="anchor" href="#ca-eccc-msc-global-discovery-catalogue-results"></a>11.3.1. ca-eccc-msc-global-discovery-catalogue test results</h4>
+<h4 id="ca-eccc-msc-global-discovery-catalogue-results"><a class="anchor" href="#ca-eccc-msc-global-discovery-catalogue-results"></a>8.3.1. ca-eccc-msc-global-discovery-catalogue test results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_13"><a class="anchor" href="#_functional_tests_13"></a>11.3.1.1. Functional tests</h5>
+<h5 id="_functional_tests_13"><a class="anchor" href="#_functional_tests_13"></a>8.3.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 21. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
 <colgroup>
@@ -6104,7 +5981,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_14"><a class="anchor" href="#_performance_tests_14"></a>11.3.1.2. Performance tests</h5>
+<h5 id="_performance_tests_14"><a class="anchor" href="#_performance_tests_14"></a>8.3.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 22. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
 <colgroup>
@@ -6130,12 +6007,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cn-cma-global-discovery-catalogue-results"><a class="anchor" href="#cn-cma-global-discovery-catalogue-results"></a>11.3.2. cn-cma-global-discovery-catalogue results</h4>
+<h4 id="cn-cma-global-discovery-catalogue-results"><a class="anchor" href="#cn-cma-global-discovery-catalogue-results"></a>8.3.2. cn-cma-global-discovery-catalogue results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_14"><a class="anchor" href="#_functional_tests_14"></a>11.3.2.1. Functional tests</h5>
+<h5 id="_functional_tests_14"><a class="anchor" href="#_functional_tests_14"></a>8.3.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 23. cn-cma-global-discovery-catalogue functional test results</caption>
 <colgroup>
@@ -6205,7 +6082,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_15"><a class="anchor" href="#_performance_tests_15"></a>11.3.2.2. Performance tests</h5>
+<h5 id="_performance_tests_15"><a class="anchor" href="#_performance_tests_15"></a>8.3.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 24. cn-cma-global-discovery-catalogue performance test results</caption>
 <colgroup>
@@ -6231,12 +6108,12 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="de-dwd-global-discovery-catalogue-results"><a class="anchor" href="#de-dwd-global-discovery-catalogue-results"></a>11.3.3. de-dwd-global-discovery-catalogue results</h4>
+<h4 id="de-dwd-global-discovery-catalogue-results"><a class="anchor" href="#de-dwd-global-discovery-catalogue-results"></a>8.3.3. de-dwd-global-discovery-catalogue results</h4>
 <div class="paragraph">
 <p>Date: YYYY-MM-DD</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_15"><a class="anchor" href="#_functional_tests_15"></a>11.3.3.1. Functional tests</h5>
+<h5 id="_functional_tests_15"><a class="anchor" href="#_functional_tests_15"></a>8.3.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 25. de-dwd-global-discovery-catalogue functional test results</caption>
 <colgroup>
@@ -6306,7 +6183,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_16"><a class="anchor" href="#_performance_tests_16"></a>11.3.3.2. Performance tests</h5>
+<h5 id="_performance_tests_16"><a class="anchor" href="#_performance_tests_16"></a>8.3.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 26. de-dwd-global-discovery-catalogue performance test results</caption>
 <colgroup>
@@ -6335,7 +6212,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="discussion"><a class="anchor" href="#discussion"></a>12. Discussion</h2>
+<h2 id="discussion"><a class="anchor" href="#discussion"></a>9. Discussion</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>TODO</p>
@@ -6343,7 +6220,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="conclusions"><a class="anchor" href="#conclusions"></a>13. Conclusions</h2>
+<h2 id="conclusions"><a class="anchor" href="#conclusions"></a>10. Conclusions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>TODO</p>
@@ -6351,7 +6228,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_future_work"><a class="anchor" href="#_future_work"></a>14. Future work</h2>
+<h2 id="_future_work"><a class="anchor" href="#_future_work"></a>11. Future work</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>TODO</p>
@@ -6432,7 +6309,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-17 16:47:21 UTC
+Last updated 2024-09-17 17:33:47 UTC
 </div>
 </div>
 </body>
