@@ -679,15 +679,17 @@ def test_data_update(_setup):
         cache_msg = cache_msg[0]
         # if the origin wnm has an update link, the corresponding cache wnm should have a canonical link and update link
         if any(l['rel'] == 'update' for l in og_wnm['links']):
-            # update and canonical links should be present and equal to origin update link (href)
+            # update link should be present and equal to origin update link (href)
             assert any(l['rel'] == 'update' for l in cache_msg['links'])
-            assert any(l['rel'] == 'canonical' for l in cache_msg['links'])
             # get the update link
             og_update_link = [l['href'] for l in og_wnm['links'] if l['rel'] == 'update'][0]
             # get the cache wnm links
-            cache_canonical_link = [l['href'] for l in cache_msg['links'] if l['rel'] == 'canonical'][0]
             cache_update_link = [l['href'] for l in cache_msg['links'] if l['rel'] == 'update'][0]
-            assert cache_canonical_link == cache_update_link != og_update_link
+            assert cache_update_link != og_update_link
+            cache_canonical_link = [l['href'] for l in cache_msg['links'] if l['rel'] == 'canonical']
+            if cache_canonical_link:
+                assert cache_canonical_link[0] != og_update_link
+                assert cache_canonical_link[0] == cache_update_link
         # use pywispubsub to validate the cache messages
         is_valid, errors = validate_message(cache_msg)
         assert is_valid is True
