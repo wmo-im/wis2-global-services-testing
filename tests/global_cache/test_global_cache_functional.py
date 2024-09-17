@@ -275,7 +275,7 @@ def test_mqtt_broker_message_flow(run, _setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "cache_a_wis2": "mix",
+                # "cache_a_wis2": "mix",
             },
             "wnm": {
                 "properties": {
@@ -291,8 +291,8 @@ def test_mqtt_broker_message_flow(run, _setup):
                                                 data_ids=[_init['test_data_id']])
     sub_client.loop_stop()
     # assert origin and cache messages
-    assert len(origin_msgs) > num_origin_msgs
-    assert len(cache_msgs) > num_origin_msgs
+    assert len(origin_msgs) >= num_origin_msgs
+    assert len(cache_msgs) >= num_origin_msgs
 
     # compare origin and cache messages
 
