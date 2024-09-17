@@ -820,9 +820,6 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 <p>The WIS2 development environment will be used as the target network for executing tests.</p>
 </div>
 <div class="paragraph">
-<p>The test orchestrators/runners will execute on <code>master.wis2dev.io</code></p>
-</div>
-<div class="paragraph">
 <p>The environment to perform tests is made available on <code>master.wis2dev.io</code>.  Access is coordinated with the testing team.</p>
 </div>
 <div class="sect4">
@@ -842,7 +839,29 @@ pip3 install -r requirements.txt</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_execution"><a class="anchor" href="#_execution"></a>6.3.2.2. Execution</h5>
+<h5 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>6.3.2.2. Environment variables</h5>
+<div class="paragraph">
+<p>The testing environment includes two file for environment variables, which are initiated in the following order:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>secrets: <code>/data/wis2-testing/wis2-global-services-testing/tests/secrets.env</code></p>
+</li>
+<li>
+<p>default: <code>/data/wis2-testing/wis2-global-services-testing/tests/default.env</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To set environment variables which should not be managed in Git, use secrets and refer to these environment variables in default.</p>
+</div>
+<div class="paragraph">
+<p>See each Global Service testing section for any specific updates to environment variables.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_execution"><a class="anchor" href="#_execution"></a>6.3.2.3. Execution</h5>
 <div class="paragraph">
 <p>The following steps are required prior to executing a given tests:</p>
 </div>
@@ -858,7 +877,7 @@ git pull origin main</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_results"><a class="anchor" href="#_results"></a>6.3.2.3. Results</h5>
+<h5 id="_results"><a class="anchor" href="#_results"></a>6.3.2.4. Results</h5>
 <div class="paragraph">
 <p>Test results shall be stored in <code>/data/wis2-testing/results</code>, organized by the centre id of the Global Service Implementation Under Test (IUT).</p>
 </div>
@@ -6309,7 +6328,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-17 17:33:47 UTC
+Last updated 2024-09-17 17:37:32 UTC
 </div>
 </div>
 </body>
