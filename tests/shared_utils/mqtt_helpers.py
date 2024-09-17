@@ -1,3 +1,4 @@
+import time
 import uuid
 from datetime import datetime
 from random import random
@@ -16,7 +17,10 @@ def check_broker_connectivity(connection_string: str):
     is_connected = False
     pwclient = MQTTPubSubClient(connection_string)
     pwclient.conn.tls_insecure_set(True)  # Disable certificate verification
-    pwclient.conn.loop()
+    # use the async loop to connect
+    pwclient.conn.loop_start()
+    time.sleep(1)  # wait for connection
+    # pwclient.conn.loop()
     if pwclient.conn.is_connected():
         is_connected = True
     pwclient.conn.loop_stop()
