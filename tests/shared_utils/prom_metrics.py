@@ -59,6 +59,7 @@ if __name__ == '__main__':
     from dotenv import load_dotenv
     import os
 
+    load_dotenv("./global-cache.env")
     load_dotenv("../secrets.env")
     load_dotenv("../default.env")
     # prometheus config
@@ -69,7 +70,8 @@ if __name__ == '__main__':
     print(f"Prometheus credentials: {username}:{password}")
     print(prometheus_baseurl)
     metric_name = "wmo_wis2_gc_downloaded_total"
-    report_by = "data-metoffice-noaa-global-cache"
+    report_by = os.getenv('GC_METRICS_REPORT_BY')
+    print(report_by)
     centre_id = "io-wis2dev-11-test"
 
     metrics = fetch_prometheus_metrics(metric_name, report_by, centre_id, prometheus_baseurl, username, password)
