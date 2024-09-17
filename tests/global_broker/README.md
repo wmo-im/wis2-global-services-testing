@@ -2,7 +2,7 @@
 
 ## Overview
 
-This PyTest script implements the functional tests for the Global Broker.  Currently a "work in progress".
+This PyTest script implements the functional tests for the Global Broker.  **Currently a "work in progress".**
 
 ### Outstanding Issues
 
