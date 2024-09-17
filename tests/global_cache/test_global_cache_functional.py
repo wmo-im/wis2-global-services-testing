@@ -184,7 +184,7 @@ def _setup():
     test_data_id = f"{test_centre}_{uuid.uuid4().hex[:6]}"
 
     # Capture initial metrics state
-    initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=test_centre_int)
+    # initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=test_centre_int)
 
     # Yield setup data and initial metrics
     setup_dict = {
@@ -193,7 +193,7 @@ def _setup():
         "test_centre": test_centre,
         "test_pub_topic": test_pub_topic,
         "test_data_id": test_data_id,
-        "initial_metrics": initial_metrics
+        # "initial_metrics": initial_metrics
     }
     logging.info(f"Setup: {setup_dict}")
     yield setup_dict

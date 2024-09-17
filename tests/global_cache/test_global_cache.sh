@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Load environment variables from global-cache.env
-source tests/global-cache.env
+source ./global-cache.env
 
 # Create the output directory if it doesn't exist
 #OUTPUT_DIR=~/user/test-results/gc
-OUTPUT_DIR=~/wis2test/results/${GC_METRICS_REPORT_BY}"
+OUTPUT_DIR="$HOME/results/${GC_METRICS_REPORT_BY}"
 mkdir -p $OUTPUT_DIR
 
 # Get the current datetime stamp
