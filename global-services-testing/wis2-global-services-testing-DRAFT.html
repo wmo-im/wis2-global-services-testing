@@ -531,7 +531,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#global-cache-setup-teardown">8. Preparation</a>
 <ul class="sectlevel2">
-<li><a href="#_setup">8.1. Setup</a>
+<li><a href="#_setup_2">8.1. Setup</a>
 <ul class="sectlevel3">
 <li><a href="#_disconnect_the_global_cache_from_the_production_environment">8.1.1. Disconnect the Global Cache from the production environment.</a></li>
 <li><a href="#_connect_the_global_cache_to_the_devtest_environment">8.1.2. Connect the Global Cache to the dev/test environment.</a></li>
@@ -944,8 +944,10 @@ limited to, data (NWP models, observations, forecasts and warnings, etc.), servi
 <div class="paragraph">
 <p>The environment to perform tests is made available on <code>master.wis2dev.io</code>.  Access is coordinated with the testing team.</p>
 </div>
+<div class="sect4">
+<h5 id="_setup"><a class="anchor" href="#_setup"></a>6.3.2.1. Setup</h5>
 <div class="paragraph">
-<p>The following steps are required before executing tests in the test environment</p>
+<p>The following steps are required to setup the initial test environment:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -955,6 +957,29 @@ python3 -m venv env
 git clone https://github.com/wmo-im/wis2-global-services-testing.git
 cd wis2-global-services-testing/tests
 pip3 install -r requirements.txt</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_execution"><a class="anchor" href="#_execution"></a>6.3.2.2. Execution</h5>
+<div class="paragraph">
+<p>The following steps are required prior to executing a given tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">cd /data/wis2-testing/wis2-global-services-testing/tests
+. /data/wis2-testing/env/bin/activate
+git pull origin main</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>From here, test execution is specific to the Global Service.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_results"><a class="anchor" href="#_results"></a>6.3.2.3. Results</h5>
+<div class="paragraph">
+<p>Test results shall be stored in <code>/data/wis2-testing/results</code>, organized by the centre id of the Global Service Implementation Under Test (IUT).</p>
 </div>
 </div>
 </div>
@@ -1983,7 +2008,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <h2 id="global-cache-setup-teardown"><a class="anchor" href="#global-cache-setup-teardown"></a>8. Preparation</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_setup"><a class="anchor" href="#_setup"></a>8.1. Setup</h3>
+<h3 id="_setup_2"><a class="anchor" href="#_setup_2"></a>8.1. Setup</h3>
 <div class="paragraph">
 <p>Before running the pytest tests, ensure the following setup steps are completed:</p>
 </div>
@@ -6407,7 +6432,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-17 14:02:07 UTC
+Last updated 2024-09-17 16:35:42 UTC
 </div>
 </div>
 </body>
