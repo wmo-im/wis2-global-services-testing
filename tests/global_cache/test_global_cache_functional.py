@@ -291,8 +291,8 @@ def test_mqtt_broker_message_flow(run, _setup):
                                                 data_ids=[_init['test_data_id']])
     sub_client.loop_stop()
     # assert origin and cache messages
-    assert len(origin_msgs) > 0
-    assert len(cache_msgs) > 0
+    assert len(origin_msgs) > num_origin_msgs
+    assert len(cache_msgs) > num_origin_msgs
 
     # compare origin and cache messages
 
@@ -731,8 +731,8 @@ def test_wnm_processing_rate(_setup):
     sub_client.loop_stop()
     sub_client.disconnect()
     # Assert origin and cache messages
-    assert len(origin_msgs) > 0
-    assert len(cache_msgs) > 0
+    assert len(origin_msgs) >= num_msgs
+    assert len(cache_msgs) >= num_msgs
 
     # Calculate and print processing metrics
     origin_start_time = msg_data.get('origin_start_time')
