@@ -152,7 +152,7 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None) -> None
     trigger_client = subscribe_trigger_client()
     trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message))
 
-
+test_3
 def test_global_broker_connection_and_subscription(gb_client):
     print('Testing Global Broker connection and subscription')
 
