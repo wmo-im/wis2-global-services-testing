@@ -66,8 +66,6 @@ image::images/c4.container.png[wis2dev.io development environment]
 
 The WIS2 development environment will be used as the target network for executing tests.
 
-The test orchestrators/runners will execute on ``master.wis2dev.io``
-
 The environment to perform tests is made available on ``master.wis2dev.io``.  Access is coordinated with the testing team.
 
 ===== Setup
@@ -83,6 +81,17 @@ git clone https://github.com/wmo-im/wis2-global-services-testing.git
 cd wis2-global-services-testing/tests
 pip3 install -r requirements.txt
 ----
+
+===== Environment variables
+
+The testing environment includes two file for environment variables, which are initiated in the following order:
+
+* secrets: `/data/wis2-testing/wis2-global-services-testing/tests/secrets.env`
+* default: `/data/wis2-testing/wis2-global-services-testing/tests/default.env`
+
+To set environment variables which should not be managed in Git, use secrets and refer to these environment variables in default.
+
+See each Global Service testing section for any specific updates to environment variables.
 
 ===== Execution
 
