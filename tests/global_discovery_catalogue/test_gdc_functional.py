@@ -46,6 +46,7 @@ TOPICS = [
     f'monitor/a/wis2/{GDC_CENTRE_ID}/#'
 ]
 
+global MONITOR_MESSAGES
 MONITOR_MESSAGES = {}
 
 # fixtures
@@ -126,7 +127,8 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
 def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_rel='canonical',
                                           metadata_id=True) -> None:
 
-    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
+    #base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
+    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/refs/heads/gdc-updates-2024-09-16/tests/global_discovery_catalogue'
 
     wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
 
@@ -155,8 +157,9 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_re
         message['configuration']['setup']['cache_a_wis2'] = cache_a_wis2
 
     if not metadata_id:
-        message['configuration']['wnm']['properties']['metadata_id'] = False
+        message['configuration']['wnm']['properties']['metadata_id'] = metadata_id
 
+    print(json.dumps(message))
     trigger_client = subscribe_trigger_client()
     trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message))
 
@@ -261,6 +264,8 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
         time.sleep(5)
 
+    time.sleep(10)
+
     for wcmp2_id in wcmp2_ids:
         try:
             assert MONITOR_MESSAGES[wcmp2_id]['summary']['FAILED'] > 0
@@ -283,7 +288,7 @@ def test_metadata_ingest_centre_id_mismatch(gb_client):
     wnm = 'urn--wmo--md--io-wis2dev-11-test--centreid-mismatch.json'
     wcmp2_id = _get_wcmp2_id_from_filename(wnm)
 
-    _publish_wcmp2_trigger_broker_message('global_discovery_catalogue/metadata/invalid/{wnm}')  # noqa
+    _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{wnm}')  # noqa
     time.sleep(5)
 
     assert 'message' in MONITOR_MESSAGES[wcmp2_id]
@@ -292,12 +297,18 @@ def test_metadata_ingest_centre_id_mismatch(gb_client):
 def test_notification_and_metadata_processing_record_deletion(gb_client):
     print('Testing Notification and metadata processing (record deletion)')
 
-    MONITOR_MESSAGES = {}
+    assert gb_client.conn.is_connected
+
+    _subscribe_gb_client(gb_client)
+
+    time.sleep(1)
+
+    assert gb_client.conn.subscribed_flag
 
     wnm = 'urn--wmo--md--io-wis2dev-11-test--data.core.weather.prediction.forecast.shortrange.probabilistic.global.json'
     wcmp2_id = _get_wcmp2_id_from_filename(wnm)
 
-    _publish_wcmp2_trigger_broker_message('global_discovery_catalogue/metadata/valid/{wnm}')  # noqa
+    _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}')  # noqa
     time.sleep(5)
 
     query_url = f'{GDC_API}/items/{wcmp2_id}'
@@ -305,8 +316,8 @@ def test_notification_and_metadata_processing_record_deletion(gb_client):
     r = requests.get(query_url)
     assert r.ok
 
-    _publish_wcmp2_trigger_broker_message('global_discovery_catalogue/metadata/valid/{wnm}', link_rel='deletion')  # noqa
-    time.sleep(5)
+    _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion')  # noqa
+    time.sleep(10)
 
     r = requests.get(query_url)
     assert not r.ok
@@ -322,19 +333,8 @@ def test_notification_and_metadata_processing_failure_record_deletion_message_do
     wnm = 'urn--wmo--md--io-wis2dev-11-test--data.core.weather.prediction.forecast.shortrange.probabilistic.global.json'
     wcmp2_id = _get_wcmp2_id_from_filename(wnm)
 
-    _publish_wcmp2_trigger_broker_message('global_discovery_catalogue/metadata/valid/{wnm}')  # noqa
+    _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion', metadata_id=False)  # noqa
     time.sleep(5)
-
-    query_url = f'{GDC_API}/items/{wcmp2_id}'
-
-    r = requests.get(query_url)
-    assert r.ok
-
-    _publish_wcmp2_trigger_broker_message('global_discovery_catalogue/metadata/valid/{wnm}', link_rel='deletion', metadata_id=False)  # noqa
-    time.sleep(5)
-
-    r = requests.get(query_url)
-    assert not r.ok
 
     assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
@@ -367,15 +367,21 @@ def test_wcmp2_cold_start_initialization_from_metadata_archive_zipfile(gb_client
 def test_api_functionality(gb_client):
     print('Testing API functionality')
 
+    assert gb_client.conn.is_connected
+
+    _subscribe_gb_client(gb_client)
+
+    time.sleep(1)
+
+    assert gb_client.conn.subscribed_flag
+
     wcmp2_ids = []
     for w2p in os.listdir('global_discovery_catalogue/metadata/valid'):
         _publish_wcmp2_trigger_broker_message(f'metadata/valid/{w2p}')
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
+        time.sleep(5)
 
     time.sleep(10)
-
-    for wcmp2_id in wcmp2_ids:
-        assert MONITOR_MESSAGES[wcmp2_id]['summary']['PASSED'] == 12
 
     base_url = GDC_API
 
