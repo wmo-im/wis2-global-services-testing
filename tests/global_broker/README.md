@@ -6,7 +6,7 @@ This PyTest script implements the functional tests for the Global Broker.  **Cur
 
 ### Outstanding Issues
 
-1. Evaluation of the Global Broker metrics specified in the [Global Broker Testing Document.]https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc 
+1. Evaluation of the Global Broker metrics specified in the [Global Broker Testing Document.](https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc) 
 2. PyTest exception handling and job control
 
 ### Environment Configurables
@@ -34,7 +34,7 @@ message_pace = 0.5
 ```
 ### Test Roster
 
-Although all of the specified Global Broker tests are performes, there are more tests in the PyTest script than outlined in the [Global Broker Testing Document.]https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc 
+Although all of the specified Global Broker tests are performes, there are more tests in the PyTest script than outlined in the [Global Broker Testing Document.](https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc) 
 
 dd
 
@@ -136,4 +136,4 @@ Publishing messages to Invalid Topics using the Scenario Broker.  The script cyc
 
 #### Test 13: WIS2 GB Inalid Message Test
 
-Publishing messages to Invalid Topics using the Scenario Broker.  The script cycles through the list of [Invalid Message Scenarios]https://github.com/wmo-im/wis2-global-services-testing/tree/main/tools/Documentation/scenario
+Publishing messages to Invalid Topics using the Scenario Broker.  The script cycles through the list of [Invalid Message Scenarios](https://github.com/wmo-im/wis2-global-services-testing/tree/main/tools/Documentation/scenario)
