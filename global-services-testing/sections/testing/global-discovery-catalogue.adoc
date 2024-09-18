@@ -6,7 +6,7 @@
 
 - backup metadata repository
 - metrics can be backed up, but as they are also rebuilt after a service restart, no backup is necessary here
-- the GDC broker shall be made accesible to to the WIS2 test Global Broker, with access via the credentials `everyone-dev/everyone-dev` for the purpose of testing
+- the GDC broker shall be made accessible to to the WIS2 test Global Broker, with access via the credentials `everyone-dev/everyone-dev` for the purpose of testing
 
 ==== Entering the test environment
 
