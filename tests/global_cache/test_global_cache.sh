@@ -9,7 +9,9 @@ OUTPUT_DIR="/data/wis2-testing/results/${GC_METRICS_REPORT_BY}"
 mkdir -p $OUTPUT_DIR
 
 # Get the current datetime stamp
-DATETIME=$(date '+%Y%m%d_%H%M%S')
+DATETIME=$(date '+%Y-%m-%dT%H:%M:%SZ')
+
+
 
 # Construct the output file names
 LOG_FILE="${OUTPUT_DIR}/gc_tests_${DATETIME}_${GC_METRICS_REPORT_BY}.log"
