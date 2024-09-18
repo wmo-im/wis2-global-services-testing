@@ -82,7 +82,6 @@ def _on_subscribe(client, userdata, mid, reason_codes, properties):
 
 
 def _on_message(client, userdata, message):
-    print("TOPIC", message.topic)
     if message.topic.startswith('monitor/a/wis2'):
         report = json.loads(message.payload)
 
@@ -343,7 +342,7 @@ def test_notification_and_metadata_processing_failure_record_deletion_message_do
 def test_wcmp2_metadata_archive_zipfile_publication(gb_client):
     print('Testing WCMP2 metadata archive zipfile publication')
 
-    metadata_archive_zipfile_href = _get_metadata_archive_zipfile_href
+    metadata_archive_zipfile_href = _get_metadata_archive_zipfile_href()
 
     assert metadata_archive_zipfile_href is not None
 
