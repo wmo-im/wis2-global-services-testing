@@ -18,8 +18,7 @@ This PyTest script implements the functional tests for the Global Broker.  **Cur
 5. TEST_BROKER_WS: "443" Websockets Connection
 6. TEST_BROKER_TEST: Functional Tests Connections
 
-The functional tests endpoint is separate providing the opportunity to select
-a functional URL in the event that SSL/TLS is not available.
+The functional tests endpoint is separate providing the opportunity to select a functional URL in the event that SSL/TLS is not available.
 
 ### Script Configurables
 
@@ -34,21 +33,19 @@ message_pace = 0.5
 ```
 ### Test Roster
 
-Although all of the specified Global Broker tests are performes, there are more tests in the PyTest script than outlined in the [Global Broker Testing Document.](https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc) 
-
-dd
+All of the specified Global Broker tests are performed, however there are more tests in the PyTest script than outlined in the [Global Broker Testing Document.](https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc) 
 
 #### Test 1: Global Broker Clear-Text Connectivity
 
-A clear text connection attempt test for simple verification that the tesing configuration is up and ready to go.  Useful for debugging.
+A clear text connection attempt to confirm that the Global Broker under test is up and ready to go.  Useful for debugging.
 
 #### Test 2: Global Broker TLS Connectivity
 
-TLS and WebSocket tests are separated to avoid exeption handling in PyTest.  As outlined, either a TLS or WebSocket connection is sufficient for the encrpyted transport test to pass.  However exception hanling in PyTest frustrates implementin a sigle test that can pass with one of the two conditions failing.
+TLS and WebSocket tests are separated to avoid exeption handling in PyTest.  As outlined, either a TLS or WebSocket connection is sufficient for the encrpyted transport test to pass.  However exception hanling in PyTest frustrates implementing a sigle test that can pass with one of the two conditions failing.
 
 #### Test 3: Global Broker WS Connectivity
 
-The WebSocket case since either a TLS or WebSocket connection is sufficient for the specified test to pass.  Future updates to resolve this issue.
+The WebSocket case since either a TLS or WebSocket connection is sufficient for the specified test to pass.  Future updates to resolve the PyTest exception handling issue and allow one of two conditions to fail and maintaining a passing test.
 
 #### Test 4: Global Broker TLS Certifiate Validity
 
@@ -56,7 +53,7 @@ Again, the Certificat Validity tests are separated to avoid exeption handling in
 
 #### Test 5: Global Broker WS Certificate Validity
 
-The WebSocket case since either a TLS or WebSocket certificate validation is sufficient for the specified test to pass.  Future updates to resolve this issue.
+The WebSocket case since either a TLS or WebSocket certificate validation is sufficient for the specified test to pass.
 
 #### Test 6: Global Broker Subscription Read Access
 
@@ -64,7 +61,7 @@ A simple high level topic subscritpion to the "live" Global Broker under test.  
 
 #### Test 7: Global Broker Write Access
 
-A publication attempt to a valid WIS2 topic on the Global Broker under test to evaluate the world accessible "everyone:everyone" permissions.  Exception hanling in PyTest frustrates implementing this test since a successful outcome involves the client violating the permissions policy.  Future updates to resolve this issue
+A publication attempt to a valid WIS2 topic on the Global Broker under test to evaluate the world accessible "everyone:everyone" permissions.  Exception hanling in PyTest frustrates implementing this test since a successful outcome involves the client violating the permissions policy prompting an MQTT client disconnect.  Future updates to resolve this issue
 
 #### Test 8: WIS2 Broker Antiloop Test
 
@@ -72,7 +69,7 @@ Publishing multiple messages with identical UUIDs using the Scenario Broker.
 
 #### Test 9: WIS2 Node Invalid Centre ID Test
 
-Publishing messages from a Centre-ID that does not match the Centre-ID on the topic using the Scenario Broker
+Publishing messages from a Centre-ID that does not match the Centre-ID in the topic using the Scenario Broker
 
 #### Test 10: WIS2 GB Valid Topic Test
 
@@ -102,7 +99,7 @@ Publishing messages to Valid Topics using the Scenario Broker.  The script cycle
 
 #### Test 11: WIS2 GB Valid Message Test
 
-Publishing valid messages to valid topics using the Scenario Broker.  A repeat of Test 10.  Future updates that evaluate the implementation might differentiate this test from test number 10.
+Publishing valid messages to valid topics using the Scenario Broker.  A repeat of Test 10.  Future updates that evaluate the implementation might require changes that differentiate this test from test number 10.
 
 #### Test 12: WIS2 GB Inalid Topic Test
 
@@ -136,4 +133,4 @@ Publishing messages to Invalid Topics using the Scenario Broker.  The script cyc
 
 #### Test 13: WIS2 GB Inalid Message Test
 
-Publishing messages to Invalid Topics using the Scenario Broker.  The script cycles through the list of [Invalid Message Scenarios](https://github.com/wmo-im/wis2-global-services-testing/tree/main/tools/Documentation/scenario)
+Publishing Invalid Messages using the Scenario Broker.  The script cycles through the list of [Invalid Message Scenarios](https://github.com/wmo-im/wis2-global-services-testing/tree/main/tools/Documentation/scenario)
