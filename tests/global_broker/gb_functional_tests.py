@@ -14,25 +14,35 @@ from urllib.parse import urlparse
 from paho.mqtt.packettypes import PacketTypes
 from paho.mqtt.properties import Properties
 from dotenv import load_dotenv
-load_dotenv()
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from shared_utils import mqtt_helpers, ab, prom_metrics
 
 # Connection strings for the development global broker and message generator
 # Access the environment variables
+load_dotenv("./global-broker.env")
+load_dotenv("../secrets.env")
+load_dotenv("../default.env")
+mqtt_broker_trigger = os.getenv('TRIGGER_BROKER')
+mqtt_broker_clear = os.getenv('TEST_GB_MQTT_BROKER')
+mqtt_broker_tls = os.getenv('TEST_GB_MQTT_SSL_BROKER')
+mqtt_broker_ws = os.getenv('TEST_GB_MQTT_WS_BROKER')
+mqtt_broker_test = os.getenv('TEST_GB_MQTT_TEST_BROKER')
 
-scenario_broker_url = os.getenv('SCENARIO_BROKER') # Scenario Message Generator
-global_broker_url = os.getenv('GLOBAL_BROKER')     # gb.wis2dev.io
-test_broker_clear = os.getenv('TEST_BROKER_CLEAR') # Cleartext Connection
-test_broker_tls = os.getenv('TEST_BROKER_TLS')     # MQTTs TLS/SSL Connection
-test_broker_ws = os.getenv('TEST_BROKER_WS')       # MQTTs Websockets Connection
-test_broker_test = os.getenv('TEST_BROKER_TEST')   # Functional Tests Connections
+# prometheus config
+prom_host = os.getenv('PROMETHEUS_HOST')
+prom_user = os.getenv('PROMETHEUS_USER')
+prom_pass = os.getenv('PROMETHEUS_PASSWORD')
 
-test_pace = 0.5
-message_pace = 0.5
+# timing config
+test_pace = float(os.getenv('TEST_PACE'))
+message_pace = float(os.getenv('MESSAGE_PACE'))
 
 # Connections
 broker_tls_connections = [
-    test_broker_tls,
-    test_broker_ws
+    mqtt_broker_tls,
+    mqtt_broker_ws
 ]
 
 # Global Topics
@@ -62,6 +72,13 @@ pub_write_topics = [
     "cache/a/wis2/io-wis2dev-13-test/data/core/weather/surface-based-observations/synop"
 ]
 
+pub_general_topics = [
+    "origin/a/wis2/io-wis2dev-12/#",
+    "cache/a/wis2/io-wis2dev-12-test/metadata/#",
+    "origin/a/wis2/io-wis2dev-13-test/data/#",
+    "cache/a/wis2/io-wis2dev-13-test/data/#"
+]
+
 # Valid Test Topics
 pub_valid_topics = [
     "origin/a/wis2/io-wis2dev-12-test/metadata",
@@ -89,31 +106,31 @@ pub_valid_topics = [
 
 # Invalid Test Topics
 pub_invalid_topics = [
-    "origin/a/wis2/io-wis2dev-14-test/data",
-    "origin/a/wis2/io-wis2dev-14-test/data/core",
-    "origin/a/wis2/io-wis2dev-14-test/metadata/core",
-    "origin/a/wis2/io-wis2dev-14-test/metadata/core/weather",
+    "origin/a/wis2/io-wis2dev-12-test/data",
+    "origin/a/wis2/io-wis2dev-12-test/data/core",
+    "origin/a/wis2/io-wis2dev-13-test/metadata/core",
+    "origin/a/wis2/io-wis2dev-13-test/metadata/core/weather",
     "origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations",
     "origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations/experimental",
-    "origin/a/wis3/io-wis2dev-14-test/data/core/weather/surface-based-observations/synop",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-sed-observations/synop",
-    "origin/a/wis3/io-wis2dev-14-test/data/core/weather/surface-based-observations/synop",
-    "origin/a/wis2/io-wis2dev-14-test/database/core/weather/surface-based-observations/synop",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations/synop/prediction",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/space-based-observations/smm-newton/epic",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/space-based-observations/themis-a/scm",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/space-weather/space-based-observations/sentinel-2b/msi",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/space-weather/space-based-observations/swot/poseidon-3c",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/geospatial/surface-based-observations/synop",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/ibweather/surface-based-observations/dynop",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/atmospheric-composition/satellite",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/atmospheric-composition",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/prediction",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/prediction/analysis",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/prediction/analysis/nowcasting",
+    "origin/a/wis3/io-wis2dev-15-test/data/core/weather/surface-based-observations/synop",
+    "origin/a/wis2/io-wis2dev-15-test/data/core/weather/surface-sed-observations/synop",
+    "origin/a/wis3/io-wis2dev-16-test/data/core/weather/surface-based-observations/synop",
+    "origin/a/wis2/io-wis2dev-16-test/database/core/weather/surface-based-observations/synop",
+    "origin/a/wis2/io-wis2dev-17-test/data/core/weather/surface-based-observations/synop/prediction",
+    "origin/a/wis2/io-wis2dev-17-test/data/core/weather/space-based-observations/smm-newton/epic",
+    "origin/a/wis2/io-wis2dev-18-test/data/core/weather/space-based-observations/themis-a/scm",
+    "origin/a/wis2/io-wis2dev-18-test/data/core/space-weather/space-based-observations/sentinel-2b/msi",
+    "origin/a/wis2/io-wis2dev-19-test/data/core/space-weather/space-based-observations/swot/poseidon-3c",
+    "origin/a/wis2/io-wis2dev-19-test/data/core/geospatial/surface-based-observations/synop",
+    "origin/a/wis2/io-wis2dev-20-test/data/core/ibweather/surface-based-observations/dynop",
+    "origin/a/wis2/io-wis2dev-20-test/data/core/atmospheric-composition/satellite",
+    "origin/a/wis2/io-wis2dev-12-test/data/core/atmospheric-composition",
+    "origin/a/wis2/io-wis2dev-12-test/data/core/weather/prediction",
+    "origin/a/wis2/io-wis2dev-13-test/data/core/weather/prediction/analysis",
+    "origin/a/wis2/io-wis2dev-13-test/data/core/weather/prediction/analysis/nowcasting",
     "origin/a/wis2/io-wis2dev-14-test/data/core/weather/prediction/hindcast",
     "origin/a/wis2/io-wis2dev-14-test/data/core/weather/prediction/hindcast/short-range",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/prediction/hindcast/nowcasting"
+    "origin/a/wis2/io-wis2dev-15-test/data/core/weather/prediction/hindcast/nowcasting"
 ]
 
 # Invalid Test Messages
@@ -201,37 +218,37 @@ def gen_wnm_mesg(topic, filename):
     return(wis2_notification_message)
 
 def test_1_mqtt_broker_cleartext_connectivity():
-    print("\n1. Global Broker Clear-Text Connectivity" + test_broker_clear)
-    client = setup_mqtt_client(test_broker_clear, False)
+    print("\n1. Global Broker Clear-Text Connectivity" + mqtt_broker_clear)
+    client = setup_mqtt_client(mqtt_broker_clear, False)
     assert client.connected_flag
     client.disconnect()
     del client
     time.sleep(test_pace)
 
 def test_2_mqtt_broker_tls_connectivity():
-    print("\n1. Global Broker TLS Connectivity" + test_broker_tls)
-    client = setup_mqtt_client(test_broker_tls, False)
+    print("\n1. Global Broker TLS Connectivity" + mqtt_broker_tls)
+    client = setup_mqtt_client(mqtt_broker_tls, False)
     assert client.connected_flag
     del client
     time.sleep(test_pace)
 
 def test_3_mqtt_broker_ws_connectivity():
-    print("\n1. Global Broker WS Connectivity" + test_broker_ws)
-    client = setup_mqtt_client(test_broker_ws, False)
+    print("\n1. Global Broker WS Connectivity" + mqtt_broker_ws)
+    client = setup_mqtt_client(mqtt_broker_ws, False)
     assert client.connected_flag
     del client
     time.sleep(test_pace)
 
 def test_4_mqtt_broker_tls_validate_cert():
-    print("\n1. Global Broker TLS Certifiate Validity" + test_broker_tls)
-    client = setup_mqtt_client(test_broker_tls, True)
+    print("\n1. Global Broker TLS Certifiate Validity" + mqtt_broker_tls)
+    client = setup_mqtt_client(mqtt_broker_tls, True)
     assert client.connected_flag
     del client
     time.sleep(test_pace)
 
 def test_5_mqtt_broker_ws_validate_cert():
-    print("\n1. Global Broker WS Certificate Validity" + test_broker_ws)
-    client = setup_mqtt_client(test_broker_ws, True)
+    print("\n1. Global Broker WS Certificate Validity" + mqtt_broker_ws)
+    client = setup_mqtt_client(mqtt_broker_ws, True)
     assert client.connected_flag
     del client
     time.sleep(test_pace)
@@ -239,7 +256,7 @@ def test_5_mqtt_broker_ws_validate_cert():
 @pytest.mark.parametrize("topic", sub_global_topics)
 def test_6_mqtt_broker_subscription_read(topic):
     print("\n2. Global Broker Subscription Read Access")
-    client = setup_mqtt_client(test_broker_test, False)
+    client = setup_mqtt_client(mqtt_broker_test, False)
     client.subscribe(topic)
     client.loop_start()
     time.sleep(message_pace)  # Wait for subscription
@@ -252,16 +269,21 @@ def test_6_mqtt_broker_subscription_read(topic):
 
 @pytest.mark.parametrize("topic", pub_write_topics)
 def test_7_mqtt_broker_subscription_write(topic):
-    print("\n2. Global Broker Write Access")
-    client = setup_mqtt_client(test_broker_test, False)
-    for sub_topic in sub_global_topics:
+    print("\n2. Global Broker Write Access Denial")
+    client = setup_mqtt_client(mqtt_broker_test, False)
+    for sub_topic in pub_general_topics:
         client.subscribe(sub_topic)
     client.loop_start()
     time.sleep(message_pace)  # Wait for subscription
-    res, mid = client.publish(topic, json.dumps(gen_wnm_mesg(topic,"t1t2A1A2iiCCCC_yymmddHHMMSS.bufr")))
-    time.sleep(message_pace)  # Wait for messages
     assert client.connected_flag
     assert client.subscribed_flag
+    class PermissionDenied(Exception):
+        pass
+    with pytest.raises(PermissionDenied) as execinfo:
+        pub_result = client.publish(topic, json.dumps(gen_wnm_mesg(topic,"t1t2A1A2iiCCCC_yymmddHHMMSS.bufr")), qos=1)
+        time.sleep(message_pace)
+        if len(client._userdata['received_messages']) == 0:
+            raise PermissionDenied("Permission for \"everyone:everyone\"")
     client.loop_stop()
     client.disconnect()
     del client
@@ -282,13 +304,13 @@ def test_8_mqtt_broker_antiloop():
             }
         }
     }
-    sub_client = setup_mqtt_client(test_broker_test, False)
+    sub_client = setup_mqtt_client(mqtt_broker_test, False)
     sub_client.loop_start()
     sub_client.subscribe("origin/a/wis2/io-wis2dev-12-test/#")
     sub_client.subscribe("origin/a/wis2/io-wis2dev-13-test/#")
     sub_client.subscribe("origin/a/wis2/io-wis2dev-14-test/#")
     time.sleep(message_pace * 6)  # Wait for subscription
-    pub_client = setup_mqtt_client(scenario_broker_url, False)
+    pub_client = setup_mqtt_client(mqtt_broker_trigger, False)
     pub_client.loop_start()
     pub_client.publish("config/a/wis2", json.dumps(wnm_scenario_config))
     time.sleep(message_pace * 6)  # Wait for messages
@@ -316,12 +338,12 @@ def test_9_node_invalid_centre_id_test():
             }
         }
     }
-    sub_client = setup_mqtt_client(test_broker_test, False)
+    sub_client = setup_mqtt_client(mqtt_broker_test, False)
     sub_client.loop_start()
     sub_client.subscribe("origin/a/wis2/io-wis2dev-12-test/#")
     time.sleep(message_pace)  # Wait for subscription
     print("\n4. " + json.dumps(wnm_scenario_config))
-    pub_client = setup_mqtt_client(scenario_broker_url, False)
+    pub_client = setup_mqtt_client(mqtt_broker_trigger, False)
     pub_client.publish("config/a/wis2", json.dumps(wnm_scenario_config))
     time.sleep(message_pace * 2)  # Wait for messages
     assert sub_client.connected_flag
@@ -337,10 +359,10 @@ def test_9_node_invalid_centre_id_test():
 
 def test_10_valid_topic_test():
     print("\n4. WIS2 GB Valid Topic Test")
-    sub_client = setup_mqtt_client(test_broker_test, False)
+    sub_client = setup_mqtt_client(mqtt_broker_test, False)
     sub_client.subscribe(f"origin/a/wis2/#")
     sub_client.loop_start()
-    pub_client = setup_mqtt_client(scenario_broker_url, False)
+    pub_client = setup_mqtt_client(mqtt_broker_trigger, False)
     time.sleep(message_pace)  # Wait for messages
     mesg_count = 0
     for topic in pub_valid_topics:
@@ -373,10 +395,10 @@ def test_10_valid_topic_test():
     
 def test_11_valid_msg_test():
     print("\n4. WIS2 GB Valid Message Test")
-    sub_client = setup_mqtt_client(test_broker_test, False)
+    sub_client = setup_mqtt_client(mqtt_broker_test, False)
     sub_client.subscribe(f"origin/a/wis2/#")
     sub_client.loop_start()
-    pub_client = setup_mqtt_client(scenario_broker_url, False)
+    pub_client = setup_mqtt_client(mqtt_broker_trigger, False)
     time.sleep(message_pace)  # Wait for messages
     mesg_count = 0
     for topic in pub_valid_topics:
@@ -409,10 +431,10 @@ def test_11_valid_msg_test():
     
 def test_12_invalid_topic_test():
     print("\n4. WIS2 GB Inalid Topic Test")
-    sub_client = setup_mqtt_client(test_broker_test, False)
+    sub_client = setup_mqtt_client(mqtt_broker_test, False)
     sub_client.subscribe(f"origin/a/wis2/#")
     sub_client.loop_start()
-    pub_client = setup_mqtt_client(scenario_broker_url, False)
+    pub_client = setup_mqtt_client(mqtt_broker_trigger, False)
     time.sleep(message_pace)  # Wait for messages
     for topic in pub_invalid_topics:
         cent_id_num = center_id_regex.search(topic).group(1)
@@ -442,10 +464,10 @@ def test_12_invalid_topic_test():
     
 def test_13_invalid_msg_test():
     print("\n4. WIS2 GB Inalid Message Test")
-    sub_client = setup_mqtt_client(test_broker_test, False)
+    sub_client = setup_mqtt_client(mqtt_broker_test, False)
     sub_client.subscribe(f"origin/a/wis2/#")
     sub_client.loop_start()
-    pub_client = setup_mqtt_client(scenario_broker_url, False)
+    pub_client = setup_mqtt_client(mqtt_broker_trigger, False)
     time.sleep(message_pace)  # Wait for messages
     for mesg in pub_invalid_mesg:
         wnm_scenario_config = {
