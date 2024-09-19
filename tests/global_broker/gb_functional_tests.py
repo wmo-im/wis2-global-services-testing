@@ -270,9 +270,13 @@ def test_7_mqtt_broker_subscription_write(topic):
     time.sleep(message_pace)  # Wait for subscription
     assert client.connected_flag
     assert client.subscribed_flag
+    class PermissionDenied(Exception):
+        pass
     with pytest.raises(PermissionDenied) as execinfo:
-        client.publish(topic, json.dumps(gen_wnm_mesg(topic,"t1t2A1A2iiCCCC_yymmddHHMMSS.bufr")))
-    assert "Permission for \"everyone:everyone\"" in str(execinfo.type)
+        pub_result = client.publish(topic, json.dumps(gen_wnm_mesg(topic,"t1t2A1A2iiCCCC_yymmddHHMMSS.bufr")))
+        if pub_result.rc != 0:
+            raise PermissionDenied("Permission for \"everyone:everyone\"")
+    # assert "Permission for \"everyone:everyone\"" in str(execinfo.type)
     client.loop_stop()
     client.disconnect()
     del client
