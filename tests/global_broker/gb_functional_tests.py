@@ -72,6 +72,13 @@ pub_write_topics = [
     "cache/a/wis2/io-wis2dev-13-test/data/core/weather/surface-based-observations/synop"
 ]
 
+pub_general_topics = [
+    "origin/a/wis2/io-wis2dev-12/#",
+    "cache/a/wis2/io-wis2dev-12-test/metadata/#",
+    "origin/a/wis2/io-wis2dev-13-test/data/#",
+    "cache/a/wis2/io-wis2dev-13-test/data/#"
+]
+
 # Valid Test Topics
 pub_valid_topics = [
     "origin/a/wis2/io-wis2dev-12-test/metadata",
@@ -264,7 +271,7 @@ def test_6_mqtt_broker_subscription_read(topic):
 def test_7_mqtt_broker_subscription_write(topic):
     print("\n2. Global Broker Write Access Denial")
     client = setup_mqtt_client(mqtt_broker_test, False)
-    for sub_topic in sub_global_topics:
+    for sub_topic in pub_general_topics:
         client.subscribe(sub_topic)
     client.loop_start()
     time.sleep(message_pace)  # Wait for subscription
@@ -273,10 +280,10 @@ def test_7_mqtt_broker_subscription_write(topic):
     class PermissionDenied(Exception):
         pass
     with pytest.raises(PermissionDenied) as execinfo:
-        pub_result = client.publish(topic, json.dumps(gen_wnm_mesg(topic,"t1t2A1A2iiCCCC_yymmddHHMMSS.bufr")))
-        if pub_result.rc != 0:
+        pub_result = client.publish(topic, json.dumps(gen_wnm_mesg(topic,"t1t2A1A2iiCCCC_yymmddHHMMSS.bufr")), qos=1)
+        time.sleep(message_pace)
+        if len(client._userdata['received_messages']) == 0:
             raise PermissionDenied("Permission for \"everyone:everyone\"")
-    # assert "Permission for \"everyone:everyone\"" in str(execinfo.type)
     client.loop_stop()
     client.disconnect()
     del client
