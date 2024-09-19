@@ -136,7 +136,7 @@ test_wis2_gb_connected_flag{report_by="cn-cma-global-broker", centre_id=~"$centr
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-6.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-6-0.png[]
 
 ===== Panel 6：
 Metrics:test_wis2_gb_last_message_timestamp_seconds
@@ -149,7 +149,7 @@ sort_desc(time()-wmo_wis2_gb_last_message_timestamp_seconds{centre_id=~"$centre_
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-7.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-6.png[]
 
 =====Panel 7：
 Metrics:test_wis2_gb_messages_received_total
@@ -162,7 +162,7 @@ sum by(report_by) (test_wis2_gb_messages_received_total{centre_id=~"$centre_id",
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-8.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-7.png[]
 
 ===== Panel 8：
 Metrics:test_wis2_gb_messages_received_total
@@ -175,7 +175,7 @@ sum by(report_by) (test_wis2_gb_messages_received_total{centre_id=~"$centre_id",
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-9.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-8.png[]
 
 =====Panel 9：
 Metrics:test_wis2_gb_messages_invalid_topic_total
@@ -188,7 +188,7 @@ sum by(report_by) (test_wis2_gb_messages_invalid_topic_total{centre_id=~"$centre
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-10.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-9.png[]
 
 ===== Panel 10：
 Metrics:test_wis2_gb_messages_invalid_format_total
@@ -201,7 +201,7 @@ sum by(report_by) (test_wis2_gb_messages_invalid_format_total{centre_id=~"$centr
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-11.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-10.png[]
 
 ===== Panel 11：
 Metrics:test_wis2_gb_messages_no_metadata_total
@@ -214,7 +214,7 @@ sum by(report_by) (test_wis2_gb_messages_no_metadata_total{centre_id=~"$centre_i
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-12.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-11.png[]
 
 ===== Panel 12：
 Metrics:test_wis2_gb_messages_published_total
@@ -227,7 +227,7 @@ sum by(report_by) (test_wis2_gb_messages_published_total{centre_id=~"$centre_id"
 
 Result:
 
-image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-13.png[]
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-12.png[]
 
 ===== Raising alert 1
 
