@@ -15,8 +15,6 @@ from paho.mqtt.packettypes import PacketTypes
 from paho.mqtt.properties import Properties
 from dotenv import load_dotenv
 
-from tests.shared_utils.prom_metrics import fetch_prometheus_metrics
-
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
@@ -30,6 +28,7 @@ mqtt_broker_trigger = os.getenv('TRIGGER_BROKER')
 mqtt_broker_clear = os.getenv('TEST_GB_MQTT_BROKER')
 mqtt_broker_tls = os.getenv('TEST_GB_MQTT_SSL_BROKER')
 mqtt_broker_ws = os.getenv('TEST_GB_MQTT_WS_BROKER')
+mqtt_broker_test = os.getenv('TEST_GB_MQTT_TEST_BROKER')
 
 # prometheus config
 prom_host = os.getenv('PROMETHEUS_HOST')
@@ -37,8 +36,8 @@ prom_user = os.getenv('PROMETHEUS_USER')
 prom_pass = os.getenv('PROMETHEUS_PASSWORD')
 
 # timing config
-test_pace = int(os.getenv('TEST_PACE'))
-message_pace = int(os.getenv('MESSAGE_PACE'))
+test_pace = float(os.getenv('TEST_PACE'))
+message_pace = float(os.getenv('MESSAGE_PACE'))
 
 # Connections
 broker_tls_connections = [
