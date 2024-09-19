@@ -1,5 +1,4 @@
 import json
-import logging
 import uuid
 import random
 import sys
@@ -46,6 +45,25 @@ sub_topics = [
 ]
 
 
+def check_broker_connectivity(connection_string: str):
+    """
+    Check if the broker is reachable
+    :param connection_string:
+    :return:
+    """
+    # return True if connection is successful, False otherwise
+    is_connected = False
+    try:
+        client = setup_mqtt_client(connection_string, on_log=True, loop_start=True)
+        if client.is_connected():
+            is_connected = True
+        client.loop_stop()
+        client.disconnect()
+    except Exception as e:
+        print(f"Connection error: {e}")
+    return is_connected
+
+
 def parse_timestamp(data_string):
     formats = ['%Y-%m-%dT%H:%M:%S.%fZ', '%Y-%m-%dT%H:%M:%SZ']
     parsed_time = None
@@ -77,7 +95,7 @@ def flag_on_subscribe(client, userdata, mid, granted_qos, properties=None):
 
 
 def flag_on_message(client, userdata, msg):
-    print(f"Received message: {msg.topic} {msg.payload}")
+    # print(f"Received message: {msg.topic} {msg.payload}")
     try:
         msg_json = json.loads(msg.payload.decode())
     except:
@@ -97,25 +115,54 @@ def flag_on_message(client, userdata, msg):
         client._userdata['cache_end_time'] = time.time()
 
 
-def setup_mqtt_client(connection_info: str, loop_start=True):
+def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
+    """
+    Setup an MQTT client for testing.
+    Args:
+        on_log: use on_log callback to print logs
+        connection_info: connection string for the MQTT broker.
+        loop_start: use the async loop to connect
+
+    Returns: paho MQTT client
+
+    """
     # Initialize MQTT client
     rand_id = "gc_test_client_" + str(uuid.uuid4())[:10]
     client = mqtt.Client(client_id=rand_id, protocol=mqtt.MQTTv5, userdata={'received_messages': []})
     client.on_connect = flag_on_connect
     client.on_subscribe = flag_on_subscribe
     client.on_message = flag_on_message
+    if on_log:
+        client.on_log = lambda client, userdata, level, buf: print(f"Log: {buf}")
+    # Parse connection info
     connection_info = urlparse(connection_info)
     client.username_pw_set(connection_info.username, connection_info.password)
+
     properties = Properties(PacketTypes.CONNECT)
     properties.SessionExpiryInterval = 300  # seconds
-    client.tls_set()
-    client.tls_insecure_set(True)
-    client.connect(host=connection_info.hostname, port=connection_info.port, properties=properties)
-    if loop_start:
-        client.loop_start()
-    time.sleep(1)  # Wait for connection
-    if not client.is_connected() and loop_start:
-        raise Exception("Failed to connect to MQTT broker")
+    if connection_info.port in [443, 8883]:
+        tls_settings = {'tls_version': 2, 'cert_reqs': mqtt.ssl.CERT_NONE}
+        client.tls_set(**tls_settings)
+
+    try:
+        client.connect(host=connection_info.hostname, port=connection_info.port, properties=properties)
+        if loop_start:
+            client.loop_start()
+        time.sleep(1)  # Wait for connection
+        if not client.is_connected() and loop_start:
+            raise Exception("Failed to connect to MQTT broker")
+    except Exception as e:
+        print(f"Connection error: {e}")
+        print(f"Parsed connection string components:")
+        print(f"  Scheme: {connection_info.scheme}")
+        print(f"  Hostname: {connection_info.hostname}")
+        print(f"  Port: {connection_info.port}")
+        print(f"  Username: {connection_info.username}")
+        print(f"  Password: {connection_info.password}")
+        # tls configuration
+        print(f"  TLS: {tls_settings}")
+        raise
+
     return client
 
 
@@ -195,7 +242,6 @@ def _setup():
         "test_data_id": test_data_id,
         # "initial_metrics": initial_metrics
     }
-    logging.info(f"Setup: {setup_dict}")
     yield setup_dict
 
 
@@ -236,7 +282,7 @@ def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
 
 def test_mqtt_broker_connectivity():
     print("\nMQTT Broker Connectivity")
-    assert mqtt_helpers.check_broker_connectivity(mqtt_broker_gc) is True
+    assert check_broker_connectivity(mqtt_broker_gc) is True
 
 
 @pytest.mark.parametrize("topic", [
@@ -246,18 +292,15 @@ def test_mqtt_broker_connectivity():
 def test_mqtt_broker_subscription(topic):
     print("\nGC MQTT Broker Subscription")
     print(f"Subscribing to topic: {topic}")
-    # use pywispubsub client but specify the on_connect, on_subscribe callbacks
-    client = MQTTPubSubClient(mqtt_broker_gc)
-    client.conn.subscribed_flag = False
-    client.conn.on_subscribe = flag_on_subscribe
-    client.conn.on_connect = flag_on_connect
-    client.conn.loop_start()
-    result, mid = client.conn.subscribe(topic)
+    # Use setup_mqtt_client function to initialize the client
+    client = setup_mqtt_client(mqtt_broker_gc, on_log=True, loop_start=True)
+    client.subscribed_flag = False
+    result, mid = client.subscribe(topic)
     time.sleep(1)  # Wait for subscription
     assert result is mqtt.MQTT_ERR_SUCCESS
-    assert client.conn.subscribed_flag is True
-    client.conn.loop_stop()
-    client.conn.disconnect()
+    assert client.subscribed_flag is True
+    client.loop_stop()
+    client.disconnect()
     del client
 
 
@@ -860,11 +903,11 @@ def test_concurrent_client_downloads(_setup):
     assert len(ab_result_msgs) > 0, "No ab result messages received"
 
     # Perform additional assertions or evaluations on the result messages if needed
+    print("\nCollecting and parsing ApacheBench results:\n")
     for r in ab_result_msgs:
         # parse the ab result
         ab_result = ab.parse_ab_output(r['payload'])
         # assert no failed requests
         assert int(ab_result['failed_requests']) == 0
         # log the result
-        logging.info(f"Concurrent Downloads AB Result: {ab_result}")
-        # todo - capture output in test
+        print(json.dumps(ab_result, indent=4))
