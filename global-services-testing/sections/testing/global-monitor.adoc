@@ -65,6 +65,170 @@ TODO
 . Initialize the GM with the endpoints with valid metrics.
 . Open the corresponding dashboard, if the dashboard could display the metrics in an appropriate way, it is successful. 
 
+===== Panel 1
+Metrics:test_wis2_gb_connected_flag
+
+Description:The connection status from the broker to the center is always 1
+
+Query Used：
+
+test_wis2_gb_connected_flag{centre_id=~"cn-cma|ca-eccc-msc|cm-meteocameroon|it-meteoam|ms-metservice", report_by="cn-cma-global-broker"}
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-1.png[]
+
+===== Panel 2
+Metrics:test_wis2_gb_connected_flag
+
+Description:The connection status from the broker to the center is always 0
+
+Query Used：
+
+test_wis2_gb_connected_flag{centre_id=~"kn-metservice|zm-zmd|sg-mss|na-meteona|uy-inumet", report_by=~"cn-cma-global-broker-bak"}
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-2.png[]
+
+===== Panel 3
+Metrics:test_wis2_gb_connected_flag
+
+Description:The connection status from the broker to the center alternates between 0 and 1 every minute
+
+Query Used：
+
+test_wis2_gb_connected_flag{centre_id="ai-metservice", report_by="cn-cma-global-broker"}
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-3.png[]
+
+===== Panel 4
+Metrics:test_wis2_gb_connected_flag
+
+Description:The connection status from the broker to the center alternates between 0 and 1 every five minute
+
+Query Used：
+
+test_wis2_gb_connected_flag{centre_id="ar-smn", report_by="cn-cma-global-broker"}
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-4.png[]
+
+Query Used：
+
+test_wis2_gb_connected_flag{centre_id="au-bom", report_by="cn-cma-global-broker"}
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-5.png[]
+
+===== Panel 5
+Metrics:test_wis2_gb_connected_flag
+
+Description:All status values for the connection from the broker to the center
+
+Query Used：
+
+test_wis2_gb_connected_flag{report_by="cn-cma-global-broker", centre_id=~"$centre_id"}
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-6.png[]
+
+===== Panel 6：
+Metrics:test_wis2_gb_last_message_timestamp_seconds
+
+Description:Time difference between the Timestamp of last message received from centre and current time
+
+Query Used：
+
+sort_desc(time()-wmo_wis2_gb_last_message_timestamp_seconds{centre_id=~"$centre_id",report_by=~"cn-cma-global-broker"})
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-7.png[]
+
+=====Panel 7：
+Metrics:test_wis2_gb_messages_received_total
+
+Description: Total number of messages received by all center_id which report_by = cn-cma-global-broker
+
+Query Used：
+
+sum by(report_by) (test_wis2_gb_messages_received_total{centre_id=~"$centre_id",report_by=~"$report_id"}) 
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-8.png[]
+
+===== Panel 8：
+Metrics:test_wis2_gb_messages_received_total
+
+Description:Number of messages received by each center_id
+
+Query Used：
+
+sum by(report_by) (test_wis2_gb_messages_received_total{centre_id=~"$centre_id",report_by=~"$report_id"}) 
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-9.png[]
+
+=====Panel 9：
+Metrics:test_wis2_gb_messages_invalid_topic_total
+
+Description: Total number of invalid topic messages from all center_id which report_by = cn-cma-global-broker
+
+Query Used：
+
+sum by(report_by) (test_wis2_gb_messages_invalid_topic_total{centre_id=~"$centre_id",report_by=~"$report_id"})
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-10.png[]
+
+===== Panel 10：
+Metrics:test_wis2_gb_messages_invalid_format_total
+
+Description: Total number of invalid topic messages from all center_id which report_by = cn-cma-global-broker
+
+Query Used：
+
+sum by(report_by) (test_wis2_gb_messages_invalid_format_total{centre_id=~"$centre_id",report_by=~"$report_id"})
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-11.png[]
+
+===== Panel 11：
+Metrics:test_wis2_gb_messages_no_metadata_total
+
+Description: Total number of received without corresponding metadata from all center_id which report_by = cn-cma-global-broker
+
+Query Used：
+
+sum by(report_by) (test_wis2_gb_messages_no_metadata_total{centre_id=~"$centre_id",report_by=~"$report_id"}) 
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-12.png[]
+
+===== Panel 12：
+Metrics:test_wis2_gb_messages_published_total
+
+Description: Number of messages published by cn-cma-global-broker
+
+Query Used：
+
+sum by(report_by) (test_wis2_gb_messages_published_total{centre_id=~"$centre_id",report_by=~"$report_id"}) 
+
+Result:
+
+image::https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-13.png[]
+
 ===== Raising alert 1
 
 ====== Purpose
