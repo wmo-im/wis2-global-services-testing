@@ -22,6 +22,7 @@
 import io
 import json
 import os
+import sys
 import time
 import zipfile
 
@@ -30,24 +31,30 @@ import pytest
 from pywis_pubsub.mqtt import MQTTPubSubClient
 import requests
 
+sys.path.append('.')
+
+from shared_utils.prom_metrics import fetch_prometheus_metrics
+
 if os.path.exists('secrets.env'):
     load_dotenv('secrets.env')
 
 load_dotenv('default.env')
 
 GB = os.environ['GB']
+GB_CENTRE_ID = os.environ['GB_CENTRE_ID']
 TRIGGER_BROKER = os.environ['TRIGGER_BROKER']
 GDC_API = os.environ['GDC_API']
 GDC_CENTRE_ID = os.environ['GDC_CENTRE_ID']
+PROMETHEUS_HOST = os.getenv('PROMETHEUS_HOST')
+PROMETHEUS_USER = os.getenv('PROMETHEUS_USER')
+PROMETHEUS_PASSWORD = os.getenv('PROMETHEUS_PASSWORD')
 
+MONITOR_MESSAGES = {}
 
 TOPICS = [
     'cache/a/wis2/+/metadata/#',
     f'monitor/a/wis2/{GDC_CENTRE_ID}/#'
 ]
-
-global MONITOR_MESSAGES
-MONITOR_MESSAGES = {}
 
 # fixtures
 
@@ -89,8 +96,12 @@ def _on_message(client, userdata, message):
         if report.get('metadata_id') is not None:
             report_metadata_id = report['metadata_id']
         else:
-            file_ = report['href'].split('/')[-1]
-            report_metadata_id = _get_wcmp2_id_from_filename(file_)
+            href = report.get('href')
+            if href is None:
+                report_metadata_id = 'no-metadata_id'
+            else:
+                file_ = report['href'].split('/')[-1]
+                report_metadata_id = _get_wcmp2_id_from_filename(file_)
 
         MONITOR_MESSAGES[report_metadata_id] = report
 
@@ -127,8 +138,7 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
 def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_rel='canonical',
                                           metadata_id=True) -> None:
 
-    #base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
-    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/refs/heads/gdc-updates-2024-09-16/tests/global_discovery_catalogue'
+    base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
 
     wcmp2_id = _get_wcmp2_id_from_filename(wcmp2_file)
 
@@ -159,7 +169,6 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_re
     if not metadata_id:
         message['configuration']['wnm']['properties']['metadata_id'] = metadata_id
 
-    print(json.dumps(message))
     trigger_client = subscribe_trigger_client()
     trigger_client.pub('config/a/wis2/metadata-pub', json.dumps(message))
 
@@ -188,6 +197,12 @@ def test_global_broker_connection_and_subscription(gb_client):
     time.sleep(1)
 
     assert gb_client.conn.subscribed_flag
+
+    result = fetch_prometheus_metrics('wmo_wis2_gdc_connected_flag', PROMETHEUS_HOST,
+                                      PROMETHEUS_USER, PROMETHEUS_PASSWORD, report_by=GDC_CENTRE_ID,
+                                      centre_id=GB_CENTRE_ID)
+
+    assert result[0]['value'][1] == '1'
 
 
 def test_notification_and_metadata_processing_success(gb_client):
@@ -328,15 +343,20 @@ def test_notification_and_metadata_processing_record_deletion(gb_client):
 def test_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id(gb_client):  # noqa
     print('Testing Notification and metadata processing (failure; record deletion message does not contain properties.metadata_id)')  # noqa
 
-    MONITOR_MESSAGES = {}
+    assert gb_client.conn.is_connected
+
+    _subscribe_gb_client(gb_client)
+
+    time.sleep(1)
+
+    assert gb_client.conn.subscribed_flag
 
     wnm = 'urn--wmo--md--io-wis2dev-11-test--data.core.weather.prediction.forecast.shortrange.probabilistic.global.json'
-    wcmp2_id = _get_wcmp2_id_from_filename(wnm)
 
     _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion', metadata_id=False)  # noqa
     time.sleep(5)
 
-    assert 'message' in MONITOR_MESSAGES[wcmp2_id]
+    assert 'message' in MONITOR_MESSAGES['no-metadata_id']
 
 
 def test_wcmp2_metadata_archive_zipfile_publication(gb_client):
