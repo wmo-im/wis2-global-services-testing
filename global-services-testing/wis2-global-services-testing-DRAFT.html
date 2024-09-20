@@ -3693,6 +3693,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <li>
 <p>metrics can be backed up, but as they are also rebuilt after a service restart, no backup is necessary here</p>
 </li>
+<li>
+<p>the GDC broker shall be made accessible to to the WIS2 test Global Broker, with access via the credentials <code>everyone-dev/everyone-dev</code> for the purpose of testing</p>
+</li>
 </ul>
 </div>
 </div>
@@ -3751,24 +3754,18 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <li>
 <p>all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing (raw GitHub) (example: <a href="https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue/metadata/valid/urn&#8212;&#8203;wmo&#8212;&#8203;md&#8212;&#8203;io-wis2dev-11-test&#8212;&#8203;climate.climate-daily.json" class="bare">https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue/metadata/valid/urn&#8212;&#8203;wmo&#8212;&#8203;md&#8212;&#8203;io-wis2dev-11-test&#8212;&#8203;climate.climate-daily.json</a>)</p>
 </li>
+</ul>
+</div>
+</li>
 <li>
-<p>configuring environment variables in <code>tests/default.env</code> as follows:</p>
+<p>updating environment variables in <code>tests/default.env</code> as follows:</p>
 <div class="ulist">
 <ul>
-<li>
-<p><code>GB</code>: the Global Broker to subscribe to for GDC testing</p>
-</li>
-<li>
-<p><code>TRIGGER_BROKER</code>: the Trigger Broker (in RFC1738 format) to publish WNM configurations to a WIS2 Node</p>
-</li>
 <li>
 <p><code>GDC_API</code>: URL to GDC API (including collection name)</p>
 </li>
 <li>
 <p><code>GDC_CENTRE_ID</code>: the centre identifier of the GDC implementation under test (IUT)</p>
-</li>
-</ul>
-</div>
 </li>
 </ul>
 </div>
@@ -3807,10 +3804,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -3823,10 +3820,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
-<p>Close the connections to the broker after the test.</p>
+<p>Close the connections to the broker after the test</p>
 </li>
 </ol>
 </div>
@@ -3836,7 +3833,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p><code>wmo_wis2_gdc_connected_flag</code> for the centre-id from which the Global Discovery Catalogue connected to should be set to 1 (one).</p>
+<p><code>wmo_wis2_gdc_connected_flag</code> for the centre-id from which the Global Discovery Catalogue connected to should be set to 1 (one)</p>
 </li>
 </ul>
 </div>
@@ -3858,7 +3855,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -3871,17 +3868,17 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On an incoming message:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>find the canonical link object in the <code>links</code> array.</p>
+<p>find the canonical link object in the <code>links</code> array</p>
 </li>
 <li>
-<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value</p>
 </li>
 <li>
 <p>parse the HTTP response:</p>
@@ -3894,13 +3891,13 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>publish the WCMP2 record to the catalogue</p>
 </li>
 <li>
-<p>publish an ETS validation report as a notification message to the GDC MQTT broker.</p>
+<p>publish an ETS validation report as a notification message to the GDC MQTT broker</p>
 </li>
 </ol>
 </div>
 </li>
 <li>
-<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>).</p>
+<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>)</p>
 </li>
 </ol>
 </div>
@@ -3920,10 +3917,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p><code>wmo_wis2_gdc_passed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+<p><code>wmo_wis2_gdc_passed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one)</p>
 </li>
 <li>
-<p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be incremented by 1 (one).</p>
+<p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be incremented by 1 (one)</p>
 </li>
 </ul>
 </div>
@@ -3948,10 +3945,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -3964,24 +3961,24 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On an incoming message:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>find the canonical link object in the <code>links</code> array.</p>
+<p>find the canonical link object in the <code>links</code> array</p>
 </li>
 <li>
-<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value</p>
 </li>
 <li>
 <p>if the response is an HTTP status code of 404:</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
-<p>publish an ETS error report as a notification message to the GDC MQTT broker.</p>
+<p>publish an ETS error report as a notification message to the GDC MQTT broker</p>
 </li>
 </ol>
 </div>
@@ -4001,7 +3998,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one)</p>
 </li>
 </ul>
 </div>
@@ -4026,7 +4023,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication</p>
 </li>
 <li>
 <p>Connect the MQTT client to the Global Broker.</p>
@@ -4042,7 +4039,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On an incoming message:</p>
@@ -4107,10 +4104,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -4123,29 +4120,29 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On an incoming message:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>capture the centre-id from the topic (4th token split on <code>/</code>).</p>
+<p>capture the centre-id from the topic (4th token split on <code>/</code>)</p>
 </li>
 <li>
-<p>find the canonical link object in the <code>links</code> array.</p>
+<p>find the canonical link object in the <code>links</code> array</p>
 </li>
 <li>
-<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value</p>
 </li>
 <li>
 <p>parse the HTTP response:</p>
 </li>
 <li>
-<p>extract the centre-id from WCMP2 record identifier (<code>id</code> property, 3rd token split on <code>:</code>).</p>
+<p>extract the centre-id from WCMP2 record identifier (<code>id</code> property, 3rd token split on <code>:</code>)</p>
 </li>
 <li>
-<p>in the WCMP2 record, if a MQTT link exists (<code>rel=items</code>, <code>channel</code> starts with <code>origin/a/wis2</code>), capture the centre-id from the topic (4th token split on <code>/</code>).</p>
+<p>in the WCMP2 record, if a MQTT link exists (<code>rel=items</code>, <code>channel</code> starts with <code>origin/a/wis2</code>), capture the centre-id from the topic (4th token split on <code>/</code>)</p>
 </li>
 </ol>
 </div>
@@ -4167,7 +4164,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>publish an ETS error report as a notification message to the GDC MQTT broker.</p>
+<p>publish an ETS error report as a notification message to the GDC MQTT broker</p>
 </li>
 </ol>
 </div>
@@ -4177,7 +4174,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one).</p>
+<p><code>wmo_wis2_gdc_failed_total</code> for the centre-id from where the metadata was published from should be incremented by 1 (one)</p>
 </li>
 <li>
 <p>a notification message should arrive from the Global Broker under <code>monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id</code>)</p>
@@ -4199,10 +4196,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -4215,7 +4212,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On an incoming message:</p>
@@ -4238,16 +4235,16 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>validate against the WCMP2 Executable Test Suite (ETS)</p>
 </li>
 <li>
-<p>delete the WCMP2 record from the catalogue using the value from <code>properties.metadata_id</code> captured earlier in the test.</p>
+<p>delete the WCMP2 record from the catalogue using the value from <code>properties.metadata_id</code> captured earlier in the test</p>
 </li>
 <li>
-<p>publish a notification message to the GDC MQTT broker.</p>
+<p>publish a notification message to the GDC MQTT broker</p>
 </li>
 </ol>
 </div>
 </li>
 <li>
-<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>).</p>
+<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>)</p>
 </li>
 </ol>
 </div>
@@ -4267,10 +4264,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p><code>wmo_wis2_gdc_passed_total</code> for the centre-id from where the metadata was published from should be decremented by 1 (one).</p>
+<p><code>wmo_wis2_gdc_passed_total</code> for the centre-id from where the metadata was published from should be decremented by 1 (one)</p>
 </li>
 <li>
-<p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be decremented by 1 (one).</p>
+<p><code>wmo_wis2_gdc_core_total</code> for the centre-id from where the metadata (core data policy) was published from should be decremented by 1 (one)</p>
 </li>
 </ul>
 </div>
@@ -4298,7 +4295,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -4311,20 +4308,20 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On an incoming message:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>find the link object in the <code>links</code> array where <code>rel=deletion</code>.</p>
+<p>find the link object in the <code>links</code> array where <code>rel=deletion</code></p>
 </li>
 <li>
 <p>capture the missing <code>properties.metadata_id</code> value</p>
 </li>
 <li>
-<p>publish a notification message of the error to the GDC MQTT broker.</p>
+<p>publish a notification message of the error to the GDC MQTT broker</p>
 </li>
 </ol>
 </div>
@@ -4350,6 +4347,9 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="paragraph">
 <p>Validate that a GDC API publishes a metadata archive zipfile.</p>
 </div>
+<div class="paragraph">
+<p>Note that this test should only be executed if the GDC IUT has the ability to generate the metadata zipfile during the testing window.</p>
+</div>
 </div>
 <div class="sect5">
 <h6 id="_steps_34"><a class="anchor" href="#_steps_34"></a>Steps</h6>
@@ -4359,50 +4359,22 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>Construct a path to the GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Check that the record includes a <code>links</code> array.</p>
+<p>Check that the record includes a <code>links</code> array</p>
 </li>
 <li>
-<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=archives</code> and <code>type=application/zip</code>).</p>
+<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=archives</code> and <code>type=application/zip</code>)</p>
 </li>
 <li>
-<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value</p>
 </li>
 <li>
-<p>Unzip the content of the HTTP response.</p>
-</li>
-<li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
-</li>
-<li>
-<p>Connect the MQTT client to the Global Discovery Catalogue.</p>
-</li>
-<li>
-<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
-<div class="ulist">
-<ul>
-<li>
-<p><code>origin/a/wis2/centre-id/metadata/#</code> (where <code>centre-id</code> is the centre identifier of the Global Discovery Catalogue).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
-</li>
-<li>
-<p>If the MQTT client is able to successfully subscribe to the topic on the Global Discovery Catalogue, the test passes. If not, the test fails.</p>
-</li>
-<li>
-<p>On receipt of a notification message, issue a HTTP GET requerst on the canonical link (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>)</p>
-</li>
-<li>
-<p>Unzip the content of the HTTP response.</p>
+<p>Unzip the content of the HTTP response</p>
 </li>
 </ol>
 </div>
@@ -4412,7 +4384,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p>the resulting HTTP response should be zip encoded data, which, when unzipped, contains a directory of JSON files of WCMP2 metadata.</p>
+<p>the resulting HTTP response should be zip encoded data, which, when unzipped, contains a directory of JSON files of WCMP2 metadata</p>
 </li>
 </ul>
 </div>
@@ -4425,84 +4397,49 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="paragraph">
 <p>Validate that a GDC initializes from a metadata archive zipfile.</p>
 </div>
+<div class="paragraph">
+<p>Note that this test should only be executed if the GDC IUT has the ability to generate the metadata zipfile during the testing window.</p>
+</div>
 </div>
 <div class="sect5">
 <h6 id="_steps_35"><a class="anchor" href="#_steps_35"></a>Steps</h6>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Construct a path to an existing, functional GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
+<p>Construct a path to an existing, functional GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>)</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Check that the record includes a <code>links</code> array.</p>
+<p>Check that the record includes a <code>links</code> array</p>
 </li>
 <li>
-<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=archives</code> and <code>type=application/zip</code>).</p>
+<p>In the <code>links</code> array, check that a metadata archive zipfile link is available (where a link object&#8217;s <code>rel=archives</code> and <code>type=application/zip</code>)</p>
 </li>
 <li>
-<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value</p>
 </li>
 <li>
-<p>Unzip the content of the HTTP response.</p>
+<p>Unzip the content of the HTTP response</p>
 </li>
 <li>
 <p>Foreach WCMP2 (JSON) record in the zipfile, validate and ingest into the new GDC</p>
 </li>
 <li>
-<p>Construct a path to a Global Replay service endpoint (<code>https://HOST/collections/wis2-notification-messages?q=%22cache/a/wis2/*/metadata%22&amp;datetime=START_TIME/..</code>).</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p><code>START_TIME</code> is a timestamp that is from up to 24 hours ago, in RFC3339 format.</p>
-</li>
-</ol>
-</div>
+<p>Construct a path to the GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata/items</code>)</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Foreach item in the <code>features</code> array:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Check that the item includes a <code>links</code> array.</p>
-</li>
-<li>
-<p>In the <code>links</code> array, match the link where <code>rel=canonical</code>.</p>
-</li>
-<li>
-<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
-</li>
-<li>
-<p>Parse the HTTP response.</p>
-</li>
-<li>
-<p>Validate and ingest into the new GDC</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Construct a path to the new GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata/items</code>).</p>
-</li>
-<li>
-<p>Issue a HTTP GET request on the path.</p>
-</li>
-<li>
-<p>Parse the HTTP response.</p>
-</li>
-<li>
-<p>Count the number of items in the <code>numberMatched</code> property.</p>
+<p>Count the number of items in the <code>numberMatched</code> property</p>
 </li>
 </ol>
 </div>
@@ -4512,7 +4449,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p>the number of the features in the GDC should match the number of records in the metadata archive zipfile and the number of records from the Global Replay query.</p>
+<p>the number of the features in the GDC should match the number of records in the metadata archive zipfile.</p>
 </li>
 </ul>
 </div>
@@ -4534,82 +4471,82 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <p>Construct a path to the GDC endpoint (<code>https://HOST/collections/wis2-discovery-metadata</code>).</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Check that the record includes a <code>links</code> array.</p>
+<p>Check that the record includes a <code>links</code> array</p>
 </li>
 <li>
-<p>In the <code>links</code> array, check that an items link is available (where a link object&#8217;s <code>rel=items</code> and <code>type=application/geo+json</code>).</p>
+<p>In the <code>links</code> array, check that an items link is available (where a link object&#8217;s <code>rel=items</code> and <code>type=application/geo+json</code>)</p>
 </li>
 <li>
-<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value.</p>
+<p>In the matching link, issue a HTTP GET request on the associated <code>href</code> value</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 6.</p>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 6</p>
 </li>
 <li>
-<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 6.</p>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 6</p>
 </li>
 <li>
-<p>Construct a path to the GDC endpoint with a bounding box query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?bbox=-142,42,-53,84</code>).</p>
+<p>Construct a path to the GDC endpoint with a bounding box query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?bbox=-142,42,-53,84</code>)</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 2.</p>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 2</p>
 </li>
 <li>
-<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 2.</p>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 2</p>
 </li>
 <li>
-<p>Ensure that a <code>features</code> array exists.</p>
+<p>Ensure that a <code>features</code> array exists</p>
 </li>
 <li>
-<p>Construct a path to the GDC endpoint with a temporal query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?datetime=2000-11-11T12:42:23Z/..</code>).</p>
+<p>Construct a path to the GDC endpoint with a temporal query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?datetime=2000-11-11T12:42:23Z/..</code>)</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 6.</p>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 6</p>
 </li>
 <li>
-<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 6.</p>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 6</p>
 </li>
 <li>
-<p>Ensure that a <code>features</code> array exists.</p>
+<p>Ensure that a <code>features</code> array exists</p>
 </li>
 <li>
-<p>Construct a path to the GDC endpoint with a full text query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?q=observations</code>).</p>
+<p>Construct a path to the GDC endpoint with a full text query parameter (<code>https://HOST/collections/wis2-discovery-metadata/items?q=observations</code>)</p>
 </li>
 <li>
-<p>Issue a HTTP GET request on the path.</p>
+<p>Issue a HTTP GET request on the path</p>
 </li>
 <li>
-<p>Parse the HTTP response.</p>
+<p>Parse the HTTP response</p>
 </li>
 <li>
-<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 4.</p>
+<p>Ensure that a <code>numberMatched</code> property exists with an integer value of 4</p>
 </li>
 <li>
-<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 4.</p>
+<p>Ensure that a <code>numberReturned</code> property exists with an integer value of 4</p>
 </li>
 <li>
-<p>Ensure that a <code>features</code> array exists.</p>
+<p>Ensure that a <code>features</code> array exists</p>
 </li>
 </ol>
 </div>
@@ -4631,10 +4568,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication</p>
 </li>
 <li>
-<p>Connect the MQTT client to the Global Broker.</p>
+<p>Connect the MQTT client to the Global Broker</p>
 </li>
 <li>
 <p>Once the connection is successful, attempt to subscribe to the following topics:</p>
@@ -4647,17 +4584,17 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.</p>
+<p>Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails</p>
 </li>
 <li>
 <p>On all incoming messages:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>find the canonical link object in the <code>links</code> array.</p>
+<p>find the canonical link object in the <code>links</code> array</p>
 </li>
 <li>
-<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value.</p>
+<p>from the matching link, issue a HTTP GET request against the matching <code>href</code> value</p>
 </li>
 <li>
 <p>parse the HTTP response:</p>
@@ -4676,7 +4613,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 </div>
 </li>
 <li>
-<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>).</p>
+<p>using the WCMP2 identifier (i.e. <code>$WCMP2_ID</code>), construct a path to the record on the GDC (<code>https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID</code>)</p>
 </li>
 </ol>
 </div>
@@ -4689,7 +4626,7 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="ulist">
 <ul>
 <li>
-<p>all WCMP2 records should be processed and published in 5 minutes or less.</p>
+<p>all WCMP2 records should be processed and published in 5 minutes or less</p>
 </li>
 </ul>
 </div>
@@ -4699,13 +4636,23 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="sect3">
 <h4 id="_executing_the_test_environment"><a class="anchor" href="#_executing_the_test_environment"></a>7.3.6. Executing the test environment</h4>
 <div class="paragraph">
-<p>To execute GDC tests:</p>
+<p>To execute the core GDC tests:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash"># ensure that the Python virtual environment is activated
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To execute the additional GDC tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"># ensure that the Python virtual environment is activated which require interactive steps from the GDC IUT.
+cd tests
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT</code></pre>
 </div>
 </div>
 </div>
@@ -6328,7 +6275,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-09-20 00:57:17 UTC
+Last updated 2024-09-20 03:16:31 UTC
 </div>
 </div>
 </body>
