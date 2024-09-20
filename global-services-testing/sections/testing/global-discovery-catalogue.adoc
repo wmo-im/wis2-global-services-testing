@@ -6,6 +6,7 @@
 
 - backup metadata repository
 - metrics can be backed up, but as they are also rebuilt after a service restart, no backup is necessary here
+- the GDC broker shall be made accessible to to the WIS2 test Global Broker, with access via the credentials `everyone-dev/everyone-dev` for the purpose of testing
 
 ==== Entering the test environment
 
@@ -27,11 +28,9 @@ The GDC test setup consists of the following:
 * all WCMP2 records stored on an HTTP server (GitHub)
 ** documents available at the following location: https://github.com/wmo-im/wis2-global-services-testing/tree/main/tests/global_discovery_catalogue/metadata
 ** all WNM documents updated to point to the correct HTTP server for proper HTTP dereferencing (raw GitHub) (example: https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/gdc-tests-update/tests/global_discovery_catalogue/metadata/valid/urn--wmo--md--io-wis2dev-11-test--climate.climate-daily.json)
-** configuring environment variables in `tests/default.env` as follows:
-*** `GB`: the Global Broker to subscribe to for GDC testing
-*** `TRIGGER_BROKER`: the Trigger Broker (in RFC1738 format) to publish WNM configurations to a WIS2 Node
-*** `GDC_API`: URL to GDC API (including collection name)
-*** `GDC_CENTRE_ID`: the centre identifier of the GDC implementation under test (IUT)
+* updating environment variables in `tests/default.env` as follows:
+** `GDC_API`: URL to GDC API (including collection name)
+** `GDC_CENTRE_ID`: the centre identifier of the GDC implementation under test (IUT)
 
 Note that you can store secret environments in `tests/secrets.env` and refer to them in `tests/default.env` accordingly.
 
@@ -51,16 +50,16 @@ A Global Discovery Catalogue must connect to a Global Broker using the MQTT prot
 
 ====== Steps
 
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
-. Close the connections to the broker after the test.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
+. Close the connections to the broker after the test
 
 On successful completion, the following metrics should be modified:
 
-* `wmo_wis2_gdc_connected_flag` for the centre-id from which the Global Discovery Catalogue connected to should be set to 1 (one).
+* `wmo_wis2_gdc_connected_flag` for the centre-id from which the Global Discovery Catalogue connected to should be set to 1 (one)
 
 ===== Notification and metadata processing (success)
 
@@ -71,25 +70,25 @@ The Global Discovery Catalogue should be able to process valid WCMP2 metadata re
 ====== Steps
 
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On an incoming message:
-.. find the canonical link object in the `links` array.
-.. from the matching link, issue a HTTP GET request against the matching `href` value.
+.. find the canonical link object in the `links` array
+.. from the matching link, issue a HTTP GET request against the matching `href` value
 .. parse the HTTP response:
 ... validate against the WCMP2 Executable Test Suite (ETS)
 ... publish the WCMP2 record to the catalogue
-... publish an ETS validation report as a notification message to the GDC MQTT broker.
-.. using the WCMP2 identifier (i.e. `$WCMP2_ID`), construct a path to the record on the GDC (`\https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID`).
+... publish an ETS validation report as a notification message to the GDC MQTT broker
+.. using the WCMP2 identifier (i.e. `$WCMP2_ID`), construct a path to the record on the GDC (`\https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID`)
 
 On successful completion:
 
 * the resulting WCMP2 record should be available on the GDC API and contain an MQTT link / channel (using `cache/a/wis2`) foreach Global Broker
 * the following metrics should be modified:
-** `wmo_wis2_gdc_passed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one).
-** `wmo_wis2_gdc_core_total` for the centre-id from where the metadata (core data policy) was published from should be incremented by 1 (one).
+** `wmo_wis2_gdc_passed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one)
+** `wmo_wis2_gdc_core_total` for the centre-id from where the metadata (core data policy) was published from should be incremented by 1 (one)
 * a notification message should arrive from the Global Broker under `monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id`)
 
 ===== Notification and metadata processing (failure; record not found)
@@ -100,21 +99,21 @@ The Global Discovery Catalogue should be able to process failing (record not fou
 
 ====== Steps
 
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On an incoming message:
-.. find the canonical link object in the `links` array.
-.. from the matching link, issue a HTTP GET request against the matching `href` value.
+.. find the canonical link object in the `links` array
+.. from the matching link, issue a HTTP GET request against the matching `href` value
 .. if the response is an HTTP status code of 404:
-... publish an ETS error report as a notification message to the GDC MQTT broker.
+... publish an ETS error report as a notification message to the GDC MQTT broker
 
 On successful completion:
 
 * the following metrics should be modified:
-** `wmo_wis2_gdc_failed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one).
+** `wmo_wis2_gdc_failed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one)
 * a notification message should arrive from the Global Broker under `monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id`)
 
 ===== Notification and metadata processing (failure; malformed JSON or invalid WCMP2)
@@ -125,11 +124,11 @@ The Global Discovery Catalogue should be able to process failing (malformed JSON
 
 ====== Steps
 
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication
 . Connect the MQTT client to the Global Broker.
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On an incoming message:
 .. find the canonical link object in the `links` array.
 .. from the matching link, issue a HTTP GET request against the matching `href` value.
@@ -151,27 +150,27 @@ A Global Discovery Catalogue should detect a mismatch between an incoming messag
 
 ====== Steps
 
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On an incoming message:
-.. capture the centre-id from the topic (4th token split on `/`).
-.. find the canonical link object in the `links` array.
-.. from the matching link, issue a HTTP GET request against the matching `href` value.
+.. capture the centre-id from the topic (4th token split on `/`)
+.. find the canonical link object in the `links` array
+.. from the matching link, issue a HTTP GET request against the matching `href` value
 .. parse the HTTP response:
-.. extract the centre-id from WCMP2 record identifier (`id` property, 3rd token split on `:`).
-.. in the WCMP2 record, if a MQTT link exists (`rel=items`, `channel` starts with `origin/a/wis2`), capture the centre-id from the topic (4th token split on `/`).
+.. extract the centre-id from WCMP2 record identifier (`id` property, 3rd token split on `:`)
+.. in the WCMP2 record, if a MQTT link exists (`rel=items`, `channel` starts with `origin/a/wis2`), capture the centre-id from the topic (4th token split on `/`)
 . compare the following values to verify that they are identical:
 .. centre-id extracted from topic
 .. centre-id extracted from WCMP2 identifier
 .. centre-id extracted from MQTT link in WCMP2 record
-. publish an ETS error report as a notification message to the GDC MQTT broker.
+. publish an ETS error report as a notification message to the GDC MQTT broker
 
 On successful completion, the following metrics should be modified:
 
-* `wmo_wis2_gdc_failed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one).
+* `wmo_wis2_gdc_failed_total` for the centre-id from where the metadata was published from should be incremented by 1 (one)
 * a notification message should arrive from the Global Broker under `monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id`)
 
 ===== Notification and metadata processing (record deletion)
@@ -182,27 +181,27 @@ The Global Discovery Catalogue should be able to process valid WCMP2 metadata re
 
 ====== Steps
 
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On an incoming message:
 .. find the link object in the `links` array where `rel=deletion`.
 .. capture the `properties.metadata_id` value
 .. from the matching link, issue a HTTP GET request against the matching `href` value.
 .. parse the HTTP response:
 ... validate against the WCMP2 Executable Test Suite (ETS)
-... delete the WCMP2 record from the catalogue using the value from `properties.metadata_id` captured earlier in the test.
-... publish a notification message to the GDC MQTT broker.
-.. using the WCMP2 identifier (i.e. `$WCMP2_ID`), construct a path to the record on the GDC (`\https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID`).
+... delete the WCMP2 record from the catalogue using the value from `properties.metadata_id` captured earlier in the test
+... publish a notification message to the GDC MQTT broker
+.. using the WCMP2 identifier (i.e. `$WCMP2_ID`), construct a path to the record on the GDC (`\https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID`)
 
 On successful completion:
 
 * the WCMP2 record should be removed from the GDC API
 * the following metrics should be modified:
-** `wmo_wis2_gdc_passed_total` for the centre-id from where the metadata was published from should be decremented by 1 (one).
-** `wmo_wis2_gdc_core_total` for the centre-id from where the metadata (core data policy) was published from should be decremented by 1 (one).
+** `wmo_wis2_gdc_passed_total` for the centre-id from where the metadata was published from should be decremented by 1 (one)
+** `wmo_wis2_gdc_core_total` for the centre-id from where the metadata (core data policy) was published from should be decremented by 1 (one)
 * a notification message should arrive from the Global Broker under `monitor/a/wis2/CENTRE_ID_global-discovery-catalogue/centre-id`)
 
 ===== Notification and metadata processing (failure; record deletion message does not contain `properties.metadata_id`)
@@ -214,14 +213,14 @@ The Global Discovery Catalogue should be able to detect a WNM error when `proper
 ====== Steps
 
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On an incoming message:
-.. find the link object in the `links` array where `rel=deletion`.
+.. find the link object in the `links` array where `rel=deletion`
 .. capture the missing `properties.metadata_id` value
-.. publish a notification message of the error to the GDC MQTT broker.
+.. publish a notification message of the error to the GDC MQTT broker
 
 On successful completion:
 
@@ -233,27 +232,21 @@ On successful completion:
 
 Validate that a GDC API publishes a metadata archive zipfile.
 
+Note that this test should only be executed if the GDC IUT has the ability to generate the metadata zipfile during the testing window.
+
 ====== Steps
 
 . Construct a path to the GDC endpoint (`\https://HOST/collections/wis2-discovery-metadata`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Check that the record includes a `links` array.
-. In the `links` array, check that a metadata archive zipfile link is available (where a link object's `rel=archives` and `type=application/zip`).
-. In the matching link, issue a HTTP GET request on the associated `href` value.
-. Unzip the content of the HTTP response.
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Discovery Catalogue.
-. Once the connection is successful, attempt to subscribe to the following topics:
-   - ``++origin/a/wis2/centre-id/metadata/#++`` (where `centre-id` is the centre identifier of the Global Discovery Catalogue).
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
-. If the MQTT client is able to successfully subscribe to the topic on the Global Discovery Catalogue, the test passes. If not, the test fails.
-. On receipt of a notification message, issue a HTTP GET requerst on the canonical link (a link object's `href` property where `rel=canonical`)
-. Unzip the content of the HTTP response.
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Check that the record includes a `links` array
+. In the `links` array, check that a metadata archive zipfile link is available (where a link object's `rel=archives` and `type=application/zip`)
+. In the matching link, issue a HTTP GET request on the associated `href` value
+. Unzip the content of the HTTP response
 
 On successful completion:
 
-* the resulting HTTP response should be zip encoded data, which, when unzipped, contains a directory of JSON files of WCMP2 metadata.
+* the resulting HTTP response should be zip encoded data, which, when unzipped, contains a directory of JSON files of WCMP2 metadata
 
 ===== WCMP2 cold start initialization from metadata archive zipfile
 
@@ -261,36 +254,26 @@ On successful completion:
 
 Validate that a GDC initializes from a metadata archive zipfile.
 
+Note that this test should only be executed if the GDC IUT has the ability to generate the metadata zipfile during the testing window.
+
 ====== Steps
 
-. Construct a path to an existing, functional GDC endpoint (`\https://HOST/collections/wis2-discovery-metadata`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Check that the record includes a `links` array.
-. In the `links` array, check that a metadata archive zipfile link is available (where a link object's `rel=archives` and `type=application/zip`).
-. In the matching link, issue a HTTP GET request on the associated `href` value.
-. Unzip the content of the HTTP response.
+. Construct a path to an existing, functional GDC endpoint (`\https://HOST/collections/wis2-discovery-metadata`)
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Check that the record includes a `links` array
+. In the `links` array, check that a metadata archive zipfile link is available (where a link object's `rel=archives` and `type=application/zip`)
+. In the matching link, issue a HTTP GET request on the associated `href` value
+. Unzip the content of the HTTP response
 . Foreach WCMP2 (JSON) record in the zipfile, validate and ingest into the new GDC
-
-. Construct a path to a Global Replay service endpoint (`\https://HOST/collections/wis2-notification-messages?q=%22cache/a/wis2/*/metadata%22&datetime=START_TIME/..`).
-.. `START_TIME` is a timestamp that is from up to 24 hours ago, in RFC3339 format.
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Foreach item in the `features` array:
-.. Check that the item includes a `links` array.
-.. In the `links` array, match the link where `rel=canonical`.
-.. In the matching link, issue a HTTP GET request on the associated `href` value.
-.. Parse the HTTP response.
-.. Validate and ingest into the new GDC
-. Construct a path to the new GDC endpoint (`\https://HOST/collections/wis2-discovery-metadata/items`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Count the number of items in the `numberMatched` property.
+. Construct a path to the GDC endpoint (`\https://HOST/collections/wis2-discovery-metadata/items`)
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Count the number of items in the `numberMatched` property
 
 On successful completion:
 
-* the number of the features in the GDC should match the number of records in the metadata archive zipfile and the number of records from the Global Replay query.
-
+* the number of the features in the GDC should match the number of records in the metadata archive zipfile.
 
 ===== API functionality
 
@@ -301,32 +284,32 @@ Validate that a GDC API performs as expected based on the OGC API - Records stan
 ====== Steps
 
 . Construct a path to the GDC endpoint (`\https://HOST/collections/wis2-discovery-metadata`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Check that the record includes a `links` array.
-. In the `links` array, check that an items link is available (where a link object's `rel=items` and `type=application/geo+json`).
-. In the matching link, issue a HTTP GET request on the associated `href` value.
-. Parse the HTTP response.
-. Ensure that a `numberMatched` property exists with an integer value of 6.
-. Ensure that a `numberReturned` property exists with an integer value of 6.
-. Construct a path to the GDC endpoint with a bounding box query parameter (`\https://HOST/collections/wis2-discovery-metadata/items?bbox=-142,42,-53,84`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Ensure that a `numberMatched` property exists with an integer value of 2.
-. Ensure that a `numberReturned` property exists with an integer value of 2.
-. Ensure that a `features` array exists.
-. Construct a path to the GDC endpoint with a temporal query parameter (`\https://HOST/collections/wis2-discovery-metadata/items?datetime=2000-11-11T12:42:23Z/..`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Ensure that a `numberMatched` property exists with an integer value of 6.
-. Ensure that a `numberReturned` property exists with an integer value of 6.
-. Ensure that a `features` array exists.
-. Construct a path to the GDC endpoint with a full text query parameter (`\https://HOST/collections/wis2-discovery-metadata/items?q=observations`).
-. Issue a HTTP GET request on the path.
-. Parse the HTTP response.
-. Ensure that a `numberMatched` property exists with an integer value of 4.
-. Ensure that a `numberReturned` property exists with an integer value of 4.
-. Ensure that a `features` array exists.
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Check that the record includes a `links` array
+. In the `links` array, check that an items link is available (where a link object's `rel=items` and `type=application/geo+json`)
+. In the matching link, issue a HTTP GET request on the associated `href` value
+. Parse the HTTP response
+. Ensure that a `numberMatched` property exists with an integer value of 6
+. Ensure that a `numberReturned` property exists with an integer value of 6
+. Construct a path to the GDC endpoint with a bounding box query parameter (`\https://HOST/collections/wis2-discovery-metadata/items?bbox=-142,42,-53,84`)
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Ensure that a `numberMatched` property exists with an integer value of 2
+. Ensure that a `numberReturned` property exists with an integer value of 2
+. Ensure that a `features` array exists
+. Construct a path to the GDC endpoint with a temporal query parameter (`\https://HOST/collections/wis2-discovery-metadata/items?datetime=2000-11-11T12:42:23Z/..`)
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Ensure that a `numberMatched` property exists with an integer value of 6
+. Ensure that a `numberReturned` property exists with an integer value of 6
+. Ensure that a `features` array exists
+. Construct a path to the GDC endpoint with a full text query parameter (`\https://HOST/collections/wis2-discovery-metadata/items?q=observations`)
+. Issue a HTTP GET request on the path
+. Parse the HTTP response
+. Ensure that a `numberMatched` property exists with an integer value of 4
+. Ensure that a `numberReturned` property exists with an integer value of 4
+. Ensure that a `features` array exists
 
 ==== Performance tests
 
@@ -338,36 +321,44 @@ Validate that a GDC is able to process WCMP2 metadata in a timely manner.
 
 ====== Steps
 
-. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
-. Connect the MQTT client to the Global Broker.
+. Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication
+. Connect the MQTT client to the Global Broker
 . Once the connection is successful, attempt to subscribe to the following topics:
    - ``++cache/a/wis2/+/metadata/#++``
-. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails.
+. Check if the subscription is successful. If the subscription is successful, proceed. If the subscription is not successful, the test fails
 . On all incoming messages:
-.. find the canonical link object in the `links` array.
-.. from the matching link, issue a HTTP GET request against the matching `href` value.
+.. find the canonical link object in the `links` array
+.. from the matching link, issue a HTTP GET request against the matching `href` value
 .. parse the HTTP response:
 ... validate against the WCMP2 Executable Test Suite (ETS)
 ... publish the WCMP2 record to the catalogue
 ... publish an ETS validation report as a notification message to the GDC MQTT broker.
-.. using the WCMP2 identifier (i.e. `$WCMP2_ID`), construct a path to the record on the GDC (`\https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID`).
+.. using the WCMP2 identifier (i.e. `$WCMP2_ID`), construct a path to the record on the GDC (`\https://HOST/collections/wis2-discovery-metadata/$WCMP2_ID`)
 
 On successful completion:
 
-* all WCMP2 records should be processed and published in 5 minutes or less.
+* all WCMP2 records should be processed and published in 5 minutes or less
 
 
 ==== Executing the test environment
 
-To execute GDC tests:
+To execute the core GDC tests:
 
 [source,bash]
 ----
 # ensure that the Python virtual environment is activated
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py  
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
 ----
 
+To execute the additional GDC tests:
+
+[source,bash]
+----
+# ensure that the Python virtual environment is activated which require interactive steps from the GDC IUT.
+cd tests
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
+----
 
 ==== Exiting the test environment
 
