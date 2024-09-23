@@ -17,20 +17,9 @@ This PyTest script implements the functional tests for the Global Broker.  **Cur
 4. TEST_BROKER_TLS: "8883" TLS/SSL Connection
 5. TEST_BROKER_WS: "443" Websockets Connection
 6. TEST_BROKER_TEST: Functional Tests Connections
+7. TEST_PACE: Extends the delay between tests.
+8. MESSAGE_PACE: Extends the delay between MQTT client events like subscribing and publishing.
 
-The functional tests endpoint is separate providing the opportunity to select a functional URL in the event that SSL/TLS is not available.
-
-### Script Configurables
-
-Pacing the rate of testing can alter the outcome depending on the performance of the Broker Under Test.
-
-**message_pace** extends the delay between MQTT client events like subscribing and publishing.
-**test_pace** extends the delay between tests.
-
-```bash
-test_pace = 0.5
-message_pace = 0.5
-```
 ### Test Roster
 
 All of the specified Global Broker tests are performed, however there are more tests in the PyTest script than outlined in the [Global Broker Testing Document.](https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/sections/testing/global-broker.adoc) 
@@ -107,8 +96,6 @@ Publishing messages to Invalid Topics using the Scenario Broker.  The script cyc
 
 - origin/a/wis2/io-wis2dev-14-test/data
 - origin/a/wis2/io-wis2dev-14-test/data/core
-- origin/a/wis2/io-wis2dev-14-test/metadata/core
-- origin/a/wis2/io-wis2dev-14-test/metadata/core/weather
 - origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations
 - origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations/experimental
 - origin/a/wis3/io-wis2dev-14-test/data/core/weather/surface-based-observations/synop
