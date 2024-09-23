@@ -578,7 +578,7 @@ def test_wnm_deduplication_alt_1(_setup):
                     "links": [
                         {
                             "rel": "canonical",
-                            "href": "http://invalid.example.com/data"
+                            "href": "http://invalid.whatever.com/data"
                         }
                     ]
                 }
@@ -835,8 +835,6 @@ def test_concurrent_client_downloads(_setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "cache_large_files": True,
-                "cache_size_max": 1000 * 1000 * 205,  # 205MB
                 "size_min": 1000 * 1000 * 200,  # 200MB
                 "size_max": 1000 * 1000 * 201,  # 201MB
                 # "size_min": 1000 * 200,  # 200KB
