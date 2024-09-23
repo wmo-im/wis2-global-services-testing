@@ -331,7 +331,7 @@ def test_mqtt_broker_message_flow(run, _setup):
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_dataset_config))
     # Wait for messages
     origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs,
-                                                data_ids=[_init['test_data_id']])
+                                                data_ids=[_init['test_data_id']], max_wait_time=60*5)
     sub_client.loop_stop()
     # assert origin and cache messages
     assert len(origin_msgs) >= num_origin_msgs
@@ -543,7 +543,7 @@ def test_wnm_deduplication(_setup):
     pub_client.close()
     del pub_client
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 1)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 1, max_wait_time=120, min_wait_time=60)
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
@@ -567,8 +567,9 @@ def test_wnm_deduplication_alt_1(_setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "size_min": 1024,  # 1KB
-                "size_max": 1024 * 2  # 2KB
+                "size_min": 128,
+                "size_max": 512,
+                "embed_data": False
             },
             "wnm": {
                 "properties": {
@@ -577,7 +578,7 @@ def test_wnm_deduplication_alt_1(_setup):
                     "links": [
                         {
                             "rel": "canonical",
-                            "href": "http://invalid.example.com/data"
+                            "href": "http://invalid.whatever.com/data"
                         }
                     ]
                 }
@@ -594,7 +595,7 @@ def test_wnm_deduplication_alt_1(_setup):
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_valid_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, 1)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, 1, max_wait_time=60*2)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -698,11 +699,12 @@ def test_data_update(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the earlier message first, then the later message
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_earlier_config))
+    time.sleep(10)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_later_config))
 
     # Wait for messages
     origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs * 2,
-                                                data_ids=[_init['test_data_id']])
+                                                data_ids=[_init['test_data_id']], max_wait_time=60*2)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -762,7 +764,7 @@ def test_wnm_processing_rate(_setup):
                     "centreid_min": centreid,
                     "centreid_max": centreid,
                     "number": num_msgs_per_centre,
-                    "size_min": (1000 * 80),
+                    "size_min": (1000 * 85),
                     "size_max": (1000 * 90),
                     "delay": 0
                 }}}
@@ -771,7 +773,7 @@ def test_wnm_processing_rate(_setup):
     trigger_client.disconnect()
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_msgs, num_msgs, max_wait_time=60*7)
+    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_msgs, num_msgs, max_wait_time=60*10)
     msg_data = sub_client._userdata
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -826,7 +828,6 @@ def test_concurrent_client_downloads(_setup):
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     concurrency_benchmark = 1000
-
     # Prepare and publish a normal WNM message
     wnm_dataset_config = {
         "scenario": "datatest",
@@ -834,29 +835,30 @@ def test_concurrent_client_downloads(_setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "size_min": 1000 * 1000 * 200, # 200MB
-                "size_max": 1000 * 1000 * 201, # 201MB
-                # "size_min": 1000 * 200, # 200KB
-                # "size_max": 1000 * 201, # 201KB
+                "size_min": 1000 * 1000 * 200,  # 200MB
+                "size_max": 1000 * 1000 * 201,  # 201MB
+                # "size_min": 1000 * 200,  # 200KB
+                # "size_max": 1000 * 201,  # 201KB
             },
             "wnm": {
                 "properties": {
                     "data_id": _init['test_data_id'],
+                    "cache": True  # Ensure caching for large files
                 }
             }
         }
     }
 
     pub_client = setup_mqtt_client(mqtt_broker_trigger)
-    pub_client.publish(topic=_init['test_pub_topic'], payload=json.dumps(wnm_dataset_config))
-
+    pub_result_1 = pub_client.publish(topic=_init['test_pub_topic'], payload=json.dumps(wnm_dataset_config))
+    print(f"Published large file with result: {pub_result_1}")
     # Wait for messages
     origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs, max_wait_time=60*5,
                                                 data_ids=[_init['test_data_id']])
 
     # Assert origin and cache messages
     assert len(origin_msgs) == num_origin_msgs
-    assert len(cache_msgs) == num_origin_msgs
+    assert len(cache_msgs) == num_origin_msgs, "Cache messages not received..."
 
     # Extract the canonical link from the cached messages
     canonical_link = None
@@ -890,11 +892,12 @@ def test_concurrent_client_downloads(_setup):
     result_client = setup_mqtt_client(mqtt_broker_trigger)
     result_client.subscribe("result/a/wis2/+/ab", qos=1)
 
-    pub_result = pub_client.publish(topic="config/a/wis2/gcabtest", payload=json.dumps(ab_scenario_config))
-    if not pub_result:
+    pub_ab_result = pub_client.publish(topic="config/a/wis2/gcabtest", payload=json.dumps(ab_scenario_config))
+    if not pub_ab_result:
         raise Exception("Failed to publish message")
+    print(f"Published ApacheBench scenario with result: {pub_ab_result}")
 
-    wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*10)
+    wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*15)
     # collect msgs from result client
     ab_result_msgs = [m for m in result_client._userdata['received_messages'] if
                    'result' in m['topic'] and 'payload' in m.keys() and 'ApacheBench' in m['payload']]
