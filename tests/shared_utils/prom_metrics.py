@@ -9,7 +9,7 @@ def fetch_prometheus_metrics(metric_name, prometheus_baseurl=None, username=None
     from prometheus_api_client import PrometheusConnect
 
     # Ensure the base URL has a scheme
-    if not prometheus_baseurl.startswith("http://") and not prometheus_baseurl.startswith("https://"):
+    if not prometheus_baseurl.startswith(("http://", "https://")):
         prometheus_baseurl = "https://" + prometheus_baseurl
 
     # Create headers for authentication if username and password are provided
@@ -21,16 +21,17 @@ def fetch_prometheus_metrics(metric_name, prometheus_baseurl=None, username=None
     prom = PrometheusConnect(url=prometheus_baseurl, headers=headers, disable_ssl=True)
 
     # Construct the query
-    query = f'{metric_name}'
+
+    query = metric_name
+
     if report_by or centre_id:
-        query += '{'
+        labels = []
         if report_by:
-            query += f'report_by="{report_by}"'
-        if report_by and centre_id:
-            query += ','
+            labels.append(f'report_by="{report_by}"')
         if centre_id:
-            query += f'centre_id="{centre_id}"'
-        query += '}'
+            labels.append(f'centre_id="{centre_id}"')
+
+        query = f"{metric_name}{{{','.join(labels)}}}"
 
     # Fetch the metrics
     result = prom.custom_query(query=query)
