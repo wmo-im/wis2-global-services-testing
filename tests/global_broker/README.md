@@ -97,7 +97,6 @@ Publishing messages to Invalid Topics using the Scenario Broker.  The script cyc
 - origin/a/wis2/io-wis2dev-14-test/data
 - origin/a/wis2/io-wis2dev-14-test/data/core
 - origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations
-- origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations/experimental
 - origin/a/wis3/io-wis2dev-14-test/data/core/weather/surface-based-observations/synop
 - origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-sed-observations/synop
 - origin/a/wis3/io-wis2dev-14-test/data/core/weather/surface-based-observations/synop
