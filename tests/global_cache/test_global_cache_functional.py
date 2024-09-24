@@ -166,8 +166,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     return client
 
 
-def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_result_msgs=0, data_ids=[], interval=0.5, max_wait_time=10,
-                      min_wait_time=0):
+def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_result_msgs=0, data_ids=[], interval=0.5, max_wait_time=10, min_wait_time=0):
     """
     Waits for the expected number of origin and cache messages.
 
@@ -175,7 +174,7 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
         sub_client (mqtt.Client): The MQTT client subscribed to the topics.
         num_origin_msgs (int): The expected number of origin messages.
         num_cache_msgs (int): The expected number of cache messages.
-        num_result_msgs: The expected number of result messages.
+        num_result_msgs (int): The expected number of result messages.
         data_ids (list): List of data_ids to filter messages.
         interval (float): The interval to wait between checks (in seconds).
         max_wait_time (int): The maximum time to wait for messages (in seconds).
@@ -184,38 +183,38 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     Returns:
         tuple: A tuple containing lists of origin and cache messages, and a string indicating the reason for the break.
     """
-    elapsed_time = 0
-    reason = "completed"
+    start_time = time.time()
 
-    while elapsed_time < max_wait_time:
+    while time.time() - start_time < max_wait_time:
         if data_ids:
-            origin_msgs = [m for m in sub_client._userdata['received_messages'] if
-                           "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
-            cache_msgs = [m for m in sub_client._userdata['received_messages'] if
-                          "cache" in m['topic'] and m['properties']['data_id'] in data_ids]
+            origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
+            cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic'] and m['properties']['data_id'] in data_ids]
+            result_msgs = [m for m in sub_client._userdata['received_messages'] if "result" in m['topic'] and m['properties']['data_id'] in data_ids]
         else:
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
             cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
             result_msgs = [m for m in sub_client._userdata['received_messages'] if "result" in m['topic']]
 
-        if num_cache_msgs != 0 and num_origin_msgs != 0:
-            if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs and elapsed_time >= min_wait_time:
-                print(f"Origin/Cache messages received within {elapsed_time} seconds.")
-                break
-        elif num_result_msgs != 0 and elapsed_time >= min_wait_time:
-            if len(result_msgs) >= num_result_msgs:
-                print(f"{num_result_msgs} Result messages received within {elapsed_time} seconds.")
-                break
+        elapsed_time = time.time() - start_time
+        if elapsed_time >= min_wait_time:
+            if num_cache_msgs != 0 and num_origin_msgs != 0:
+                if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs:
+                    print(f"Origin/Cache messages received within {elapsed_time} seconds.")
+                    break
+            if num_result_msgs != 0:
+                if len(result_msgs) >= num_result_msgs:
+                    print(f"{num_result_msgs} Result messages received within {elapsed_time} seconds.")
+                    break
 
         time.sleep(interval)
-        elapsed_time += interval
 
+    elapsed_time = time.time() - start_time
     if elapsed_time >= max_wait_time:
         print(f"Max wait time of {max_wait_time} seconds reached.")
     elif elapsed_time < min_wait_time:
         print(f"Min wait time of {min_wait_time} seconds reached.")
 
-    return origin_msgs, cache_msgs
+    return origin_msgs, cache_msgs, result_msgs
 
 
 @pytest.fixture
@@ -330,7 +329,7 @@ def test_mqtt_broker_message_flow(run, _setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_dataset_config))
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs,
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs,
                                                 data_ids=[_init['test_data_id']], max_wait_time=60*5)
     sub_client.loop_stop()
     # assert origin and cache messages
@@ -388,7 +387,7 @@ def test_cache_false_directive(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_dataset_config))
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs,
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs,
                                                 data_ids=[_init['test_data_id']])
     assert len(origin_msgs) > 0
     assert len(cache_msgs) > 0
@@ -450,7 +449,7 @@ def test_source_download_failure(_setup):
     # Publish the message
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_dataset_config))
     del pub_client
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, data_ids=[_init['test_data_id']],
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, data_ids=[_init['test_data_id']],
                                                 min_wait_time=5)
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -500,7 +499,7 @@ def test_data_integrity_check_failure(_setup):
     if not pub_result:
         raise Exception("Failed to publish message")
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, data_ids=[_init['test_data_id']],
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, 0, data_ids=[_init['test_data_id']],
                                                 min_wait_time=5)
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -543,7 +542,7 @@ def test_wnm_deduplication(_setup):
     pub_client.close()
     del pub_client
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, 1, max_wait_time=120, min_wait_time=60)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, 1, max_wait_time=120, min_wait_time=60)
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
@@ -562,6 +561,30 @@ def test_wnm_deduplication_alt_1(_setup):
 
     # Prepare WNM with invalid and valid properties
     wnm_invalid_config = {
+        "scenario": "wnmtest",
+        "configuration": {
+            "setup": {
+                "centreid": _init['test_centre_int'],
+                "number": num_origin_msgs,
+                "size_min": 128,
+                "size_max": 256
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": _init['test_data_id'],
+                    "pubtime": test_dt,
+                    "links": [
+                        {
+                            "href": "https://www.example.org/random",
+                            "rel": "canonical"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    wnm_valid_config = {
         "scenario": "datatest",
         "configuration": {
             "setup": {
@@ -574,28 +597,20 @@ def test_wnm_deduplication_alt_1(_setup):
             "wnm": {
                 "properties": {
                     "data_id": _init['test_data_id'],
-                    "pubtime": test_dt,
-                    "links": [
-                        {
-                            "rel": "canonical",
-                            "href": "http://invalid.whatever.com/data"
-                        }
-                    ]
+                    "pubtime": test_dt
                 }
             }
         }
     }
-    # valid config is the exact same, minus the links property
-    wnm_valid_config = deepcopy(wnm_invalid_config)
-    wnm_valid_config['configuration']['wnm']['properties'].pop('links')
 
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the invalid message first, then the valid message
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_invalid_config))
+    time.sleep(5)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_valid_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, 1, max_wait_time=60*2)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_cache_msgs=1, data_ids=[_init['test_data_id']], max_wait_time=60*2)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -643,10 +658,11 @@ def test_wnm_deduplication_alt_2(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the message with later pubtime first, then the earlier pubtime
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_1))
+    time.sleep(2)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_2))
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs, data_ids=[test_data_id], max_wait_time=60)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -703,7 +719,7 @@ def test_data_update(_setup):
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_later_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs * 2,
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs * 2,
                                                 data_ids=[_init['test_data_id']], max_wait_time=60*2)
 
     sub_client.loop_stop()
@@ -773,7 +789,7 @@ def test_wnm_processing_rate(_setup):
     trigger_client.disconnect()
 
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_msgs, num_msgs, max_wait_time=60*10)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_msgs, num_msgs, max_wait_time=60*10)
     msg_data = sub_client._userdata
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -835,10 +851,12 @@ def test_concurrent_client_downloads(_setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "size_min": 1000 * 1000 * 200,  # 200MB
-                "size_max": 1000 * 1000 * 201,  # 201MB
-                # "size_min": 1000 * 200,  # 200KB
-                # "size_max": 1000 * 201,  # 201KB
+                # "size_min": 1000 * 1000 * 200,  # 200MB
+                # "size_max": 1000 * 1000 * 201,  # 201MB
+                "size_min": 1000 * 1000 * 20,  # 20MB
+                "size_max": 1000 * 1000 * 21,  # 21MB
+                # "size_min": 1000 * 100,
+                # "size_max": 1000 * 101,
             },
             "wnm": {
                 "properties": {
@@ -853,7 +871,7 @@ def test_concurrent_client_downloads(_setup):
     pub_result_1 = pub_client.publish(topic=_init['test_pub_topic'], payload=json.dumps(wnm_dataset_config))
     print(f"Published large file with result: {pub_result_1}")
     # Wait for messages
-    origin_msgs, cache_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs, max_wait_time=60*5,
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs, max_wait_time=60*5,
                                                 data_ids=[_init['test_data_id']])
 
     # Assert origin and cache messages
@@ -881,7 +899,7 @@ def test_concurrent_client_downloads(_setup):
                 "centreid_min": ab_centres[0],
                 "centreid_max": ab_centres[-1],
                 "concurrent": concurrency_benchmark//num_ab_centres,
-                "number": concurrency_benchmark*2//num_ab_centres,
+                "number": concurrency_benchmark*1.5//num_ab_centres,
                 "url": canonical_link,
                 "action": "start"
             }
@@ -897,10 +915,9 @@ def test_concurrent_client_downloads(_setup):
         raise Exception("Failed to publish message")
     print(f"Published ApacheBench scenario with result: {pub_ab_result}")
 
-    wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*15)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*15)
     # collect msgs from result client
-    ab_result_msgs = [m for m in result_client._userdata['received_messages'] if
-                   'result' in m['topic'] and 'payload' in m.keys() and 'ApacheBench' in m['payload']]
+    ab_result_msgs = [m for m in result_msgs if 'payload' in m.keys() and 'ApacheBench' in m['payload']]
 
     # Assert result messages
     assert len(ab_result_msgs) > 0, "No ab result messages received"
