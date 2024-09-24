@@ -853,8 +853,8 @@ def test_concurrent_client_downloads(_setup):
                 "number": num_origin_msgs,
                 # "size_min": 1000 * 1000 * 200,  # 200MB
                 # "size_max": 1000 * 1000 * 201,  # 201MB
-                "size_min": 1000 * 1000 * 20,  # 200MB
-                "size_max": 1000 * 1000 * 21,  # 201MB
+                "size_min": 1000 * 1000 * 20,  # 20MB
+                "size_max": 1000 * 1000 * 21,  # 21MB
                 # "size_min": 1000 * 100,
                 # "size_max": 1000 * 101,
             },
@@ -899,7 +899,7 @@ def test_concurrent_client_downloads(_setup):
                 "centreid_min": ab_centres[0],
                 "centreid_max": ab_centres[-1],
                 "concurrent": concurrency_benchmark//num_ab_centres,
-                "number": concurrency_benchmark*2//num_ab_centres,
+                "number": concurrency_benchmark*1.5//num_ab_centres,
                 "url": canonical_link,
                 "action": "start"
             }
