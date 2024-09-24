@@ -561,6 +561,30 @@ def test_wnm_deduplication_alt_1(_setup):
 
     # Prepare WNM with invalid and valid properties
     wnm_invalid_config = {
+        "scenario": "wnmtest",
+        "configuration": {
+            "setup": {
+                "centreid": _init['test_centre_int'],
+                "number": num_origin_msgs,
+                "size_min": 128,
+                "size_max": 256
+            },
+            "wnm": {
+                "properties": {
+                    "data_id": _init['test_data_id'],
+                    "pubtime": test_dt,
+                    "links": [
+                        {
+                            "href": "https://www.example.org/random",
+                            "rel": "canonical"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    wnm_valid_config = {
         "scenario": "datatest",
         "configuration": {
             "setup": {
@@ -573,28 +597,20 @@ def test_wnm_deduplication_alt_1(_setup):
             "wnm": {
                 "properties": {
                     "data_id": _init['test_data_id'],
-                    "pubtime": test_dt,
-                    "links": [
-                        {
-                            "rel": "canonical",
-                            "href": "http://invalid.whatever.com/data"
-                        }
-                    ]
+                    "pubtime": test_dt
                 }
             }
         }
     }
-    # valid config is the exact same, minus the links property
-    wnm_valid_config = deepcopy(wnm_invalid_config)
-    wnm_valid_config['configuration']['wnm']['properties'].pop('links')
 
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the invalid message first, then the valid message
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_invalid_config))
+    time.sleep(5)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_valid_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, 1, max_wait_time=60*2)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_cache_msgs=1, data_ids=[_init['test_data_id']], max_wait_time=60*2)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -642,10 +658,11 @@ def test_wnm_deduplication_alt_2(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the message with later pubtime first, then the earlier pubtime
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_1))
+    time.sleep(2)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_2))
 
     # Wait for messages
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_origin_msgs, data_ids=[test_data_id], max_wait_time=60)
 
     sub_client.loop_stop()
     sub_client.disconnect()
