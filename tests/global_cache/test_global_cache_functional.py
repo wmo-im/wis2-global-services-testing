@@ -166,8 +166,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     return client
 
 
-def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_result_msgs=0, data_ids=[], interval=0.5, max_wait_time=10,
-                      min_wait_time=0):
+def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_result_msgs=0, data_ids=[], interval=0.5, max_wait_time=10, min_wait_time=0):
     """
     Waits for the expected number of origin and cache messages.
 
@@ -175,7 +174,7 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
         sub_client (mqtt.Client): The MQTT client subscribed to the topics.
         num_origin_msgs (int): The expected number of origin messages.
         num_cache_msgs (int): The expected number of cache messages.
-        num_result_msgs: The expected number of result messages.
+        num_result_msgs (int): The expected number of result messages.
         data_ids (list): List of data_ids to filter messages.
         interval (float): The interval to wait between checks (in seconds).
         max_wait_time (int): The maximum time to wait for messages (in seconds).
@@ -189,23 +188,22 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
 
     while elapsed_time < max_wait_time:
         if data_ids:
-            origin_msgs = [m for m in sub_client._userdata['received_messages'] if
-                           "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
-            cache_msgs = [m for m in sub_client._userdata['received_messages'] if
-                          "cache" in m['topic'] and m['properties']['data_id'] in data_ids]
+            origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
+            cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic'] and m['properties']['data_id'] in data_ids]
         else:
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
             cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
             result_msgs = [m for m in sub_client._userdata['received_messages'] if "result" in m['topic']]
 
-        if num_cache_msgs != 0 and num_origin_msgs != 0:
-            if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs and elapsed_time >= min_wait_time:
-                print(f"Origin/Cache messages received within {elapsed_time} seconds.")
-                break
-        elif num_result_msgs != 0 and elapsed_time >= min_wait_time:
-            if len(result_msgs) >= num_result_msgs:
-                print(f"{num_result_msgs} Result messages received within {elapsed_time} seconds.")
-                break
+        if elapsed_time >= min_wait_time:
+            if num_cache_msgs != 0 and num_origin_msgs != 0:
+                if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs:
+                    print(f"Origin/Cache messages received within {elapsed_time} seconds.")
+                    break
+            if num_result_msgs != 0:
+                if len(result_msgs) >= num_result_msgs:
+                    print(f"{num_result_msgs} Result messages received within {elapsed_time} seconds.")
+                    break
 
         time.sleep(interval)
         elapsed_time += interval
@@ -215,7 +213,7 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     elif elapsed_time < min_wait_time:
         print(f"Min wait time of {min_wait_time} seconds reached.")
 
-    return origin_msgs, cache_msgs
+    return origin_msgs, cache_msgs, result_msgs
 
 
 @pytest.fixture
