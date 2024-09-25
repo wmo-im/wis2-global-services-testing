@@ -32,13 +32,13 @@ from pywis_pubsub.mqtt import MQTTPubSubClient
 import requests
 
 sys.path.append('.')
-
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils.prom_metrics import fetch_prometheus_metrics
 
-if os.path.exists('secrets.env'):
-    load_dotenv('secrets.env')
+if os.path.exists('../secrets.env'):
+    load_dotenv('../secrets.env')
 
-load_dotenv('default.env')
+load_dotenv('../default.env')
 
 GB = os.environ['GB']
 GB_CENTRE_ID = os.environ['GB_CENTRE_ID']
@@ -66,6 +66,7 @@ def gb_client():
     }
 
     client = MQTTPubSubClient(GB, options)
+    client.conn.on_log = lambda client, userdata, level, buf: print(f"Log: {buf}")
     yield client
 
     client.conn.loop_stop()
@@ -85,7 +86,7 @@ def subscribe_trigger_client():
 
 # paho-mqtt callbacks
 
-def _on_subscribe(client, userdata, mid, reason_codes, properties):
+def _on_subscribe(client, userdata, mid, reason_codes, properties=None):
     client.subscribed_flag = True
 
 
@@ -262,9 +263,12 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
 
     wcmp2_ids = []
 
+    malformed_dir = os.path.join(os.path.dirname(__file__), 'metadata', 'malformed')
+    invalid_dir = os.path.join(os.path.dirname(__file__), 'metadata', 'invalid')
+
     print('Testing malformed JSON')
-    for w2p in os.listdir('global_discovery_catalogue/metadata/malformed'):
-        _publish_wcmp2_trigger_broker_message(f'metadata/malformed/{w2p}')
+    for w2p in os.listdir(malformed_dir):
+        _publish_wcmp2_trigger_broker_message(os.path.join('metadata', 'malformed', w2p))
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
         time.sleep(5)
 
@@ -274,8 +278,8 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
         assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
     print('Testing invalid JSON')
-    for w2p in os.listdir('global_discovery_catalogue/metadata/invalid'):
-        _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{w2p}')
+    for w2p in os.listdir(invalid_dir):
+        _publish_wcmp2_trigger_broker_message(os.path.join('metadata', 'invalid', w2p))
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
         time.sleep(5)
 
@@ -396,8 +400,9 @@ def test_api_functionality(gb_client):
     assert gb_client.conn.subscribed_flag
 
     wcmp2_ids = []
-    for w2p in os.listdir('global_discovery_catalogue/metadata/valid'):
-        _publish_wcmp2_trigger_broker_message(f'metadata/valid/{w2p}')
+    valid_dir = os.path.join(os.path.dirname(__file__),'metadata', 'valid')
+    for w2p in os.listdir(valid_dir):
+        _publish_wcmp2_trigger_broker_message(os.path.join('metadata', 'valid', w2p))
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
         time.sleep(5)
 
