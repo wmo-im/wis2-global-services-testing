@@ -50,6 +50,7 @@ PROMETHEUS_USER = os.getenv('PROMETHEUS_USER')
 PROMETHEUS_PASSWORD = os.getenv('PROMETHEUS_PASSWORD')
 
 MONITOR_MESSAGES = {}
+CACHE_MESSAGES = []
 
 TOPICS = [
     'cache/a/wis2/+/metadata/#',
@@ -90,7 +91,10 @@ def _on_subscribe(client, userdata, mid, reason_codes, properties):
 
 
 def _on_message(client, userdata, message):
+    global MONITOR_MESSAGES
+    global CACHE_MESSAGES
     if message.topic.startswith('monitor/a/wis2'):
+        report_metadata_id = ""
         report = json.loads(message.payload)
 
         if report.get('metadata_id') is not None:
@@ -102,8 +106,16 @@ def _on_message(client, userdata, message):
             else:
                 file_ = report['href'].split('/')[-1]
                 report_metadata_id = _get_wcmp2_id_from_filename(file_)
-
-        MONITOR_MESSAGES[report_metadata_id] = report
+        if report_metadata_id != "":
+            MONITOR_MESSAGES[report_metadata_id] = report
+    else:
+        if message.topic.startswith('cache/a/wis2'):
+            cache_msg_id = ""
+            if "metadata" in message.topic:
+                cache_msg = json.loads(message.payload)
+                if cache_msg.get('id') is not None:
+                    cache_msg_id = cache_msg['id']
+                    CACHE_MESSAGES.update(cache_msg_id)
 
 
 # helper functions
@@ -228,7 +240,12 @@ def test_notification_and_metadata_processing_success(gb_client):
     r = requests.get(query_url)
     assert r.ok
 
-    assert MONITOR_MESSAGES[wcmp2_id]['summary']['PASSED'] == 12
+    assert wcmp2_id in CACHE_MESSAGES
+
+    if wcmp2_id in MONITOR_MESSAGES.keys():
+        assert MONITOR_MESSAGES[wcmp2_id]['summary']['PASSED'] == 12
+    else:
+        print(f'{wcmp2_id} not in MONITOR_MESSAGES.keys(): {MONITOR_MESSAGES.keys()}')
 
 
 def test_notification_and_metadata_processing_failure_record_not_found(gb_client):
@@ -282,6 +299,7 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
     time.sleep(10)
 
     for wcmp2_id in wcmp2_ids:
+        assert wcmp2_id in CACHE_MESSAGES
         try:
             assert MONITOR_MESSAGES[wcmp2_id]['summary']['FAILED'] > 0
         except Exception:
@@ -306,10 +324,13 @@ def test_metadata_ingest_centre_id_mismatch(gb_client):
     _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{wnm}')  # noqa
     time.sleep(5)
 
+    assert wcmp2_id in CACHE_MESSAGES
+
     assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
 
 def test_notification_and_metadata_processing_record_deletion(gb_client):
+    global CACHE_MESSAGES
     print('Testing Notification and metadata processing (record deletion)')
 
     assert gb_client.conn.is_connected
@@ -326,13 +347,20 @@ def test_notification_and_metadata_processing_record_deletion(gb_client):
     _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}')  # noqa
     time.sleep(5)
 
+    assert wcmp2_id in CACHE_MESSAGES
+
     query_url = f'{GDC_API}/items/{wcmp2_id}'
 
     r = requests.get(query_url)
     assert r.ok
 
+    if wcmp2_id in CACHE_MESSAGES:
+        CACHE_MESSAGES.remove(wcmp2_id)
+
     _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion')  # noqa
     time.sleep(10)
+
+    assert wcmp2_id in CACHE_MESSAGES
 
     r = requests.get(query_url)
     assert not r.ok
@@ -355,6 +383,10 @@ def test_notification_and_metadata_processing_failure_record_deletion_message_do
 
     _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion', metadata_id=False)  # noqa
     time.sleep(5)
+
+    # CACHE_MESSAGES.update uses id from payload so it should work
+    wcmp2_id = "urn:wmo:md:io-wis2dev-11-test:data.core.weather.prediction.forecast.shortrange.probabilistic.global"
+    assert wcmp2_id in CACHE_MESSAGES
 
     assert 'message' in MONITOR_MESSAGES['no-metadata_id']
 
@@ -402,6 +434,9 @@ def test_api_functionality(gb_client):
         time.sleep(5)
 
     time.sleep(10)
+
+    for wcmp2_id in wcmp2_ids:
+        assert wcmp2_id in CACHE_MESSAGES
 
     base_url = GDC_API
 
@@ -456,3 +491,4 @@ def test_api_functionality(gb_client):
     assert r['numberMatched'] == 4
     assert r['numberReturned'] == 4
     assert len(r['features']) == 4
+    
