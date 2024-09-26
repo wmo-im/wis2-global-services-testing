@@ -1,6 +1,6 @@
-paho-mqtt
+paho-mqtt~=2.1.0
 prometheus_api_client
 pytest
 python-dotenv
 python-slugify
-pywis-pubsub
+git+https://github.com/wmo-im/pywis-pubsub.git@main#egg=pywis-pubsub
