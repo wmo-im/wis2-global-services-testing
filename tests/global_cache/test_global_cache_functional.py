@@ -89,8 +89,15 @@ def flag_on_connect(client, userdata, flags, rc, properties=None):
         client.connected_flag = False
 
 
-def flag_on_subscribe(client, userdata, mid, granted_qos, properties=None):
-    print("Subscribed with mid " + str(mid) + " and QoS " + str(granted_qos[0]))
+def flag_on_disconnect(client, userdata, reason_code, properties=None):
+    if reason_code == 0:
+        logging.info("Clean disconnection")
+    else:
+        logging.error(f"Disconnect error with reason code {reason_code}")
+
+
+def flag_on_subscribe(client, userdata, mid, reason_codes, properties=None):
+    print("Subscribed with mid " + str(mid) + " and QoS " + str(reason_codes[0]))
     client.subscribed_flag = True
 
 
@@ -117,7 +124,7 @@ def flag_on_message(client, userdata, msg):
 
 def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     """
-    Setup an MQTT client for testing.
+    Set up an MQTT client for testing.
     Args:
         on_log: use on_log callback to print logs
         connection_info: connection string for the MQTT broker.
@@ -131,6 +138,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     client = mqtt.Client(client_id=rand_id, protocol=mqtt.MQTTv5, userdata={'received_messages': []})
     client.on_connect = flag_on_connect
     client.on_subscribe = flag_on_subscribe
+    client.on_disconnect = flag_on_disconnect
     client.on_message = flag_on_message
     if on_log:
         client.on_log = lambda client, userdata, level, buf: print(f"Log: {buf}")
