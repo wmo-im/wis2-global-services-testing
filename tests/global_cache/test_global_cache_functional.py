@@ -220,7 +220,7 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     elapsed_time = time.time() - start_time
     if elapsed_time >= max_wait_time:
         print(f"Max wait time of {max_wait_time} seconds reached.")
-    elif elapsed_time < min_wait_time:
+    if min_wait_time > 0 and elapsed_time < min_wait_time:
         print(f"Min wait time of {min_wait_time} seconds reached.")
 
     return origin_msgs, cache_msgs, result_msgs
@@ -566,6 +566,7 @@ def test_wnm_deduplication_alt_1(_setup):
     _init = _setup
     num_origin_msgs = 1
     sub_client = _init['sub_client']
+    msg_data_id = "gc_dedup_alt_1_"+_init['test_data_id']
     test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
 
     # Prepare WNM with invalid and valid properties
@@ -580,7 +581,7 @@ def test_wnm_deduplication_alt_1(_setup):
             },
             "wnm": {
                 "properties": {
-                    "data_id": _init['test_data_id'],
+                    "data_id": msg_data_id,
                     "pubtime": test_dt,
                     "links": [
                         {
@@ -605,7 +606,7 @@ def test_wnm_deduplication_alt_1(_setup):
             },
             "wnm": {
                 "properties": {
-                    "data_id": _init['test_data_id'],
+                    "data_id": msg_data_id,
                     "pubtime": test_dt
                 }
             }
@@ -615,11 +616,11 @@ def test_wnm_deduplication_alt_1(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the invalid message first, then the valid message
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_invalid_config))
-    time.sleep(5)
+    time.sleep(2)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_valid_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_cache_msgs=1, data_ids=[_init['test_data_id']], max_wait_time=60*2)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs=num_origin_msgs * 2, num_cache_msgs=num_origin_msgs, data_ids=[msg_data_id], max_wait_time=60*2)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -791,7 +792,7 @@ def test_wnm_processing_rate(_setup):
                     "number": num_msgs_per_centre,
                     "size_min": (1000 * 85),
                     "size_max": (1000 * 90),
-                    "delay": 0
+                    "delay": 100
                 }}}
         trigger_client.publish(topic="config/a/wis2/gc_performance_test", payload=json.dumps(wnm_dataset_config), qos=1)
     trigger_client.loop_stop()
