@@ -46,6 +46,33 @@ sub_topics = [
 ]
 
 
+def sleep_w_status(duration):
+    """
+    Sleeps for the specified duration while printing a status bar to the console.
+
+    Args:
+        duration (int): The duration to sleep in seconds.
+    """
+    interval = 0.1  # Update interval for the status bar
+    steps = int(duration / interval)
+
+    for i in range(steps + 1):
+        time.sleep(interval)
+        progress = (i / steps) * 100
+        bar_length = 40
+        block = int(bar_length * (i / steps))
+        status_bar = f"\r[{'#' * block}{'-' * (bar_length - block)}] {progress:.2f}%"
+        print(status_bar, end='', flush=True)
+    print("\nDone!")
+
+
+# Compare initial and final metrics
+def get_metric_value(metrics, metric_name):
+    for metric in metrics.get(metric_name, []):
+        return float(metric['value'][1])
+    return None
+
+
 def check_broker_connectivity(connection_string: str):
     """
     Check if the broker is reachable
@@ -192,6 +219,8 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     Returns:
         tuple: A tuple containing lists of origin and cache messages, and a string indicating the reason for the break.
     """
+    # print summary message
+    print(f"Waiting for messages: Origin={num_origin_msgs}, Cache={num_cache_msgs}, Result={num_result_msgs}")
     start_time = time.time()
 
     while time.time() - start_time < max_wait_time:
@@ -239,7 +268,7 @@ def _setup():
     test_data_id = f"{test_centre}_{uuid.uuid4().hex[:6]}"
 
     # Capture initial metrics state
-    # initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=test_centre_int)
+    initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=test_centre_int)
 
     # Yield setup data and initial metrics
     setup_dict = {
@@ -248,7 +277,7 @@ def _setup():
         "test_centre": test_centre,
         "test_pub_topic": test_pub_topic,
         "test_data_id": test_data_id,
-        # "initial_metrics": initial_metrics
+        "initial_metrics": initial_metrics
     }
     yield setup_dict
 
@@ -268,9 +297,11 @@ def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
     """
     print("Fetching GC Metrics")
     report_by = os.getenv('GC_METRICS_REPORT_BY')
+    print(f"Report by: {report_by}")
+    metric_job = os.getenv('GC_METRICS_JOB', None)
+    print(f"Job: {metric_job}")
     if centre_id is not None:
         centre_id = f'io-wis2dev-{centre_id}-test'
-    print(f"Report by: {report_by}")
     metrics_to_fetch = [
         "wmo_wis2_gc_downloaded_total",
         "wmo_wis2_gc_dataserver_status_flag",
@@ -281,12 +312,18 @@ def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
 
     metrics = {}
     for metric_name in metrics_to_fetch:
-        result = fetch_prometheus_metrics(metric_name, prometheus_baseurl, username, password, report_by=report_by,
-                                          centre_id=centre_id)
+        labels = []
+        if report_by:
+            labels.append(f'report_by="{report_by}"')
+        if centre_id:
+            labels.append(f'centre_id="{centre_id}"')
+        if metric_job:
+            labels.append(f'job="{metric_job}"')
+        query = f'{metric_name}{{{",".join(labels)}}}'
+        result = fetch_prometheus_metrics(query, prometheus_baseurl, username, password)
         metrics[metric_name] = result
 
     return metrics
-
 
 def test_mqtt_broker_connectivity():
     print("\nMQTT Broker Connectivity")
@@ -346,7 +383,7 @@ def test_mqtt_broker_message_flow(run, _setup):
     assert len(cache_msgs) >= num_origin_msgs
 
     # compare origin and cache messages
-
+    origin_msg_dataservers = []
     for origin_msg in origin_msgs:
         # match based on data_id and pubtime
         cache_msg = [m for m in cache_msgs if
@@ -367,6 +404,27 @@ def test_mqtt_broker_message_flow(run, _setup):
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
         assert verified is True
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+    # Fetch final metrics
+    sleep_w_status(60*2)
+    final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=_init['test_centre_int'])
+
+    initial_download_total = get_metric_value(_init['initial_metrics'], 'wmo_wis2_gc_downloaded_total')
+    final_download_total = get_metric_value(final_metrics, 'wmo_wis2_gc_downloaded_total')
+    assert final_download_total > initial_download_total, "Download total did not increase"
+
+    for metric in final_metrics.get('wmo_wis2_gc_dataserver_status_flag', []):
+        # only check the dataserver that was used
+        if metric['metric']['dataserver'] in origin_msg_dataservers:
+            assert metric['value'][
+                       1] == '1', f"Dataserver status flag not set to 1 for {metric['metric']['dataserver']}"
+
+    for metric in final_metrics.get('wmo_wis2_gc_downloaded_last_timestamp_seconds', []):
+        assert float(
+            metric['value'][1]) > 0, f"Last download timestamp not set for {metric['metric']['dataserver']}"
+
+    print("\nAll metrics assertions passed.")
 
 
 @pytest.mark.usefixtures("_setup")
