@@ -39,6 +39,8 @@ mqtt_broker_gc = os.getenv('TEST_GC_MQTT_BROKER')
 prom_host = os.getenv('PROMETHEUS_HOST')
 prom_un = os.getenv('PROMETHEUS_USER')
 prom_pass = os.getenv('PROMETHEUS_PASSWORD')
+# sleep factor
+sleep_factor = os.getenv('SLEEP_FACTOR', 1)
 # GB Topics
 sub_topics = [
     "origin/a/wis2/#",
@@ -53,7 +55,8 @@ def sleep_w_status(duration):
     Args:
         duration (int): The duration to sleep in seconds.
     """
-    interval = 0.1  # Update interval for the status bar
+    print(f"Sleeping for {duration} seconds")
+    interval = 0.5  # Update interval for the status bar
     steps = int(duration / interval)
 
     for i in range(steps + 1):
@@ -184,7 +187,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
         client.connect(host=connection_info.hostname, port=connection_info.port, properties=properties)
         if loop_start:
             client.loop_start()
-        time.sleep(1)  # Wait for connection
+        time.sleep(1 * sleep_factor)  # Wait for connection
         if not client.is_connected() and loop_start:
             raise Exception("Failed to connect to MQTT broker")
     except Exception as e:
@@ -221,8 +224,11 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     """
     # print summary message
     print(f"Waiting for messages: Origin={num_origin_msgs}, Cache={num_cache_msgs}, Result={num_result_msgs}")
+    if sleep_factor != 1:
+        print(f"Sleep factor: {sleep_factor}")
+        max_wait_time = max_wait_time * sleep_factor
+        min_wait_time = min_wait_time * sleep_factor
     start_time = time.time()
-
     while time.time() - start_time < max_wait_time:
         if data_ids:
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
@@ -237,11 +243,11 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
         if elapsed_time >= min_wait_time:
             if num_cache_msgs != 0 and num_origin_msgs != 0:
                 if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs:
-                    print(f"Origin/Cache messages received within {elapsed_time} seconds.")
+                    print(f"Origin/Cache messages received within {elapsed_time:.2f} seconds.")
                     break
             if num_result_msgs != 0:
                 if len(result_msgs) >= num_result_msgs:
-                    print(f"{num_result_msgs} Result messages received within {elapsed_time} seconds.")
+                    print(f"{num_result_msgs} Result messages received within {elapsed_time:.2f} seconds.")
                     break
 
         time.sleep(interval)
@@ -341,7 +347,7 @@ def test_mqtt_broker_subscription(topic):
     client = setup_mqtt_client(mqtt_broker_gc, on_log=True, loop_start=True)
     client.subscribed_flag = False
     result, mid = client.subscribe(topic)
-    time.sleep(1)  # Wait for subscription
+    time.sleep(1 * sleep_factor)  # Wait for subscription
     assert result is mqtt.MQTT_ERR_SUCCESS
     assert client.subscribed_flag is True
     client.loop_stop()
@@ -363,6 +369,7 @@ def test_mqtt_broker_message_flow(run, _setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
+                "delay": 1000,
                 # "cache_a_wis2": "mix",
             },
             "wnm": {
@@ -407,7 +414,7 @@ def test_mqtt_broker_message_flow(run, _setup):
         dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
         origin_msg_dataservers.append(dataserver)
     # Fetch final metrics
-    sleep_w_status(60*2)
+    sleep_w_status(60 * 2 * sleep_factor)
     final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=_init['test_centre_int'])
 
     initial_download_total = get_metric_value(_init['initial_metrics'], 'wmo_wis2_gc_downloaded_total')
@@ -674,7 +681,7 @@ def test_wnm_deduplication_alt_1(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the invalid message first, then the valid message
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_invalid_config))
-    time.sleep(2)
+    time.sleep(2 * sleep_factor)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_valid_config))
 
     # Wait for messages
@@ -726,7 +733,7 @@ def test_wnm_deduplication_alt_2(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the message with later pubtime first, then the earlier pubtime
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_1))
-    time.sleep(2)
+    time.sleep(2 * sleep_factor)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_2))
 
     # Wait for messages
@@ -783,7 +790,7 @@ def test_data_update(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the earlier message first, then the later message
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_earlier_config))
-    time.sleep(10)
+    time.sleep(10 * sleep_factor)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_later_config))
 
     # Wait for messages
