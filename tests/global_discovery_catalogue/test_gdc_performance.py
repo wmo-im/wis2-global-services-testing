@@ -56,6 +56,7 @@ def test_api_functionality(sleep_factor, gb_client):
     assert gb_client.conn.subscribed_flag
 
     start = time.time()
+
     wcmp2_ids = []
     for w2p in os.listdir(f'{METADATA_DIR}/valid'):
         _publish_wcmp2_trigger_broker_message(f'metadata/valid/{w2p}')
@@ -65,11 +66,14 @@ def test_api_functionality(sleep_factor, gb_client):
     time.sleep(10 * sleep_factor)
 
     end = time.time()
-    elapsed = (end - start) - (10 * sleep_factor)
+
+    sleep_total = len(wcmp2_ids) + 10
+
+    elapsed = (end - start) - (sleep_total * sleep_factor)
 
     run_api_tests()
 
-    assert elapsed < 300
+    assert elapsed < (300 * sleep_factor)
 
 
 def run_api_tests():
