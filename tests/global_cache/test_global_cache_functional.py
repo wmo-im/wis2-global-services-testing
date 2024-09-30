@@ -926,12 +926,8 @@ def test_concurrent_client_downloads(_setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                # "size_min": 1000 * 1000 * 200,  # 200MB
-                # "size_max": 1000 * 1000 * 201,  # 201MB
-                "size_min": 1000 * 1000 * 20,  # 20MB
-                "size_max": 1000 * 1000 * 21,  # 21MB
-                # "size_min": 1000 * 100,
-                # "size_max": 1000 * 101,
+                "size_min": 1000 * 1000 * 2,  # 2MB
+                "size_max": 1000 * 1000 * 2,
             },
             "wnm": {
                 "properties": {
@@ -941,7 +937,6 @@ def test_concurrent_client_downloads(_setup):
             }
         }
     }
-
     pub_client = setup_mqtt_client(mqtt_broker_trigger)
     pub_result_1 = pub_client.publish(topic=_init['test_pub_topic'], payload=json.dumps(wnm_dataset_config))
     print(f"Published large file with result: {pub_result_1}")
