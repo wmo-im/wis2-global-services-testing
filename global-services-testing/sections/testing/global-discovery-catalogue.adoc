@@ -31,6 +31,7 @@ The GDC test setup consists of the following:
 * updating environment variables in `tests/default.env` as follows:
 ** `GDC_API`: URL to GDC API (including collection name)
 ** `GDC_CENTRE_ID`: the centre identifier of the GDC implementation under test (IUT)
+** `GB_CENTRE_ID`: the centre identifier of the GB used by the GDC implementation under test (IUT)
 
 Note that you can store secret environments in `tests/secrets.env` and refer to them in `tests/default.env` accordingly.
 
@@ -347,8 +348,10 @@ To execute the core GDC tests:
 [source,bash]
 ----
 # ensure that the Python virtual environment is activated
+# NOTE: CENTRE_ID is the centre identifier of the IUT
+mkdir -p /data/wis2-testing/CENTRE_ID
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log
 ----
 
 To execute the additional GDC tests:
@@ -359,6 +362,11 @@ To execute the additional GDC tests:
 cd tests
 pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
 ----
+
+===== Useful flags
+
+* `--sleep-factor`: some tests may require extra time for Pub/Sub workflow to complete.  Passing the `--sleep-factor` (integer) option allows to set a multiplier applied to all sleep functions in the test.
+* `-o log_cli=true`: print logging messages to screen (useful for debugging)
 
 ==== Exiting the test environment
 
