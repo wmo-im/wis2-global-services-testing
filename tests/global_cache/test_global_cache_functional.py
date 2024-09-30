@@ -40,7 +40,7 @@ prom_host = os.getenv('PROMETHEUS_HOST')
 prom_un = os.getenv('PROMETHEUS_USER')
 prom_pass = os.getenv('PROMETHEUS_PASSWORD')
 # sleep factor
-sleep_factor = os.getenv('SLEEP_FACTOR', 1)
+sleep_factor = int(os.getenv('SLEEP_FACTOR', 1))
 # GB Topics
 sub_topics = [
     "origin/a/wis2/#",
