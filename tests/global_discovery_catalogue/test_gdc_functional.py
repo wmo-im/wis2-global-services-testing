@@ -70,7 +70,7 @@ def gb_client():
     }
 
     client = MQTTPubSubClient(GB, options)
-    client.conn.on_log = lambda client, userdata, level, msg: print(f"{client.host}: {msg}")
+    client.conn.on_log = lambda client, userdata, level, msg: LOGGER.debug(f"{client.host}: {msg}")
     yield client
 
     client.conn.loop_stop()
@@ -90,7 +90,7 @@ def subscribe_trigger_client():
     }
 
     client = MQTTPubSubClient(TRIGGER_BROKER, options)
-    client.conn.on_log = lambda client, userdata, level, msg: print(f"{client.host}: {msg}")
+    client.conn.on_log = lambda client, userdata, level, msg: LOGGER.debug(f"{client.host}: {msg}")
     client.conn.on_message = _on_message
 
     return client
