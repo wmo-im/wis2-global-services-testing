@@ -370,7 +370,7 @@ def test_mqtt_broker_message_flow(run, _setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "delay": 1000,
+                "delay": 200,
                 # "cache_a_wis2": "mix",
             },
             "wnm": {
