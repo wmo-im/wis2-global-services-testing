@@ -199,7 +199,8 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
         print(f"  Username: {connection_info.username}")
         print(f"  Password: {connection_info.password}")
         # tls configuration
-        print(f"  TLS: {tls_settings}")
+        if connection_info.port in [443, 8883]:
+            print(f"  TLS: {tls_settings}")
         raise
 
     return client
