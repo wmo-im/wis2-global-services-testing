@@ -933,7 +933,7 @@ def test_concurrent_client_downloads(_setup):
             "wnm": {
                 "properties": {
                     "data_id": _init['test_data_id'],
-                    "cache": True  # Ensure caching for large files
+                    "cache": True  # Ensure caching
                 }
             }
         }
