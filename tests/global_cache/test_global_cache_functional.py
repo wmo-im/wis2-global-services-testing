@@ -196,7 +196,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     client.username_pw_set(connection_info.username, connection_info.password)
 
     properties = Properties(PacketTypes.CONNECT)
-    properties.SessionExpiryInterval = 300  # seconds
+    properties.SessionExpiryInterval = 0  # this ensures that the session expires when the client disconnects
     if connection_info.port in [443, 8883]:
         tls_settings = {'tls_version': 2, 'cert_reqs': mqtt.ssl.CERT_NONE}
         client.tls_set(**tls_settings)

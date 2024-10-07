@@ -178,11 +178,9 @@ def test_concurrent_client_downloads():
             }
         }
     }
-
     # Subscribe to the result topic
     result_client = setup_mqtt_client(mqtt_broker_trigger)
-    result_client.subscribe("result/a/wis2/+/ab", qos=1)
-
+    result_client.subscribe("result/a/wis2/#", qos=1)
     pub_ab_result = pub_client.publish(topic="config/a/wis2/gcabtest", payload=json.dumps(ab_scenario_config))
     if not pub_ab_result:
         raise Exception("Failed to publish message")
