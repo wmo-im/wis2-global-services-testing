@@ -68,12 +68,24 @@ def sleep_w_status(duration):
     print("\nDone!")
 
 
-# Compare initial and final metrics
-def get_metric_value(metrics, metric_name):
-    for metric in metrics.get(metric_name, []):
-        return float(metric['value'][1])
-    return None
+def get_metric_value(metrics, metric_name, centre_id=None, dataserver=None, default=None):
+    # Filter metrics by metric_name
+    metric_list = metrics.get(metric_name, [])
 
+    # Further filter by centre_id if provided
+    if centre_id is not None:
+        metric_list = [metric for metric in metric_list if metric['metric'].get('centre_id') == centre_id]
+
+    # Further filter by dataserver if provided
+    if dataserver is not None:
+        metric_list = [metric for metric in metric_list if metric['metric'].get('dataserver') == dataserver]
+
+    # Return the metric value if found, otherwise return the default value
+    if metric_list:
+        if len(metric_list) > 1:
+            logging.warning(f"Multiple metrics found for {metric_name} with centre_id={centre_id} and dataserver={dataserver}")
+        return float(metric_list[0]['value'][1])
+    return default
 
 def check_broker_connectivity(connection_string: str):
     """
@@ -279,10 +291,26 @@ def _setup(test_centre_int:int=None):
         "test_centre_int": test_centre_int,
         "sub_client": sub_client,
         "test_centre": test_centre,
+        "test_pub_centre": test_pub_centre,
         "test_pub_topic": test_pub_topic,
         "test_data_id": test_data_id,
     }
     return setup_dict
+
+
+@pytest.fixture(scope="session")
+def initial_metrics():
+    print("\nFetching initial metrics")
+    # Fetch initial metrics before any tests are run
+    initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass)
+    return initial_metrics
+
+
+@pytest.fixture(scope="session")
+def metrics_data():
+    data = {
+    }
+    yield data
 
 
 
@@ -352,8 +380,8 @@ def test_mqtt_broker_subscription(topic):
     client.disconnect()
     del client
 
-@pytest.mark.parametrize("run", range(3))
-def test_mqtt_broker_message_flow(run, metrics_data, initial_metrics):
+
+def test_mqtt_broker_message_flow(metrics_data, initial_metrics):
     print("\nWIS2 Notification Message (WNM) Processing")
     # Setup
     _init = _setup(12)
@@ -409,19 +437,31 @@ def test_mqtt_broker_message_flow(run, metrics_data, initial_metrics):
         assert verified is True
         dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
         origin_msg_dataservers.append(dataserver)
-    # Fetch final metrics
-    sleep_w_status(60 * 2 * sleep_factor)
-    final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=_init['test_centre_int'])
 
-    initial_download_total = get_metric_value(_init['initial_metrics'], 'wmo_wis2_gc_downloaded_total')
-    final_download_total = get_metric_value(final_metrics, 'wmo_wis2_gc_downloaded_total')
-    assert final_download_total > initial_download_total, "Download total did not increase"
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_mqtt_broker_message_flow",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": num_origin_msgs,
+    })
+    # Add assertion for dataserver status flag
+    metrics_data["assertions"].append({
+        "test_name": "test_mqtt_broker_message_flow",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 1,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_mqtt_broker_message_flow",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_last_timestamp_seconds",
+        "expected_comparison": "greater",
+        "dataservers": origin_msg_dataservers
+    })
+    # test_gc_metrics(metrics_data, initial_metrics)
 
-    for metric in final_metrics.get('wmo_wis2_gc_dataserver_status_flag', []):
-        # only check the dataserver that was used
-        if metric['metric']['dataserver'] in origin_msg_dataservers:
-            assert metric['value'][
-                       1] == '1', f"Dataserver status flag not set to 1 for {metric['metric']['dataserver']}"
 
 
 def test_cache_false_directive(metrics_data):
@@ -818,4 +858,40 @@ def test_data_update(metrics_data):
 
 def test_gc_metrics(metrics_data, initial_metrics):
     print("\nGC Metrics Assertions")
-    perform_assertions(metrics_data, initial_metrics)
+    sleep_w_status(2*60)
+    assertion_results = []
+    final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass)
+    for assertion in metrics_data.get("assertions", []):
+        print(assertion)
+        metric_name = assertion["metric_name"]
+        centre_id = assertion.get("centre_id")
+        dataservers = assertion.get("dataservers", [])
+        filtered_initial_metrics = initial_metrics.get(metric_name, [])
+        if metric_name == "wmo_wis2_gc_downloaded_total":
+            initial_val = get_metric_value(initial_metrics, metric_name, centre_id, default=0)
+            expected_difference = assertion["expected_difference"]
+            final_val = get_metric_value(final_metrics, metric_name, centre_id, default=0)
+            try:
+                assert final_val - initial_val == expected_difference, \
+                    f"Expected difference for {metric_name} is {expected_difference}, but got {final_val - initial_val}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
+        elif metric_name == "wmo_wis2_gc_dataserver_status_flag":
+            final_val = int(get_metric_value(final_metrics, metric_name, centre_id, dataserver=dataservers[0], default=0))
+            expected_value = int(assertion["expected_value"])
+            try:
+                assert final_val == expected_value, \
+                    f"Dataserver status flag not set to {expected_value} for {dataservers[0]}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
+
+        elif metric_name == "wmo_wis2_gc_downloaded_last_timestamp_seconds":
+            initial_val = int(get_metric_value(initial_metrics, metric_name, centre_id, dataserver=dataservers[0], default=0))
+            final_val = int(get_metric_value(final_metrics, metric_name, centre_id, dataserver=dataservers[0], default=0))
+            try:
+                assert final_val > initial_val, \
+                    f"Final timestamp {final_val} is not greater than initial timestamp {initial_val}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
+    if assertion_results:
+        raise AssertionError("\n".join(assertion_results))
