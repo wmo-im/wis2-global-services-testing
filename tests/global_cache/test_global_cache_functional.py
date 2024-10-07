@@ -272,11 +272,7 @@ def _setup():
         print(f"Subscribed to topic: {sub_topic}")
     test_centre = f"gc_test_centre_{test_centre_int}"
     test_pub_topic = f"config/a/wis2/{test_centre}"
-    test_data_id = f"{test_centre}_{uuid.uuid4().hex[:6]}"
-
-    # Capture initial metrics state
-    initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=test_centre_int)
-
+    test_data_id = f"{test_centre}_{uuid.uuid4().hex[:16]}"
     # Yield setup data and initial metrics
     setup_dict = {
         "test_centre_int": test_centre_int,
