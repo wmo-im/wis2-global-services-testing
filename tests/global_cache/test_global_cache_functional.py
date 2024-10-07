@@ -1,9 +1,11 @@
 import json
+import logging
 import uuid
 import random
 import sys
 import os
 from copy import deepcopy
+import argparse
 
 import pytest
 import paho.mqtt.client as mqtt
@@ -24,7 +26,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
 
 datatest_centres = [11, 20]
-ab_centres = [1001, 1010]
 
 # Connection strings for the development global broker and message generator
 # Access the environment variables
@@ -38,12 +39,60 @@ mqtt_broker_gc = os.getenv('TEST_GC_MQTT_BROKER')
 prom_host = os.getenv('PROMETHEUS_HOST')
 prom_un = os.getenv('PROMETHEUS_USER')
 prom_pass = os.getenv('PROMETHEUS_PASSWORD')
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Global Cache Functional Tests')
+parser.add_argument('--sleep-factor', type=int, default=1, help='Sleep factor for the tests')
+args = parser.parse_args()
+
+# sleep factor
+sleep_factor = args.sleep_factor
 # GB Topics
 sub_topics = [
     "origin/a/wis2/#",
     "cache/a/wis2/#",
 ]
 
+
+def sleep_w_status(duration):
+    """
+    Sleeps for the specified duration while printing a status bar to the console.
+
+    Args:
+        duration (int): The duration to sleep in seconds.
+    """
+    print(f"Sleeping for {duration} seconds")
+    interval = 0.5  # Update interval for the status bar
+    steps = int(duration / interval)
+
+    for i in range(steps + 1):
+        time.sleep(interval)
+        progress = (i / steps) * 100
+        bar_length = 40
+        block = int(bar_length * (i / steps))
+        status_bar = f"\r[{'#' * block}{'-' * (bar_length - block)}] {progress:.2f}%"
+        print(status_bar, end='', flush=True)
+    print("\nDone!")
+
+
+def get_metric_value(metrics, metric_name, centre_id=None, dataserver=None, default=None):
+    # Filter metrics by metric_name
+    metric_list = metrics.get(metric_name, [])
+
+    # Further filter by centre_id if provided
+    if centre_id is not None:
+        metric_list = [metric for metric in metric_list if metric['metric'].get('centre_id') == centre_id]
+
+    # Further filter by dataserver if provided
+    if dataserver is not None:
+        metric_list = [metric for metric in metric_list if metric['metric'].get('dataserver') == dataserver]
+
+    # Return the metric value if found, otherwise return the default value
+    if metric_list:
+        if len(metric_list) > 1:
+            logging.warning(f"Multiple metrics found for {metric_name} with centre_id={centre_id} and dataserver={dataserver}")
+        return float(metric_list[0]['value'][1])
+    return default
 
 def check_broker_connectivity(connection_string: str):
     """
@@ -89,8 +138,15 @@ def flag_on_connect(client, userdata, flags, rc, properties=None):
         client.connected_flag = False
 
 
-def flag_on_subscribe(client, userdata, mid, granted_qos, properties=None):
-    print("Subscribed with mid " + str(mid) + " and QoS " + str(granted_qos[0]))
+def flag_on_disconnect(client, userdata, reason_code, properties=None):
+    if reason_code == 0:
+        logging.info("Clean disconnection")
+    else:
+        logging.error(f"Disconnect error with reason code {reason_code}")
+
+
+def flag_on_subscribe(client, userdata, mid, reason_codes, properties=None):
+    print("Subscribed with mid " + str(mid) + " and QoS " + str(reason_codes[0]))
     client.subscribed_flag = True
 
 
@@ -117,7 +173,7 @@ def flag_on_message(client, userdata, msg):
 
 def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     """
-    Setup an MQTT client for testing.
+    Set up an MQTT client for testing.
     Args:
         on_log: use on_log callback to print logs
         connection_info: connection string for the MQTT broker.
@@ -131,6 +187,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     client = mqtt.Client(client_id=rand_id, protocol=mqtt.MQTTv5, userdata={'received_messages': []})
     client.on_connect = flag_on_connect
     client.on_subscribe = flag_on_subscribe
+    client.on_disconnect = flag_on_disconnect
     client.on_message = flag_on_message
     if on_log:
         client.on_log = lambda client, userdata, level, buf: print(f"Log: {buf}")
@@ -148,7 +205,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
         client.connect(host=connection_info.hostname, port=connection_info.port, properties=properties)
         if loop_start:
             client.loop_start()
-        time.sleep(1)  # Wait for connection
+        time.sleep(1 * sleep_factor)  # Wait for connection
         if not client.is_connected() and loop_start:
             raise Exception("Failed to connect to MQTT broker")
     except Exception as e:
@@ -160,7 +217,8 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
         print(f"  Username: {connection_info.username}")
         print(f"  Password: {connection_info.password}")
         # tls configuration
-        print(f"  TLS: {tls_settings}")
+        if connection_info.port in [443, 8883]:
+            print(f"  TLS: {tls_settings}")
         raise
 
     return client
@@ -183,8 +241,13 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     Returns:
         tuple: A tuple containing lists of origin and cache messages, and a string indicating the reason for the break.
     """
+    # print summary message
+    print(f"Waiting for messages: Origin={num_origin_msgs}, Cache={num_cache_msgs}, Result={num_result_msgs}")
+    if sleep_factor != 1:
+        print(f"Sleep factor: {sleep_factor}")
+        max_wait_time = max_wait_time * sleep_factor
+        min_wait_time = min_wait_time * sleep_factor
     start_time = time.time()
-
     while time.time() - start_time < max_wait_time:
         if data_ids:
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
@@ -199,11 +262,11 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
         if elapsed_time >= min_wait_time:
             if num_cache_msgs != 0 and num_origin_msgs != 0:
                 if len(origin_msgs) >= num_origin_msgs and len(cache_msgs) >= num_cache_msgs:
-                    print(f"Origin/Cache messages received within {elapsed_time} seconds.")
+                    print(f"Origin/Cache messages received within {elapsed_time:.2f} seconds.")
                     break
             if num_result_msgs != 0:
                 if len(result_msgs) >= num_result_msgs:
-                    print(f"{num_result_msgs} Result messages received within {elapsed_time} seconds.")
+                    print(f"{num_result_msgs} Result messages received within {elapsed_time:.2f} seconds.")
                     break
 
         time.sleep(interval)
@@ -211,37 +274,51 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     elapsed_time = time.time() - start_time
     if elapsed_time >= max_wait_time:
         print(f"Max wait time of {max_wait_time} seconds reached.")
-    elif elapsed_time < min_wait_time:
+    if min_wait_time > 0 and elapsed_time < min_wait_time:
         print(f"Min wait time of {min_wait_time} seconds reached.")
 
     return origin_msgs, cache_msgs, result_msgs
 
 
-@pytest.fixture
-def _setup():
+def _setup(test_centre_int:int=None):
     # Setup
-    test_centre_int = random.choice(range(datatest_centres[0], datatest_centres[-1] + 1))
+    if test_centre_int is None:
+        test_centre_int = random.choice(range(datatest_centres[0], datatest_centres[-1] + 1))
     sub_client = setup_mqtt_client(mqtt_broker_recv)
     for sub_topic in sub_topics:
         sub_client.subscribe(sub_topic, qos=1)
         print(f"Subscribed to topic: {sub_topic}")
     test_centre = f"gc_test_centre_{test_centre_int}"
+    # format like the actual pub centre ie io-wis2dev-12-test
+    test_pub_centre = f"io-wis2dev-{test_centre_int}-test"
     test_pub_topic = f"config/a/wis2/{test_centre}"
-    test_data_id = f"{test_centre}_{uuid.uuid4().hex[:6]}"
-
-    # Capture initial metrics state
-    # initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass, centre_id=test_centre_int)
-
+    test_data_id = f"{test_centre}_{uuid.uuid4().hex[:16]}"
     # Yield setup data and initial metrics
     setup_dict = {
         "test_centre_int": test_centre_int,
         "sub_client": sub_client,
         "test_centre": test_centre,
+        "test_pub_centre": test_pub_centre,
         "test_pub_topic": test_pub_topic,
         "test_data_id": test_data_id,
-        # "initial_metrics": initial_metrics
     }
-    yield setup_dict
+    return setup_dict
+
+
+@pytest.fixture(scope="session")
+def initial_metrics():
+    print("\nFetching initial metrics")
+    # Fetch initial metrics before any tests are run
+    initial_metrics = get_gc_metrics(prom_host, prom_un, prom_pass)
+    return initial_metrics
+
+
+@pytest.fixture(scope="session")
+def metrics_data():
+    data = {
+    }
+    yield data
+
 
 
 def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
@@ -259,25 +336,37 @@ def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
     """
     print("Fetching GC Metrics")
     report_by = os.getenv('GC_METRICS_REPORT_BY')
+    print(f"Report by: {report_by}")
+    metric_job = os.getenv('GC_METRICS_JOB', None)
+    print(f"Job: {metric_job}")
     if centre_id is not None:
         centre_id = f'io-wis2dev-{centre_id}-test'
-    print(f"Report by: {report_by}")
     metrics_to_fetch = [
         "wmo_wis2_gc_downloaded_total",
         "wmo_wis2_gc_dataserver_status_flag",
         "wmo_wis2_gc_downloaded_last_timestamp_seconds",
+        "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
         "wmo_wis2_gc_downloaded_errors_total",
-        "wmo_wis2_gc_integrity_failed_total"
+        "wmo_wis2_gc_integrity_failed_total",
+        "wmo_wis2_gc_no_cache_total",
+        "wmo_wis2_gc_cache_override_total",
+        "wmo_wis2_gc_last_metadata_timestamp_seconds"
     ]
 
     metrics = {}
     for metric_name in metrics_to_fetch:
-        result = fetch_prometheus_metrics(metric_name, prometheus_baseurl, username, password, report_by=report_by,
-                                          centre_id=centre_id)
+        labels = []
+        if report_by:
+            labels.append(f'report_by="{report_by}"')
+        if centre_id:
+            labels.append(f'centre_id="{centre_id}"')
+        if metric_job:
+            labels.append(f'job="{metric_job}"')
+        query = f'{metric_name}{{{",".join(labels)}}}'
+        result = fetch_prometheus_metrics(query, prometheus_baseurl, username, password)
         metrics[metric_name] = result
 
     return metrics
-
 
 def test_mqtt_broker_connectivity():
     print("\nMQTT Broker Connectivity")
@@ -295,7 +384,7 @@ def test_mqtt_broker_subscription(topic):
     client = setup_mqtt_client(mqtt_broker_gc, on_log=True, loop_start=True)
     client.subscribed_flag = False
     result, mid = client.subscribe(topic)
-    time.sleep(1)  # Wait for subscription
+    time.sleep(1 * sleep_factor)  # Wait for subscription
     assert result is mqtt.MQTT_ERR_SUCCESS
     assert client.subscribed_flag is True
     client.loop_stop()
@@ -303,12 +392,10 @@ def test_mqtt_broker_subscription(topic):
     del client
 
 
-@pytest.mark.parametrize("run", range(3))
-@pytest.mark.usefixtures("_setup")
-def test_mqtt_broker_message_flow(run, _setup):
+def test_mqtt_broker_message_flow(metrics_data, initial_metrics):
     print("\nWIS2 Notification Message (WNM) Processing")
     # Setup
-    _init = _setup
+    _init = _setup(12)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     wnm_dataset_config = {
@@ -317,6 +404,7 @@ def test_mqtt_broker_message_flow(run, _setup):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
+                "delay": 200,
                 # "cache_a_wis2": "mix",
             },
             "wnm": {
@@ -337,7 +425,7 @@ def test_mqtt_broker_message_flow(run, _setup):
     assert len(cache_msgs) >= num_origin_msgs
 
     # compare origin and cache messages
-
+    origin_msg_dataservers = []
     for origin_msg in origin_msgs:
         # match based on data_id and pubtime
         cache_msg = [m for m in cache_msgs if
@@ -358,13 +446,37 @@ def test_mqtt_broker_message_flow(run, _setup):
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
         assert verified is True
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_mqtt_broker_message_flow",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": num_origin_msgs,
+    })
+    # Add assertion for dataserver status flag
+    metrics_data["assertions"].append({
+        "test_name": "test_mqtt_broker_message_flow",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 1,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_mqtt_broker_message_flow",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_last_timestamp_seconds",
+        "expected_comparison": "greater",
+        "dataservers": origin_msg_dataservers
+    })
 
 
-@pytest.mark.usefixtures("_setup")
-def test_cache_false_directive(_setup):
+def test_cache_false_directive(metrics_data):
     print("\nCache False Directive")
     num_origin_msgs = 1
-    _init = _setup
+    _init = _setup(13)
     # generate some random id's for the messages
     sub_client = _init['sub_client']
     wnm_dataset_config = {
@@ -392,6 +504,7 @@ def test_cache_false_directive(_setup):
     assert len(origin_msgs) > 0
     assert len(cache_msgs) > 0
     # compare origin and cache messages
+    origin_msg_dataservers = []
     for origin_msg in origin_msgs:
         # match based on data_id and pubtime
         cache_msg = [m for m in cache_msgs if
@@ -411,12 +524,41 @@ def test_cache_false_directive(_setup):
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
         assert verified is True
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+    # metrics assertions
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_cache_false_directive",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_no_cache_total",
+        "expected_difference": num_origin_msgs,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_cache_false_directive",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": 0,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_cache_false_directive",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_comparison": "equal",
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_cache_false_directive",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_comparison": "equal",
+        "dataservers": origin_msg_dataservers
+    })
 
 
-@pytest.mark.usefixtures("_setup")
-def test_source_download_failure(_setup):
+def test_source_download_failure(metrics_data):
     print("\nSource Download Failure")
-    _init = _setup
+    _init = _setup(14)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     # test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
@@ -458,18 +600,50 @@ def test_source_download_failure(_setup):
     # Origin Messages
     assert len(origin_msgs) == num_origin_msgs
     # No messages should be published on the cache/a/wis2/# topic
+    origin_msg_dataservers = []
     for origin_msg in origin_msgs:
         # match based on data_id and pubtime
         cache_msg = [m for m in cache_msgs if
                      m['properties']['data_id'] == origin_msg['properties']['data_id'] and m['properties'][
                          'pubtime'] == origin_msg['properties']['pubtime']]
         assert len(cache_msg) == 0
+        dataserver = next(
+            (urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'),
+            None)
+        origin_msg_dataservers.append(dataserver)
+    # metrics assertions
 
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_source_download_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_download_total",
+        "expected_difference": 0,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_source_download_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 0,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_source_download_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_difference": 0,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_source_download_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+        "expected_difference": num_origin_msgs,
+    })
 
-@pytest.mark.usefixtures("_setup")
-def test_data_integrity_check_failure(_setup):
+def test_data_integrity_check_failure(metrics_data):
     print("\nData Integrity Check Failure")
-    _init = _setup
+    _init = _setup(15)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
 
@@ -509,11 +683,50 @@ def test_data_integrity_check_failure(_setup):
     # No messages should be published on the cache/a/wis2/# topic
     assert len(cache_msgs) == 0
 
+    # get dataservers
+    origin_msg_dataservers = []
+    for origin_msg in origin_msgs:
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
 
-@pytest.mark.usefixtures("_setup")
-def test_wnm_deduplication(_setup):
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_data_integrity_check_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_download_total",
+        "expected_difference": 0,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_integrity_check_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 0,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_integrity_check_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_difference": 0,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_integrity_check_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+        "expected_difference": num_origin_msgs,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_integrity_check_failure",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_integrity_failed_total",
+        "expected_difference": num_origin_msgs,
+    })
+
+
+def test_wnm_deduplication(metrics_data):
     print("\nWIS2 Notification Message Deduplication")
-    _init = _setup
+    _init = _setup(16)
     num_origin_msgs = 5
     sub_client = _init['sub_client']
 
@@ -550,13 +763,54 @@ def test_wnm_deduplication(_setup):
     assert len(origin_msgs) == num_origin_msgs
     assert len(cache_msgs) == 1
 
+    # # get origin dataservers
+    # origin_msg_dataservers = []
+    # for origin_msg in origin_msgs:
+    #     dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+    #     origin_msg_dataservers.append(dataserver)
+    # origin_msg_dataservers = list(set(origin_msg_dataservers))
+    #
+    # metrics_data["assertions"] = metrics_data.get("assertions", [])
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_download_total",
+    #     "expected_difference": 1,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+    #     "expected_value": 1,
+    #     "dataservers": origin_msg_dataservers
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+    #     "expected_comparison": "greater",
+    #     "dataservers": origin_msg_dataservers
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+    #     "expected_difference": 0,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
+    #     "expected_difference": 0,
+    # })
 
-@pytest.mark.usefixtures("_setup")
-def test_wnm_deduplication_alt_1(_setup):
+
+def test_wnm_deduplication_alt_1(metrics_data):
     print("\nWIS2 Notification Message Deduplication (Alt 1)")
-    _init = _setup
+    _init = _setup(17)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
+    msg_data_id = "gc_dedup_alt_1_"+_init['test_data_id']
     test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
 
     # Prepare WNM with invalid and valid properties
@@ -571,7 +825,7 @@ def test_wnm_deduplication_alt_1(_setup):
             },
             "wnm": {
                 "properties": {
-                    "data_id": _init['test_data_id'],
+                    "data_id": msg_data_id,
                     "pubtime": test_dt,
                     "links": [
                         {
@@ -596,7 +850,7 @@ def test_wnm_deduplication_alt_1(_setup):
             },
             "wnm": {
                 "properties": {
-                    "data_id": _init['test_data_id'],
+                    "data_id": msg_data_id,
                     "pubtime": test_dt
                 }
             }
@@ -606,11 +860,11 @@ def test_wnm_deduplication_alt_1(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the invalid message first, then the valid message
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_invalid_config))
-    time.sleep(5)
+    time.sleep(2 * sleep_factor)
     pub_client.pub(topic=_init['test_pub_topic'], message=json.dumps(wnm_valid_config))
 
     # Wait for messages
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs * 2, num_cache_msgs=1, data_ids=[_init['test_data_id']], max_wait_time=60*2)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs=num_origin_msgs * 2, num_cache_msgs=num_origin_msgs, data_ids=[msg_data_id], max_wait_time=60*2)
 
     sub_client.loop_stop()
     sub_client.disconnect()
@@ -620,12 +874,50 @@ def test_wnm_deduplication_alt_1(_setup):
     assert len(origin_msgs) == num_origin_msgs * 2
     # Only one message should be published on the cache/a/wis2/# topic
     assert len(cache_msgs) == 1
+    # # get origin dataservers
+    # origin_msg_dataservers = []
+    # for origin_msg in origin_msgs:
+    #     dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+    #     origin_msg_dataservers.append(dataserver)
+    # origin_msg_dataservers = list(set(origin_msg_dataservers))
+    # metrics_data["assertions"] = metrics_data.get("assertions", [])
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_1",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_download_total",
+    #     "expected_difference": num_origin_msgs,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_1",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+    #     "expected_value": 1,
+    #     "dataservers": [x for x in origin_msg_dataservers if 'example.org' not in x]
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_1",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+    #     "expected_comparison": "greater",
+    #     "dataservers": [x for x in origin_msg_dataservers if 'example.org' not in x]
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_1",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+    #     "expected_difference": num_origin_msgs,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_1",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
+    #     "expected_difference": 0,
+    # })
 
 
-@pytest.mark.usefixtures("_setup")
-def test_wnm_deduplication_alt_2(_setup):
+def test_wnm_deduplication_alt_2(metrics_data):
     print("\nWIS2 Notification Message Deduplication (Alt 2)")
-    _init = _setup
+    _init = _setup(18)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
@@ -658,7 +950,7 @@ def test_wnm_deduplication_alt_2(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the message with later pubtime first, then the earlier pubtime
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_1))
-    time.sleep(2)
+    time.sleep(2 * sleep_factor)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_config_2))
 
     # Wait for messages
@@ -672,12 +964,48 @@ def test_wnm_deduplication_alt_2(_setup):
     assert len(origin_msgs) == num_origin_msgs * 2
     # Both messages should be published on the origin/a/wis2/# topic but only one on the cache/a/wis2/# topic
     assert len(cache_msgs) == num_origin_msgs
+    # origin_msg_dataservers = []
+    # for origin_msg in origin_msgs:
+    #     dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+    #     origin_msg_dataservers.append(dataserver)
+    # origin_msg_dataservers = list(set(origin_msg_dataservers))
+    # metrics_data["assertions"] = metrics_data.get("assertions", [])
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_2",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_download_total",
+    #     "expected_difference": 1,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_2",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+    #     "expected_value": 1,
+    #     "dataservers": origin_msg_dataservers
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_2",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+    #     "expected_comparison": "greater",
+    #     "dataservers": origin_msg_dataservers
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_2",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+    #     "expected_difference": 0,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_wnm_deduplication_alt_2",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
+    #     "expected_difference": 0,
+    # })
 
-
-@pytest.mark.usefixtures("_setup")
-def test_data_update(_setup):
+def test_data_update(metrics_data):
     print("\nData Update")
-    _init = _setup
+    _init = _setup(19)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
@@ -715,7 +1043,7 @@ def test_data_update(_setup):
     pub_client = MQTTPubSubClient(mqtt_broker_trigger)
     # Publish the earlier message first, then the later message
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_earlier_config))
-    time.sleep(10)
+    time.sleep(5 * sleep_factor)
     pub_client.pub(topic=test_pub_topic, message=json.dumps(wnm_later_config))
 
     # Wait for messages
@@ -731,6 +1059,7 @@ def test_data_update(_setup):
     assert len(cache_msgs) == num_origin_msgs * 2
 
     # for each origin message, there should be a corresponding cache message
+    origin_msg_dataservers = []
     for og_wnm in origin_msgs:
         # match based on data_id and pubtime
         cache_msg = [m for m in cache_msgs if
@@ -757,177 +1086,95 @@ def test_data_update(_setup):
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
         assert verified is True
+        dataserver = next((urlparse(link['href']).hostname for link in og_wnm.get('links', []) if
+                           link.get('rel') in ['canonical', 'update']), None)
+        origin_msg_dataservers.append(dataserver)
+    origin_msg_dataservers = list(set(origin_msg_dataservers))
+    # metrics_data["assertions"] = metrics_data.get("assertions", [])
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_data_update",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_download_total",
+    #     "expected_difference": num_origin_msgs*2,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_data_update",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+    #     "expected_value": 1,
+    #     "dataservers": origin_msg_dataservers
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_data_update",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+    #     "expected_comparison": "greater",
+    #     "dataservers": origin_msg_dataservers
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_data_update",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+    #     "expected_difference": 0,
+    # })
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_data_update",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
+    #     "expected_difference": 0,
+    # })
 
+def test_gc_metrics(metrics_data, initial_metrics):
+    print("\nGC Metrics Assertions")
+    sleep_w_status(2*60)
+    final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass)
+    assertion_results = []
 
-def test_wnm_processing_rate(_setup):
-    print("\nWIS2 Notification Message Processing Rate")
-    _init = _setup
-    num_msgs = 2000
-    sub_client = _init['sub_client']
-    test_pub_topic = _init['test_pub_topic']
-    num_msgs_per_centre = num_msgs // (datatest_centres[-1] - datatest_centres[0] + 1)
-    num_msgs = num_msgs_per_centre * (datatest_centres[-1] - datatest_centres[0] + 1)
-    print(f"Number of messages: {num_msgs}")
-    print(f"Number of messages per centre: {num_msgs_per_centre}")
+    for assertion in metrics_data.get("assertions", []):
+        print(f"Checking assertion: {assertion}")
+        test_name = assertion.get("test_name")
+        centre_id = assertion.get("centre_id")
+        metric_name = assertion.get("metric_name")
+        expected_difference = assertion.get("expected_difference", None)
+        expected_value = assertion.get("expected_value", None)
+        expected_comparison = assertion.get("expected_comparison", None)
+        dataservers = assertion.get("dataservers", None)
 
-    # Initialize the trigger client
-    trigger_client = setup_mqtt_client(mqtt_broker_trigger)
-    for centreid in range(datatest_centres[0], datatest_centres[1] + 1):
-        wnm_dataset_config = {
-            "scenario": "datatest",
-            "configuration": {
-                "setup": {
-                    "centreid_min": centreid,
-                    "centreid_max": centreid,
-                    "number": num_msgs_per_centre,
-                    "size_min": (1000 * 85),
-                    "size_max": (1000 * 90),
-                    "delay": 0
-                }}}
-        trigger_client.publish(topic="config/a/wis2/gc_performance_test", payload=json.dumps(wnm_dataset_config), qos=1)
-    trigger_client.loop_stop()
-    trigger_client.disconnect()
+        if dataservers:
+            initial_value = get_metric_value(initial_metrics, metric_name, centre_id, dataservers[0], default=0)
+            final_value = get_metric_value(final_metrics, metric_name, centre_id, dataservers[0], default=0)
+        else:
+            initial_value = get_metric_value(initial_metrics, metric_name, centre_id, default=0)
+            final_value = get_metric_value(final_metrics, metric_name, centre_id, default=0)
 
-    # Wait for messages
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_msgs, num_msgs, max_wait_time=60*10)
-    msg_data = sub_client._userdata
-    sub_client.loop_stop()
-    sub_client.disconnect()
-    # Assert origin and cache messages
-    assert len(origin_msgs) >= num_msgs
-    assert len(cache_msgs) >= num_msgs
+        if expected_difference is not None:
+            try:
+                assert final_value == initial_value + expected_difference, \
+                    f"{test_name}: Expected {metric_name} to increase by {expected_difference} but got {final_value - initial_value}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
 
-    # Calculate and print processing metrics
-    origin_start_time = msg_data.get('origin_start_time')
-    cache_end_time = msg_data.get('cache_end_time')
-    if origin_start_time and cache_end_time:
-        total_processing_time = cache_end_time - origin_start_time
-        print(f"Total processing time from first 'origin' to last 'cache': {total_processing_time:.2f} seconds")
-        # print total cache and origin messages
-        print(f"Total Origin Messages: {len(origin_msgs)}")
-        print(f"Total Cache Messages: {len(cache_msgs)}")
+        if expected_value is not None:
+            try:
+                assert final_value == expected_value, \
+                    f"{test_name}: Expected {metric_name} to be {expected_value} but got {final_value}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
 
-    processing_times = [
-        cache_msg['received_time'] - origin_msg['received_time']
-        for origin_msg in origin_msgs
-        for cache_msg in cache_msgs
-        if cache_msg['properties']['data_id'] == origin_msg['properties']['data_id'] and cache_msg['properties'][
-            'pubtime'] == origin_msg['properties']['pubtime']
-    ]
+        if expected_comparison == "greater":
+            try:
+                assert final_value > initial_value, \
+                    f"{test_name}: Expected {metric_name} to be greater than {initial_value} but got {final_value}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
 
-    if processing_times:
-        avg_processing_time = sum(processing_times) / len(processing_times)
-        print(f"Average processing time per message: {avg_processing_time:.2f} seconds")
+        if expected_comparison == "equal":
+            try:
+                assert final_value == initial_value, \
+                    f"{test_name}: Expected {metric_name} to be equal to {initial_value} but got {final_value}"
+            except AssertionError as e:
+                assertion_results.append(str(e))
 
-    if origin_start_time and cache_end_time:
-        throughput = len(cache_msgs) / total_processing_time
-        print(f"Throughput: {throughput:.2f} messages per second")
-        assert throughput >= 5, "Throughput is less than 5 messages per second"
-
-    cache_start_time = msg_data.get('cache_start_time')
-    if cache_start_time and cache_end_time:
-        cache_processing_time = cache_end_time - cache_start_time
-        print(f"Cache processing time excluding initial lag: {cache_processing_time:.2f} seconds")
-    # calculate the average cache message size
-    # msg['links']['canonical']['length']
-    cache_msg_sizes = [l['length'] for m in cache_msgs for l in m['links'] if l['rel'] == 'canonical']
-    avg_cache_msg_size = sum(cache_msg_sizes) / len(cache_msg_sizes)
-    print(f"Average cache message size: {avg_cache_msg_size:.2f} bytes")
-
-
-# @pytest.mark.parametrize("ab_centreid", range(ab_centres[0], ab_centres[0] + 1))
-@pytest.mark.usefixtures("_setup")
-# def test_concurrent_client_downloads(ab_centreid, _setup):
-def test_concurrent_client_downloads(_setup):
-    print("\nConcurrent client downloads")
-    _init = _setup
-    num_origin_msgs = 1
-    sub_client = _init['sub_client']
-    concurrency_benchmark = 1000
-    # Prepare and publish a normal WNM message
-    wnm_dataset_config = {
-        "scenario": "datatest",
-        "configuration": {
-            "setup": {
-                "centreid": _init['test_centre_int'],
-                "number": num_origin_msgs,
-                # "size_min": 1000 * 1000 * 200,  # 200MB
-                # "size_max": 1000 * 1000 * 201,  # 201MB
-                "size_min": 1000 * 1000 * 20,  # 20MB
-                "size_max": 1000 * 1000 * 21,  # 21MB
-                # "size_min": 1000 * 100,
-                # "size_max": 1000 * 101,
-            },
-            "wnm": {
-                "properties": {
-                    "data_id": _init['test_data_id'],
-                    "cache": True  # Ensure caching for large files
-                }
-            }
-        }
-    }
-
-    pub_client = setup_mqtt_client(mqtt_broker_trigger)
-    pub_result_1 = pub_client.publish(topic=_init['test_pub_topic'], payload=json.dumps(wnm_dataset_config))
-    print(f"Published large file with result: {pub_result_1}")
-    # Wait for messages
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(sub_client, num_origin_msgs, num_origin_msgs, max_wait_time=60*5,
-                                                data_ids=[_init['test_data_id']])
-
-    # Assert origin and cache messages
-    assert len(origin_msgs) == num_origin_msgs
-    assert len(cache_msgs) == num_origin_msgs, "Cache messages not received..."
-
-    # Extract the canonical link from the cached messages
-    canonical_link = None
-    for cache_msg in cache_msgs:
-        for link in cache_msg['links']:
-            if link['rel'] == 'canonical':
-                canonical_link = link['href']
-                break
-        if canonical_link:
-            break
-
-    assert canonical_link is not None, "Canonical link not found in cached messages"
-    # Prepare and publish an 'ab' scenario config message using the canonical link
-    # number of ab centres
-    num_ab_centres = ab_centres[-1] - ab_centres[0] + 1
-    ab_scenario_config = {
-        "scenario": "ab",
-        "configuration": {
-            "setup": {
-                "centreid_min": ab_centres[0],
-                "centreid_max": ab_centres[-1],
-                "concurrent": concurrency_benchmark//num_ab_centres,
-                "number": concurrency_benchmark*1.5//num_ab_centres,
-                "url": canonical_link,
-                "action": "start"
-            }
-        }
-    }
-
-    # Subscribe to the result topic
-    result_client = setup_mqtt_client(mqtt_broker_trigger)
-    result_client.subscribe("result/a/wis2/+/ab", qos=1)
-
-    pub_ab_result = pub_client.publish(topic="config/a/wis2/gcabtest", payload=json.dumps(ab_scenario_config))
-    if not pub_ab_result:
-        raise Exception("Failed to publish message")
-    print(f"Published ApacheBench scenario with result: {pub_ab_result}")
-
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*15)
-    # collect msgs from result client
-    ab_result_msgs = [m for m in result_msgs if 'payload' in m.keys() and 'ApacheBench' in m['payload']]
-
-    # Assert result messages
-    assert len(ab_result_msgs) > 0, "No ab result messages received"
-
-    # Perform additional assertions or evaluations on the result messages if needed
-    print("\nCollecting and parsing ApacheBench results:\n")
-    for r in ab_result_msgs:
-        # parse the ab result
-        ab_result = ab.parse_ab_output(r['payload'])
-        # assert no failed requests
-        assert int(ab_result['failed_requests']) == 0
-        # log the result
-        print(json.dumps(ab_result, indent=4))
+    if assertion_results:
+        print("\n".join(assertion_results))
+        raise AssertionError("\n".join(assertion_results))
