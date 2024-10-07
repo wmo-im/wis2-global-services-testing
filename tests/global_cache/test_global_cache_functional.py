@@ -282,7 +282,6 @@ def _setup(test_centre_int:int=None):
         "test_pub_topic": test_pub_topic,
         "test_data_id": test_data_id,
     }
-    yield setup_dict
     return setup_dict
 
 
@@ -425,8 +424,6 @@ def test_mqtt_broker_message_flow(run, metrics_data, initial_metrics):
                        1] == '1', f"Dataserver status flag not set to 1 for {metric['metric']['dataserver']}"
 
 
-@pytest.mark.usefixtures("_setup")
-def test_cache_false_directive(_setup):
 def test_cache_false_directive(metrics_data):
     print("\nCache False Directive")
     num_origin_msgs = 1
