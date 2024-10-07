@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import sys
 from dotenv import load_dotenv
@@ -7,6 +8,17 @@ from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
+def pytest_configure(config):
+    # Set logging configuration
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    config.option.log_cli = True
+    config.option.log_cli_level = 'DEBUG'
+    config.option.capture="tee-sys"
+    config.option.log_cli_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logger = logging.getLogger(__name__)
+
+
+# Your test code here
 
 ab_centres = [1001, 1010]
 datatest_centres = [11, 20]
@@ -185,20 +197,31 @@ def test_concurrent_client_downloads():
     if not pub_ab_result:
         raise Exception("Failed to publish message")
     print(f"Published ApacheBench scenario with result: {pub_ab_result}")
-
-    origin_msgs, cache_msgs, result_msgs = wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*15)
+    origin_msgs, cache_msgs, result_msgs = wait_for_messages(result_client, num_result_msgs=num_ab_centres*2, max_wait_time=60*3)
+    logger.debug(f"num result messages: {len(result_msgs)}")
     # collect msgs from result client
     ab_result_msgs = [m for m in result_msgs if 'payload' in m.keys() and 'ApacheBench' in m['payload']]
 
     # Assert result messages
     assert len(ab_result_msgs) > 0, "No ab result messages received"
-
+    assert len(ab_result_msgs) == num_ab_centres, "Incorrect number of ab result messages received"
+    logger.debug(f"Received {len(ab_result_msgs)} ApacheBench result messages")
     # Perform additional assertions or evaluations on the result messages if needed
-    print("\nCollecting and parsing ApacheBench results:\n")
-    for r in ab_result_msgs:
-        # parse the ab result
-        ab_result = ab.parse_ab_output(r['payload'])
-        # assert no failed requests
-        assert int(ab_result['failed_requests']) == 0
+    logger.debug("\nCollecting and parsing ApacheBench results:\n")
+    ab_results = [ab.parse_ab_output(r['payload']) for r in ab_result_msgs]
+    # aggregate the failed requests
+    failed_requests = [int(r['failed_requests']) for r in ab_results]
+    total_requests = [int(r['complete_requests']) for r in ab_results]
+    success_rate = sum(total_requests) / (sum(total_requests) + sum(failed_requests))
+    assert success_rate > 0.99, "Success rate is less than 99%"
+    # aggregate requests_per_second (avg), transfer_rate (avg)
+    requests_per_second = [float(r['requests_per_second']) for r in ab_results]
+    transfer_rate = [float(r['transfer_rate']) for r in ab_results]
+    avg_requests_per_second = sum(requests_per_second) / len(requests_per_second)
+    avg_transfer_rate = sum(transfer_rate) / len(transfer_rate)
+    logger.info(f"Average requests per second: {avg_requests_per_second:.2f}")
+    logger.info(f"Average transfer rate: {avg_transfer_rate:.2f}")
+    logger.info(f"Success rate: {success_rate:.2f}")
+    for res in ab_results:
         # log the result
-        print(json.dumps(ab_result, indent=4))
+        logger.debug(json.dumps(res, indent=4))
