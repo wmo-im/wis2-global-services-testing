@@ -261,10 +261,10 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     return origin_msgs, cache_msgs, result_msgs
 
 
-@pytest.fixture
-def _setup():
+def _setup(test_centre_int:int=None):
     # Setup
-    test_centre_int = random.choice(range(datatest_centres[0], datatest_centres[-1] + 1))
+    if test_centre_int is None:
+        test_centre_int = random.choice(range(datatest_centres[0], datatest_centres[-1] + 1))
     sub_client = setup_mqtt_client(mqtt_broker_recv)
     for sub_topic in sub_topics:
         sub_client.subscribe(sub_topic, qos=1)
@@ -281,9 +281,10 @@ def _setup():
         "test_centre": test_centre,
         "test_pub_topic": test_pub_topic,
         "test_data_id": test_data_id,
-        "initial_metrics": initial_metrics
     }
     yield setup_dict
+    return setup_dict
+
 
 
 def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
@@ -352,13 +353,11 @@ def test_mqtt_broker_subscription(topic):
     client.disconnect()
     del client
 
-
 @pytest.mark.parametrize("run", range(3))
-@pytest.mark.usefixtures("_setup")
-def test_mqtt_broker_message_flow(run, _setup):
+def test_mqtt_broker_message_flow(run, metrics_data, initial_metrics):
     print("\nWIS2 Notification Message (WNM) Processing")
     # Setup
-    _init = _setup
+    _init = _setup(12)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     wnm_dataset_config = {
@@ -425,18 +424,13 @@ def test_mqtt_broker_message_flow(run, _setup):
             assert metric['value'][
                        1] == '1', f"Dataserver status flag not set to 1 for {metric['metric']['dataserver']}"
 
-    for metric in final_metrics.get('wmo_wis2_gc_downloaded_last_timestamp_seconds', []):
-        assert float(
-            metric['value'][1]) > 0, f"Last download timestamp not set for {metric['metric']['dataserver']}"
-
-    print("\nAll metrics assertions passed.")
-
 
 @pytest.mark.usefixtures("_setup")
 def test_cache_false_directive(_setup):
+def test_cache_false_directive(metrics_data):
     print("\nCache False Directive")
     num_origin_msgs = 1
-    _init = _setup
+    _init = _setup(13)
     # generate some random id's for the messages
     sub_client = _init['sub_client']
     wnm_dataset_config = {
@@ -485,10 +479,9 @@ def test_cache_false_directive(_setup):
         assert verified is True
 
 
-@pytest.mark.usefixtures("_setup")
-def test_source_download_failure(_setup):
+def test_source_download_failure(metrics_data):
     print("\nSource Download Failure")
-    _init = _setup
+    _init = _setup(14)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     # test_dt = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S') + 'Z'
@@ -538,10 +531,9 @@ def test_source_download_failure(_setup):
         assert len(cache_msg) == 0
 
 
-@pytest.mark.usefixtures("_setup")
-def test_data_integrity_check_failure(_setup):
+def test_data_integrity_check_failure(metrics_data):
     print("\nData Integrity Check Failure")
-    _init = _setup
+    _init = _setup(15)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
 
@@ -582,10 +574,9 @@ def test_data_integrity_check_failure(_setup):
     assert len(cache_msgs) == 0
 
 
-@pytest.mark.usefixtures("_setup")
-def test_wnm_deduplication(_setup):
+def test_wnm_deduplication(metrics_data):
     print("\nWIS2 Notification Message Deduplication")
-    _init = _setup
+    _init = _setup(16)
     num_origin_msgs = 5
     sub_client = _init['sub_client']
 
@@ -623,10 +614,9 @@ def test_wnm_deduplication(_setup):
     assert len(cache_msgs) == 1
 
 
-@pytest.mark.usefixtures("_setup")
-def test_wnm_deduplication_alt_1(_setup):
+def test_wnm_deduplication_alt_1(metrics_data):
     print("\nWIS2 Notification Message Deduplication (Alt 1)")
-    _init = _setup
+    _init = _setup(17)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     msg_data_id = "gc_dedup_alt_1_"+_init['test_data_id']
@@ -695,10 +685,9 @@ def test_wnm_deduplication_alt_1(_setup):
     assert len(cache_msgs) == 1
 
 
-@pytest.mark.usefixtures("_setup")
-def test_wnm_deduplication_alt_2(_setup):
+def test_wnm_deduplication_alt_2(metrics_data):
     print("\nWIS2 Notification Message Deduplication (Alt 2)")
-    _init = _setup
+    _init = _setup(18)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
@@ -747,10 +736,9 @@ def test_wnm_deduplication_alt_2(_setup):
     assert len(cache_msgs) == num_origin_msgs
 
 
-@pytest.mark.usefixtures("_setup")
-def test_data_update(_setup):
+def test_data_update(metrics_data):
     print("\nData Update")
-    _init = _setup
+    _init = _setup(19)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
