@@ -1,8 +1,9 @@
+import argparse
 import os
 import sys
 from dotenv import load_dotenv
 import json
-from test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_client
+from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_client
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
@@ -22,7 +23,14 @@ prom_host = os.getenv('PROMETHEUS_HOST')
 prom_un = os.getenv('PROMETHEUS_USER')
 prom_pass = os.getenv('PROMETHEUS_PASSWORD')
 # sleep factor
-sleep_factor = int(os.getenv('SLEEP_FACTOR', 1))
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Global Cache Functional Tests')
+parser.add_argument('--sleep-factor', type=int, default=1, help='Sleep factor for the tests')
+args = parser.parse_args()
+
+# sleep factor
+sleep_factor = args.sleep_factor
 # GB Topics
 sub_topics = [
     "origin/a/wis2/#",

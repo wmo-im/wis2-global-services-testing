@@ -5,6 +5,7 @@ import random
 import sys
 import os
 from copy import deepcopy
+import argparse
 
 import pytest
 import paho.mqtt.client as mqtt
@@ -38,8 +39,14 @@ mqtt_broker_gc = os.getenv('TEST_GC_MQTT_BROKER')
 prom_host = os.getenv('PROMETHEUS_HOST')
 prom_un = os.getenv('PROMETHEUS_USER')
 prom_pass = os.getenv('PROMETHEUS_PASSWORD')
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Global Cache Functional Tests')
+parser.add_argument('--sleep-factor', type=int, default=1, help='Sleep factor for the tests')
+args = parser.parse_args()
+
 # sleep factor
-sleep_factor = int(os.getenv('SLEEP_FACTOR', 1))
+sleep_factor = args.sleep_factor
 # GB Topics
 sub_topics = [
     "origin/a/wis2/#",
@@ -676,6 +683,12 @@ def test_data_integrity_check_failure(metrics_data):
     # No messages should be published on the cache/a/wis2/# topic
     assert len(cache_msgs) == 0
 
+    # get dataservers
+    origin_msg_dataservers = []
+    for origin_msg in origin_msgs:
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+
     metrics_data["assertions"] = metrics_data.get("assertions", [])
     metrics_data["assertions"].append({
         "test_name": "test_data_integrity_check_failure",
@@ -688,14 +701,14 @@ def test_data_integrity_check_failure(metrics_data):
         "centre_id": _init['test_pub_centre'],
         "metric_name": "wmo_wis2_gc_dataserver_status_flag",
         "expected_value": 0,
-        # "dataservers": origin_msg_dataservers
+        "dataservers": origin_msg_dataservers
     })
     metrics_data["assertions"].append({
         "test_name": "test_data_integrity_check_failure",
         "centre_id": _init['test_pub_centre'],
         "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
         "expected_difference": 0,
-        # "dataservers": origin_msg_dataservers
+        "dataservers": origin_msg_dataservers
     })
     metrics_data["assertions"].append({
         "test_name": "test_data_integrity_check_failure",
