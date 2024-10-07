@@ -25,12 +25,12 @@ prom_pass = os.getenv('PROMETHEUS_PASSWORD')
 # sleep factor
 
 # Parse command-line arguments
-parser = argparse.ArgumentParser(description='Global Cache Functional Tests')
-parser.add_argument('--sleep-factor', type=int, default=1, help='Sleep factor for the tests')
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description='Global Cache Functional Tests')
+# parser.add_argument('--sleep-factor', type=int, default=1, help='Sleep factor for the tests')
+# args = parser.parse_args()
 
 # sleep factor
-sleep_factor = args.sleep_factor
+sleep_factor = int(os.getenv('SLEEP_FACTOR', 1))
 # GB Topics
 sub_topics = [
     "origin/a/wis2/#",
