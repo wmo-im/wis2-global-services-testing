@@ -8,6 +8,8 @@ from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
+
+
 def pytest_configure(config):
     # Set logging configuration
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
