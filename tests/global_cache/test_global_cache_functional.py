@@ -271,6 +271,8 @@ def _setup():
         sub_client.subscribe(sub_topic, qos=1)
         print(f"Subscribed to topic: {sub_topic}")
     test_centre = f"gc_test_centre_{test_centre_int}"
+    # format like the actual pub centre ie io-wis2dev-12-test
+    test_pub_centre = f"io-wis2dev-{test_centre_int}-test"
     test_pub_topic = f"config/a/wis2/{test_centre}"
     test_data_id = f"{test_centre}_{uuid.uuid4().hex[:16]}"
     # Yield setup data and initial metrics
