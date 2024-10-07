@@ -21,6 +21,7 @@
 
 import io
 import json
+import logging
 import os
 import sys
 import time
@@ -40,6 +41,8 @@ if os.path.exists('secrets.env'):
 
 load_dotenv('default.env')
 
+LOGGER = logging.getLogger(__name__)
+
 GB = os.environ['GB']
 GB_CENTRE_ID = os.environ['GB_CENTRE_ID']
 TRIGGER_BROKER = os.environ['TRIGGER_BROKER']
@@ -49,6 +52,7 @@ PROMETHEUS_HOST = os.getenv('PROMETHEUS_HOST')
 PROMETHEUS_USER = os.getenv('PROMETHEUS_USER')
 PROMETHEUS_PASSWORD = os.getenv('PROMETHEUS_PASSWORD')
 
+METADATA_DIR = os.path.join(os.path.dirname(__file__), 'metadata')
 MONITOR_MESSAGES = {}
 
 TOPICS = [
@@ -66,10 +70,18 @@ def gb_client():
     }
 
     client = MQTTPubSubClient(GB, options)
+    client.conn.on_log = lambda client, userdata, level, msg: LOGGER.debug(f"{client.host}: {msg}")
     yield client
 
     client.conn.loop_stop()
     client.conn.disconnect()
+
+
+@pytest.fixture()
+def sleep_factor(request):
+    sf = request.config.getoption('--sleep-factor')
+    LOGGER.info(f'Sleep factor: {sf}')
+    return sf
 
 
 def subscribe_trigger_client():
@@ -78,6 +90,7 @@ def subscribe_trigger_client():
     }
 
     client = MQTTPubSubClient(TRIGGER_BROKER, options)
+    client.conn.on_log = lambda client, userdata, level, msg: LOGGER.debug(f"{client.host}: {msg}")
     client.conn.on_message = _on_message
 
     return client
@@ -91,6 +104,7 @@ def _on_subscribe(client, userdata, mid, reason_codes, properties):
 
 def _on_message(client, userdata, message):
     if message.topic.startswith('monitor/a/wis2'):
+        LOGGER.debug('Monitor topic')
         report = json.loads(message.payload)
 
         if report.get('metadata_id') is not None:
@@ -120,6 +134,8 @@ def _subscribe_gb_client(gb_client_):
 
 def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
 
+    LOGGER.debug(f'Deriving WCMP2 filename from {wcmp2_file}')
+
     id_ = wcmp2_file
 
     replacers = (
@@ -132,10 +148,12 @@ def _get_wcmp2_id_from_filename(wcmp2_file) -> str:
     for replacer in replacers:
         id_ = id_.replace(*replacer)
 
+    LOGGER.debug(f'WCMP2 id {id_}')
+
     return id_
 
 
-def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_rel='canonical',
+def _publish_wcmp2_trigger_broker_message(wcmp2_file, link_rel='canonical',
                                           metadata_id=True) -> None:
 
     base_url = 'https://raw.githubusercontent.com/wmo-im/wis2-global-services-testing/main/tests/global_discovery_catalogue'
@@ -146,6 +164,7 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_re
         'scenario': 'metadatatest',
         'configuration': {
             'setup': {
+                'cache_a_wis2': 'only',
                 'centreid': 11,
                 'number': 1
             },
@@ -161,12 +180,11 @@ def _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2=None, link_re
     }
 
     if link_rel == 'deletion':
+        LOGGER.debug('WNM deletion')
         message['configuration']['wnm']['links'][0]['rel'] = 'deletion'
 
-    if cache_a_wis2 is not None:
-        message['configuration']['setup']['cache_a_wis2'] = cache_a_wis2
-
     if not metadata_id:
+        LOGGER.debug('WNM suppressing properties.metadata_id')
         message['configuration']['wnm']['properties']['metadata_id'] = metadata_id
 
     trigger_client = subscribe_trigger_client()
@@ -180,6 +198,7 @@ def _get_metadata_archive_zipfile_href():
     r = requests.get(GDC_API).json()
 
     for link in r['links']:
+        LOGGER.debug(f'Looking for zipfile link in {link}')
         if link.get('rel') == 'archives' and link.get('type') == 'application/zip':
             metadata_archive_zipfile_href = link['href']
             break
@@ -187,14 +206,14 @@ def _get_metadata_archive_zipfile_href():
     return metadata_archive_zipfile_href
 
 
-def test_global_broker_connection_and_subscription(gb_client):
+def test_global_broker_connection_and_subscription(sleep_factor, gb_client):
     print('Testing Global Broker connection and subscription')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
@@ -205,14 +224,14 @@ def test_global_broker_connection_and_subscription(gb_client):
     assert result[0]['value'][1] == '1'
 
 
-def test_notification_and_metadata_processing_success(gb_client):
+def test_notification_and_metadata_processing_success(sleep_factor, gb_client):
     print('Testing Notification and metadata processing (success)')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
@@ -221,7 +240,7 @@ def test_notification_and_metadata_processing_success(gb_client):
 
     _publish_wcmp2_trigger_broker_message(wcmp2_file)
 
-    time.sleep(5)
+    time.sleep(5 * sleep_factor)
 
     query_url = f'{GDC_API}/items/{wcmp2_id}'
 
@@ -231,55 +250,55 @@ def test_notification_and_metadata_processing_success(gb_client):
     assert MONITOR_MESSAGES[wcmp2_id]['summary']['PASSED'] == 12
 
 
-def test_notification_and_metadata_processing_failure_record_not_found(gb_client):
+def test_notification_and_metadata_processing_failure_record_not_found(sleep_factor, gb_client):
     print('Testing Notification and metadata processing (failure; record not found)')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
     wcmp2_file = 'metadata/valid/404.json'
 
-    _publish_wcmp2_trigger_broker_message(wcmp2_file, cache_a_wis2='only')
+    _publish_wcmp2_trigger_broker_message(wcmp2_file)
 
-    print('Test not executed (not cached)')
+    LOGGER.info('Test not executed (not cached)')
 
 
-def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2(gb_client):
+def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_wcmp2(sleep_factor, gb_client):
     print('Testing Notification and metadata processing (failure; malformed JSON or invalid WCMP2)')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
     wcmp2_ids = []
 
-    print('Testing malformed JSON')
-    for w2p in os.listdir('global_discovery_catalogue/metadata/malformed'):
+    LOGGER.info('Testing malformed JSON')
+    for w2p in os.listdir(f'{METADATA_DIR}/malformed'):
         _publish_wcmp2_trigger_broker_message(f'metadata/malformed/{w2p}')
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
-        time.sleep(5)
+        time.sleep(5 * sleep_factor)
 
-    time.sleep(10)
+    time.sleep(10 * sleep_factor)
 
     for wcmp2_id in wcmp2_ids:
         assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
-    print('Testing invalid JSON')
-    for w2p in os.listdir('global_discovery_catalogue/metadata/invalid'):
+    LOGGER.info('Testing invalid JSON')
+    for w2p in os.listdir(f'{METADATA_DIR}/invalid'):
         _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{w2p}')
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
-        time.sleep(5)
+        time.sleep(5 * sleep_factor)
 
-    time.sleep(10)
+    time.sleep(10 * sleep_factor)
 
     for wcmp2_id in wcmp2_ids:
         try:
@@ -288,35 +307,34 @@ def test_notification_and_metadata_processing_failure_malformed_json_or_invalid_
             assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
 
-def test_metadata_ingest_centre_id_mismatch(gb_client):
+def test_metadata_ingest_centre_id_mismatch(sleep_factor, gb_client):
     print('Testing Metadata ingest centre-id mismatch')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
-    print('Testing centre-id mismatch')
     wnm = 'urn--wmo--md--io-wis2dev-11-test--centreid-mismatch.json'
     wcmp2_id = _get_wcmp2_id_from_filename(wnm)
 
     _publish_wcmp2_trigger_broker_message(f'metadata/invalid/{wnm}')  # noqa
-    time.sleep(5)
+    time.sleep(5 * sleep_factor)
 
     assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
 
-def test_notification_and_metadata_processing_record_deletion(gb_client):
+def test_notification_and_metadata_processing_record_deletion(sleep_factor, gb_client):
     print('Testing Notification and metadata processing (record deletion)')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
@@ -324,7 +342,7 @@ def test_notification_and_metadata_processing_record_deletion(gb_client):
     wcmp2_id = _get_wcmp2_id_from_filename(wnm)
 
     _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}')  # noqa
-    time.sleep(5)
+    time.sleep(5 * sleep_factor)
 
     query_url = f'{GDC_API}/items/{wcmp2_id}'
 
@@ -332,7 +350,7 @@ def test_notification_and_metadata_processing_record_deletion(gb_client):
     assert r.ok
 
     _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion')  # noqa
-    time.sleep(10)
+    time.sleep(10 * sleep_factor)
 
     r = requests.get(query_url)
     assert not r.ok
@@ -340,21 +358,21 @@ def test_notification_and_metadata_processing_record_deletion(gb_client):
     assert 'message' in MONITOR_MESSAGES[wcmp2_id]
 
 
-def test_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id(gb_client):  # noqa
+def test_notification_and_metadata_processing_failure_record_deletion_message_does_not_contain_properties_metadata_id(sleep_factor, gb_client):
     print('Testing Notification and metadata processing (failure; record deletion message does not contain properties.metadata_id)')  # noqa
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
     wnm = 'urn--wmo--md--io-wis2dev-11-test--data.core.weather.prediction.forecast.shortrange.probabilistic.global.json'
+    _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion', metadata_id=False)
 
-    _publish_wcmp2_trigger_broker_message(f'metadata/valid/{wnm}', link_rel='deletion', metadata_id=False)  # noqa
-    time.sleep(5)
+    time.sleep(5 * sleep_factor)
 
     assert 'message' in MONITOR_MESSAGES['no-metadata_id']
 
@@ -372,42 +390,49 @@ def test_wcmp2_metadata_archive_zipfile_publication(gb_client):
 
     content = io.BytesIO(r.content)
     with zipfile.ZipFile(content) as z:
+        assert len(z.namelist()) == 6
         for name in z.namelist():
             with z.open(name) as zfh:
                 record = json.load(zfh)
                 assert 'http://wis.wmo.int/spec/wcmp/2/conf/core' in record['conformsTo']
 
 
-def test_wcmp2_cold_start_initialization_from_metadata_archive_zipfile(gb_client):
+def test_wcmp2_cold_start_initialization_from_metadata_archive_zipfile():
     print('Testing WCMP2 cold start initialization from metadata archive zipfile')
 
-    pass
+    run_api_tests()
 
 
-def test_api_functionality(gb_client):
+def test_api_functionality(sleep_factor, gb_client):
     print('Testing API functionality')
 
     assert gb_client.conn.is_connected
 
     _subscribe_gb_client(gb_client)
 
-    time.sleep(1)
+    time.sleep(1 * sleep_factor)
 
     assert gb_client.conn.subscribed_flag
 
     wcmp2_ids = []
-    for w2p in os.listdir('global_discovery_catalogue/metadata/valid'):
+    for w2p in os.listdir(f'{METADATA_DIR}/valid'):
         _publish_wcmp2_trigger_broker_message(f'metadata/valid/{w2p}')
         wcmp2_ids.append(_get_wcmp2_id_from_filename(w2p))
-        time.sleep(5)
+        time.sleep(5 * sleep_factor)
 
-    time.sleep(10)
+    time.sleep(10 * sleep_factor)
+
+    run_api_tests()
+
+
+def run_api_tests():
+    print('Query GDC API')
 
     base_url = GDC_API
 
     query_url = None
 
-    print('Querying base collection endpoint')
+    LOGGER.info('Querying base collection endpoint')
     r = requests.get(base_url).json()
 
     for link in r['links']:
@@ -418,7 +443,7 @@ def test_api_functionality(gb_client):
 
     assert query_url is not None
 
-    print('Querying items endpoint')
+    LOGGER.info('Querying items endpoint')
     r = requests.get(query_url).json()
 
     assert r['numberMatched'] == 6
@@ -428,7 +453,7 @@ def test_api_functionality(gb_client):
         'bbox': '-142,42,-53,84'
     }
 
-    print(f'Querying items endpoint with {query_params}')
+    LOGGER.info(f'Querying items endpoint with {query_params}')
     r = requests.get(f'{base_url}/items', params=query_params).json()
 
     assert r['numberMatched'] == 2
@@ -439,7 +464,7 @@ def test_api_functionality(gb_client):
         'datetime': '2000-11-11T12:42:23Z/..'
     }
 
-    print(f'Querying items endpoint with {query_params}')
+    LOGGER.info(f'Querying items endpoint with {query_params}')
     r = requests.get(f'{base_url}/items', params=query_params).json()
 
     assert r['numberMatched'] == 6
@@ -450,7 +475,7 @@ def test_api_functionality(gb_client):
         'q': 'observations'
     }
 
-    print(f'Querying items endpoint with {query_params}')
+    LOGGER.info(f'Querying items endpoint with {query_params}')
     r = requests.get(f'{base_url}/items', params=query_params).json()
 
     assert r['numberMatched'] == 4
