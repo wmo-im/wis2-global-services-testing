@@ -18,5 +18,7 @@ LOG_FILE="${OUTPUT_DIR}/gc_tests_${DATETIME}_${GC_METRICS_REPORT_BY}.log"
 XML_FILE="${OUTPUT_DIR}/gc_tests_${DATETIME}_${GC_METRICS_REPORT_BY}.xml"
 
 # Run the pytest and capture the output
-pytest test_global_cache_functional.py --junitxml=$XML_FILE -l -rA | tee -a $LOG_FILE
-pytest test_global_cache_performance.py --junitxml=$XML_FILE -l -rA | tee -a $LOG_FILE
+echo -e "Running functional tests\n" | tee -a $LOG_FILE
+pytest test_global_cache_functional.py --junitxml=$XML_FILE -l -rA --log-cli-level=DEBUG --log-cli-format='-%(funcName)s - %(message)s' --capture=tee-sys | tee -a $LOG_FILE
+echo -e "Running performance tests\n" | tee -a $LOG_FILE
+pytest test_global_cache_performance.py --junitxml=$XML_FILE -l -rA --log-cli-level=DEBUG --log-cli-format='-%(funcName)s - %(message)s' --capture=tee-sys | tee -a $LOG_FILE
