@@ -11,48 +11,48 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<Port>>
-|
+|yes
 |
 
 |<<Certificate>>
-|
+|yes
 |
 
 |<<Origin and Cache Read-Access>>
-|
+|yes
 |
 
 |<<Deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials>>
-|
+|yes
 |
 
 
 |<<cluster redundancy>>
-|
+|yes
 |
 
 |<<Discarding of duplicate messages>>
-|
+|yes
 |
 
 |<<Publishing a message using the centre_id from a different WIS2 Node>>
-|
+|yes
 |
 
 |<<Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)>>
-|
+|yes
 |
 
 |<<Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)>>
-|
+|yes
 |
 
 |<<Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata>>
-|
+|yes
 |
 
 |<<Verifying the compliance of a WIS2 Notification message>>
-|
+|yes
 |
 
 |===
@@ -64,15 +64,19 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<Minimum number of WIS2 Nodes>>
-|
+|yes
 |
 
 |<<Minimum number of subscribers>>
-|
+|yes
 |
 
 |<<Minimum number of messages per second>>
-|
+|yes
 |
 
 |===
+===== Recommendation
+* To avoid loss of connections a proposal to use everyone/everyone for the public and use specific credentials for partners
+* QoS=1 for partners
+* Qos=0 for public
