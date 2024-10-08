@@ -4,7 +4,10 @@ import os
 import sys
 from dotenv import load_dotenv
 import json
-from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_client
+import paho.mqtt.client as mqtt
+
+from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_client, sleep_w_status
+
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
@@ -193,8 +196,14 @@ def test_concurrent_client_downloads():
         }
     }
     # Subscribe to the result topic
+    result_topic = "result/a/wis2/#"
     result_client = setup_mqtt_client(mqtt_broker_trigger)
-    result_client.subscribe("result/a/wis2/#", qos=1)
+    # assert connected
+    assert result_client.is_connected() is True, "Result client not connected"
+    sub_res, sub_mid = result_client.subscribe(result_topic, qos=1)
+    # assert subscribed
+    assert sub_res == mqtt.MQTT_ERR_SUCCESS, "Failed to subscribe to result topic"
+    # give some time for the ab scenario to start
     pub_ab_result = pub_client.publish(topic="config/a/wis2/gcabtest", payload=json.dumps(ab_scenario_config))
     if not pub_ab_result:
         raise Exception("Failed to publish message")

@@ -148,6 +148,7 @@ def flag_on_disconnect(client, userdata, reason_code, properties=None):
 def flag_on_subscribe(client, userdata, mid, reason_codes, properties=None):
     print("Subscribed with mid " + str(mid) + " and QoS " + str(reason_codes[0]))
     client.subscribed_flag = True
+    time.sleep(1)
 
 
 def flag_on_message(client, userdata, msg):
@@ -224,7 +225,7 @@ def setup_mqtt_client(connection_info: str, on_log=False, loop_start=True):
     return client
 
 
-def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_result_msgs=0, data_ids=[], interval=0.5, max_wait_time=10, min_wait_time=0):
+def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_result_msgs=0, data_ids=[], interval=1, max_wait_time=10, min_wait_time=0):
     """
     Waits for the expected number of origin and cache messages.
 
@@ -241,8 +242,10 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
     Returns:
         tuple: A tuple containing lists of origin and cache messages, and a string indicating the reason for the break.
     """
-    # print summary message
-    print(f"Waiting for messages: Origin={num_origin_msgs}, Cache={num_cache_msgs}, Result={num_result_msgs}")
+    # make sure the client is connected
+    if not sub_client.is_connected():
+        raise Exception("Client is not connected")
+    logger.info(f"Waiting for messages: Origin={num_origin_msgs}, Cache={num_cache_msgs}, Result={num_result_msgs}")
     if sleep_factor != 1:
         print(f"Sleep factor: {sleep_factor}")
         max_wait_time = max_wait_time * sleep_factor
