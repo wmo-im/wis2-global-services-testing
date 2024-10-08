@@ -5,8 +5,6 @@ import random
 import sys
 import os
 from copy import deepcopy
-import argparse
-
 import pytest
 import paho.mqtt.client as mqtt
 import time
@@ -24,13 +22,6 @@ from tests.shared_utils.prom_metrics import fetch_prometheus_metrics
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
-
-def pytest_configure(config):
-    # Set logging configuration
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    config.option.log_cli = True
-    config.option.log_cli_level = 'DEBUG'
-    config.option.log_cli_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logger = logging.getLogger(__name__)
 
 
