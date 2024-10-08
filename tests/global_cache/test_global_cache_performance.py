@@ -2,6 +2,8 @@ import argparse
 import logging
 import os
 import sys
+import time
+
 from dotenv import load_dotenv
 import json
 import paho.mqtt.client as mqtt
@@ -188,6 +190,7 @@ def test_concurrent_client_downloads():
     # assert connected
     assert result_client.is_connected() is True, "Result client not connected"
     sub_res, sub_mid = result_client.subscribe(result_topic, qos=1)
+    time.sleep(3)
     # assert subscribed
     assert sub_res == mqtt.MQTT_ERR_SUCCESS, "Failed to subscribe to result topic"
     # give some time for the ab scenario to start
