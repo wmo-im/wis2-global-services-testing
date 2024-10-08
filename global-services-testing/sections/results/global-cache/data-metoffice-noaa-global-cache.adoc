@@ -2,7 +2,7 @@
 
 ==== data-metoffice-noaa-global-cache-results test results
 
-Date: YYYY-MM-DD
+Date: 2024-10-07
 
 ===== Functional tests
 
