@@ -77,7 +77,7 @@ Date: YYYY-MM-DD
 
 |===
 
-(1) Three sceanio carried out for the performance tests as follows
+(1) The performance tests wer carried out in three scenarios as follows
 
 |===
 
