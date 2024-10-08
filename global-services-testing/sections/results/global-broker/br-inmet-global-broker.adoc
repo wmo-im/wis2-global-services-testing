@@ -118,7 +118,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50
 Expected:51200, Received:51200 +
 Expected:204800, Received:204800 +
 Expected:204800, Received: lost of messages
-
+|===
 ===== Decision
 * Analysis of the results to adjust the parameters
 * Only the low tests are taken into account for acceptance purposes
