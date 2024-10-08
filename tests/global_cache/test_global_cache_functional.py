@@ -25,6 +25,15 @@ from tests.shared_utils.prom_metrics import fetch_prometheus_metrics
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
 
+def pytest_configure(config):
+    # Set logging configuration
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    config.option.log_cli = True
+    config.option.log_cli_level = 'DEBUG'
+    config.option.log_cli_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logger = logging.getLogger(__name__)
+
+
 datatest_centres = [11, 20]
 
 # Connection strings for the development global broker and message generator
@@ -140,9 +149,9 @@ def flag_on_connect(client, userdata, flags, rc, properties=None):
 
 def flag_on_disconnect(client, userdata, reason_code, properties=None):
     if reason_code == 0:
-        logging.info("Clean disconnection")
+        logger.info("Clean disconnection")
     else:
-        logging.error(f"Disconnect error with reason code {reason_code}")
+        logger.error(f"Disconnect error with reason code {reason_code}")
 
 
 def flag_on_subscribe(client, userdata, mid, reason_codes, properties=None):
@@ -260,6 +269,9 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
             cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
             result_msgs = [m for m in sub_client._userdata['received_messages'] if "result" in m['topic']]
+        logger.debug(f"Origin messages: {len(origin_msgs)}")
+        logger.debug(f"Cache messages: {len(cache_msgs)}")
+        logger.debug(f"Result messages: {len(result_msgs)}")
 
         elapsed_time = time.time() - start_time
         if elapsed_time >= min_wait_time:
@@ -347,7 +359,6 @@ def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
     metrics_to_fetch = [
         "wmo_wis2_gc_downloaded_total",
         "wmo_wis2_gc_dataserver_status_flag",
-        "wmo_wis2_gc_downloaded_last_timestamp_seconds",
         "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
         "wmo_wis2_gc_downloaded_errors_total",
         "wmo_wis2_gc_integrity_failed_total",
@@ -393,6 +404,10 @@ def test_mqtt_broker_subscription(topic):
     client.loop_stop()
     client.disconnect()
     del client
+
+def test_metrics_fetch(initial_metrics):
+    print("\nFetching GC Metrics")
+    assert initial_metrics is not None
 
 
 def test_mqtt_broker_message_flow(metrics_data, initial_metrics):
@@ -470,7 +485,7 @@ def test_mqtt_broker_message_flow(metrics_data, initial_metrics):
     metrics_data["assertions"].append({
         "test_name": "test_mqtt_broker_message_flow",
         "centre_id": _init['test_pub_centre'],
-        "metric_name": "wmo_wis2_gc_downloaded_last_timestamp_seconds",
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
         "expected_comparison": "greater",
         "dataservers": origin_msg_dataservers
     })
@@ -620,7 +635,7 @@ def test_source_download_failure(metrics_data):
     metrics_data["assertions"].append({
         "test_name": "test_source_download_failure",
         "centre_id": _init['test_pub_centre'],
-        "metric_name": "wmo_wis2_gc_download_total",
+        "metric_name": "wmo_wis2_gc_downloaded_total",
         "expected_difference": 0,
     })
     metrics_data["assertions"].append({
@@ -696,7 +711,7 @@ def test_data_integrity_check_failure(metrics_data):
     metrics_data["assertions"].append({
         "test_name": "test_data_integrity_check_failure",
         "centre_id": _init['test_pub_centre'],
-        "metric_name": "wmo_wis2_gc_download_total",
+        "metric_name": "wmo_wis2_gc_downloaded_total",
         "expected_difference": 0,
     })
     metrics_data["assertions"].append({
@@ -765,47 +780,46 @@ def test_wnm_deduplication(metrics_data):
     # Only one message should be published on the cache/a/wis2/# topic
     assert len(origin_msgs) == num_origin_msgs
     assert len(cache_msgs) == 1
+    # get origin dataservers
+    origin_msg_dataservers = []
+    for origin_msg in origin_msgs:
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+    origin_msg_dataservers = list(set(origin_msg_dataservers))
 
-    # # get origin dataservers
-    # origin_msg_dataservers = []
-    # for origin_msg in origin_msgs:
-    #     dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
-    #     origin_msg_dataservers.append(dataserver)
-    # origin_msg_dataservers = list(set(origin_msg_dataservers))
-    #
-    # metrics_data["assertions"] = metrics_data.get("assertions", [])
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_download_total",
-    #     "expected_difference": 1,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
-    #     "expected_value": 1,
-    #     "dataservers": origin_msg_dataservers
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
-    #     "expected_comparison": "greater",
-    #     "dataservers": origin_msg_dataservers
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
-    #     "expected_difference": 0,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
-    #     "expected_difference": 0,
-    # })
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": 1,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 1,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_comparison": "greater",
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+        "expected_difference": 0,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_integrity_failed_total",
+        "expected_difference": 0,
+    })
 
 
 def test_wnm_deduplication_alt_1(metrics_data):
@@ -877,45 +891,45 @@ def test_wnm_deduplication_alt_1(metrics_data):
     assert len(origin_msgs) == num_origin_msgs * 2
     # Only one message should be published on the cache/a/wis2/# topic
     assert len(cache_msgs) == 1
-    # # get origin dataservers
-    # origin_msg_dataservers = []
-    # for origin_msg in origin_msgs:
-    #     dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
-    #     origin_msg_dataservers.append(dataserver)
-    # origin_msg_dataservers = list(set(origin_msg_dataservers))
-    # metrics_data["assertions"] = metrics_data.get("assertions", [])
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_1",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_download_total",
-    #     "expected_difference": num_origin_msgs,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_1",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
-    #     "expected_value": 1,
-    #     "dataservers": [x for x in origin_msg_dataservers if 'example.org' not in x]
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_1",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
-    #     "expected_comparison": "greater",
-    #     "dataservers": [x for x in origin_msg_dataservers if 'example.org' not in x]
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_1",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
-    #     "expected_difference": num_origin_msgs,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_1",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
-    #     "expected_difference": 0,
-    # })
+    # get origin dataservers
+    origin_msg_dataservers = []
+    for origin_msg in origin_msgs:
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+    origin_msg_dataservers = list(set(origin_msg_dataservers))
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_1",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": num_origin_msgs,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_1",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 1,
+        "dataservers": [x for x in origin_msg_dataservers if 'example.org' not in x]
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_1",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_comparison": "greater",
+        "dataservers": [x for x in origin_msg_dataservers if 'example.org' not in x]
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_1",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+        "expected_difference": num_origin_msgs,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_1",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_integrity_failed_total",
+        "expected_difference": 0,
+    })
 
 
 def test_wnm_deduplication_alt_2(metrics_data):
@@ -967,44 +981,44 @@ def test_wnm_deduplication_alt_2(metrics_data):
     assert len(origin_msgs) == num_origin_msgs * 2
     # Both messages should be published on the origin/a/wis2/# topic but only one on the cache/a/wis2/# topic
     assert len(cache_msgs) == num_origin_msgs
-    # origin_msg_dataservers = []
-    # for origin_msg in origin_msgs:
-    #     dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
-    #     origin_msg_dataservers.append(dataserver)
-    # origin_msg_dataservers = list(set(origin_msg_dataservers))
-    # metrics_data["assertions"] = metrics_data.get("assertions", [])
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_2",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_download_total",
-    #     "expected_difference": 1,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_2",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
-    #     "expected_value": 1,
-    #     "dataservers": origin_msg_dataservers
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_2",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
-    #     "expected_comparison": "greater",
-    #     "dataservers": origin_msg_dataservers
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_2",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
-    #     "expected_difference": 0,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_wnm_deduplication_alt_2",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
-    #     "expected_difference": 0,
-    # })
+    origin_msg_dataservers = []
+    for origin_msg in origin_msgs:
+        dataserver = next((urlparse(link['href']).hostname for link in origin_msg.get('links', []) if link.get('rel') == 'canonical'), None)
+        origin_msg_dataservers.append(dataserver)
+    origin_msg_dataservers = list(set(origin_msg_dataservers))
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_2",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": 1,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_2",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 1,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_2",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_comparison": "greater",
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_2",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+        "expected_difference": 0,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_wnm_deduplication_alt_2",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_integrity_failed_total",
+        "expected_difference": 0,
+    })
 
 def test_data_update(metrics_data):
     print("\nData Update")
@@ -1093,39 +1107,39 @@ def test_data_update(metrics_data):
                            link.get('rel') in ['canonical', 'update']), None)
         origin_msg_dataservers.append(dataserver)
     origin_msg_dataservers = list(set(origin_msg_dataservers))
-    # metrics_data["assertions"] = metrics_data.get("assertions", [])
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_data_update",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_download_total",
-    #     "expected_difference": num_origin_msgs*2,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_data_update",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_status_flag",
-    #     "expected_value": 1,
-    #     "dataservers": origin_msg_dataservers
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_data_update",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
-    #     "expected_comparison": "greater",
-    #     "dataservers": origin_msg_dataservers
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_data_update",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
-    #     "expected_difference": 0,
-    # })
-    # metrics_data["assertions"].append({
-    #     "test_name": "test_data_update",
-    #     "centre_id": _init['test_pub_centre'],
-    #     "metric_name": "wmo_wis2_gc_integrity_failed_total",
-    #     "expected_difference": 0,
-    # })
+    metrics_data["assertions"] = metrics_data.get("assertions", [])
+    metrics_data["assertions"].append({
+        "test_name": "test_data_update",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_total",
+        "expected_difference": num_origin_msgs*2,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_update",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_status_flag",
+        "expected_value": 1,
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_update",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_dataserver_last_download_timestamp_seconds",
+        "expected_comparison": "greater",
+        "dataservers": origin_msg_dataservers
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_update",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+        "expected_difference": 0,
+    })
+    metrics_data["assertions"].append({
+        "test_name": "test_data_update",
+        "centre_id": _init['test_pub_centre'],
+        "metric_name": "wmo_wis2_gc_integrity_failed_total",
+        "expected_difference": 0,
+    })
 
 def test_gc_metrics(metrics_data, initial_metrics):
     print("\nGC Metrics Assertions")
