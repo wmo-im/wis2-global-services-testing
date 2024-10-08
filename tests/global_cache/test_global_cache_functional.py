@@ -1134,7 +1134,7 @@ def test_data_update(metrics_data):
 
 def test_gc_metrics(metrics_data, initial_metrics):
     print("\nGC Metrics Assertions")
-    sleep_w_status(2*60)
+    sleep_w_status(2.5*60*sleep_factor)
     final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass)
     assertion_results = []
 
