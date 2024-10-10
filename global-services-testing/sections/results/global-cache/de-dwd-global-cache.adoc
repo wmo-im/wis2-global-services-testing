@@ -11,48 +11,48 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<MQTT Broker Connectivity>>
-|
+|yes
 |
 
 |<<GC MQTT Broker Subscription>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message (WNM) Processing>>
-|
+|yes
 |
 
 |<<Cache False Directive>>
-|
+|yes
 |
 
 |<<Source Download Failure>>
-|
-|
-
-|<<Cache Override (Optional)>>
-|
+|yes
 |
 
 |<<Data Integrity Check Failure (Recommended)>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication (Alternative 1)>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication (Alternative 2)>>
-|
+|yes
 |
 
 |<<Data Update>>
+|yes
 |
-|
+
+|<<GC Metrics>>
+|yes
+|The tests shows that the metrics comparison failed, but the manual verification of “wmo_wis2_gc_downloaded_total” confirmed that this test has also been successful
 
 |===
 
@@ -63,15 +63,13 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<WIS2 Notification Processing Rate>>
-|
+|yes
 |
 
 |<<Concurrent client downloads>>
-|
+|yes
 |
 
-|<<Implicit tests>>
-|
-|
+
 
 |===
