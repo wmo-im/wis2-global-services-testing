@@ -11,48 +11,48 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<MQTT Broker Connectivity>>
-|
+|yes
 |
 
 |<<GC MQTT Broker Subscription>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message (WNM) Processing>>
-|
+|yes
 |
 
 |<<Cache False Directive>>
-|
+|yes
 |
 
 |<<Source Download Failure>>
-|
-|
-
-|<<Cache Override (Optional)>>
-|
+|yes
 |
 
 |<<Data Integrity Check Failure (Recommended)>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication (Alternative 1)>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication (Alternative 2)>>
-|
+|yes
 |
 
 |<<Data Update>>
+|yes
 |
-|
+
+|<<GC Metrics>>
+|yes
+|A first random check was fine for wmo_wis2_gc_downloaded_total (centre_id="io-wis2dev-20-test") with value before tests 400, after functional tests still 400, and after performance tests 600. 
 
 |===
 
@@ -63,15 +63,11 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<WIS2 Notification Processing Rate>>
-|
+|yes
 |
 
 |<<Concurrent client downloads>>
-|
-|
-
-|<<Implicit tests>>
-|
+|yes
 |
 
 |===
