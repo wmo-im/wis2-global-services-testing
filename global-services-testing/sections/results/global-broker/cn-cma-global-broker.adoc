@@ -16,7 +16,7 @@ Date: YYYY-MM-DD
 
 |<<Certificate>>
 |yes
-|manual check approve that the certifcate is correct
+|manual check approve that the certificate is correct
 
 |<<Origin and Cache Read-Access>>
 |yes
