@@ -11,48 +11,48 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<Port>>
-|
+|yes
 |
 
 |<<Certificate>>
 |
-|
+|no certificate
 
 |<<Origin and Cache Read-Access>>
-|
+|yes
 |
 
 |<<Deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials>>
-|
+|yes
 |
 
 
 |<<cluster redundancy>>
-|
+|yes
 |
 
 |<<Discarding of duplicate messages>>
-|
+|yes
 |
 
 |<<Publishing a message using the centre_id from a different WIS2 Node>>
-|
+|yes
 |
 
 |<<Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)>>
-|
+|yes
 |
 
 |<<Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)>>
-|
+|yes
 |
 
 |<<Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata>>
-|
+|yes
 |
 
 |<<Verifying the compliance of a WIS2 Notification message>>
-|
+|yes
 |
 
 |===
@@ -64,15 +64,60 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<Minimum number of WIS2 Nodes>>
-|
+|yes
 |
 
 |<<Minimum number of subscribers>>
-|
+|yes
 |
 
 |<<Minimum number of messages per second>>
-|
+|yes
 |
 
 |===
+
+(1) The performance tests wer carried out in three scenarios as follows
+
+|===
+
+|Test|Scenario|Comments
+
+|Low Performance
+|concur:8,tmout:20,msg_count:2,msg_delay:500 +
+concur:8,tmout:20,msg_count:4,msg_delay:500 +
+concur:8,tmout:20,msg_count:6,msg_delay:500 +
+concur:8,tmout:40,msg_count:8,msg_delay:500 +
+concur:8,tmout:40,msg_count:10,msg_delay:500 +
+concur:8,tmout:40,msg_count:12,msg_delay:500
+
+|Expected:3200, Received:3200
+Expected:6400, Received:6400
+Expected:9600, Received:9600
+Expected:12800, Received:12800
+Expected:16000, Received:16000
+Expected:19200, Received:19200
+
+|Medium Performance
+|concur:4,tmout:20,msg_count:4,msg_delay:100 +
+concur:8,tmout:20,msg_count:8,msg_delay:100 +
+concur:16,tmout:40,msg_count:16,msg_delay:100 +
+concur:32,tmout:40,msg_count:32,msg_delay:100
+|Expected:3200, Received:3200 +
+Expected:12800, Received:12800 +
+Expected:51200, Received:51200 +
+Expected:**203300** , Received:204800 
+
+|High Performance
+|concur:8,tmout:30,msg_count:8,msg_delay:50 +
+concur:16,tmout:30,msg_count:16,msg_delay:50 +
+concur:32,tmout:60,msg_count:32,msg_delay:50 +
+concur:64,tmout:90,msg_count:64,msg_delay:50
+
+|not tested
+|===
+===== Decision
+* Analysis of the results to adjust the parameters
+* Only the low tests are taken into account for acceptance purposes
+* Medium and high tests are just for performance information
+* A performance Test to be scheduled for all  the GBs (November/December)
