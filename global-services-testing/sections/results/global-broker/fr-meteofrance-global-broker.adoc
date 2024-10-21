@@ -65,7 +65,7 @@ Date: YYYY-MM-DD
 
 |<<Minimum number of WIS2 Nodes>>
 |yes
-|
+|the test script was not ready, so the performance tests were carried out manually 
 
 |<<Minimum number of subscribers>>
 |yes
