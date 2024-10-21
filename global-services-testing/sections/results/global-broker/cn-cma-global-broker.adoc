@@ -11,48 +11,48 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<Port>>
-|
+|yes
 |
 
 |<<Certificate>>
-|
-|
+|yes
+|manual check approve that the certifcate is correct
 
 |<<Origin and Cache Read-Access>>
-|
+|yes
 |
 
 |<<Deny write access to _origin/a/wis2/#_ and _cache/a/wis2/#_ for everyone/everyone credentials>>
-|
+|yes
 |
 
 
 |<<cluster redundancy>>
-|
+|yes
 |
 
 |<<Discarding of duplicate messages>>
-|
+|yes
 |
 
 |<<Publishing a message using the cn-cma-global-broker from a different WIS2 Node>>
-|
+|yes
 |
 
 |<<Publishing messages from a WIS2 Node using valid topics (compliant with WIS2 Topic Hierarchy)>>
-|
+|yes
 |
 
 |<<Publishing messages from a WIS2 Node using invalid topics (not compliant with WIS2 Topic Hierarchy)>>
-|
+|yes
 |
 
 |<<Publishes messages from a WIS2 Node on a _valid_ topic without corresponding metadata>>
-|
+|yes
 |
 
 |<<Verifying the compliance of a WIS2 Notification message>>
-|
+|yes
 |
 
 |===
@@ -64,15 +64,15 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<Minimum number of WIS2 Nodes>>
-|
+|yes
 |
 
 |<<Minimum number of subscribers>>
-|
+|yes
 |
 
 |<<Minimum number of messages per second>>
-|
-|
+|yes
+|the test script was not workikng correctly, so tests has been carried out manualy
 
 |===
