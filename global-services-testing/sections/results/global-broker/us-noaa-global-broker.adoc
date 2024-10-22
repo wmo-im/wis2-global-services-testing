@@ -2,7 +2,7 @@
 
 ==== CENTRE_ID test results
 
-Date: YYYY-MM-DD
+Date: 2024-10-17
 
 ===== Functional tests
 
