@@ -2,7 +2,7 @@
 
 ==== fr-meteofrance-global-broker test results
 
-Date: YYYY-MM-DD
+Date: 2024-09-30
 
 ===== Functional tests
 
