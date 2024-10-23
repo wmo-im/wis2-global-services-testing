@@ -376,7 +376,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 ===== Useful flags
 
 * `--sleep-factor`: some tests may require extra time for Pub/Sub workflow to complete.  Passing the `--sleep-factor` (integer) option allows to set a multiplier applied to all sleep functions in the test.
-* `-o log_cli=true`: print logging messages to screen (useful for debugging)
+* `-o log_cli=true log-level=DEBUG`: print logging messages to screen (useful for debugging).
 
 ==== Exiting the test environment
 
