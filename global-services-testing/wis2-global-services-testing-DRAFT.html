@@ -455,7 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><strong class="big">World Meteorological Organization</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-10-22</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Date: 2024-10-23</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">Version: 2024-03-28</p></td>
@@ -4645,9 +4645,10 @@ If a browser like Firefox is used, connect WSS endpoint (<a href="https://global
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash"># ensure that the Python virtual environment is activated
 # NOTE: CENTRE_ID is the centre identifier of the IUT
-mkdir -p /data/wis2-testing/results/CENTRE_ID
+export CENTRE_ID=ca-eccc-msc-global-discovery-catalogue
+mkdir -p /data/wis2-testing/results/$CENTRE_ID
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log</code></pre>
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4657,7 +4658,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --j
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash"># ensure that the Python virtual environment is activated which require interactive steps from the GDC IUT.
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT</code></pre>
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4667,7 +4668,7 @@ pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junit
 <div class="content">
 <pre class="highlight"><code class="language-bash" data-lang="bash"># ensure that the Python virtual environment is activated which require interactive steps from the GDC IUT.
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT</code></pre>
+pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -6439,7 +6440,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-22 13:37:49 UTC
+Last updated 2024-10-23 11:32:35 UTC
 </div>
 </div>
 </body>
