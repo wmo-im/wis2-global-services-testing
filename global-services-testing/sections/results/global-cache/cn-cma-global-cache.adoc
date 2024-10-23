@@ -2,7 +2,7 @@
 
 ==== cn-cma-global-cache test results
 
-Date: 2024-10-09
+Date:2024-10-09
 
 ===== Functional tests
 
