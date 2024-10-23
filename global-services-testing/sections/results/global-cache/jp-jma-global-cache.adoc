@@ -2,7 +2,7 @@
 
 ==== jp-jma-global-cache test results
 
-Date: YYYY-MM-DD
+Date: 2024-10-23
 
 ===== Functional tests
 
@@ -11,47 +11,47 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<MQTT Broker Connectivity>>
-|
+|yes
 |
 
 |<<GC MQTT Broker Subscription>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message (WNM) Processing>>
-|
+|yes
 |
 
 |<<Cache False Directive>>
-|
+|yes
 |
 
 |<<Source Download Failure>>
-|
+|yes
 |
 
 |<<Cache Override (Optional)>>
-|
+|yes
 |
 
 |<<Data Integrity Check Failure (Recommended)>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication (Alternative 1)>>
-|
+|yes
 |
 
 |<<WIS2 Notification Message Deduplication (Alternative 2)>>
-|
+|yes
 |
 
 |<<Data Update>>
-|
+|yes
 |
 
 |===
@@ -63,15 +63,14 @@ Date: YYYY-MM-DD
 |Test|Pass|Comments
 
 |<<WIS2 Notification Processing Rate>>
-|
+|yes
 |
 
 |<<Concurrent client downloads>>
-|
-|
+|no
+|the sleep factor has been increased but the test failed +
+A manual test shows that downloading took a very long time
 
-|<<Implicit tests>>
-|
-|
+
 
 |===
