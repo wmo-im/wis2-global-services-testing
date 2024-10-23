@@ -349,9 +349,10 @@ To execute the core GDC functional tests:
 ----
 # ensure that the Python virtual environment is activated
 # NOTE: CENTRE_ID is the centre identifier of the IUT
-mkdir -p /data/wis2-testing/results/CENTRE_ID
+export CENTRE_ID=ca-eccc-msc-global-discovery-catalogue
+mkdir -p /data/wis2-testing/results/$CENTRE_ID
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "not zipfile" --junitxml=/data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log
 ----
 
 To execute the additional GDC functional tests:
@@ -360,7 +361,7 @@ To execute the additional GDC functional tests:
 ----
 # ensure that the Python virtual environment is activated which require interactive steps from the GDC IUT.
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
+pytest -s global_discovery_catalogue/test_gdc_functional.py -k "zipfile" --junitxml=/data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
 ----
 
 To execute the GDC performance tests:
@@ -369,7 +370,7 @@ To execute the GDC performance tests:
 ----
 # ensure that the Python virtual environment is activated which require interactive steps from the GDC IUT.
 cd tests
-pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
+pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').xml -l -rA | tee /data/wis2-testing/results/$CENTRE_ID/$(date '+%Y-%m-%dT%H:%M:%SZ').log  # CENTRE_ID is the centre identifier of the IUT
 ----
 
 ===== Useful flags
