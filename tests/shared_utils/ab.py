@@ -7,6 +7,7 @@ from slugify import slugify
 
 
 def parse_ab_output(ab_output):
+    print(ab_output)
     result = {}
     patterns = [
         ('Server Software', r'Server Software:\s+(\S+)'),
@@ -34,6 +35,8 @@ def parse_ab_output(ab_output):
             key2 = slugify(key, separator='_')
             result[key2] = re.search(pattern, ab_output).group(1)
         except AttributeError:
+            print(f"missing ab result key: {key}")
+            print(ab_output)
             print(traceback.format_exc())
             pass
     try:
@@ -71,6 +74,8 @@ def parse_ab_output(ab_output):
             }
         }
     except AttributeError:
+        print('error parsing connection times')
+        print(ab_output)
         print(traceback.format_exc())
         pass
 
@@ -79,6 +84,8 @@ def parse_ab_output(ab_output):
         result['percentage_of_requests_served_within_a_certain_time'] = {f'{percent}%': time for percent, time in
                                                                          percentage_times}
     except AttributeError:
+        print('error parsing percentages')
+        print(ab_output)
         print(traceback.format_exc())
         pass
 
