@@ -223,6 +223,3 @@ def test_concurrent_client_downloads():
     logger.info(f"Average requests per second: {avg_requests_per_second:.2f}")
     logger.info(f"Average transfer rate: {avg_transfer_rate:.2f}")
     logger.info(f"Success rate: {success_rate:.2f}")
-    for res in ab_results:
-        # log the result
-        logger.debug(json.dumps(res, indent=4))
