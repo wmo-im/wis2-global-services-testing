@@ -251,6 +251,8 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
         max_wait_time = max_wait_time * sleep_factor
         min_wait_time = min_wait_time * sleep_factor
     start_time = time.time()
+    prev_origin_count = prev_cache_count = prev_result_count = 0
+
     while time.time() - start_time < max_wait_time:
         if data_ids:
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
@@ -260,9 +262,22 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
             cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
             result_msgs = [m for m in sub_client._userdata['received_messages'] if "result" in m['topic']]
-        logger.debug(f"Origin messages: {len(origin_msgs)}")
-        logger.debug(f"Cache messages: {len(cache_msgs)}")
-        logger.debug(f"Result messages: {len(result_msgs)}")
+
+        current_origin_count = len(origin_msgs)
+        current_cache_count = len(cache_msgs)
+        current_result_count = len(result_msgs)
+
+        if (current_origin_count != prev_origin_count or
+            current_cache_count != prev_cache_count or
+            current_result_count != prev_result_count):
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            logger.debug(f"{timestamp} - Origin messages: {current_origin_count}")
+            logger.debug(f"{timestamp} - Cache messages: {current_cache_count}")
+            logger.debug(f"{timestamp} - Result messages: {current_result_count}")
+
+            prev_origin_count = current_origin_count
+            prev_cache_count = current_cache_count
+            prev_result_count = current_result_count
 
         elapsed_time = time.time() - start_time
         if elapsed_time >= min_wait_time:
@@ -413,7 +428,7 @@ def test_mqtt_broker_message_flow(metrics_data, initial_metrics):
             "setup": {
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
-                "delay": 200,
+                "delay": 500,
                 # "cache_a_wis2": "mix",
             },
             "wnm": {
@@ -747,7 +762,8 @@ def test_wnm_deduplication(metrics_data):
                 "centreid": _init['test_centre_int'],
                 "number": num_origin_msgs,
                 "size_min": 128,
-                "size_max": 512
+                "size_max": 512,
+                "delay": 500,
             },
             "wnm": {
                 "properties": {
