@@ -1,0 +1,57 @@
+
+[[ma-marocmeteo-global-monitor-results]]
+
+==== ma-marocmeteo-global-monitor test results
+
+Date: 2024-10-24
+
+===== Functional tests
+
+.ma-marocmeteo-global-monitor functional test results
+|===
+|Test|Pass|Comments
+
+|<<Connectivity>>
+|yes
+|
+
+|<<Metrics validation>>
+|yes
+|
+
+|<<Disply the metrics on the dashboard>>
+|yes
+|
+
+|<<Raising alert1(error): raise an alert by sending a message. >>
+|yes
+|
+
+
+|<<Raising alert2(critical): raise an alert by publishing a message and sending a ticket to IMS.>>
+|yes
+|
+
+  
+|===
+
+===== Performance tests
+
+.ma-marocmeteo-global-monitor test results
+|===
+|Test|Pass|Comments
+
+|<<Multiple providers: A Global Monitor should support a minimum of 50 metrics providers.>>
+|yes
+|
+
+|<<Simultaneous access: A Global Monitor should support 200 simultaneous access to the dashboard.>>
+|yes
+|
+
+|<<Bandwidth limitation: Could limit the bandwidth usage of the service to 100 Mb/s.>>
+|yes
+|
+
+
+|===
