@@ -572,6 +572,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#de-dwd-global-discovery-catalogue-results">8.3.3. de-dwd-global-discovery-catalogue results</a></li>
 </ul>
 </li>
+<li><a href="#global-monitor-results">8.4. Global Monitor results</a>
+<ul class="sectlevel3">
+<li><a href="#cn-cma-global-monitor-results">8.4.1. cn-cma-global-monitor test results</a></li>
+<li><a href="#ma-marocmeteo-global-monitor-results">8.4.2. ma-marocmeteo-global-monitor test results</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#discussion">9. Discussion</a></li>
@@ -6336,6 +6342,181 @@ A manual test shows that downloading took a very long time</p></td>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="global-monitor-results"><a class="anchor" href="#global-monitor-results"></a>8.4. Global Monitor results</h3>
+<div class="sect3">
+<h4 id="cn-cma-global-monitor-results"><a class="anchor" href="#cn-cma-global-monitor-results"></a>8.4.1. cn-cma-global-monitor test results</h4>
+<div class="paragraph">
+<p>Date: 2024-10-24</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_16"><a class="anchor" href="#_functional_tests_16"></a>8.4.1.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 27. cn-cma-global-monitor functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Connectivity">[Connectivity]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Metrics validation">[Metrics validation]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Disply the metrics on the dashboard">[Disply the metrics on the dashboard]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Raising alert1(error): raise an alert by sending a message. ">[Raising alert1(error): raise an alert by sending a message. ]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Raising alert2(critical): raise an alert by sending a message and issue a ticket to IMS.">[Raising alert2(critical): raise an alert by sending a message and issue a ticket to IMS.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_17"><a class="anchor" href="#_performance_tests_17"></a>8.4.1.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 28. cn-cma-global-monitor test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Multiple providers: A Global Monitor should support a minimum of 50 metrics providers.">[Multiple providers: A Global Monitor should support a minimum of 50 metrics providers.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Simultaneous access: A Global Monitor should support 200 simultaneous access to the dashboard.">[Simultaneous access: A Global Monitor should support 200 simultaneous access to the dashboard.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Bandwidth limitation: Could limit the bandwidth usage of the service to 100 Mb/s.">[Bandwidth limitation: Could limit the bandwidth usage of the service to 100 Mb/s.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ma-marocmeteo-global-monitor-results"><a class="anchor" href="#ma-marocmeteo-global-monitor-results"></a>8.4.2. ma-marocmeteo-global-monitor test results</h4>
+<div class="paragraph">
+<p>Date: 2024-10-24</p>
+</div>
+<div class="sect4">
+<h5 id="_functional_tests_17"><a class="anchor" href="#_functional_tests_17"></a>8.4.2.1. Functional tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 29. ma-marocmeteo-global-monitor functional test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Connectivity">[Connectivity]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Metrics validation">[Metrics validation]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Disply the metrics on the dashboard">[Disply the metrics on the dashboard]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Raising alert1(error): raise an alert by sending a message. ">[Raising alert1(error): raise an alert by sending a message. ]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Raising alert2(critical): raise an alert by publishing a message and sending a ticket to IMS.">[Raising alert2(critical): raise an alert by publishing a message and sending a ticket to IMS.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_performance_tests_18"><a class="anchor" href="#_performance_tests_18"></a>8.4.2.2. Performance tests</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 30. ma-marocmeteo-global-monitor test results</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Test</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Pass</th>
+<th class="tableblock halign-left valign-top" style="background-color: #FFFFFF;">Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Multiple providers: A Global Monitor should support a minimum of 50 metrics providers.">[Multiple providers: A Global Monitor should support a minimum of 50 metrics providers.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Simultaneous access: A Global Monitor should support 200 simultaneous access to the dashboard.">[Simultaneous access: A Global Monitor should support 200 simultaneous access to the dashboard.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Bandwidth limitation: Could limit the bandwidth usage of the service to 100 Mb/s.">[Bandwidth limitation: Could limit the bandwidth usage of the service to 100 Mb/s.]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -6436,7 +6617,7 @@ A manual test shows that downloading took a very long time</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-10-28 10:43:10 UTC
+Last updated 2024-10-28 11:32:09 UTC
 </div>
 </div>
 </body>
