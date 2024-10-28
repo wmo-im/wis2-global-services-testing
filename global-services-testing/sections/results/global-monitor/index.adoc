@@ -1,0 +1,6 @@
+[[global-monitor-results]]
+
+=== Global Monitor results
+
+include::cn-cma-global-monitor.adoc[]
+include::ma-marocmeteo-global-monitor.adoc[]

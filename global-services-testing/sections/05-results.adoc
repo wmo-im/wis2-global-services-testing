@@ -13,3 +13,4 @@ The following tables provide the results of all tests (in alphabetical order, gr
 include::results/global-broker/index.adoc[]
 include::results/global-cache/index.adoc[]
 include::results/global-discovery-catalogue/index.adoc[]
+include::results/global-monitor/index.adoc[]
