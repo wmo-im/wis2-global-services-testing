@@ -1,12 +1,12 @@
-[[CENTRE_ID-results]]
+[[us-noaa-global-broker-results]]
 
-==== CENTRE_ID test results
+==== us-noaa-global-broker test results
 
 Date: 2024-10-17
 
 ===== Functional tests
 
-.CENTRE_ID functional test results
+.us-noaa-global-broker functional test results
 |===
 |Test|Pass|Comments
 
