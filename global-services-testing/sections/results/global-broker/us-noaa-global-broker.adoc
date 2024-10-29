@@ -15,8 +15,8 @@ Date: 2024-10-17
 |
 
 |<<Certificate>>
+|yes
 |
-|no certificate
 
 |<<Origin and Cache Read-Access>>
 |yes
