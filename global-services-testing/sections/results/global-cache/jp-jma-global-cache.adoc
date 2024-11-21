@@ -2,7 +2,7 @@
 
 ==== jp-jma-global-cache test results
 
-Date: 2024-10-23
+Date: 2024-11-21
 
 ===== Functional tests
 
@@ -67,7 +67,7 @@ Date: 2024-10-23
 |
 
 |<<Concurrent client downloads>>
-|no
+|yes
 |the sleep factor has been increased but the test failed +
 A manual test shows that downloading took a very long time
 
