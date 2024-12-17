@@ -330,7 +330,7 @@ Where a Gateway fails to process a notification message relating to a given uniq
 ===== WIS2 Notification Message Deduplication (Alternative 2) 
 
 ====== Purpose
- Related to the two previous tests, a Gateway should not process and downloaded a data item if it has already processed and downloaded a data item with the same `properties.data_id` and a `properties.pubtime` that is equal to or less than the `properties.pubtime` of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.
+Related to the two previous tests, a Gateway should not process and downloaded a data item if it has already processed and downloaded a data item with the same `properties.data_id` and a `properties.pubtime` that is equal to or less than the `properties.pubtime` of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
