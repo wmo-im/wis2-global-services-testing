@@ -86,7 +86,7 @@ To teardown the configuration after the testing session, simply reverse the setu
 
 ====== Purpose
 
-Test that the Gateway functions as expected under normal conditions. The Gateway must process valid incoming WNMs that include `properties.gts`` (TTAAii, CCCC) that correspond with the set of GTS Headers that are whitelisted, download the data at the provided canonical link, and pass the downloaded data object to a target location (directory) for onward publishing to the GTS by a Message Switch.
+Test that the Gateway functions as expected under normal conditions. The Gateway must process valid incoming WNMs that include `properties.gts` (TTAAii, CCCC) that correspond with the set of GTS Headers that are whitelisted, download the data at the provided canonical link, and pass the downloaded data object to a target location (directory) for onward publishing to the GTS by a Message Switch.
 
 The Gateway must update the necessary metrics.
 
