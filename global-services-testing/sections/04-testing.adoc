@@ -125,3 +125,9 @@ include::testing/global-broker.adoc[]
 include::testing/global-cache.adoc[]
 
 include::testing/global-discovery-catalogue.adoc[]
+
+include::testing/global-monitor.adoc[]
+
+include::testing/gts-to-wis2-gateway.adoc[]
+
+include::testing/wis2-to-gts-gateway.adoc[]
