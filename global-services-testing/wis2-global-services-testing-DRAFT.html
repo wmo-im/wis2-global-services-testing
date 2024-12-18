@@ -543,6 +543,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_exiting_the_test_environment">7.3.7. Exiting the test environment</a></li>
 </ul>
 </li>
+<li><a href="#global-monitor-testing">7.4. Global Monitor Service testing</a>
+<ul class="sectlevel3">
+<li><a href="#_setup_3">7.4.1. Setup</a></li>
+<li><a href="#_functional_tests_3">7.4.2. Functional tests</a></li>
+<li><a href="#_performance_tests_4">7.4.3. Performance tests</a></li>
+</ul>
+</li>
+<li><a href="#gts-to-wis2-gateway-testing">7.5. GTS-to-WIS2 Gateway testing</a></li>
+<li><a href="#wis2-to-gts-gateway-testing">7.6. WIS2-to-GTS Gateway testing</a>
+<ul class="sectlevel3">
+<li><a href="#wis2-to-gts-gateway-setup-teardown">7.6.1. Preparation</a></li>
+<li><a href="#wis2-to-gts-gateway-tests">7.6.2. Functional Tests</a></li>
+<li><a href="#_performance_tests_5">7.6.3. Performance Tests</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#results">8. Results</a>
@@ -4714,6 +4729,2585 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="global-monitor-testing"><a class="anchor" href="#global-monitor-testing"></a>7.4. Global Monitor Service testing</h3>
+<div class="sect3">
+<h4 id="_setup_3"><a class="anchor" href="#_setup_3"></a>7.4.1. Setup</h4>
+<div class="paragraph">
+<p>A test data bundle to consist of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code> 1 valid endpoint with valid metrics. </code></p>
+</li>
+<li>
+<p><code> 1 invalid endpoint. </code></p>
+</li>
+<li>
+<p><code> 1 valid endpiont with malformed metrics. </code></p>
+</li>
+<li>
+<p><code> 50 valid endpoints for the performance test. </code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>7.4.2. Functional tests</h4>
+<div class="sect4">
+<h5 id="_connectivity"><a class="anchor" href="#_connectivity"></a>7.4.2.1. Connectivity</h5>
+<div class="sect5">
+<h6 id="_purpose_38"><a class="anchor" href="#_purpose_38"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Monitor must connect to the endpoints provided by the other Global Services, and if any of the endpoints is unavailable, the error should be reported and the alert notification messages should arrive.</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_38"><a class="anchor" href="#_steps_38"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the broker of GM.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>monitor/a/wis2/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Initialize the GM with test endpoint with simulated metrics.</p>
+</li>
+<li>
+<p>Check if the endpoint is available, if it is, it shows ‘UP’ on the webpage.</p>
+</li>
+<li>
+<p>If the endpoint is unavailable, it shows error just like '404' on the webpage, and a notification message should arrive from the broker of GM under</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>monitor/a/wis2/CENTRE_ID-global-monitor/centre-id</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>e.g. monitor/a/wis2/cn-cma-global-monitor/us-noaa-nws-global-broker</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_metrics_validation_failure_invalid"><a class="anchor" href="#_metrics_validation_failure_invalid"></a>7.4.2.2. Metrics validation （failure; invalid）</h5>
+<div class="sect5">
+<h6 id="_purpose_39"><a class="anchor" href="#_purpose_39"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Monitor should be able to recognize the invalid metrics, give prompt and alert.</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_39"><a class="anchor" href="#_steps_39"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the broker of GM.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>monitor/a/wis2/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Initialize the GM with test endpoint with invalid metrics.</p>
+</li>
+<li>
+<p>GM gives the error prompt on the webpage, and a notification message should arrive from the broker of GM under</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>monitor/a/wis2/CENTRE_ID-global-monitor/centre-id</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>e.g. monitor/a/wis2/ma-marocmeteo-global-monitor/us-noaa-nws-global-broker</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_display_the_metrics_on_the_dashboard"><a class="anchor" href="#_display_the_metrics_on_the_dashboard"></a>7.4.2.3. Display the metrics on the dashboard</h5>
+<div class="sect5">
+<h6 id="_purpose_40"><a class="anchor" href="#_purpose_40"></a>Purpose</h6>
+<div class="paragraph">
+<p>The metrics that scraped from the Global Services could be displayed on the dashboard appropriately.</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_40"><a class="anchor" href="#_steps_40"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialize the GM with the endpoints with valid metrics.</p>
+</li>
+<li>
+<p>Open the corresponding dashboard, if the dashboard could display the metrics in an appropriate way, it is successful.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_1"><a class="anchor" href="#_panel_1"></a>7.4.2.4. Panel 1</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_connected_flag</p>
+</div>
+<div class="paragraph">
+<p>Description:The connection status from the broker to the center is always 1</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>test_wis2_gb_connected_flag{centre_id=~"cn-cma|ca-eccc-msc|cm-meteocameroon|it-meteoam|ms-metservice", report_by="cn-cma-global-broker"}</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-1.png" alt="dashboard 1">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_2"><a class="anchor" href="#_panel_2"></a>7.4.2.5. Panel 2</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_connected_flag</p>
+</div>
+<div class="paragraph">
+<p>Description:The connection status from the broker to the center is always 0</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>test_wis2_gb_connected_flag{centre_id=~"kn-metservice|zm-zmd|sg-mss|na-meteona|uy-inumet", report_by=~"cn-cma-global-broker-bak"}</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-2.png" alt="dashboard 2">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_3"><a class="anchor" href="#_panel_3"></a>7.4.2.6. Panel 3</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_connected_flag</p>
+</div>
+<div class="paragraph">
+<p>Description:The connection status from the broker to the center alternates between 0 and 1 every minute</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>test_wis2_gb_connected_flag{centre_id="ai-metservice", report_by="cn-cma-global-broker"}</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-3.png" alt="dashboard 3">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_4"><a class="anchor" href="#_panel_4"></a>7.4.2.7. Panel 4</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_connected_flag</p>
+</div>
+<div class="paragraph">
+<p>Description:The connection status from the broker to the center alternates between 0 and 1 every five minute</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>test_wis2_gb_connected_flag{centre_id="ar-smn", report_by="cn-cma-global-broker"}</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-4.png" alt="dashboard 4">
+</div>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>test_wis2_gb_connected_flag{centre_id="au-bom", report_by="cn-cma-global-broker"}</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-5.png" alt="dashboard 5">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_5"><a class="anchor" href="#_panel_5"></a>7.4.2.8. Panel 5</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_connected_flag</p>
+</div>
+<div class="paragraph">
+<p>Description:All status values for the connection from the broker to the center</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>test_wis2_gb_connected_flag{report_by="cn-cma-global-broker", centre_id=~"$centre_id"}</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-6-0.png" alt="dashboard 6 0">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_6"><a class="anchor" href="#_panel_6"></a>7.4.2.9. Panel 6：</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_last_message_timestamp_seconds</p>
+</div>
+<div class="paragraph">
+<p>Description:Time difference between the Timestamp of last message received from centre and current time</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sort_desc(time()-wmo_wis2_gb_last_message_timestamp_seconds{centre_id=<sub>"$centre_id",report_by=</sub>"cn-cma-global-broker"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-6.png" alt="dashboard 6">
+</div>
+</div>
+<div class="paragraph">
+<p>=====Panel 7：
+Metrics:test_wis2_gb_messages_received_total</p>
+</div>
+<div class="paragraph">
+<p>Description: Total number of messages received by all center_id which report_by = cn-cma-global-broker</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sum by(report_by) (test_wis2_gb_messages_received_total{centre_id=<sub>"$centre_id",report_by=</sub>"$report_id"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-7.png" alt="dashboard 7">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_8"><a class="anchor" href="#_panel_8"></a>7.4.2.10. Panel 8：</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_messages_received_total</p>
+</div>
+<div class="paragraph">
+<p>Description:Number of messages received by each center_id</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sum by(report_by) (test_wis2_gb_messages_received_total{centre_id=<sub>"$centre_id",report_by=</sub>"$report_id"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-8.png" alt="dashboard 8">
+</div>
+</div>
+<div class="paragraph">
+<p>=====Panel 9：
+Metrics:test_wis2_gb_messages_invalid_topic_total</p>
+</div>
+<div class="paragraph">
+<p>Description: Total number of invalid topic messages from all center_id which report_by = cn-cma-global-broker</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sum by(report_by) (test_wis2_gb_messages_invalid_topic_total{centre_id=<sub>"$centre_id",report_by=</sub>"$report_id"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-9.png" alt="dashboard 9">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_10"><a class="anchor" href="#_panel_10"></a>7.4.2.11. Panel 10：</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_messages_invalid_format_total</p>
+</div>
+<div class="paragraph">
+<p>Description: Total number of invalid topic messages from all center_id which report_by = cn-cma-global-broker</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sum by(report_by) (test_wis2_gb_messages_invalid_format_total{centre_id=<sub>"$centre_id",report_by=</sub>"$report_id"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-10.png" alt="dashboard 10">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_11"><a class="anchor" href="#_panel_11"></a>7.4.2.12. Panel 11：</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_messages_no_metadata_total</p>
+</div>
+<div class="paragraph">
+<p>Description: Total number of received without corresponding metadata from all center_id which report_by = cn-cma-global-broker</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sum by(report_by) (test_wis2_gb_messages_no_metadata_total{centre_id=<sub>"$centre_id",report_by=</sub>"$report_id"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-11.png" alt="dashboard 11">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_panel_12"><a class="anchor" href="#_panel_12"></a>7.4.2.13. Panel 12：</h5>
+<div class="paragraph">
+<p>Metrics:test_wis2_gb_messages_published_total</p>
+</div>
+<div class="paragraph">
+<p>Description: Number of messages published by cn-cma-global-broker</p>
+</div>
+<div class="paragraph">
+<p>Query Used：</p>
+</div>
+<div class="paragraph">
+<p>sum by(report_by) (test_wis2_gb_messages_published_total{centre_id=<sub>"$centre_id",report_by=</sub>"$report_id"})</p>
+</div>
+<div class="paragraph">
+<p>Result:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="https://github.com/wmo-im/wis2-global-services-testing/blob/main/global-services-testing/images/dashboard-12.png" alt="dashboard 12">
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_raising_alert_1"><a class="anchor" href="#_raising_alert_1"></a>7.4.2.14. Raising alert 1</h5>
+<div class="sect5">
+<h6 id="_purpose_41"><a class="anchor" href="#_purpose_41"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Monitor could raise the alert according to the metrics and the alerting rules.</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_41"><a class="anchor" href="#_steps_41"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Simulate the metrics, and set wmo_wis2_gb_connected_flag{centre_id="int-ecmwf"} = 0 reported by 3 Global Brokers.</p>
+</li>
+<li>
+<p>Publish the metrics once per minute.</p>
+</li>
+<li>
+<p>Configure gb.yml</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>alert: disconnectedwis2nodemultiplegb</p>
+</div>
+<div class="paragraph">
+<p>expr: count by (centre_id) ( wmo_wis2_gb_connected_flag == 0 ) &gt; 1</p>
+</div>
+<div class="paragraph">
+<p>for: 2m</p>
+</div>
+<div class="paragraph">
+<p>labels:</p>
+</div>
+<div class="paragraph">
+<p>severity: error</p>
+</div>
+<div class="paragraph">
+<p>annotations:</p>
+</div>
+<div class="paragraph">
+<p>summary: Disconnected WIS2 Node from multiple Global Brokers</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Wait for 2 minutes, and watch the webpage, if the alert is raised on the webpage, it is successful, otherwise, it is unsuccessful.</p>
+</li>
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the broker of GM.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>monitor/a/wis2/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>An alert notification message should arrive from the broker of GM under</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>++monitor/a/wis2/CENTRE_ID-global-monitor/int-ecmwf</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_raising_alert_2"><a class="anchor" href="#_raising_alert_2"></a>7.4.2.15. Raising alert 2</h5>
+<div class="sect5">
+<h6 id="_purpose_42"><a class="anchor" href="#_purpose_42"></a>Purpose</h6>
+<div class="paragraph">
+<p>The Global Monitor could raise the alert according to the metrics and the alerting rules.</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_42"><a class="anchor" href="#_steps_42"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Simulate the metrics, and set wmo_wis2_gc_downloaded_total = 0 reported by cn-cma-global-cache.</p>
+</li>
+<li>
+<p>Publish the metrics once per minute.</p>
+</li>
+<li>
+<p>Configure the gc.yml</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>No data is received by Global Cache over the two minutes</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>alert: No_data</p>
+<div class="literalblock">
+<div class="content">
+<pre>expr: sum by (report_by) (delta(wmo_wis2_gc_downloaded_total[2m])) == 0</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>for: 2m</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>labels:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>severity: critical</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>annotations:</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>summary: The Global cache is not receiving any data since two minutes</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Wait for 2 minutes, and watch the webpage, if the alert is raised on the webpage, it is successful, otherwise, it is unsuccessful.</p>
+</li>
+<li>
+<p>Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.</p>
+</li>
+<li>
+<p>Connect the MQTT client to the broker of GM.</p>
+</li>
+<li>
+<p>Once the connection is successful, attempt to subscribe to the following topics:</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><code>monitor/a/wis2/#</code></p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An alert notification message should arrive from the broker of GM under</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><code>monitor/a/wis2/CENTRE_ID_global-monitor/cn-cma-global-cache</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>7.4.3. Performance tests</h4>
+<div class="sect4">
+<h5 id="_multiple_providers"><a class="anchor" href="#_multiple_providers"></a>7.4.3.1. Multiple providers</h5>
+<div class="sect5">
+<h6 id="_purpose_43"><a class="anchor" href="#_purpose_43"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Monitor should support a minimum of 50 metrics providers.</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_43"><a class="anchor" href="#_steps_43"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Set up the configuration with 50 simulated endpoints.</p>
+</li>
+<li>
+<p>If all the endpoints shows 'UP' on the webpage, the test passes.</p>
+</li>
+<li>
+<p>Open the dashboard and check if it matches the metrics, if it is, the test passes.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_simultaneous_access"><a class="anchor" href="#_simultaneous_access"></a>7.4.3.2. Simultaneous access</h5>
+<div class="sect5">
+<h6 id="_purpose_44"><a class="anchor" href="#_purpose_44"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Global Monitor should support 200 simultaneous access to the dashboard</p>
+</div>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_44"><a class="anchor" href="#_steps_44"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open Jmeter and configure the Test Plan:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>GM address, username and password</p>
+</li>
+<li>
+<p>threads(=200)</p>
+</li>
+<li>
+<p>Ramp-up Time and Loop Count(=30s)</p>
+</li>
+<li>
+<p>Add listener</p>
+</li>
+<li>
+<p>Run the test</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>When the test finishe­s, look at the results in the liste­ners. Look at things like response­ time, throughput, and error rate.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="gts-to-wis2-gateway-testing"><a class="anchor" href="#gts-to-wis2-gateway-testing"></a>7.5. GTS-to-WIS2 Gateway testing</h3>
+<div class="paragraph">
+<p>No formal (e.g., automated) testing is required for the GTS-to-WIS2 Gateway.</p>
+</div>
+<div class="paragraph">
+<p>Each WIS Centre seeking to decommission its GTS Message Switch must check that all the bulletins they normally receive via GTS are available from at least one GTS-to-WIS2 Gateway.</p>
+</div>
+<div class="paragraph">
+<p>Each GISC should work with RTHs to validate that everything their affiliated centres are producing on GTS are available from each Gateway.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+The assessment of the GTS bulletins being pubished via the GTS-to-WIS2 Gateways should be completed between 2025-01-01 2025-03-31.
+</div>
+</div>
+<div class="paragraph">
+<p>In summary, we propose to use “user” feedback to determine veracity and completeness of data published by each Gateway.</p>
+</div>
+<div class="paragraph">
+<p>Performance testing is not required because each GTS-to-WIS2 Gateway has already demonstrated sustained throughput of bulletins to messages and data from GTS into WIS2.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="wis2-to-gts-gateway-testing"><a class="anchor" href="#wis2-to-gts-gateway-testing"></a>7.6. WIS2-to-GTS Gateway testing</h3>
+<div class="paragraph">
+<p>Each WIS2-to-GTS gateway instance will be deployed into the wis2dev.io environment and tested using automated scripts – following the approach used to test the main Global Services.</p>
+</div>
+<div class="paragraph">
+<p>The WIS2-to-GTS gateway is functionally similar to the Global Cache – albeit with that it publishes to GTS rather than re-publishing cached data into WIS2. The Global Cache tests provide a good basis for testing the gateway.</p>
+</div>
+<div class="paragraph">
+<p>There are 8 functional tests:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>WIS2 Notification Message (WNM) Processing</p>
+</li>
+<li>
+<p>Source Download Failure</p>
+</li>
+<li>
+<p>Data Integrity Check Failure</p>
+</li>
+<li>
+<p>WIS2 Notification Message Deduplication</p>
+</li>
+<li>
+<p>WIS2 Notification Message Deduplication (Alternative 1)</p>
+</li>
+<li>
+<p>WIS2 Notification Message Deduplication (Alternative 2)</p>
+</li>
+<li>
+<p>Data Update</p>
+</li>
+<li>
+<p>GTS Properties Validation Failure</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Functional tests 1-7 are derived from similar tests developed for assessing the functional performance of a Global Cache.</p>
+</div>
+<div class="paragraph">
+<p>These functional tests do not evaluate functionality of Message Switch as these components are already known to function correctly in operations. Furthermore, it may be difficult to deploy a functioning GTS Message Switch into the wis2dev.io environment.</p>
+</div>
+<div class="paragraph">
+<p>WIS2-to-GTS Gatweway performance is assessed using one test:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>WIS2 Notification Message Processing Rate</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The performance test is based on “normal data processing” (see functional test “WIS2 Notification Message (WNM) Processing) with a throughput of 2000 unique WNMs per second that include valid <code>properties.gts</code> corresponding to the GTS Headers that the Gateway has whitelisted and trigger a download of data for onward distribution to the GTS.</p>
+</div>
+<div class="paragraph">
+<p>This performance test is derived from a similar test developed for assessing the performance of a Global Cache.</p>
+</div>
+<div class="paragraph">
+<p>Further WIS2-to-GTS gateway testing will be conducted during the “dry-run” MSS Decommissioning activity. Here we will also validate that the data from WIS2 is correctly packaged into bulletins by the gateway and propagated via the GTS.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+Note that the metrics referenced in these tests are proposed here, currently pending review: <a href="https://github.com/wmo-im/wis2-metric-hierarchy/issues/18" class="bare">https://github.com/wmo-im/wis2-metric-hierarchy/issues/18</a>
+</div>
+</div>
+<div class="sect3">
+<h4 id="wis2-to-gts-gateway-setup-teardown"><a class="anchor" href="#wis2-to-gts-gateway-setup-teardown"></a>7.6.1. Preparation</h4>
+<div class="sect4">
+<h5 id="_setup_4"><a class="anchor" href="#_setup_4"></a>7.6.1.1. Setup</h5>
+<div class="paragraph">
+<p>Before running the pytest tests, ensure the following setup steps are completed:</p>
+</div>
+<div class="sect5">
+<h6 id="_disconnect_the_gateway_from_the_production_environment"><a class="anchor" href="#_disconnect_the_gateway_from_the_production_environment"></a>Disconnect the Gateway from the production environment.</h6>
+<div class="paragraph">
+<p>Ensure that the Gateway is not connected to the production environment during the testing session. This ensures that all testing is completed in a controlled environment.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Remove other subscriptions to prod GB&#8217;s.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ensure that the Gateway is not subscribed to any other Global Broker except the dev/test Global Broker.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_connect_the_gateway_to_the_devtest_environment"><a class="anchor" href="#_connect_the_gateway_to_the_devtest_environment"></a>Connect the Gateway to the dev/test environment.</h6>
+<div class="paragraph">
+<p>Ensure that the Gateway is connected to the dev/test environment during the testing session. This is to allow the test messages to be propagated to the Gateway for testing.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Gateway Subscription to the dev/test Global Broker.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ensure the Gateway is subscribed to the dev/test Global Broker (<code>gb.wis2dev.io</code>).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>the connection string to be used is: <code>mqtts://everyone-dev:everyone-dev@gb.wis2dev.io:8883</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The Gateway should be subscribed to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_pytest_setup_2"><a class="anchor" href="#_pytest_setup_2"></a>Pytest Setup</h6>
+<div class="paragraph">
+<p>Prior to executing the tests, update the <code>wis2-to-gts-gateway.env</code> file with the necessary environment variables. This env file is nested in the <code>tests/wis2-to-gts-gateway</code> directory and the values of the following variable must be updated:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>WG_METRICS_REPORT_BY</code> - this is the centre_id of the Global Service and matches the report_by property in the metrics.</p>
+</li>
+<li>
+<p><code>WG_DATA_OBJECTS_FOR_GTS_DISSEMINATION_LOCATIONS</code> - this is the list of directories where the Gateway will put data objects that have been downloaded ready for onward distribution via the GTS.</p>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<mark>To-do: The env file and other resources in the <code>tests/wis2-to-gts-gateway</code> directory need to be created.</mark>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_teardown_2"><a class="anchor" href="#_teardown_2"></a>7.6.1.2. Teardown</h5>
+<div class="paragraph">
+<p>To teardown the configuration after the testing session, simply reverse the setup steps:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Unsubscribe the Gateway from the dev/test Global Broker.</p>
+</li>
+<li>
+<p>Reset the metrics so that dev and prod metrics are not mixed.</p>
+</li>
+<li>
+<p>Reconnect the Gateway Cache to the production environment by re-subscribing to the production Global Brokers.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="wis2-to-gts-gateway-tests"><a class="anchor" href="#wis2-to-gts-gateway-tests"></a>7.6.2. Functional Tests</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_message_wnm_processing_2"><a class="anchor" href="#_wis2_notification_message_wnm_processing_2"></a>7.6.2.1. WIS2 Notification Message (WNM) Processing</h5>
+<div class="sect5">
+<h6 id="_purpose_45"><a class="anchor" href="#_purpose_45"></a>Purpose</h6>
+<div class="paragraph">
+<p>Test that the Gateway functions as expected under normal conditions. The Gateway must process valid incoming WNMs that include <code>properties.gts</code> (TTAAii, CCCC) that correspond with the set of GTS Headers that are whitelisted, download the data at the provided canonical link, and pass the downloaded data object to a target location (directory) for onward publishing to the GTS by a Message Switch.</p>
+</div>
+<div class="paragraph">
+<p>The Gateway must update the necessary metrics.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong> This test does not evaluate functionality of Message Switch as these components are already known to function correctly in operations. Furthermore, it may be difficult to deploy a functioning GTS Message Switch into the wis2dev.io environment.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_27"><a class="anchor" href="#_requirements_27"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>`origin/a/wis2/+/data/#</p>
+</li>
+<li>
+<p>`cache/a/wis2/+/data/#</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and associated data objects:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WNM&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime should be unique to each message. Ensuring a different `data_id</code> is best here</p>
+</li>
+<li>
+<p><code>properties.integrity</code> with valid <code>properties.integrity.value</code> for the associated data object and a valid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p>Varying provision of <code>properties.gts</code>:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Some messages not including <code>properties.gts</code></p>
+</li>
+<li>
+<p>Some messages including <code>properties.gts</code> with valid GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+<li>
+<p>Some messages including <code>properties.gts</code> with valid GTS Headers (TTAAii, CCCC) that are not whitelisted in the Gateway configuration</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_45"><a class="anchor" href="#_steps_45"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test GB MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish a batch of Prepared WIS2 Notification Messages to the dev/test GB on following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to origin/a/wis2/+/data/#</p>
+</li>
+<li>
+<p>Send 1 or more messages to cache/a/wis2/+/data/#</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_27"><a class="anchor" href="#_evaluate_27"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The total number of data objects downloaded by the Gateway. This should match the number of notification messages published that include whitelisted GTS Headers (TTAAii, CCCC).</p>
+</li>
+<li>
+<p>The data objects downloaded by the Gateway should be identical to the source data objects.</p>
+</li>
+<li>
+<p>The diff or hashes of the data objects should be identical.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (matches total number of messages that include whitelisted GTS Headers)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages that include any valid GTS Headers)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 1 for each)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (set for each and within expected time range)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_source_download_failure_2"><a class="anchor" href="#_source_download_failure_2"></a>7.6.2.2. Source Download Failure</h5>
+<div class="sect5">
+<h6 id="_purpose_46"><a class="anchor" href="#_purpose_46"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Gateway receives a valid WNM but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the metric <code>wmo_wis2_wg_dataserver_status_flag</code> for the source data server should be set to 0 (zero).</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_28"><a class="anchor" href="#_requirements_28"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WNM&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>invalid data download links (a link object&#8217;s <code>href</code> property where <code>rel=canonical</code>)</p>
+</li>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> should be unique to each message. Ensuring a different <code>data_id</code> is best here</p>
+</li>
+<li>
+<p>Valid <code>properties.gts</code> with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects are not required for this test.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_46"><a class="anchor" href="#_steps_46"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WNM&#8217;s to the dev/test GB on one or more of the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway (zero) and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_28"><a class="anchor" href="#_evaluate_28"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>No data objects should be downloaded by the Gateway.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (unchanged)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages that include any valid GTS Headers)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (+=1 for each WNM)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 0 for each)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (unchanged)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_data_integrity_check_failure_2"><a class="anchor" href="#_data_integrity_check_failure_2"></a>7.6.2.3. Data Integrity Check Failure</h5>
+<div class="sect5">
+<h6 id="_purpose_47"><a class="anchor" href="#_purpose_47"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Gateway should validate the integrity of the resources it downloads and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Gateway should accept the data as valid.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_29"><a class="anchor" href="#_requirements_29"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on origin/a/wis2 and cache/a/wis2 topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WMN&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> should be unique to each message. Ensuring a different <code>data_id</code> is best here</p>
+</li>
+<li>
+<p><code>properties.integrity</code> with invalid <code>properties.integrity.value</code> for the associated data object and/or an invalid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p>Valid <code>properties.gts</code> with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_47"><a class="anchor" href="#_steps_47"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WMN&#8217;s to the dev/test GB on one or more of the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway (zero) and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_29"><a class="anchor" href="#_evaluate_29"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>No data objects should be downloaded by the Gateway.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (unchanged)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages that include any valid GTS Headers)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (+=1 for each WNM)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (+=1 for each WNM)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 1 for each where a data object was successfully downloaded before failing the integrity check)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (unchanged)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_wis2_notification_message_deduplication_2"><a class="anchor" href="#_wis2_notification_message_deduplication_2"></a>7.6.2.4. WIS2 Notification Message Deduplication</h5>
+<div class="sect5">
+<h6 id="_purpose_48"><a class="anchor" href="#_purpose_48"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Gateway must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_30"><a class="anchor" href="#_requirements_30"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WMN&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> are NOT unique to each message, but shared by 2 or more messages</p>
+</li>
+<li>
+<p><code>properties.integrity</code> with valid <code>properties.integrity.value</code> for the associated data object and a valid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p>Valid <code>properties.gts</code> with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_48"><a class="anchor" href="#_steps_48"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WMN&#8217;s to the dev/test GB on one or more of the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_30"><a class="anchor" href="#_evaluate_30"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Only one data object should be downloaded per unique identifier which is defined as <code>properties.data_id</code> + <code>properties.pubtime</code>.</p>
+</li>
+<li>
+<p>The data objects downloaded by the Gateway should be identical to the source data objects.</p>
+</li>
+<li>
+<p>The diff or hashes of the data objects should be identical.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (+1= for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 1 for each)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (set for each and within expected time range)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+Question: Are <code>wmo_wis2_wg_messages_gtsproperties_total</code> and <code>wmo_wis2_wg_messages_total</code> the total number of messages, or the total number of unique messages (based on the “id” property of the message)?
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_wis2_notification_message_deduplication_alternative_1_2"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_1_2"></a>7.6.2.5. WIS2 Notification Message Deduplication (Alternative 1)</h5>
+<div class="sect5">
+<h6 id="_purpose_49"><a class="anchor" href="#_purpose_49"></a>Purpose</h6>
+<div class="paragraph">
+<p>Where a Gateway fails to process a notification message relating to a given unique data object (<code>properties.data_id</code> + <code>properties.pubtime</code>), a Gateway should successfully process a valid, subsequently received notification message with the same unique data identifier.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_31"><a class="anchor" href="#_requirements_31"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on origin/a/wis2 and cache/a/wis2 topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WMN&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> are NOT unique to each message, but shared by 2 or more messages</p>
+</li>
+<li>
+<p><code>properties.integrity</code> with valid <code>properties.integrity.value</code> for the associated data object and a valid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p>Valid <code>properties.gts</code> with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+<li>
+<p>This defines a unique identifier message set.</p>
+</li>
+<li>
+<p>For each unique identifier message set, the first published message should be invalid, or the data object inaccessible, and the second message/data object should be valid.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>At least some of the accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_49"><a class="anchor" href="#_steps_49"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WMN&#8217;s to the dev/test GB such that the invalid WNM for each unique data identifier is published first. One or more of the following topics can be used:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_31"><a class="anchor" href="#_evaluate_31"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Only one data object should be downloaded per unique identifier which is defined as <code>properties.data_id</code> + <code>properties.pubtime</code>.</p>
+</li>
+<li>
+<p>The data objects downloaded by the Gateway should be identical to the source data objects.</p>
+</li>
+<li>
+<p>The diff or hashes of the data objects should be identical.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (+1= for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (+1= for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 1 for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (set for each and within expected time range)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_wis2_notification_message_deduplication_alternative_2_2"><a class="anchor" href="#_wis2_notification_message_deduplication_alternative_2_2"></a>7.6.2.6. WIS2 Notification Message Deduplication (Alternative 2)</h5>
+<div class="sect5">
+<h6 id="_purpose_50"><a class="anchor" href="#_purpose_50"></a>Purpose</h6>
+<div class="paragraph">
+<p>Related to the two previous tests, a Gateway should not process and downloaded a data item if it has already processed and downloaded a data item with the same <code>properties.data_id</code> and a <code>properties.pubtime</code> that is equal to or less than the <code>properties.pubtime</code> of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_32"><a class="anchor" href="#_requirements_32"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WMN&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> are NOT unique to each message, but shared by 2 or more messages</p>
+</li>
+<li>
+<p><code>properties.integrity</code> with valid <code>properties.integrity.value</code> for the associated data object and a valid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p>Valid properties.gts with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+<li>
+<p>This defines a unique identifier message set.</p>
+</li>
+<li>
+<p>For each unique identifier message set, the first published message should be invalid, or the data object inaccessible, and the second message/data object should be valid.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>At least some of the accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_50"><a class="anchor" href="#_steps_50"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WMN&#8217;s to the dev/test GB such that for each unique identifier message set, the first published message has a pubtime that is greater than or equal to the subsequent message/s. One or more of the following topics can be used:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_32"><a class="anchor" href="#_evaluate_32"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>For each message set with a shared data_id, each data object should be downloaded by the Gateway and assuming that the <code>properties.pubtime</code> has been correctly set (decreasing or equal) for each message sent in chronological order.</p>
+</li>
+<li>
+<p>The data objects downloaded by the Gateway should be identical to the source data objects.</p>
+</li>
+<li>
+<p>The diff or hashes of the data objects should be identical.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (+1= for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (+1= for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 1 for each unique identifier)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (set for each and within expected time range)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_data_update_2"><a class="anchor" href="#_data_update_2"></a>7.6.2.7. Data Update</h5>
+<div class="sect5">
+<h6 id="_purpose_51"><a class="anchor" href="#_purpose_51"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Gateway should treat notification messages with the same data item identifier (<code>properties.data_id</code>), but different publication times (<code>properties.pubtime</code>) as unique data items. A Gateway only download data objects with the same data item identifier when messages are sent in chronological order AND they are marked as updates. Data items with the same <code>properties.data_id</code> but a greater/later publication time AND a update link (<code>links['rel']='update'</code>), should be processed. Data items with the same <code>properties.data_id</code> but earlier or identical publication times should be ignored.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_33"><a class="anchor" href="#_requirements_33"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WMN&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> are unique to each message, but the <code>properties.data_id</code> is shared by 2 or more messages and the pubtimes are different</p>
+</li>
+<li>
+<p>For a given shared <code>data_id</code>, the message with the latest pubtime has a link object with <code>rel=update</code></p>
+</li>
+<li>
+<p><code>properties.integrity</code> with valid <code>properties.integrity.value</code> for the associated data object and a valid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p>Valid <code>properties.gts</code> with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+<li>
+<p>This defines a unique identifier message set</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_51"><a class="anchor" href="#_steps_51"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WMN&#8217;s to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s and subsequent messages have a valid update link. One or more of the following topics can be used:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_33"><a class="anchor" href="#_evaluate_33"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>For each message set with a shared <code>data_id</code>, each data object should be downloaded by the Gateway and assuming that the properties.pubtime as been correctly set (increasing) for each message sent in chronological order.</p>
+</li>
+<li>
+<p>The data objects downloaded by the Gateway should be identical to the source data objects.</p>
+</li>
+<li>
+<p>The diff or hashes of the data objects should be identical.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p>wmo_wis2_wg_downloaded_total (+1= for each unique identifier arriving in chronological order)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_messages_gtsproperties_total (matches total number of messages)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_messages_total (matches total number of messages)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_downloaded_errors_total (no change)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_integrity_failed_total (no change)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_messages_gtsproperties_invalid_format_total (no change)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_dataserver_status_flag (set to 1)</p>
+</li>
+<li>
+<p>wmo_wis2_wg_dataserver_last_download_timestamp_seconds (set for each and within expected time range)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_gts_properties_validation_failure"><a class="anchor" href="#_gts_properties_validation_failure"></a>7.6.2.8. GTS Properties Validation Failure</h5>
+<div class="sect5">
+<h6 id="_purpose_52"><a class="anchor" href="#_purpose_52"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Gateway should only process messages that have valid <code>properties.gts</code> (TTAAii, CCCC) that correspond to the set of whitelisted GTS Headers. A Gateway must validate <code>properties.gts</code> to ensure that the TTAAii and CCCC are syntactically correct. Messages without <code>properties.gts</code> are ignored (see test “WIS2 Notification Message (WNM) Processing”).</p>
+</div>
+<div class="paragraph">
+<p>This test assesses that messages with invalid <code>properties.gts</code> are discarded.</p>
+</div>
+<div class="paragraph">
+<p>A valid <code>properties.gts</code> shall contain:
+    <strong> 1 (and only 1) subproperty: <code>ttaaii</code>
+    </strong> 1 (and only 1) subproperty: <code>cccc</code>
+    <strong> Any other subproperties are ignored
+    </strong> <code>properties.gts.ttaaii</code> shall comprise a sequence of exactly 4 alphabetic characters following by 2 numeric characters (6 characters in total)
+    ** <code>properties.gts.cccc</code> shall comprise a sequence of exactly 4 alphabetic characters</p>
+</div>
+<div class="paragraph">
+<p>Note that:
+• Alphabetic character case is ignored.
+• TTAAii and CCCC values are not cross-referenced against WMO Volume C1 to determine if they are valid GTS bulletin headers.</p>
+</div>
+<div class="listingblock">
+<div class="title">Example GTS properties object:</div>
+<div class="content">
+<pre class="highlight"><code class="language-json" data-lang="json">"properties": {
+    …
+    "gts": {
+        "ttaaii": "ISMN01",
+        "cccc": "EGRR"
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_34"><a class="anchor" href="#_requirements_34"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test client</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>Prepared WIS2 Notification Messages and data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WMN&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> should be unique to each message. Ensuring a different <code>data_id</code> is best here</p>
+</li>
+<li>
+<p><code>properties.gts</code> where <code>properties.gts.ttaaii</code> and/or <code>properties.gts.cccc</code> are invalid</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects are not required for this test</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_52"><a class="anchor" href="#_steps_52"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.</p>
+</li>
+<li>
+<p>Publish the prepared WMN&#8217;s to the dev/test GB on one or more of the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Send 1 or more messages to <code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p>Send 1 or more messages to <code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Assess the data objects downloaded by the Gateway (zero) and the Gateway Metrics</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_34"><a class="anchor" href="#_evaluate_34"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data Objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>No data objects should be downloaded by the Gateway.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (unchanged)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (unchanged – the GTS properties are invalid)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (unchanged)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (unchanged)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (+=1 for each WNM)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (unchanged)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_last_download_timestamp_seconds</code> (unchanged)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>7.6.3. Performance Tests</h4>
+<div class="sect4">
+<h5 id="_wis2_notification_message_processing_rate"><a class="anchor" href="#_wis2_notification_message_processing_rate"></a>7.6.3.1. WIS2 Notification Message Processing Rate</h5>
+<div class="sect5">
+<h6 id="_purpose_53"><a class="anchor" href="#_purpose_53"></a>Purpose</h6>
+<div class="paragraph">
+<p>A Gateway shall be able to successfully process, on average, 2000 unique WNM&#8217;s per minute with an average message size of 85kb. The noted WNM&#8217;s/minute rate can be used as a performance indicator for the Gateway being tested.</p>
+</div>
+<div class="paragraph">
+<p>The Gateway must process valid incoming WNMs that include <code>properties.gts</code> (TTAAii, CCCC) that correspond with the set of GTS Headers that are whitelisted, download the data at the provided canonical link, and pass the downloaded data object to a target location (directory) for onward publishing to the GTS by a Message Switch.</p>
+</div>
+<div class="paragraph">
+<p>The Gateway must update the necessary metrics.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong> This test does not evaluate functionality of Message Switch as these components are already known to function correctly in operations. Furthermore, it may be difficult to deploy a functioning GTS Message Switch into the wis2dev.io environment.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_requirements_35"><a class="anchor" href="#_requirements_35"></a>Requirements</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Dev/test GB MQTT broker connection string</p>
+<div class="ulist">
+<ul>
+<li>
+<p>MQTT user is able to read and write messages on <code>origin/a/wis2</code> and <code>cache/a/wis2</code> topics.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><mark>To-do: defined set of whitelisted CCCC and TTAAii headers</mark></p>
+</li>
+<li>
+<p>For this test, the Gateway should place all downloaded files into the same location (directory).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>origin/a/wis2/+/data/#</code></p>
+</li>
+<li>
+<p><code>cache/a/wis2/+/data/#</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>MQTT test clients</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.</p>
+</li>
+<li>
+<p>The test clients should be distributed among several locations.</p>
+</li>
+<li>
+<p>Each client should send (or generate) valid WIS2 Notification Messages and make the accompanying data objects available for download at rates specified in this performance test.</p>
+</li>
+<li>
+<p>The test clients should publish a known (or predictable) number of messages in a given time.</p>
+</li>
+<li>
+<p>The test clients should keep sending / generating messages at the specified rate for multiple minutes.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway metrics scraper</p>
+</li>
+<li>
+<p>WIS2 Notification Messages and associated data objects (these may be prepared or generated as needed):</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A known number of valid WNM&#8217;s with:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>properties.data_id</code> + <code>properties.pubtime</code> should be unique to each message. Ensuring a different <code>data_id</code> is best here</p>
+</li>
+<li>
+<p><code>properties.integrity</code> with valid <code>properties.integrity.value</code> for the associated data object and a valid <code>properties.integrity.method</code></p>
+</li>
+<li>
+<p><code>properties.gts</code> with valid GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Accompanying data objects should be accessible via the canonical link provided in the WNM.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The canonical link should be accessible per the core requirements</p>
+</li>
+<li>
+<p>The data object hash should match the hash provided in the WNM if integrity properties are provided</p>
+</li>
+<li>
+<p>Average message size should be 85kb</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+Question: "Average message size" is the phrase used in the GC performance test - should this be referring to the average size of the data object associated with each message?
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_steps_53"><a class="anchor" href="#_steps_53"></a>Steps</h6>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Initialise the trigger client and publish the WNM dataset configuration to the dev/test GB on the topic <code>config/a/wis2/wg_performance_test</code>.</p>
+</li>
+<li>
+<p>Every 60-seconds, run a script (or similar) to count the number of data objects (files) that have been successfully downloaded to the location configured in the Gateway.</p>
+</li>
+<li>
+<p>Print the following metrics:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Number of data objects downloaded for each minute of the test</p>
+</li>
+<li>
+<p>Average number of data objects downloaded per minute during the test - excluding the first and last minutes of the test</p>
+</li>
+<li>
+<p>Total number of data objects downloaded during the test</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Assess the Gateway Metrics - there should not have been any errors during this test</p>
+</li>
+</ol>
+</div>
+<div class="sidebarblock">
+<div class="content">
+Note: Obviously there is some work needed to get this set up in the same way as for the Global Cache tests.
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+Note: Unlike the Global Cache performance tests, we can’t use published WNMs to monitor the test progress. Instead, we have to look at the rate at which data objects are downloaded.
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_evaluate_35"><a class="anchor" href="#_evaluate_35"></a>Evaluate</h6>
+<div class="ulist">
+<ul>
+<li>
+<p>Data objects</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The total number of data objects downloaded by the Gateway should match the number of messages published by the test clients.</p>
+</li>
+<li>
+<p>This test does not require comparison between source and downloaded data objects.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Processing rate</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The average processing rate should exceed 2000 messages per minute during the middle phase of the test (i.e., excluding results from the first and last minutes).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Gateway Metrics</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>wmo_wis2_wg_downloaded_total</code> (matches total number of messages and count of downloaded files)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_total</code> (matches total number of messages)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_downloaded_errors_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_integrity_failed_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_messages_gtsproperties_invalid_format_total</code> (no change)</p>
+</li>
+<li>
+<p><code>wmo_wis2_wg_dataserver_status_flag</code> (set to 1 for each)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -4746,7 +7340,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 <p>Date: 2024-10-18</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_3"><a class="anchor" href="#_functional_tests_3"></a>8.1.1.1. Functional tests</h5>
+<h5 id="_functional_tests_4"><a class="anchor" href="#_functional_tests_4"></a>8.1.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. cn-cma-global-broker functional test results</caption>
 <colgroup>
@@ -4821,7 +7415,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_4"><a class="anchor" href="#_performance_tests_4"></a>8.1.1.2. Performance tests</h5>
+<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.1.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. cn-cma-global-broker test results</caption>
 <colgroup>
@@ -4862,7 +7456,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 <p>Date: 2024-09-30</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_4"><a class="anchor" href="#_functional_tests_4"></a>8.1.2.1. Functional tests</h5>
+<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>8.1.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 3. fr-meteofrance-global-broker functional test results</caption>
 <colgroup>
@@ -4937,7 +7531,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_5"><a class="anchor" href="#_performance_tests_5"></a>8.1.2.2. Performance tests</h5>
+<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>8.1.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 4. fr-meteofrance-global-broker performance test results</caption>
 <colgroup>
@@ -4994,7 +7588,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 <p>Date: 2024-10-03</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_5"><a class="anchor" href="#_functional_tests_5"></a>8.1.3.1. Functional tests</h5>
+<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.1.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. br-inmet-global-broker functional test results</caption>
 <colgroup>
@@ -5069,7 +7663,7 @@ pytest -s global_discovery_catalogue/test_gdc_performance.py --junitxml=/data/wi
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_6"><a class="anchor" href="#_performance_tests_6"></a>8.1.3.2. Performance tests</h5>
+<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>8.1.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 6. br-inmet-global-broker test results</caption>
 <colgroup>
@@ -5180,7 +7774,7 @@ Expected:204800, Received: lost of messages</p></td>
 <p>Date: 2024-10-17</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_6"><a class="anchor" href="#_functional_tests_6"></a>8.1.4.1. Functional tests</h5>
+<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>8.1.4.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 7. us-noaa-global-broker functional test results</caption>
 <colgroup>
@@ -5255,7 +7849,7 @@ Expected:204800, Received: lost of messages</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_7"><a class="anchor" href="#_performance_tests_7"></a>8.1.4.2. Performance tests</h5>
+<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>8.1.4.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 8. CENTRE_ID test results</caption>
 <colgroup>
@@ -5369,7 +7963,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 <p>Date: 2024-10-07</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_7"><a class="anchor" href="#_functional_tests_7"></a>8.2.1.1. Functional tests</h5>
+<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>8.2.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 9. data-metoffice-noaa-global-cache-results functional test results</caption>
 <colgroup>
@@ -5444,7 +8038,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_8"><a class="anchor" href="#_performance_tests_8"></a>8.2.1.2. Performance tests</h5>
+<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>8.2.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 10. data-metoffice-noaa-global-cache-results performance test results</caption>
 <colgroup>
@@ -5480,7 +8074,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 <p>Date: 2024-10-10</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_8"><a class="anchor" href="#_functional_tests_8"></a>8.2.2.1. Functional tests</h5>
+<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>8.2.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 11. de-dwd-global-cache functional test results</caption>
 <colgroup>
@@ -5555,7 +8149,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_9"><a class="anchor" href="#_performance_tests_9"></a>8.2.2.2. Performance tests</h5>
+<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>8.2.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 12. de-dwd-global-cache performance test results</caption>
 <colgroup>
@@ -5591,7 +8185,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 <p>Date: 2024-10-09</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_9"><a class="anchor" href="#_functional_tests_9"></a>8.2.3.1. Functional tests</h5>
+<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>8.2.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 13. cn-cma-global-cache functional test results</caption>
 <colgroup>
@@ -5666,7 +8260,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_10"><a class="anchor" href="#_performance_tests_10"></a>8.2.3.2. Performance tests</h5>
+<h5 id="_performance_tests_12"><a class="anchor" href="#_performance_tests_12"></a>8.2.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 14. cn-cma-global-cache performance test results</caption>
 <colgroup>
@@ -5702,7 +8296,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 <p>Date: 2024-11-21</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_10"><a class="anchor" href="#_functional_tests_10"></a>8.2.4.1. Functional tests</h5>
+<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>8.2.4.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 15. sa-ncm-global-cache functional test results</caption>
 <colgroup>
@@ -5777,7 +8371,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_11"><a class="anchor" href="#_performance_tests_11"></a>8.2.4.2. Performance tests</h5>
+<h5 id="_performance_tests_13"><a class="anchor" href="#_performance_tests_13"></a>8.2.4.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 16. sa-ncm-global-cache performance test results</caption>
 <colgroup>
@@ -5813,7 +8407,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 <p>Date: 2024-11-21</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_11"><a class="anchor" href="#_functional_tests_11"></a>8.2.5.1. Functional tests</h5>
+<h5 id="_functional_tests_12"><a class="anchor" href="#_functional_tests_12"></a>8.2.5.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 17. jp-jma-global-cache functional test results</caption>
 <colgroup>
@@ -5888,7 +8482,7 @@ concur:64,tmout:90,msg_count:64,msg_delay:50</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_12"><a class="anchor" href="#_performance_tests_12"></a>8.2.5.2. Performance tests</h5>
+<h5 id="_performance_tests_14"><a class="anchor" href="#_performance_tests_14"></a>8.2.5.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 18. jp-jma-global-cache performance test results</caption>
 <colgroup>
@@ -5925,7 +8519,7 @@ A manual test shows that downloading took a very long time</p></td>
 <p>Date: 2024-10-22</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_12"><a class="anchor" href="#_functional_tests_12"></a>8.2.6.1. Functional tests</h5>
+<h5 id="_functional_tests_13"><a class="anchor" href="#_functional_tests_13"></a>8.2.6.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 19. kr-kma-global-cache functional test results</caption>
 <colgroup>
@@ -6000,7 +8594,7 @@ A manual test shows that downloading took a very long time</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_13"><a class="anchor" href="#_performance_tests_13"></a>8.2.6.2. Performance tests</h5>
+<h5 id="_performance_tests_15"><a class="anchor" href="#_performance_tests_15"></a>8.2.6.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 20. kr-kma-global-cache performance test results</caption>
 <colgroup>
@@ -6039,7 +8633,7 @@ A manual test shows that downloading took a very long time</p></td>
 <p>Date: 2024-10-23</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_13"><a class="anchor" href="#_functional_tests_13"></a>8.3.1.1. Functional tests</h5>
+<h5 id="_functional_tests_14"><a class="anchor" href="#_functional_tests_14"></a>8.3.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 21. ca-eccc-msc-global-discovery-catalogue functional test results</caption>
 <colgroup>
@@ -6109,7 +8703,7 @@ A manual test shows that downloading took a very long time</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_14"><a class="anchor" href="#_performance_tests_14"></a>8.3.1.2. Performance tests</h5>
+<h5 id="_performance_tests_16"><a class="anchor" href="#_performance_tests_16"></a>8.3.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 22. ca-eccc-msc-global-discovery-catalogue performance test results</caption>
 <colgroup>
@@ -6140,7 +8734,7 @@ A manual test shows that downloading took a very long time</p></td>
 <p>Date: 2024-10-21</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_14"><a class="anchor" href="#_functional_tests_14"></a>8.3.2.1. Functional tests</h5>
+<h5 id="_functional_tests_15"><a class="anchor" href="#_functional_tests_15"></a>8.3.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 23. cn-cma-global-discovery-catalogue functional test results</caption>
 <colgroup>
@@ -6210,7 +8804,7 @@ A manual test shows that downloading took a very long time</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_15"><a class="anchor" href="#_performance_tests_15"></a>8.3.2.2. Performance tests</h5>
+<h5 id="_performance_tests_17"><a class="anchor" href="#_performance_tests_17"></a>8.3.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 24. cn-cma-global-discovery-catalogue performance test results</caption>
 <colgroup>
@@ -6241,7 +8835,7 @@ A manual test shows that downloading took a very long time</p></td>
 <p>Date: 2024-10-23</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_15"><a class="anchor" href="#_functional_tests_15"></a>8.3.3.1. Functional tests</h5>
+<h5 id="_functional_tests_16"><a class="anchor" href="#_functional_tests_16"></a>8.3.3.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 25. de-dwd-global-discovery-catalogue functional test results</caption>
 <colgroup>
@@ -6311,7 +8905,7 @@ A manual test shows that downloading took a very long time</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_16"><a class="anchor" href="#_performance_tests_16"></a>8.3.3.2. Performance tests</h5>
+<h5 id="_performance_tests_18"><a class="anchor" href="#_performance_tests_18"></a>8.3.3.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 26. de-dwd-global-discovery-catalogue performance test results</caption>
 <colgroup>
@@ -6345,7 +8939,7 @@ A manual test shows that downloading took a very long time</p></td>
 <p>Date: 2024-10-24</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_16"><a class="anchor" href="#_functional_tests_16"></a>8.4.1.1. Functional tests</h5>
+<h5 id="_functional_tests_17"><a class="anchor" href="#_functional_tests_17"></a>8.4.1.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 27. cn-cma-global-monitor functional test results</caption>
 <colgroup>
@@ -6362,7 +8956,7 @@ A manual test shows that downloading took a very long time</p></td>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Connectivity">[Connectivity]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_connectivity">Connectivity</a></p></td>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
 </tr>
@@ -6390,7 +8984,7 @@ A manual test shows that downloading took a very long time</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_17"><a class="anchor" href="#_performance_tests_17"></a>8.4.1.2. Performance tests</h5>
+<h5 id="_performance_tests_19"><a class="anchor" href="#_performance_tests_19"></a>8.4.1.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 28. cn-cma-global-monitor test results</caption>
 <colgroup>
@@ -6431,7 +9025,7 @@ A manual test shows that downloading took a very long time</p></td>
 <p>Date: 2024-10-24</p>
 </div>
 <div class="sect4">
-<h5 id="_functional_tests_17"><a class="anchor" href="#_functional_tests_17"></a>8.4.2.1. Functional tests</h5>
+<h5 id="_functional_tests_18"><a class="anchor" href="#_functional_tests_18"></a>8.4.2.1. Functional tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 29. ma-marocmeteo-global-monitor functional test results</caption>
 <colgroup>
@@ -6448,7 +9042,7 @@ A manual test shows that downloading took a very long time</p></td>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#Connectivity">[Connectivity]</a></p></td>
+<td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock"><a href="#_connectivity">Connectivity</a></p></td>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"><p class="tableblock">yes</p></td>
 <td class="tableblock halign-left valign-top" style="background-color: #FFFFFF;"></td>
 </tr>
@@ -6476,7 +9070,7 @@ A manual test shows that downloading took a very long time</p></td>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_performance_tests_18"><a class="anchor" href="#_performance_tests_18"></a>8.4.2.2. Performance tests</h5>
+<h5 id="_performance_tests_20"><a class="anchor" href="#_performance_tests_20"></a>8.4.2.2. Performance tests</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 30. ma-marocmeteo-global-monitor test results</caption>
 <colgroup>
@@ -6612,7 +9206,7 @@ A manual test shows that downloading took a very long time</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-18 11:47:17 UTC
+Last updated 2024-12-18 11:55:30 UTC
 </div>
 </div>
 </body>
