@@ -9,9 +9,8 @@ Each WIS Centre seeking to decommission its GTS Message Switch must check that a
 Each GISC should work with RTHs to validate that everything their affiliated centres are producing on GTS are available from each Gateway. 
 
 [sidebar]
-The assessment of the GTS bulletins being pubished via the GTS-to-WIS2 Gateways should be completed between 1-Jan-2025 and 31-Mar-2025.
+The assessment of the GTS bulletins being pubished via the GTS-to-WIS2 Gateways should be completed between 2025-01-01 2025-03-31.
 
 In summary, we propose to use “user” feedback to determine veracity and completeness of data published by each Gateway. 
 
 Performance testing is not required because each GTS-to-WIS2 Gateway has already demonstrated sustained throughput of bulletins to messages and data from GTS into WIS2.
-

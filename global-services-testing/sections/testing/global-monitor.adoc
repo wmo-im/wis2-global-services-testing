@@ -241,7 +241,8 @@ TODO
 . Simulate the metrics, and set wmo_wis2_gb_connected_flag{centre_id="int-ecmwf"} = 0 reported by 3 Global Brokers.
 . Publish the metrics once per minute.
 . Configure gb.yml
-|===
+
+
 alert: disconnectedwis2nodemultiplegb
 
 expr: count by (centre_id) ( wmo_wis2_gb_connected_flag == 0 ) > 1
@@ -255,7 +256,7 @@ severity: error
 annotations:
 
 summary: Disconnected WIS2 Node from multiple Global Brokers
-|===
+
 . Wait for 2 minutes, and watch the webpage, if the alert is raised on the webpage, it is successful, otherwise, it is unsuccessful.
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
 . Connect the MQTT client to the broker of GM.
@@ -276,7 +277,7 @@ TODO
 . Simulate the metrics, and set wmo_wis2_gc_downloaded_total = 0 reported by cn-cma-global-cache.
 . Publish the metrics once per minute.
 . Configure the gc.yml
-|===
+
 No data is received by Global Cache over the two minutes
 
      - alert: No_data
@@ -292,7 +293,7 @@ No data is received by Global Cache over the two minutes
         annotations:
 
           summary: The Global cache is not receiving any data since two minutes
-|===
+
 . Wait for 2 minutes, and watch the webpage, if the alert is raised on the webpage, it is successful, otherwise, it is unsuccessful.
 . Initialize the MQTT client with the necessary parameters such as the MQTT protocol version 5, TLS security, and username/password for authentication.
 . Connect the MQTT client to the broker of GM.

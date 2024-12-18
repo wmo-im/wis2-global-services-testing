@@ -442,8 +442,8 @@ A valid `properties.gts` shall contain:
     ** `properties.gts.cccc` shall comprise a sequence of exactly 4 alphabetic characters
 
 Note that:
-•	Alphabetic character case is ignored.
-•	TTAAii and CCCC values are not cross-referenced against WMO Volume C1 to determine if they are valid GTS bulletin headers.
+• Alphabetic character case is ignored.
+• TTAAii and CCCC values are not cross-referenced against WMO Volume C1 to determine if they are valid GTS bulletin headers.
 
 .Example GTS properties object:
 [source,json]
