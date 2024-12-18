@@ -1,0 +1,574 @@
+[[wis2-to-gts-gateway-testing]]
+
+=== WIS2-to-GTS Gateway testing
+
+Each WIS2-to-GTS gateway instance will be deployed into the wis2dev.io environment and tested using automated scripts – following the approach used to test the main Global Services. 
+
+The WIS2-to-GTS gateway is functionally similar to the Global Cache – albeit with that it publishes to GTS rather than re-publishing cached data into WIS2. The Global Cache tests provide a good basis for testing the gateway. 
+
+There are 8 functional tests:
+
+. WIS2 Notification Message (WNM) Processing 
+. Source Download Failure
+. Data Integrity Check Failure
+. WIS2 Notification Message Deduplication
+. WIS2 Notification Message Deduplication (Alternative 1)
+. WIS2 Notification Message Deduplication (Alternative 2)
+. Data Update
+. GTS Properties Validation Failure
+
+Functional tests 1-7 are derived from similar tests developed for assessing the functional performance of a Global Cache.
+
+These functional tests do not evaluate functionality of Message Switch as these components are already known to function correctly in operations. Furthermore, it may be difficult to deploy a functioning GTS Message Switch into the wis2dev.io environment.
+
+WIS2-to-GTS Gatweway performance is assessed using one test:
+
+. WIS2 Notification Message Processing Rate
+
+The performance test is based on “normal data processing” (see functional test “WIS2 Notification Message (WNM) Processing) with a throughput of 2000 unique WNMs per second that include valid `properties.gts` corresponding to the GTS Headers that the Gateway has whitelisted and trigger a download of data for onward distribution to the GTS.  
+
+This performance test is derived from a similar test developed for assessing the performance of a Global Cache.
+
+Further WIS2-to-GTS gateway testing will be conducted during the “dry-run” MSS Decommissioning activity. Here we will also validate that the data from WIS2 is correctly packaged into bulletins by the gateway and propagated via the GTS.
+
+[sidebar]
+Note that the metrics referenced in these tests are proposed here, currently pending review: https://github.com/wmo-im/wis2-metric-hierarchy/issues/18 
+
+[[wis2-to-gts-gateway-setup-teardown]]
+
+==== Preparation
+
+===== Setup
+
+Before running the pytest tests, ensure the following setup steps are completed:
+
+====== Disconnect the Gateway from the production environment.
+
+Ensure that the Gateway is not connected to the production environment during the testing session. This ensures that all testing is completed in a controlled environment.
+
+. Remove other subscriptions to prod GB's.
+    - Ensure that the Gateway is not subscribed to any other Global Broker except the dev/test Global Broker.
+
+====== Connect the Gateway to the dev/test environment.
+
+Ensure that the Gateway is connected to the dev/test environment during the testing session. This is to allow the test messages to be propagated to the Gateway for testing.
+
+. Gateway Subscription to the dev/test Global Broker.
+    * Ensure the Gateway is subscribed to the dev/test Global Broker (`gb.wis2dev.io`).
+        -  the connection string to be used is: `mqtts://everyone-dev:everyone-dev@gb.wis2dev.io:8883`
+    * The Gateway should be subscribed to the following topics:
+        - `origin/a/wis2/+/data/#`
+        - `cache/a/wis2/+/data/#`
+
+====== Pytest Setup
+
+Prior to executing the tests, update the `wis2-to-gts-gateway.env` file with the necessary environment variables. This env file is nested in the `tests/wis2-to-gts-gateway` directory and the values of the following variable must be updated:
+
+- `WG_METRICS_REPORT_BY` - this is the centre_id of the Global Service and matches the report_by property in the metrics.
+- `WG_DATA_OBJECTS_FOR_GTS_DISSEMINATION_LOCATIONS` - this is the list of directories where the Gateway will put data objects that have been downloaded ready for onward distribution via the GTS.
+
+[sidebar]
+#To-do: The env file and other resources in the `tests/wis2-to-gts-gateway` directory need to be created.#
+
+===== Teardown
+
+To teardown the configuration after the testing session, simply reverse the setup steps:
+
+- Unsubscribe the Gateway from the dev/test Global Broker.
+- Reset the metrics so that dev and prod metrics are not mixed.
+- Reconnect the Gateway Cache to the production environment by re-subscribing to the production Global Brokers.
+
+[[wis2-to-gts-gateway-tests]]
+
+==== Functional Tests
+
+===== WIS2 Notification Message (WNM) Processing 
+
+====== Purpose
+
+Test that the Gateway functions as expected under normal conditions. The Gateway must process valid incoming WNMs that include `properties.gts` (TTAAii, CCCC) that correspond with the set of GTS Headers that are whitelisted, download the data at the provided canonical link, and pass the downloaded data object to a target location (directory) for onward publishing to the GTS by a Message Switch.
+
+The Gateway must update the necessary metrics.
+
+*Note:* This test does not evaluate functionality of Message Switch as these components are already known to function correctly in operations. Furthermore, it may be difficult to deploy a functioning GTS Message Switch into the wis2dev.io environment. 
+
+====== Requirements
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#
+    ** `cache/a/wis2/+/data/#
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and associated data objects:
+    ** A known number of valid WNM's with:
+    *** `properties.data_id` + `properties.pubtime should be unique to each message. Ensuring a different `data_id` is best here
+    *** `properties.integrity` with valid `properties.integrity.value` for the associated data object and a valid `properties.integrity.method`
+    *** Varying provision of `properties.gts`:
+    **** Some messages not including `properties.gts`
+    **** Some messages including `properties.gts` with valid GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration
+    **** Some messages including `properties.gts` with valid GTS Headers (TTAAii, CCCC) that are not whitelisted in the Gateway configuration
+    ** Accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+
+====== Steps
+
+. Configure the MQTT test client to connect to the dev/test GB MQTT broker using the provided connection string.
+. Publish a batch of Prepared WIS2 Notification Messages to the dev/test GB on following topics:
+    ** Send 1 or more messages to origin/a/wis2/+/data/#
+    ** Send 1 or more messages to cache/a/wis2/+/data/#
+. Assess the data objects downloaded by the Gateway and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** The total number of data objects downloaded by the Gateway. This should match the number of notification messages published that include whitelisted GTS Headers (TTAAii, CCCC).
+    ** The data objects downloaded by the Gateway should be identical to the source data objects.
+    ** The diff or hashes of the data objects should be identical.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (matches total number of messages that include whitelisted GTS Headers)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages that include any valid GTS Headers)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (no change)
+    ** `wmo_wis2_wg_integrity_failed_total` (no change)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 1 for each)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
+
+===== Source Download Failure 
+
+====== Purpose
+
+Where a Gateway receives a valid WNM but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the metric `wmo_wis2_wg_dataserver_status_flag` for the source data server should be set to 0 (zero).
+
+====== Requirements
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WNM's with:
+    *** invalid data download links (a link object's `href` property where `rel=canonical`)
+    *** `properties.data_id` + `properties.pubtime` should be unique to each message. Ensuring a different `data_id` is best here
+    *** Valid `properties.gts` with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    ** Accompanying data objects are not required for this test.
+
+====== Steps
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway (zero) and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** No data objects should be downloaded by the Gateway.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (unchanged)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages that include any valid GTS Headers)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (+=1 for each WNM)
+    ** `wmo_wis2_wg_integrity_failed_total` (no change)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 0 for each)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (unchanged)
+
+===== Data Integrity Check Failure 
+
+====== Purpose
+
+A Gateway should validate the integrity of the resources it downloads and only accept data which matches the integrity value from the WIS Notification Message. If the WIS Notification Message does not contain an integrity value, a Gateway should accept the data as valid. 
+
+====== Requirements
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on origin/a/wis2 and cache/a/wis2 topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WMN's with:
+    *** `properties.data_id` + `properties.pubtime` should be unique to each message. Ensuring a different `data_id` is best here
+    *** `properties.integrity` with invalid `properties.integrity.value` for the associated data object and/or an invalid `properties.integrity.method`
+    *** Valid `properties.gts` with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    ** Accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+
+====== Steps
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WMN's to the dev/test GB on one or more of the following topics:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway (zero) and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** No data objects should be downloaded by the Gateway.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (unchanged)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages that include any valid GTS Headers)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (+=1 for each WNM)
+    ** `wmo_wis2_wg_integrity_failed_total` (+=1 for each WNM)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 1 for each where a data object was successfully downloaded before failing the integrity check)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (unchanged)
+
+===== WIS2 Notification Message Deduplication 
+
+====== Purpose
+
+A Gateway must ensure that only one instance of a notification message with a given unique identifier (id) is successfully processed. 
+
+====== Requirements
+
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WMN's with:
+    *** `properties.data_id` + `properties.pubtime` are NOT unique to each message, but shared by 2 or more messages
+    *** `properties.integrity` with valid `properties.integrity.value` for the associated data object and a valid `properties.integrity.method`
+    *** Valid `properties.gts` with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    ** Accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+
+====== Steps
+
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WMN's to the dev/test GB on one or more of the following topics:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** Only one data object should be downloaded per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
+    ** The data objects downloaded by the Gateway should be identical to the source data objects.
+    ** The diff or hashes of the data objects should be identical.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (+1= for each unique identifier)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (no change)
+    ** `wmo_wis2_wg_integrity_failed_total` (no change)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 1 for each)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
+
+[sidebar]
+Question: Are `wmo_wis2_wg_messages_gtsproperties_total` and `wmo_wis2_wg_messages_total` the total number of messages, or the total number of unique messages (based on the “id” property of the message)?
+
+===== WIS2 Notification Message Deduplication (Alternative 1) 
+
+====== Purpose
+
+Where a Gateway fails to process a notification message relating to a given unique data object (`properties.data_id` + `properties.pubtime`), a Gateway should successfully process a valid, subsequently received notification message with the same unique data identifier.
+
+====== Requirements
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on origin/a/wis2 and cache/a/wis2 topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WMN's with:
+    *** `properties.data_id` + `properties.pubtime` are NOT unique to each message, but shared by 2 or more messages
+    *** `properties.integrity` with valid `properties.integrity.value` for the associated data object and a valid `properties.integrity.method`
+    *** Valid `properties.gts` with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    *** This defines a unique identifier message set.
+    *** For each unique identifier message set, the first published message should be invalid, or the data object inaccessible, and the second message/data object should be valid.
+    ** At least some of the accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+
+====== Steps
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WMN's to the dev/test GB such that the invalid WNM for each unique data identifier is published first. One or more of the following topics can be used:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** Only one data object should be downloaded per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
+    ** The data objects downloaded by the Gateway should be identical to the source data objects.
+    ** The diff or hashes of the data objects should be identical.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (+1= for each unique identifier)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (+1= for each unique identifier)
+    ** `wmo_wis2_wg_integrity_failed_total` (no change)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 1 for each unique identifier)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
+
+===== WIS2 Notification Message Deduplication (Alternative 2) 
+
+====== Purpose
+Related to the two previous tests, a Gateway should not process and downloaded a data item if it has already processed and downloaded a data item with the same `properties.data_id` and a `properties.pubtime` that is equal to or less than the `properties.pubtime` of the new data item. This test is an extension of the previous tests and can be conducted in conjunction with them.
+
+====== Requirements
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WMN's with:
+    *** `properties.data_id` + `properties.pubtime` are NOT unique to each message, but shared by 2 or more messages
+    *** `properties.integrity` with valid `properties.integrity.value` for the associated data object and a valid `properties.integrity.method`
+    *** Valid properties.gts with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    *** This defines a unique identifier message set.
+    *** For each unique identifier message set, the first published message should be invalid, or the data object inaccessible, and the second message/data object should be valid.
+    ** At least some of the accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+
+====== Steps
+
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WMN's to the dev/test GB such that for each unique identifier message set, the first published message has a pubtime that is greater than or equal to the subsequent message/s. One or more of the following topics can be used:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** For each message set with a shared data_id, each data object should be downloaded by the Gateway and assuming that the `properties.pubtime` has been correctly set (decreasing or equal) for each message sent in chronological order.
+    ** The data objects downloaded by the Gateway should be identical to the source data objects.
+    ** The diff or hashes of the data objects should be identical.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (+1= for each unique identifier)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (+1= for each unique identifier)
+    ** `wmo_wis2_wg_integrity_failed_total` (no change)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 1 for each unique identifier)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
+
+===== Data Update 
+
+====== Purpose
+
+A Gateway should treat notification messages with the same data item identifier (`properties.data_id`), but different publication times (`properties.pubtime`) as unique data items. A Gateway only download data objects with the same data item identifier when messages are sent in chronological order AND they are marked as updates. Data items with the same `properties.data_id` but a greater/later publication time AND a update link (`links['rel']='update'`), should be processed. Data items with the same `properties.data_id` but earlier or identical publication times should be ignored.
+
+====== Requirements
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WMN's with:
+    *** `properties.data_id` + `properties.pubtime` are unique to each message, but the `properties.data_id` is shared by 2 or more messages and the pubtimes are different
+    *** For a given shared `data_id`, the message with the latest pubtime has a link object with `rel=update`
+    *** `properties.integrity` with valid `properties.integrity.value` for the associated data object and a valid `properties.integrity.method`
+    *** Valid `properties.gts` with GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    *** This defines a unique identifier message set
+    ** Accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+
+====== Steps
+
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WMN's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s and subsequent messages have a valid update link. One or more of the following topics can be used:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** For each message set with a shared `data_id`, each data object should be downloaded by the Gateway and assuming that the properties.pubtime as been correctly set (increasing) for each message sent in chronological order.
+    ** The data objects downloaded by the Gateway should be identical to the source data objects.
+    ** The diff or hashes of the data objects should be identical.
+* Gateway Metrics
+    ** wmo_wis2_wg_downloaded_total (+1= for each unique identifier arriving in chronological order)
+    ** wmo_wis2_wg_messages_gtsproperties_total (matches total number of messages)
+    ** wmo_wis2_wg_messages_total (matches total number of messages)
+    ** wmo_wis2_wg_downloaded_errors_total (no change)
+    ** wmo_wis2_wg_integrity_failed_total (no change)
+    ** wmo_wis2_wg_messages_gtsproperties_invalid_format_total (no change)
+    ** wmo_wis2_wg_dataserver_status_flag (set to 1)
+    ** wmo_wis2_wg_dataserver_last_download_timestamp_seconds (set for each and within expected time range)
+
+===== GTS Properties Validation Failure
+
+====== Purpose
+
+A Gateway should only process messages that have valid `properties.gts` (TTAAii, CCCC) that correspond to the set of whitelisted GTS Headers. A Gateway must validate `properties.gts` to ensure that the TTAAii and CCCC are syntactically correct. Messages without `properties.gts` are ignored (see test “WIS2 Notification Message (WNM) Processing”).
+
+This test assesses that messages with invalid `properties.gts` are discarded.
+
+A valid `properties.gts` shall contain:
+    ** 1 (and only 1) subproperty: `ttaaii`
+    ** 1 (and only 1) subproperty: `cccc`
+    ** Any other subproperties are ignored
+    ** `properties.gts.ttaaii` shall comprise a sequence of exactly 4 alphabetic characters following by 2 numeric characters (6 characters in total)
+    ** `properties.gts.cccc` shall comprise a sequence of exactly 4 alphabetic characters
+
+Note that:
+•	Alphabetic character case is ignored.
+•	TTAAii and CCCC values are not cross-referenced against WMO Volume C1 to determine if they are valid GTS bulletin headers.
+
+.Example GTS properties object:
+[source,json]
+----
+"properties": { 
+    … 
+    "gts": { 
+        "ttaaii": "ISMN01", 
+        "cccc": "EGRR" 
+    } 
+}
+----
+
+====== Requirements
+
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test client
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+* Gateway metrics scraper
+* Prepared WIS2 Notification Messages and data objects
+    ** A known number of valid WMN's with:
+    *** `properties.data_id` + `properties.pubtime` should be unique to each message. Ensuring a different `data_id` is best here
+    *** `properties.gts` where `properties.gts.ttaaii` and/or `properties.gts.cccc` are invalid 
+    ** Accompanying data objects are not required for this test
+
+====== Steps
+. Configure the MQTT test client to connect to the dev/test MQTT broker using the provided connection string.
+. Publish the prepared WMN's to the dev/test GB on one or more of the following topics:
+    ** Send 1 or more messages to `origin/a/wis2/+/data/#`
+    ** Send 1 or more messages to `cache/a/wis2/+/data/#`
+. Assess the data objects downloaded by the Gateway (zero) and the Gateway Metrics
+
+====== Evaluate
+* Data Objects
+    ** No data objects should be downloaded by the Gateway.
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (unchanged)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (unchanged – the GTS properties are invalid)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (unchanged)
+    ** `wmo_wis2_wg_integrity_failed_total` (unchanged)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (+=1 for each WNM)
+    ** `wmo_wis2_wg_dataserver_status_flag` (unchanged)
+    ** `wmo_wis2_wg_dataserver_last_download_timestamp_seconds` (unchanged)
+
+==== Performance Tests
+
+===== WIS2 Notification Message Processing Rate
+
+====== Purpose
+
+A Gateway shall be able to successfully process, on average, 2000 unique WNM's per minute with an average message size of 85kb. The noted WNM's/minute rate can be used as a performance indicator for the Gateway being tested.
+
+The Gateway must process valid incoming WNMs that include `properties.gts` (TTAAii, CCCC) that correspond with the set of GTS Headers that are whitelisted, download the data at the provided canonical link, and pass the downloaded data object to a target location (directory) for onward publishing to the GTS by a Message Switch.
+
+The Gateway must update the necessary metrics.
+
+*Note:* This test does not evaluate functionality of Message Switch as these components are already known to function correctly in operations. Furthermore, it may be difficult to deploy a functioning GTS Message Switch into the wis2dev.io environment. 
+
+====== Requirements
+
+* Dev/test GB MQTT broker connection string
+    ** MQTT user is able to read and write messages on `origin/a/wis2` and `cache/a/wis2` topics.
+* Dev/test Gateway is configured to process a known set of GTS Headers (TTAAii, CCCC)
+    ** #To-do: defined set of whitelisted CCCC and TTAAii headers#
+    ** For this test, the Gateway should place all downloaded files into the same location (directory).
+* Dev/test Gateway is initiated and connected to the dev/test GB with subscriptions to the following topics:
+    ** `origin/a/wis2/+/data/#`
+    ** `cache/a/wis2/+/data/#`
+* MQTT test clients
+    ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
+    ** The test clients should be distributed among several locations.
+    ** Each client should send (or generate) valid WIS2 Notification Messages and make the accompanying data objects available for download at rates specified in this performance test.
+    ** The test clients should publish a known (or predictable) number of messages in a given time.
+    ** The test clients should keep sending / generating messages at the specified rate for multiple minutes.
+* Gateway metrics scraper
+* WIS2 Notification Messages and associated data objects (these may be prepared or generated as needed):
+    ** A known number of valid WNM's with:
+    *** `properties.data_id` + `properties.pubtime` should be unique to each message. Ensuring a different `data_id` is best here
+    *** `properties.integrity` with valid `properties.integrity.value` for the associated data object and a valid `properties.integrity.method`
+    *** `properties.gts` with valid GTS Headers (TTAAii, CCCC) that are whitelisted in the Gateway configuration 
+    ** Accompanying data objects should be accessible via the canonical link provided in the WNM.
+    *** The canonical link should be accessible per the core requirements
+    *** The data object hash should match the hash provided in the WNM if integrity properties are provided
+    *** Average message size should be 85kb
+
+[sidebar]
+Question: "Average message size" is the phrase used in the GC performance test - should this be referring to the average size of the data object associated with each message?
+
+====== Steps
+. Initialise the trigger client and publish the WNM dataset configuration to the dev/test GB on the topic `config/a/wis2/wg_performance_test`.
+. Every 60-seconds, run a script (or similar) to count the number of data objects (files) that have been successfully downloaded to the location configured in the Gateway.
+. Print the following metrics:
+    .. Number of data objects downloaded for each minute of the test
+    .. Average number of data objects downloaded per minute during the test - excluding the first and last minutes of the test
+    .. Total number of data objects downloaded during the test
+. Assess the Gateway Metrics - there should not have been any errors during this test
+
+[sidebar]
+Note: Obviously there is some work needed to get this set up in the same way as for the Global Cache tests.
+
+[sidebar]
+Note: Unlike the Global Cache performance tests, we can’t use published WNMs to monitor the test progress. Instead, we have to look at the rate at which data objects are downloaded.
+
+====== Evaluate
+
+* Data objects
+    ** The total number of data objects downloaded by the Gateway should match the number of messages published by the test clients.
+    ** This test does not require comparison between source and downloaded data objects.
+* Processing rate
+    ** The average processing rate should exceed 2000 messages per minute during the middle phase of the test (i.e., excluding results from the first and last minutes).
+* Gateway Metrics
+    ** `wmo_wis2_wg_downloaded_total` (matches total number of messages and count of downloaded files)
+    ** `wmo_wis2_wg_messages_gtsproperties_total` (matches total number of messages)
+    ** `wmo_wis2_wg_messages_total` (matches total number of messages)
+    ** `wmo_wis2_wg_downloaded_errors_total` (no change)
+    ** `wmo_wis2_wg_integrity_failed_total` (no change)
+    ** `wmo_wis2_wg_messages_gtsproperties_invalid_format_total` (no change)
+    ** `wmo_wis2_wg_dataserver_status_flag` (set to 1 for each)
+
+
+
