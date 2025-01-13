@@ -68,7 +68,7 @@ Prior to executing the tests, update the `wis2-to-gts-gateway.env` file with the
 - `WG_DATA_OBJECTS_FOR_GTS_DISSEMINATION_LOCATIONS` - this is the list of directories where the Gateway will put data objects that have been downloaded ready for onward distribution via the GTS.
 
 [sidebar]
-# TODO: The env file and other resources in the `tests/wis2-to-gts-gateway` directory need to be created.#
+#TODO: The env file and other resources in the `tests/wis2-to-gts-gateway` directory need to be created.#
 
 ===== Teardown
 
