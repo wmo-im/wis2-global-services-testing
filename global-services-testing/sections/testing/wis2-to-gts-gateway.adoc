@@ -68,7 +68,7 @@ Prior to executing the tests, update the `wis2-to-gts-gateway.env` file with the
 - `WG_DATA_OBJECTS_FOR_GTS_DISSEMINATION_LOCATIONS` - this is the list of directories where the Gateway will put data objects that have been downloaded ready for onward distribution via the GTS.
 
 [sidebar]
-#To-do: The env file and other resources in the `tests/wis2-to-gts-gateway` directory need to be created.#
+#TODO: The env file and other resources in the `tests/wis2-to-gts-gateway` directory need to be created.#
 
 ===== Teardown
 
@@ -435,6 +435,7 @@ A Gateway should only process messages that have valid `properties.gts` (TTAAii,
 This test assesses that messages with invalid `properties.gts` are discarded.
 
 A valid `properties.gts` shall contain:
+
     ** 1 (and only 1) subproperty: `ttaaii`
     ** 1 (and only 1) subproperty: `cccc`
     ** Any other subproperties are ignored
@@ -442,6 +443,7 @@ A valid `properties.gts` shall contain:
     ** `properties.gts.cccc` shall comprise a sequence of exactly 4 alphabetic characters
 
 Note that:
+
 • Alphabetic character case is ignored.
 • TTAAii and CCCC values are not cross-referenced against WMO Volume C1 to determine if they are valid GTS bulletin headers.
 
