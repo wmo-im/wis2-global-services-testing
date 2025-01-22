@@ -37,7 +37,7 @@ Before running the pytest tests, ensure the following setup steps are completed:
         - `origin/a/wis2/+/metadata/#`
         - `cache/a/wis2/+/metadata/#`
 
-====== Pytest Setup
+====== pytest setup
     Prior to executing the tests, update the global-cache.env file with the necessary environment variables. This env file is nested in the tests/global_cache directory and the values of the following variable must be updated:
 
 - ``GC_METRICS_REPORT_BY`` - this is the centre_id of the global service and matches the report_by property in the metrics.
@@ -114,7 +114,7 @@ This test also evaluates the client data download requirement: An HTTP client (i
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
@@ -166,8 +166,8 @@ Where a Global Cache receives a notification message with _properties.cache_ set
 ====== Requirements
 
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
+* Dev/test GC is initiated with subscription to the `+cache/a/wis2/#+` topic and `+origin/a/wis2/#+` topic of the dev/test GB.
 * MQTT test client
     ** Client should connect to both the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -205,8 +205,8 @@ Where a Global Cache receives a valid WNM, but is unable to download a data item
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
+* Dev/test GC is initiated with subscription to the `+cache/a/wis2/#+` topic and `+origin/a/wis2/#+` topic of the dev/test GB.
 * MQTT test client
     ** Client should connect the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -247,8 +247,8 @@ A Global Cache should validate the integrity of the resources it caches and only
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
+* Dev/test GC is initiated with subscription to the `+cache/a/wis2/#+` topic and `+origin/a/wis2/#+` topic of the dev/test GB.
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -287,8 +287,8 @@ A Global Cache must ensure that only one instance of a notification message with
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
+* Dev/test GC is initiated with subscription to the `+cache/a/wis2/#+` topic and `+origin/a/wis2/#+` topic of the dev/test GB.
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -327,8 +327,8 @@ Where a Global Cache fails to process a notification message relating to a given
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
+* Dev/test GC is initiated with subscription to the `+cache/a/wis2/#+` topic and `+origin/a/wis2/#+` topic of the dev/test GB.
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -395,8 +395,8 @@ A Global Cache should treat notification messages with the same data item identi
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
-* Dev/test GC is initiated with subscription to the `cache/a/wis2/#` topic and `origin/a/wis2/#` topic of the dev/test GB.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
+* Dev/test GC is initiated with subscription to the `+cache/a/wis2/#+` topic and `+origin/a/wis2/#+` topic of the dev/test GB.
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -435,7 +435,7 @@ A Global Cache shall be able to successfully process, on average, 2000 unique WN
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
@@ -482,7 +482,7 @@ A Global Cache should support a minimum of 1000 simultaneous downloads.
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
-    ** MQTT user is able to read and write messages on the `origin/a/wis2/#` and `cache/a/wis2/#` topics.
+    ** MQTT user is able to read and write messages on the `+origin/a/wis2/#+` and `+cache/a/wis2/#+` topics.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
@@ -529,4 +529,3 @@ The test is considered successful if the following conditions are met:
 * A Global Cache shall be able to store at least 100GB of Core data items.
 
 *Source:* Guide to WIS (WMO No. 1061), Vol II, clause 2.7.2.2. Service levels, performance indicators and fair-usage policies: “A Global Cache should support a minimum of 100 GB of data in the cache” https://wmo-im.github.io/wis2-guide/guide/wis2-guide-DRAFT.html#_procedure_for_registration_of_a_new_global_service
-
