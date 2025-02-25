@@ -25,7 +25,7 @@ WIS2-to-GTS Gatweway performance is assessed using one test:
 
 . WIS2 Notification Message Processing Rate
 
-The performance test is based on “normal data processing” (see functional test “WIS2 Notification Message (WNM) Processing) with a throughput of 2000 unique WNMs per second that include valid `properties.gts` corresponding to the GTS Headers that the Gateway has whitelisted and trigger a download of data for onward distribution to the GTS.  
+The performance test is based on “normal data processing” (see functional test “WIS2 Notification Message (WNM) Processing) with a throughput of 2000 unique WNMs per minute that include valid `properties.gts` corresponding to the GTS Headers that the Gateway has whitelisted and trigger a download of data for onward distribution to the GTS.  
 
 This performance test is derived from a similar test developed for assessing the performance of a Global Cache.
 
@@ -445,7 +445,7 @@ A valid `properties.gts` shall contain:
 Note that:
 
 • Alphabetic character case is ignored.
-• TTAAii and CCCC values are not cross-referenced against WMO Volume C1 to determine if they are valid GTS bulletin headers.
+• WIS2-to-GTS Gateways are unable to validate TTAAii CCCC terms to determine valid instances because there is no suitable reference to validate against. Volume C1 is outdated, not having been updated since 2023 and prior to that only a subset of RTHs contributed updates
 
 .Example GTS properties object:
 [source,json]
