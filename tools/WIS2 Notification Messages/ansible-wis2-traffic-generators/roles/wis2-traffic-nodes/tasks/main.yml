@@ -68,9 +68,14 @@
   - $HOME/mosquitto/log
 
 - name: Copy content of directory mosquitto config
+  become: true
   copy:
     src: ./files/common/wis2-global-services-testing/tools/WIS2 Notification Messages/mosquitto/config/ 
     dest: ./mosquitto/config
+    # 20240917 Rajout des droits
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
 
 - name: copy Docker Compose files
   copy:
@@ -106,6 +111,20 @@
   ansible.builtin.meta:
     reset_connection
 
+- name: install pip rpm
+  become: true
+  ansible.builtin.dnf:
+    name: python3-pip
+#    disable_gpg_check: yes
+    state: present
+#  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 9
+
+- name: ensure required pip-packages are installed
+  become: true
+  pip:
+    name:
+      - docker>=1.8.0
+
 - name: Make sure wis2bridge docker network exists
   become: true
   docker_network:
@@ -118,3 +137,4 @@
   community.docker.docker_compose_v2:
     project_src: /home/rocky/wis2-traffic-generator
     state: present
+#    state: restarted
