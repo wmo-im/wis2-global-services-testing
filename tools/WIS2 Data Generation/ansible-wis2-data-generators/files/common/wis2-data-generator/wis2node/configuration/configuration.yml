@@ -4,7 +4,7 @@ generator:
     size_max: 5000000
     cache_large_files: false
     cache_size_max: 1000000
-    store_duration: 900
+    store_duration: 3600
     skew: 10
     centre_id: CENTREID_CHANGE_ME 
     embed_data: true
@@ -14,12 +14,7 @@ generator:
     download_path: /storage/files/
     data:
     - dataset1:
-        type: weather
-        sub_type: surface-based-observations/synop
+        discipline: weather
+        sub_topic: surface-based-observations/synop
         data_policy: core
         weight: 100
-    - dataset2:
-        type: ocean
-        sub_type: experimental
-        data_policy: recommended
-        weight: 20
