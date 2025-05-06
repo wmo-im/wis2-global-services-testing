@@ -99,6 +99,15 @@
 #    state: present
 #    wait: true
 #
+#
+
+#- name: Remove old containers
+#  shell: |
+#    docker stop $(docker ps -q --filter ancestor={{ item }} )
+#    exit 0
+#  with_items: 
+#  - golfvert/benchmarkwis2gb:2.0.2
+
 - name: deploy docker compose stack - ordered
   remote_user: "{{ ansible_user }}"
   become: False
@@ -108,14 +117,14 @@
     project_src: /home/rocky/wis2-data-generator/compose/
     state: present
     wait: true
+    # STILL NEED TO TEST: Make sure this is really remove older versions 
+    remove_orphans: false
   with_items:
     - traefik-docker-compose.yml
     - caddy-docker-compose.yml
     - redis-docker-compose.yml
 #    - mosquitto-docker-compose.yml
     - wis2node-docker-compose.yml
-
-
 
 
 - name: permit traffic in default zone for https service
