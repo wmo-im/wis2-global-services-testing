@@ -13,3 +13,4 @@ __idea__
 __secrets.env__
 /tests/secrets.env
 
+WIS2 Bench Tools/docker-compose.yml

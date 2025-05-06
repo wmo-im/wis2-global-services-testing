@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  wis2tools:
+    container_name: wis2tools
+    image: golfvert/wis2benchtools:1.0.10
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.wis2tools.entrypoints=websecure
+      - traefik.http.routers.wis2tools.service=wis2tools-svc
+      - traefik.http.routers.wis2tools.middlewares=auth@file
+      - traefik.http.routers.wis2tools.rule=PathPrefix(`/wis2tools/`)
+      - traefik.http.services.wis2tools-svc.loadbalancer.server.port=1880
+      - traefik.http.services.wis2tools-svc.loadbalancer.server.scheme=http
+      - traefik.http.routers.wis2tools.tls=true
+    environment:
+      - TZ=Europe/Paris
+      - MQTT_CONFIG_BROKER=
+      - MQTT_CONFIG_USERNAME=
+      - MQTT_CONFIG_PASSWORD=
+      - MQTT_CONFIG_TOPIC=
+      - CENTRE_ID=
+    networks:
+      - wis2bridge
+    restart: unless-stopped
+networks:
+  wis2bridge:
+    external: true

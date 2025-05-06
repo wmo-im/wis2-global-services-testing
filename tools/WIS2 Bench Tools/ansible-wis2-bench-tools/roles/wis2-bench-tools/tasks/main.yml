@@ -1,0 +1,110 @@
+#- name: Create directory '/tmp/in'
+#  ansible.builtin.file:
+#    path: /tmp/in
+#    state: directory
+#    recurse: no
+#    owner: root
+#    group: root
+#    mode: 0775
+
+# INSTALL DOCKER INSTEAD OF PODMAN
+- name: remove podman rpms
+  become: true
+  ansible.builtin.dnf:
+    name: podman,podman-docker,podman-plugins,podman-catatonit,podman-gvproxy,containers-common,'@container-tools'
+    state: absent
+  when: ansible_os_family == 'RedHat'
+
+- name: add docker repository for Rocky 8
+  become: true
+  ansible.builtin.yum_repository:
+    name: docker-ce
+    description: docker-ce
+    baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
+  when: ansible_os_family == 'RedHat'  and ansible_distribution_major_version|int == 8
+
+- name: add docker repository for Rocky 9
+  become: true
+  shell: |
+    dnf install -y yum-utils
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  when: ansible_os_family == 'RedHat'  and ansible_distribution_major_version|int == 9
+
+- name: install docker rpms for Rocky 8
+  become: true
+  ansible.builtin.dnf:
+    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 8
+
+- name: install docker rpms for Rocky 9
+  become: true
+  ansible.builtin.dnf:
+    #    name: docker-ce,docker-ce-cli,containerd.io,python3-docker,docker-compose-plugin,python3-setuptools
+    name: docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin,python3-setuptools
+    disable_gpg_check: yes
+    state: present
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 9
+
+
+- name: Start and enable docker
+  become: true
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: copy Docker Compose files
+  copy:
+    src: "{{ item }}"
+    dest: ./wis2-bench-tools/
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  loop:
+  - ./files/common/docker-compose.yml
+
+- name: modify value for centre_id
+#  become: True
+  lineinfile:
+    dest: ./wis2-bench-tools/docker-compose.yml
+    regexp: '^      - CENTRE_ID='
+    line:   '      - CENTRE_ID={{ centre_id_bench }}'
+
+- name: Add the ansible user to docker group
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Reset ssh connection to allow user changes to affect ansible user
+  ansible.builtin.meta:
+    reset_connection
+
+- name: install pip rpm
+  become: true
+  ansible.builtin.dnf:
+    name: python3-pip
+#    disable_gpg_check: yes
+    state: present
+#  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int == 9
+
+- name: ensure required pip-packages are installed
+  become: true
+  pip:
+    name:
+      - docker>=1.8.0
+
+- name: Make sure wis2bridge docker network exists
+  become: true
+  docker_network:
+    name: wis2bridge
+
+# use files parameter to use multiple docker-compose.yml files
+- name: deploy docker compose stack
+  remote_user: "{{ ansible_user }}"
+  become: False
+  community.docker.docker_compose_v2:
+    project_src: /home/rocky/wis2-bench-tools
+    state: present
