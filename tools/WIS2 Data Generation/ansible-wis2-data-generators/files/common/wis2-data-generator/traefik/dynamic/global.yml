@@ -32,6 +32,7 @@ http:
       basicAuth:
         users:
           - "admin:$apr1$n71zsgoe$9ChU6OXzIbhNX/FmhkqhA0"
+          - "monitor:$apr1$o5dz8ivk$.rXbixMf3a/xDoI2xyZms0"
 
     security:
       headers:
