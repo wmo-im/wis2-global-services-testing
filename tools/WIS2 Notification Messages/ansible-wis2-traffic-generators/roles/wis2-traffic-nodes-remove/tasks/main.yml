@@ -88,6 +88,7 @@
 - name: deploy docker compose stack
   remote_user: "{{ ansible_user }}"
   become: False
+  ignore_errors: true
   community.docker.docker_compose_v2:
     project_src: /home/rocky/wis2-traffic-generator
     state: absent
