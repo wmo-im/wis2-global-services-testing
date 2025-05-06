@@ -17,4 +17,3 @@ cd $working_dir
 cd ./WIS2\ Data\ Generation/ansible-wis2-data-generators/
 sh install_wis2_data_nodes.sh
 
-
