@@ -7,6 +7,7 @@ HOSTS=all
 #HOSTS=awstestnode01
 
 ansible-playbook -i inventory.yml site.yml --limit $HOSTS
+#ansible-playbook -i inventory.yml site.yml --limit $HOSTS --start-at-task "Add the ansible user to docker group"
 #ansible-playbook -i inventory.yml site.yml --limit $HOSTS --start-at-task "create directory"
 #ansible-playbook -i inventory.yml site.yml --limit $HOSTS --start-at-task "modify min value container01"
 #ansible-playbook -i inventory.yml site.yml --limit $HOSTS --start-at-task "copy Docker Compose files"
