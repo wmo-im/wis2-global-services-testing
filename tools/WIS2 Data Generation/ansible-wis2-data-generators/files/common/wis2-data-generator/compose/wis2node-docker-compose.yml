@@ -1,18 +1,14 @@
-version: '3.8'
+#version: '3.8'
 services:
     wis2node:
       container_name: wis2node
-<<<<<<< HEAD
-      image: golfvert/fakewis2node:2.1.10
-=======
-      image: golfvert/fakewis2node:2.0.8
->>>>>>> b0d5c42837aee46dd15b7e913d8f9b5e22d82dac
+      image: golfvert/fakewis2node:2.1.14
       labels:
         - traefik.enable=true
         - traefik.http.routers.wis2node.entrypoints=websecure
         - traefik.http.routers.wis2node.service=wis2node-svc
         - traefik.http.routers.wis2node.middlewares=auth@file
-        - traefik.http.routers.wis2node.rule=PathPrefix(`/admin/`)
+        - traefik.http.routers.wis2node.rule=PathPrefix(`/admin/`,`/metrics`)
         - traefik.http.services.wis2node-svc.loadbalancer.server.port=1880
         - traefik.http.services.wis2node-svc.loadbalancer.server.scheme=http
         - traefik.http.routers.wis2node.tls=true
