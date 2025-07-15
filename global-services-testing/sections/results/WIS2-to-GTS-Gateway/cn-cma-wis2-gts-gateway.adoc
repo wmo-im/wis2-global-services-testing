@@ -1,6 +1,6 @@
 === cn-cma-wis2-to-gts tests result
-03-04-2025
-===== Functional tests
+==== 03-04-2025   
+==== Functional tests
 
 .cn-cma-global-cache functional test results
 |===
@@ -52,7 +52,7 @@
 
 |===
 
-===== Performance tests
+==== Performance tests
 .cn-cma-wis2-to-gts-gateway performance test results
 |===
 |Test|Pass|Comments
