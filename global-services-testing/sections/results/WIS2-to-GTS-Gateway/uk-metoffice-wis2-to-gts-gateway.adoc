@@ -1,0 +1,65 @@
+=== uk-metoffice-wis2-to-gts tests result
+==== 03-04-2025   
+==== Functional tests
+
+.uk-metoffice-wis2-to-gts functional test results
+|===
+|Test|Pass|Comments
+
+|<<WIS2 Notification Message (WNM) Processing>>
+|yes
+|
+
+|<<Source Download Failure>>
+|yes
+|
+
+|<<Data Integrity Check Failure>>
+|yes
+|
+
+|<<WIS2 Notification Message Deduplication>>
+|yes
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 1)>>
+|yes
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 2)>>
+|yes
+|
+
+|<<Data Update>>
+|yes
+|
+
+|<<GTS Properties Validation Failure>>
+|yes
+|
+
+|<<WIS2 Notification Message Deduplication (Alternative 2)>>
+|yes
+|
+
+|<<Data Update>>
+|yes
+|
+
+|<<GTS Properties Validation Failure>>
+|yes
+|
+
+|===
+
+==== Performance tests
+.uk-metoffice-wis2-to-gts-gateway performance test results
+|===
+|Test|Pass|Comments
+
+|<<WIS2 Notification Processing Rate>>
+|yes
+|
+
+
+|===
