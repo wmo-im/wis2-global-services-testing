@@ -2,7 +2,7 @@
 ==== 03-04-2025   
 ==== Functional tests
 
-.cn-cma-global-cache functional test results
+.cn-cma-wis2-to-gts functional test results
 |===
 |Test|Pass|Comments
 
