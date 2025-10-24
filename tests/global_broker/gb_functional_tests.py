@@ -80,7 +80,7 @@ pub_valid_topics = [
     "origin/a/wis2/io-wis2dev-12-test/metadata/core/weather/surface-based-observations/synop",
     "origin/a/wis2/io-wis2dev-13-test/data/core/weather/aviation/metar",
     "origin/a/wis2/io-wis2dev-13-test/data/core/weather/surface-based-observations/synop",
-    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations/ship-hourly",
+    "origin/a/wis2/io-wis2dev-14-test/data/core/weather/surface-based-observations/ship",
     "origin/a/wis2/io-wis2dev-14-test/data/core/weather/space-based-observations/sentinel-2b/msi",
     "origin/a/wis2/io-wis2dev-15-test/data/core/weather/space-based-observations/swot/poseidon-3c",
     "origin/a/wis2/io-wis2dev-15-test/data/core/space-weather/space-based-observations/xmm-newton/epic",
