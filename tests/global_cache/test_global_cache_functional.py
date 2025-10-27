@@ -12,7 +12,7 @@ from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse
 from paho.mqtt.packettypes import PacketTypes
 from paho.mqtt.properties import Properties
-from pywis_pubsub.validation import validate_message
+from pywis_pubsub.ets import WNMTestSuite
 from pywis_pubsub.verification import verify_data
 from pywis_pubsub.mqtt import MQTTPubSubClient
 from dotenv import load_dotenv
@@ -25,7 +25,7 @@ from shared_utils import mqtt_helpers, ab, prom_metrics
 logger = logging.getLogger(__name__)
 
 
-datatest_centres = [11, 20]
+datatest_centres = [11, 15]
 
 # Connection strings for the development global broker and message generator
 # Access the environment variables
@@ -251,8 +251,6 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
         max_wait_time = max_wait_time * sleep_factor
         min_wait_time = min_wait_time * sleep_factor
     start_time = time.time()
-    prev_origin_count = prev_cache_count = prev_result_count = 0
-
     while time.time() - start_time < max_wait_time:
         if data_ids:
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic'] and m['properties']['data_id'] in data_ids]
@@ -262,22 +260,9 @@ def wait_for_messages(sub_client, num_origin_msgs=0, num_cache_msgs=0, num_resul
             origin_msgs = [m for m in sub_client._userdata['received_messages'] if "origin" in m['topic']]
             cache_msgs = [m for m in sub_client._userdata['received_messages'] if "cache" in m['topic']]
             result_msgs = [m for m in sub_client._userdata['received_messages'] if "result" in m['topic']]
-
-        current_origin_count = len(origin_msgs)
-        current_cache_count = len(cache_msgs)
-        current_result_count = len(result_msgs)
-
-        if (current_origin_count != prev_origin_count or
-            current_cache_count != prev_cache_count or
-            current_result_count != prev_result_count):
-            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            logger.debug(f"{timestamp} - Origin messages: {current_origin_count}")
-            logger.debug(f"{timestamp} - Cache messages: {current_cache_count}")
-            logger.debug(f"{timestamp} - Result messages: {current_result_count}")
-
-            prev_origin_count = current_origin_count
-            prev_cache_count = current_cache_count
-            prev_result_count = current_result_count
+        logger.debug(f"Origin messages: {len(origin_msgs)}")
+        logger.debug(f"Cache messages: {len(cache_msgs)}")
+        logger.debug(f"Result messages: {len(result_msgs)}")
 
         elapsed_time = time.time() - start_time
         if elapsed_time >= min_wait_time:
@@ -465,7 +450,9 @@ def test_mqtt_broker_message_flow(metrics_data, initial_metrics):
         can_i_origin = [i for i, l in enumerate(origin_msg['links']) if l['rel'] == 'canonical'][0]
         assert cache_msg['links'][can_i_cache]['href'] != origin_msg['links'][can_i_origin]['href']
         # use pywispubsub to validate the cache messages
-        is_valid, errors = validate_message(cache_msg)
+        ets = WNMTestSuite(cache_msg)
+        validation_result = ets.test_requirement_validation()
+        is_valid = validation_result['code'] == 'PASSED'
         assert is_valid is True
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
@@ -543,7 +530,9 @@ def test_cache_false_directive(metrics_data):
         can_i_origin = [i for i, l in enumerate(origin_msg['links']) if l['rel'] == 'canonical'][0]
         assert cache_msg['links'][can_i_cache]['href'] == origin_msg['links'][can_i_origin]['href']
         # use pywispubsub to validate the cache messages
-        is_valid, errors = validate_message(cache_msg)
+        ets = WNMTestSuite(cache_msg)
+        validation_result = ets.test_requirement_validation()
+        is_valid = validation_result['code'] == 'PASSED'
         assert is_valid is True
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
@@ -1105,7 +1094,9 @@ def test_data_update(metrics_data):
                 assert cache_canonical_link[0] != og_update_link
                 assert cache_canonical_link[0] == cache_update_link
         # use pywispubsub to validate the cache messages
-        is_valid, errors = validate_message(cache_msg)
+        ets = WNMTestSuite(cache_msg)
+        validation_result = ets.test_requirement_validation()
+        is_valid = validation_result['code'] == 'PASSED'
         assert is_valid is True
         # verification
         verified = verify_data(cache_msg, verify_certs=False)
