@@ -739,7 +739,7 @@ def test_data_integrity_check_failure(metrics_data):
 
 def test_wnm_deduplication(metrics_data):
     print("\nWIS2 Notification Message Deduplication")
-    _init = _setup(16)
+    _init = _setup(11)
     num_origin_msgs = 5
     sub_client = _init['sub_client']
 
@@ -820,7 +820,7 @@ def test_wnm_deduplication(metrics_data):
 
 def test_wnm_deduplication_alt_1(metrics_data):
     print("\nWIS2 Notification Message Deduplication (Alt 1)")
-    _init = _setup(17)
+    _init = _setup(12)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     msg_data_id = "gc_dedup_alt_1_"+_init['test_data_id']
@@ -930,7 +930,7 @@ def test_wnm_deduplication_alt_1(metrics_data):
 
 def test_wnm_deduplication_alt_2(metrics_data):
     print("\nWIS2 Notification Message Deduplication (Alt 2)")
-    _init = _setup(18)
+    _init = _setup(13)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
@@ -1018,7 +1018,7 @@ def test_wnm_deduplication_alt_2(metrics_data):
 
 def test_data_update(metrics_data):
     print("\nData Update")
-    _init = _setup(19)
+    _init = _setup(14)
     num_origin_msgs = 1
     sub_client = _init['sub_client']
     test_pub_topic = _init['test_pub_topic']
