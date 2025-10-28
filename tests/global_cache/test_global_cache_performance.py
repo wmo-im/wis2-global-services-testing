@@ -21,7 +21,7 @@ from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
 logger = logging.getLogger(__name__)
-ab_centres = [1001, 1005]
+ab_centres = [1000, 1004]
 datatest_centres = [11, 15]
 
 
