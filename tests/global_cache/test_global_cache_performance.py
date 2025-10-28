@@ -7,20 +7,24 @@ import time
 from dotenv import load_dotenv
 import json
 import paho.mqtt.client as mqtt
+# Get the directory containing this test file
+_TEST_DIR = os.path.dirname(os.path.abspath(__file__))
+_TESTS_ROOT = os.path.dirname(_TEST_DIR)
 
+# Load environment variables with absolute paths
+load_dotenv(os.path.join(_TEST_DIR, "global-cache.env"))
+load_dotenv(os.path.join(_TESTS_ROOT, "secrets.env"))
+load_dotenv(os.path.join(_TESTS_ROOT, "default.env"))
 from .test_global_cache_functional import _setup, wait_for_messages, setup_mqtt_client, sleep_w_status
 
 # Add the parent directory to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from shared_utils import mqtt_helpers, ab, prom_metrics
 logger = logging.getLogger(__name__)
-ab_centres = [1001, 1010]
-datatest_centres = [11, 20]
-# Connection strings for the development global broker and message generator
-# Access the environment variables
-load_dotenv("./global-cache.env")
-load_dotenv("../secrets.env")
-load_dotenv("../default.env")
+ab_centres = [1001, 1005]
+datatest_centres = [11, 15]
+
+
 mqtt_broker_recv = os.getenv('GB')
 mqtt_broker_trigger = os.getenv('TRIGGER_BROKER')
 mqtt_broker_gc = os.getenv('TEST_GC_MQTT_BROKER')
