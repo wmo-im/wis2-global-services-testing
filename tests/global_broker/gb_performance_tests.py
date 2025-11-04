@@ -52,22 +52,6 @@ sub_global_topics = [
     "cache/a/wis2/#"
 ]
 
-# Node Topics
-sub_result_topics = [
-    "result/a/wis2/io-wis2dev-1001-test/#",
-    "result/a/wis2/io-wis2dev-1002-test/#",
-    "result/a/wis2/io-wis2dev-1003-test/#",
-    "result/a/wis2/io-wis2dev-1004-test/#",
-    "result/a/wis2/io-wis2dev-1005-test/#",
-    "result/a/wis2/io-wis2dev-1006-test/#",
-    "result/a/wis2/io-wis2dev-1007-test/#",
-    "result/a/wis2/io-wis2dev-1008-test/#",
-    "result/a/wis2/io-wis2dev-1009-test/#",
-    "result/a/wis2/io-wis2dev-1010-test/"
-]
-
-"concurrent" "num_messages" "delay"
-
 low_perf_settings = [
         {"mqttx_concurrent" : 8, "mqttx_tmout": 20, "msg_count": 2, "msg_delay": 500},
         {"mqttx_concurrent" : 8, "mqttx_tmout": 20, "msg_count": 4, "msg_delay": 500},
@@ -105,7 +89,9 @@ heroic_perf_settings = [
         {"mqttx_concurrent" : 256, "mqttx_tmout": 160, "msg_count": 256, "msg_delay": 5},
         ]
 
-center_id_regex = re.compile(r"io-wis2dev-([0-9]{2})-test")
+centre_id_start = 100
+centre_id_end = 299
+centre_id_regex = re.compile(r"io-wis2dev-([0-9]{3})-test")
 result_count_regex = re.compile(r"Received total:\s([0-9]+),\srate:\s[0-9]+/s")
 #result_count_regex = re.compile(r"Received total:\s([0-9]+),\srate:.*\s[0-9]+/s")
 
@@ -131,14 +117,13 @@ def wait_for_results(sub_client, max_wait_time=10, min_wait_time=0):
     elapsed_time = 0
     while elapsed_time < max_wait_time:
         recv_msgs = sub_client._userdata['received_messages']
-#        print(f"Results received: {len(recv_msgs)} ... {len(sub_result_topics)}")
-        if len(recv_msgs) == len(sub_result_topics):
-#            print(f"Results received within {elapsed_time} seconds.")
+#        print(f"Results received: {len(recv_msgs)}")
+        if len(recv_msgs) == (centre_id_end - centre_id_start):
+            print(f"Results received within {elapsed_time} seconds.")
             break
         time.sleep(message_pace)
         elapsed_time += message_pace
     for result_mesg in recv_msgs:
-        counts = []
         lastline = result_mesg['payload'].splitlines()[-1]
         result_mesg['max_recv'] = result_count_regex.search(lastline).group(1)
     return recv_msgs
@@ -199,7 +184,7 @@ def setup_mqtt_client(connection_info: str, verify_cert: bool):
         client.connect(host=connection_info.hostname, port=connection_info.port, properties=properties)
         client.loop_start()
         time.sleep(message_pace)  # Wait for connection
-        if not client.is_connected() and loop_start:
+        if not client.is_connected():
             raise Exception("Failed to connect to MQTT broker")
     except Exception as e:
         print(f"Connection error: {e}")
@@ -226,8 +211,8 @@ def test_1_mqtt_broker_lowperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -243,8 +228,8 @@ def test_1_mqtt_broker_lowperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "action": "stop",
             }
         }
@@ -253,8 +238,8 @@ def test_1_mqtt_broker_lowperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -270,7 +255,7 @@ def test_1_mqtt_broker_lowperf(perf_set):
     time.sleep(message_pace)  # Wait for publish
 
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    assert len(result_msgs) == (centre_id_end - centre_id_start)
     for mesg_count in result_msgs:
         print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
     sub_client.loop_stop()
@@ -293,8 +278,8 @@ def test_2_mqtt_broker_medperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -310,8 +295,8 @@ def test_2_mqtt_broker_medperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "action": "stop",
             }
         }
@@ -320,8 +305,8 @@ def test_2_mqtt_broker_medperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -337,7 +322,7 @@ def test_2_mqtt_broker_medperf(perf_set):
     time.sleep(message_pace)  # Wait for publish
 
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    assert len(result_msgs) == (centre_id_end - centre_id_start)
     for mesg_count in result_msgs:
         print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
     sub_client.loop_stop()
@@ -359,8 +344,8 @@ def test_3_mqtt_broker_highperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -376,8 +361,8 @@ def test_3_mqtt_broker_highperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "action": "stop",
             }
         }
@@ -386,8 +371,8 @@ def test_3_mqtt_broker_highperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -403,7 +388,7 @@ def test_3_mqtt_broker_highperf(perf_set):
     time.sleep(message_pace)  # Wait for publish
 
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    assert len(result_msgs) == (centre_id_end - centre_id_start)
     for mesg_count in result_msgs:
         print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
     sub_client.loop_stop()
@@ -426,8 +411,8 @@ def test_4_mqtt_broker_extremeperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -443,8 +428,8 @@ def test_4_mqtt_broker_extremeperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "action": "stop",
             }
         }
@@ -453,8 +438,8 @@ def test_4_mqtt_broker_extremeperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -470,7 +455,7 @@ def test_4_mqtt_broker_extremeperf(perf_set):
     time.sleep(message_pace)  # Wait for publish
 
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    assert len(result_msgs) == (centre_id_end - centre_id_start)
     for mesg_count in result_msgs:
         print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
     sub_client.loop_stop()
@@ -493,8 +478,8 @@ def test_5_mqtt_broker_heroicperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -510,8 +495,8 @@ def test_5_mqtt_broker_heroicperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "action": "stop",
             }
         }
@@ -520,8 +505,8 @@ def test_5_mqtt_broker_heroicperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": centre_id_start,
+                "centreid_max": centre_id_end,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -537,7 +522,7 @@ def test_5_mqtt_broker_heroicperf(perf_set):
     time.sleep(message_pace)  # Wait for publish
 
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 60, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    assert len(result_msgs) == (centre_id_end - centre_id_start)
     for mesg_count in result_msgs:
         print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
     sub_client.loop_stop()
