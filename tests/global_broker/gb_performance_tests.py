@@ -40,6 +40,12 @@ prom_pass = os.getenv('PROMETHEUS_PASSWORD')
 test_pace = float(os.getenv('TEST_PACE'))
 message_pace = float(os.getenv('MESSAGE_PACE'))
 
+# Test Centre IDs
+MQTTX_CENTRE_ID_MIN = 1000
+MQTTX_CENTRE_ID_MAX = 1004
+WNMBENCH_CENTRE_ID_MIN = 100
+WNMBENCH_CENTRE_ID_MAX = 299
+
 # Connections
 broker_tls_connections = [
     mqtt_broker_tls,
@@ -53,20 +59,8 @@ sub_global_topics = [
 ]
 
 # Node Topics
-sub_result_topics = [
-    "result/a/wis2/io-wis2dev-1001-test/#",
-    "result/a/wis2/io-wis2dev-1002-test/#",
-    "result/a/wis2/io-wis2dev-1003-test/#",
-    "result/a/wis2/io-wis2dev-1004-test/#",
-    "result/a/wis2/io-wis2dev-1005-test/#",
-    "result/a/wis2/io-wis2dev-1006-test/#",
-    "result/a/wis2/io-wis2dev-1007-test/#",
-    "result/a/wis2/io-wis2dev-1008-test/#",
-    "result/a/wis2/io-wis2dev-1009-test/#",
-    "result/a/wis2/io-wis2dev-1010-test/"
-]
-
-"concurrent" "num_messages" "delay"
+# dynamically generate sub_result_topics based on centre IDs
+sub_result_topics = [f"result/a/wis2/io-wis2dev-{i:04d}-test/#" for i in range(MQTTX_CENTRE_ID_MIN, MQTTX_CENTRE_ID_MAX + 1)]
 
 low_perf_settings = [
         {"mqttx_concurrent" : 8, "mqttx_tmout": 20, "msg_count": 2, "msg_delay": 500},
@@ -226,8 +220,8 @@ def test_1_mqtt_broker_lowperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -243,8 +237,8 @@ def test_1_mqtt_broker_lowperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "action": "stop",
             }
         }
@@ -253,8 +247,8 @@ def test_1_mqtt_broker_lowperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": WNMBENCH_CENTRE_ID_MIN,
+                "centreid_max": WNMBENCH_CENTRE_ID_MAX,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -293,8 +287,8 @@ def test_2_mqtt_broker_medperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -310,8 +304,8 @@ def test_2_mqtt_broker_medperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "action": "stop",
             }
         }
@@ -320,8 +314,8 @@ def test_2_mqtt_broker_medperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": WNMBENCH_CENTRE_ID_MIN,
+                "centreid_max": WNMBENCH_CENTRE_ID_MAX,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -359,8 +353,8 @@ def test_3_mqtt_broker_highperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -376,8 +370,8 @@ def test_3_mqtt_broker_highperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "action": "stop",
             }
         }
@@ -386,8 +380,8 @@ def test_3_mqtt_broker_highperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": WNMBENCH_CENTRE_ID_MIN,
+                "centreid_max": WNMBENCH_CENTRE_ID_MAX,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -426,8 +420,8 @@ def test_4_mqtt_broker_extremeperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -443,8 +437,8 @@ def test_4_mqtt_broker_extremeperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "action": "stop",
             }
         }
@@ -453,8 +447,8 @@ def test_4_mqtt_broker_extremeperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": WNMBENCH_CENTRE_ID_MIN,
+                "centreid_max": WNMBENCH_CENTRE_ID_MAX,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
@@ -493,8 +487,8 @@ def test_5_mqtt_broker_heroicperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "timeout": perf_set['mqttx_tmout'],
                 "concurrent": perf_set['mqttx_concurrent'],
                 "username": broker_info.username,
@@ -510,8 +504,8 @@ def test_5_mqtt_broker_heroicperf(perf_set):
         "scenario": "mqttx",
         "configuration": {
             "setup": {
-                "centreid_min": 1001,
-                "centreid_max": 1010,
+                "centreid_min": MQTTX_CENTRE_ID_MIN,
+                "centreid_max": MQTTX_CENTRE_ID_MAX,
                 "action": "stop",
             }
         }
@@ -520,8 +514,8 @@ def test_5_mqtt_broker_heroicperf(perf_set):
         "scenario": "wnmbench",
         "configuration": {
             "setup": {
-                "centreid_min": 100,
-                "centreid_max": 299,
+                "centreid_min": WNMBENCH_CENTRE_ID_MIN,
+                "centreid_max": WNMBENCH_CENTRE_ID_MAX,
                 "number": perf_set['msg_count'],
                 "delay": perf_set['msg_delay']
             }
