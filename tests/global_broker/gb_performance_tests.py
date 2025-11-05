@@ -103,12 +103,11 @@ center_id_regex = re.compile(r"io-wis2dev-([0-9]{2})-test")
 result_count_regex = re.compile(r"Received total:\s([0-9]+),\srate:\s[0-9]+/s")
 #result_count_regex = re.compile(r"Received total:\s([0-9]+),\srate:.*\s[0-9]+/s")
 
-def flag_on_connect(client, userdata, flags, rc, properties=None):
-#    print(rc)
+def flag_on_connect(client, userdata, flags, reason_code, properties=None):
     client.connected_flag = True
 
-def flag_on_subscribe(client, userdata, mid, granted_qos, properties=None):
-#    print("Subscribed with mid " + str(mid) + " and QoS " + str(granted_qos[0]))
+def flag_on_subscribe(client, userdata, mid, reason_codes, properties=None):
+#    print("Subscribed with mid " + str(mid))
     client.subscribed_flag = True
 
 def flag_on_message(client, userdata, msg):
@@ -175,9 +174,9 @@ def setup_mqtt_client(connection_info: str, verify_cert: bool):
     rand_id = "TEST-mqttx-" + str(uuid.uuid4())[:10]
     connection_info = urlparse(connection_info)
     if connection_info.scheme in ['ws', 'wss']:
-        client = mqtt.Client(client_id=rand_id, transport='websockets', protocol=mqtt.MQTTv5, userdata={'received_messages': []})
+        client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2, client_id=rand_id, transport='websockets', protocol=mqtt.MQTTv5, userdata={'received_messages': []})
     else:
-        client = mqtt.Client(client_id=rand_id, transport='tcp', protocol=mqtt.MQTTv5, userdata={'received_messages': []})
+        client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2, client_id=rand_id, transport='tcp', protocol=mqtt.MQTTv5, userdata={'received_messages': []})
     client.on_connect = flag_on_connect
     client.on_subscribe = flag_on_subscribe
     client.on_message = flag_on_message
@@ -193,7 +192,7 @@ def setup_mqtt_client(connection_info: str, verify_cert: bool):
         client.connect(host=connection_info.hostname, port=connection_info.port, properties=properties)
         client.loop_start()
         time.sleep(message_pace)  # Wait for connection
-        if not client.is_connected() and loop_start:
+        if not client.is_connected():
             raise Exception("Failed to connect to MQTT broker")
     except Exception as e:
         print(f"Connection error: {e}")
@@ -270,6 +269,7 @@ def test_1_mqtt_broker_lowperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] == 0
     time.sleep(test_pace)
 
 
@@ -337,6 +337,7 @@ def test_2_mqtt_broker_medperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] == 0
     time.sleep(test_pace)
 
 @pytest.mark.parametrize("perf_set", high_perf_settings)
@@ -403,6 +404,7 @@ def test_3_mqtt_broker_highperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] == 0
     time.sleep(test_pace)
 
 
@@ -470,6 +472,7 @@ def test_4_mqtt_broker_extremeperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] == 0
     time.sleep(test_pace)
 
 
@@ -537,5 +540,6 @@ def test_5_mqtt_broker_heroicperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] == 0
     time.sleep(test_pace)
 
