@@ -269,7 +269,7 @@ def test_1_mqtt_broker_lowperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] != 0
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
     time.sleep(test_pace)
 
 
@@ -337,7 +337,7 @@ def test_2_mqtt_broker_medperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] != 0
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
     time.sleep(test_pace)
 
 @pytest.mark.parametrize("perf_set", high_perf_settings)
@@ -404,7 +404,7 @@ def test_3_mqtt_broker_highperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] != 0
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
     time.sleep(test_pace)
 
 
@@ -472,7 +472,7 @@ def test_4_mqtt_broker_extremeperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] != 0
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
     time.sleep(test_pace)
 
 
@@ -540,6 +540,6 @@ def test_5_mqtt_broker_heroicperf(perf_set):
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - mesg_count['max_recv'] != 0
+    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
     time.sleep(test_pace)
 
