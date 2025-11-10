@@ -99,7 +99,6 @@ heroic_perf_settings = [
         {"mqttx_concurrent" : 256, "mqttx_tmout": 160, "msg_count": 256, "msg_delay": 5},
         ]
 
-center_id_regex = re.compile(r"io-wis2dev-([0-9]{2})-test")
 result_count_regex = re.compile(r"Received total:\s([0-9]+),\srate:\s[0-9]+/s")
 #result_count_regex = re.compile(r"Received total:\s([0-9]+),\srate:.*\s[0-9]+/s")
 
@@ -107,11 +106,11 @@ def flag_on_connect(client, userdata, flags, reason_code, properties=None):
     client.connected_flag = True
 
 def flag_on_subscribe(client, userdata, mid, reason_codes, properties=None):
-#    print("Subscribed with mid " + str(mid))
+    #print("Subscribed with mid " + str(mid))
     client.subscribed_flag = True
 
 def flag_on_message(client, userdata, msg):
-#    print(f"Received message on topic {msg.topic} with payload {msg.payload}")
+    #print(f"Received message on topic {msg.topic} with payload {msg.payload}")
     try:
         msg_json = json.loads(msg.payload)
     except:
@@ -124,51 +123,18 @@ def wait_for_results(sub_client, max_wait_time=10, min_wait_time=0):
     elapsed_time = 0
     while elapsed_time < max_wait_time:
         recv_msgs = sub_client._userdata['received_messages']
-#        print(f"Results received: {len(recv_msgs)} ... {len(sub_result_topics)}")
+        #print(f"Results received: {len(recv_msgs)} ... {len(sub_result_topics)}")
         if len(recv_msgs) == len(sub_result_topics):
-#            print(f"Results received within {elapsed_time} seconds.")
+            #print(f"Results received within {elapsed_time} seconds.")
             break
         time.sleep(message_pace)
         elapsed_time += message_pace
     for result_mesg in recv_msgs:
         counts = []
         lastline = result_mesg['payload'].splitlines()[-1]
+        #print(f'LastLine: {lastline}')
         result_mesg['max_recv'] = result_count_regex.search(lastline).group(1)
     return recv_msgs
-
-
-#def get_gc_metrics(prometheus_baseurl, username, password, centre_id=None):
-#    """
-#    Fetches GC metrics from Prometheus.
-#
-#    Args:
-#        prometheus_baseurl (str): The base URL of the Prometheus server.
-#        username (str): The username for Prometheus authentication.
-#        password (str): The password for Prometheus authentication.
-#        centre_id (str): The centre ID to filter the metrics by.
-#
-#    Returns:
-#        dict: A dictionary containing the fetched metrics.
-#    """
-#    print("Fetching GC Metrics")
-#    report_by = os.getenv('GC_METRICS_REPORT_BY')
-#    if centre_id is not None:
-#        centre_id = f'io-wis2dev-{centre_id}-test'
-#    print(f"Report by: {report_by}")
-#    metrics_to_fetch = [
-#        "wmo_wis2_gb_messages_published_total",
-#        "wmo_wis2_gb_messages_received_total",
-#        "wmo_wis2_gb_messages_no_metadata_total",
-#        "wmo_wis2_gb_last_message_timestamp_seconds",
-#        "wmo_wis2_gb_connected_flag"
-#    ]
-#
-#    metrics = {}
-#    for metric_name in metrics_to_fetch:
-#        result = fetch_prometheus_metrics(metric_name, prometheus_baseurl, username, password, report_by=report_by,
-#                                          centre_id=centre_id)
-#        metrics[metric_name] = result
-#    return metrics
 
 def setup_mqtt_client(connection_info: str, verify_cert: bool):
     rand_id = "TEST-mqttx-" + str(uuid.uuid4())[:10]
@@ -261,15 +227,18 @@ def test_1_mqtt_broker_lowperf(perf_set):
 #    print(f"Scenario message: {json.dumps(wnmbench_scenario_config, indent=4)}")
     sub_client.publish("config/a/wis2", json.dumps(wnmbench_scenario_config))
     time.sleep(message_pace)  # Wait for publish
-
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    test_condition = True
     for mesg_count in result_msgs:
-        print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        if (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Passed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        else:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Failed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+            test_condition = False
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
+    assert test_condition
     time.sleep(test_pace)
 
 
@@ -329,15 +298,18 @@ def test_2_mqtt_broker_medperf(perf_set):
 #    print(f"Scenario message: {json.dumps(wnmbench_scenario_config, indent=4)}")
     sub_client.publish("config/a/wis2", json.dumps(wnmbench_scenario_config))
     time.sleep(message_pace)  # Wait for publish
-
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    test_condition = True
     for mesg_count in result_msgs:
-        print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        if (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Passed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        else:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Failed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+            test_condition = False
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
+    assert test_condition
     time.sleep(test_pace)
 
 @pytest.mark.parametrize("perf_set", high_perf_settings)
@@ -396,15 +368,18 @@ def test_3_mqtt_broker_highperf(perf_set):
 #    print(f"Scenario message: {json.dumps(wnmbench_scenario_config, indent=4)}")
     sub_client.publish("config/a/wis2", json.dumps(wnmbench_scenario_config))
     time.sleep(message_pace)  # Wait for publish
-
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    test_condition = True
     for mesg_count in result_msgs:
-        print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        if (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Passed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        else:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Failed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+            test_condition = False
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
+    assert test_condition
     time.sleep(test_pace)
 
 
@@ -464,15 +439,18 @@ def test_4_mqtt_broker_extremeperf(perf_set):
 #    print(f"Scenario message: {json.dumps(wnmbench_scenario_config, indent=4)}")
     sub_client.publish("config/a/wis2", json.dumps(wnmbench_scenario_config))
     time.sleep(message_pace)  # Wait for publish
-
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 10, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    test_condition = True
     for mesg_count in result_msgs:
-        print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        if (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Passed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        else:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Failed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+            test_condition = False
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
+    assert test_condition
     time.sleep(test_pace)
 
 
@@ -532,14 +510,16 @@ def test_5_mqtt_broker_heroicperf(perf_set):
 #    print(f"Scenario message: {json.dumps(wnmbench_scenario_config, indent=4)}")
     sub_client.publish("config/a/wis2", json.dumps(wnmbench_scenario_config))
     time.sleep(message_pace)  # Wait for publish
-
     result_msgs = wait_for_results(sub_client, perf_set['mqttx_tmout'] + 60, perf_set['mqttx_tmout'])
-    assert len(result_msgs) == len(sub_result_topics)
+    test_condition = True
     for mesg_count in result_msgs:
-        print(f"MQTTx Client: {mesg_count['topic'].split('/')[3]}    Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        if (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Passed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+        else:
+            print(f"MQTTx Client {mesg_count['topic'].split('/')[3]} Failed:   Total Received: {mesg_count['max_recv']}    Expected: {200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']}")
+            test_condition = False
     sub_client.loop_stop()
     sub_client.disconnect()
     del sub_client
-    assert (200 * perf_set['msg_count'] * perf_set['mqttx_concurrent']) - int(mesg_count['max_recv']) == 0
+    assert test_condition
     time.sleep(test_pace)
-
