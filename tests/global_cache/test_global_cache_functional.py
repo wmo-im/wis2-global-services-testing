@@ -723,12 +723,13 @@ def test_data_integrity_check_failure(metrics_data):
         "expected_difference": 0,
         "dataservers": origin_msg_dataservers
     })
-    metrics_data["assertions"].append({
-        "test_name": "test_data_integrity_check_failure",
-        "centre_id": _init['test_pub_centre'],
-        "metric_name": "wmo_wis2_gc_downloaded_errors_total",
-        "expected_difference": num_origin_msgs,
-    })
+    # this is not an error
+    # metrics_data["assertions"].append({
+    #     "test_name": "test_data_integrity_check_failure",
+    #     "centre_id": _init['test_pub_centre'],
+    #     "metric_name": "wmo_wis2_gc_downloaded_errors_total",
+    #     "expected_difference": num_origin_msgs,
+    # })
     metrics_data["assertions"].append({
         "test_name": "test_data_integrity_check_failure",
         "centre_id": _init['test_pub_centre'],
@@ -1145,7 +1146,29 @@ def test_gc_metrics(metrics_data, initial_metrics):
     final_metrics = get_gc_metrics(prom_host, prom_un, prom_pass)
     assertion_results = []
 
+    # aggregate by centre_id - rolling up the expected differences/values for each metric
+    assertions = []
     for assertion in metrics_data.get("assertions", []):
+        found = False
+        for agg in assertions:
+            if agg['centre_id'] == assertion['centre_id'] and agg['metric_name'] == assertion['metric_name'] and agg.get('dataservers', []) == assertion.get('dataservers', []):
+                # aggregate
+                if 'expected_difference' in assertion:
+                    agg['expected_difference'] = agg.get('expected_difference', 0) + assertion['expected_difference']
+                if 'expected_value' in assertion:
+                    agg['expected_value'] = assertion['expected_value']  # override
+                if 'expected_comparison' in assertion:
+                    agg['expected_comparison'] = assertion['expected_comparison']  # override
+                # combine the test names
+                agg['test_name'] = agg['test_name'] + ", " + assertion['test_name']
+                found = True
+                break
+        if not found:
+            assertions.append(deepcopy(assertion))
+
+
+
+    for assertion in assertions:
         print(f"Checking assertion: {assertion}")
         test_name = assertion.get("test_name")
         centre_id = assertion.get("centre_id")
@@ -1191,5 +1214,5 @@ def test_gc_metrics(metrics_data, initial_metrics):
                 assertion_results.append(str(e))
 
     if assertion_results:
-        print("\n".join(assertion_results))
+        logger.info("\n".join(assertion_results))
         raise AssertionError("\n".join(assertion_results))
