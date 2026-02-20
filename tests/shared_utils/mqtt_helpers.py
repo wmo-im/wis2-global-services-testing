@@ -4,7 +4,7 @@ from datetime import datetime
 from random import random
 
 from pywis_pubsub.mqtt import MQTTPubSubClient
-from pywis_pubsub.publish import create_message
+from pywis_pubsub.publish import create_message, get_url_info
 
 
 def check_broker_connectivity(connection_string: str):
@@ -42,10 +42,13 @@ def generate_wnm(topic: str = None, msg_id: str = None, msg_dt: datetime = None,
     msg_dt = msg_dt.strftime('%Y-%m-%dT%H:%M:%S') + 'Z' if msg_dt is not None else datetime.utcnow().strftime(
         '%Y-%m-%dT%H:%M:%S') + 'Z'
     # msg_dt = msg_dt if msg_dt is not None else datetime.utcnow()
+
+    url_info = get_url_info("https://wis2-global-cache.s3.amazonaws.com/br-inmet/data/core/weather/surface-based-observations/synop/WIGOS_0-76-0-3106200000000597_20240822T140000.bufr4")
+
     message_args = {
         'topic': topic,
         'content_type': content_type,
-        'url': "https://wis2-global-cache.s3.amazonaws.com/br-inmet/data/core/weather/surface-based-observations/synop/WIGOS_0-76-0-3106200000000597_20240822T140000.bufr4",
+        'url_info': url_info,
         'identifier': msg_id or str(uuid.uuid4()),
         'pubtime': msg_dt,  #
         # 'geometry': [33.8, -11.8, 123],
@@ -55,5 +58,7 @@ def generate_wnm(topic: str = None, msg_id: str = None, msg_dt: datetime = None,
     }
     if msg_props:
         message_args.update(msg_props)
+
     message = create_message(**message_args)
+
     return topic, message
