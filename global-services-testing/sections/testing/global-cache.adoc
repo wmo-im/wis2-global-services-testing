@@ -269,6 +269,7 @@ A Global Cache should validate the integrity of the resources it caches and only
 * GC Metrics
     ** `wmo_wis2_gc_download_total` (unchanged)
     ** `wmo_wis2_gc_last_download_timestamp_seconds` (unchanged)
+    ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (+=1 for each WNM)
 
 ===== WIS2 Notification Message Deduplication
