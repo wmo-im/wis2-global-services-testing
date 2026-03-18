@@ -34,8 +34,8 @@ Before running the pytest tests, ensure the following setup steps are completed:
     * The Global Cache should be subscribed to the following topics:
         - `origin/a/wis2/+/data/#`
         - `cache/a/wis2/+/data/#`
-        - `origin/a/wis2/+/metadata/#`
-        - `cache/a/wis2/+/metadata/#`
+        - `origin/a/wis2/+/metadata`
+        - `cache/a/wis2/+/metadata`
 
 ====== pytest setup
     Prior to executing the tests, update the global-cache.env file with the necessary environment variables. This env file is nested in the tests/global_cache directory and the values of the following variable must be updated:
@@ -118,8 +118,8 @@ This test also evaluates the client data download requirement: An HTTP client (i
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -136,8 +136,8 @@ This test also evaluates the client data download requirement: An HTTP client (i
 . Publish a batch of Prepared WIS2 Notification Messages to the dev/test GB on following topics:
     ** Send 1 or more messages to origin/a/wis2/+/data/#
     ** Send 1 or more messages to cache/a/wis2/+/data/#
-    ** Send 1 or more messages to origin/a/wis2/+/metadata/#
-    ** Send 1 or more messages to cache/a/wis2/+/metadata/#
+    ** Send 1 or more messages to origin/a/wis2/+/metadata
+    ** Send 1 or more messages to cache/a/wis2/+/metadata
 . The test MQTT client should store the messages received on the `cache/a/wis2/#` topic published by the GC and download the data objects from the canonical link provided in the messages using HTTP 1.1 with TLS.
     ** The original data object and the downloaded>>cached data objects can then be compared to ensure they are identical.
 
@@ -153,9 +153,8 @@ This test also evaluates the client data download requirement: An HTTP client (i
     ** The data objects cached by the GC should be identical to the source data objects.
         *** The diff or hashes of the data objects should be identical.
 * GC Metrics
-    ** `wmo_wis2_gc_download_total` (matches total messages)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1 for each)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set for each and within expected time range)
+    ** `wmo_wis2_gc_download_total` (incremented by the total number of incoming messages, i.e., +=1 for each WNM)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (set for each and within expected time range)
 
 ===== Cache False Directive
 
@@ -183,8 +182,8 @@ Where a Global Cache receives a notification message with _properties.cache_ set
 . Publish the prepared WIS2 Notification Messages to the dev/test GB the following topics:
     ** Send 1 or more messages to origin/a/wis2/+/data/#
     ** Send 1 or more messages to cache/a/wis2/+/data/#
-    ** Send 1 or more messages to origin/a/wis2/+/metadata/#
-    ** Send 1 or more messages to cache/a/wis2/+/metadata/#
+    ** Send 1 or more messages to origin/a/wis2/+/metadata
+    ** Send 1 or more messages to cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -194,14 +193,12 @@ Where a Global Cache receives a notification message with _properties.cache_ set
         *** the topic (`cache/a/wis2/...`) (note the incoming message may be on the same `cache/#` topic if it is from another GC)
 * GC Metrics
   ** `wmo_wis2_gc_download_total` (unchanged)
-  ** `wmo_wis2_gc_dataserver_status_flag` (unchanged)
-  ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (unchanged)
-  ** `wmo_wis2_gc_no_cache_total` (+=1 for each WNM)
+  ** `wmo_wis2_gc_last_download_timestamp_seconds` (unchanged)
 
 ===== Source Download Failure
 
 ====== Purpose
-Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the `metric wmo_wis2_gc_dataserver_status_flag` for the source data server should be set to 0 (zero).
+Where a Global Cache receives a valid WNM, but is unable to download a data item from the location specified in a notification message (i.e., the source data server), the metric `wmo_wis2_gc_download_errors_total` is incremented.
 
 ====== Requirements
 * Dev/test GB MQTT broker connection string
@@ -222,8 +219,8 @@ Where a Global Cache receives a valid WNM, but is unable to download a data item
 . Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -232,8 +229,7 @@ Where a Global Cache receives a valid WNM, but is unable to download a data item
     ** No data objects should be cached by the GC.
 * GC Metrics
     ** `wmo_wis2_gc_download_total` (unchanged)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 0 for each)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (unchanged)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (unchanged)
     ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each WNM)
 
 
@@ -262,8 +258,8 @@ A Global Cache should validate the integrity of the resources it caches and only
 . Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -272,9 +268,7 @@ A Global Cache should validate the integrity of the resources it caches and only
     ** No data objects should be cached by the GC.
 * GC Metrics
     ** `wmo_wis2_gc_download_total` (unchanged)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 0 for each)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (unchanged)
-    ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each WNM)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (+=1 for each WNM)
 
 ===== WIS2 Notification Message Deduplication
@@ -301,8 +295,8 @@ A Global Cache must ensure that only one instance of a notification message with
 . Publish the prepared WNM's to the dev/test GB on one or more of the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -312,8 +306,7 @@ A Global Cache must ensure that only one instance of a notification message with
     ** Only one data object should be cached per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
 * GC Metrics
     ** `wmo_wis2_gc_download_total` (+=1 for each unique identifier)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1 for each unique identifier)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current for each unique identifier)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (set to current for each unique identifier)
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
@@ -343,8 +336,8 @@ Where a Global Cache fails to process a notification message relating to a given
 . Publish the prepared WNM's to the dev/test GB such that the invalid WNM for each unique data identifier is published first. One or more of the following topics can be used:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -353,9 +346,8 @@ Where a Global Cache fails to process a notification message relating to a given
     ** Only one data object should be cached per unique identifier which is defined as `properties.data_id` + `properties.pubtime`.
 * GC Metrics
     ** `wmo_wis2_gc_download_total` (+=1 for each unique identifier)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1 for each unique identifier)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current for each unique identifier)
-    ** `wmo_wis2_gc_downloaded_errors_total` (+=1 for each unique identifier WNM message set)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (set to current for each unique identifier)
+    ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
 ===== WIS2 Notification Message Deduplication (Alternative 2)
@@ -371,8 +363,8 @@ See above.
 . Publish the prepared WNM's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is #greater than or equal to# the subsequent message/s. One or more of the following topics can be used:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -380,9 +372,8 @@ See above.
 * Data Objects
     ** For each message set with a shared data_id, each data object should be cached by the GC and assuming that the `properties.pubtime` as been correctly set (decreasing or equal) for each message sent in chronological order.
 * GC Metrics
-    ** `wmo_wis2_gc_download_total` (+=1 for each set of messages sharing the same data_id)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current)
+    ** `wmo_wis2_gc_download_total` (+=1 for each unique identifier)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (set to current for each unique identifier)
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
@@ -411,8 +402,8 @@ A Global Cache should treat notification messages with the same data item identi
 . Publish the prepared WNM's to the dev/test GB such for each unique identifier message set, the first published message has a pubtime that is less than the subsequent message/s and subsequent messages have a valid update link. One or more of the following topics can be used:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 ====== Evaluate
 * WNM Messages
@@ -420,9 +411,8 @@ A Global Cache should treat notification messages with the same data item identi
 * Data Objects
     ** For each message set with a shared data_id, each data object should be cached by the GC and assuming that the `properties.pubtime` as been correctly set (increasing) for each message sent in chronological order.
 * GC Metrics
-    ** `wmo_wis2_gc_download_total` (+=1 for each message)
-    ** `wmo_wis2_gc_dataserver_status_flag` (set to 1)
-    ** `wmo_wis2_gc_dataserver_last_download_timestamp_seconds` (set to current)
+    ** `wmo_wis2_gc_download_total` (+=1 for each identifier that is either new or arrives in sequential time-order with a #update# link)
+    ** `wmo_wis2_gc_last_download_timestamp_seconds` (set to current when a new or updated data object is cached)
     ** `wmo_wis2_gc_downloaded_errors_total` (unchanged)
     ** `wmo_wis2_gc_integrity_failed_total` (unchanged)
 
@@ -439,8 +429,8 @@ A Global Cache shall be able to successfully process, on average, 2000 unique WN
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * GC metrics scraper
@@ -486,8 +476,8 @@ A Global Cache should support a minimum of 1000 simultaneous downloads.
 * Dev/test GC is initiated and connected to the dev/test GB with subscriptions to the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 * MQTT test client
     ** Client should connect to the dev/test GB MQTT broker using the provided connection string to control the input and monitor the output.
 * WIS2 Notification Messages and associated data objects:
@@ -502,8 +492,8 @@ A Global Cache should support a minimum of 1000 simultaneous downloads.
 . Publish the prepared WNM to the dev/test GB on one of the following topics:
     ** origin/a/wis2/+/data/#
     ** cache/a/wis2/+/data/#
-    ** origin/a/wis2/+/metadata/#
-    ** cache/a/wis2/+/metadata/#
+    ** origin/a/wis2/+/metadata
+    ** cache/a/wis2/+/metadata
 
 . For the WNM:
     - Receive the _cache_ notification message from the dev/test GC.
